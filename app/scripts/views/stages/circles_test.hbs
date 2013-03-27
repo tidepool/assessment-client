@@ -1,0 +1,24 @@
+<div id="characteristics" class="row">
+  <div class="span6">
+    {{#each circles}}
+    <div class="circle c{{id}}" data-circleid="{{id}}">
+      <div class="text">
+        {{trait1}} / <br/> {{trait2}}
+      </div>
+      <div id="slider{{id}}" class="slider" data-circleid="{{id}}"></div>
+    </div>
+    {{/each}}
+    <div id="infoboxLeft" class="infobox" style="visibility:hidden;">
+      <p id="instructionsLeft">{{instructions}}</p>
+      <button id="end" class="btn btn-primary btn-large btn-orange">I am Done</button>
+    </div>
+  </div>
+  <div class="span5">
+    <div class="self" style="visibility:hidden;">
+      <div id="infobox" class="infobox" style="visibility:visible;">
+        <p id="instructions">{{instructions}}</p>
+        <button id="start" class="btn btn-primary btn-large btn-orange">I'm Ready</button>  
+      </div>
+    </div>
+  </div>
+</div>
