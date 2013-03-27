@@ -1,6 +1,14 @@
 @import 'sass-bootstrap/lib/bootstrap';
 
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
+.infobox {
+  margin-top: 80px;
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 18px;
+  color: white;
+  line-height: 27px;
+  text-align: center;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
 }
