@@ -1,7 +1,8 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./image_rank"], ($, Backbone, template) ->    
+  'Handlebars',
+  "text!./image_rank.hbs"], ($, Backbone, Handlebars, tempfile) ->    
   ImageRank = Backbone.View.extend
     events:
       "click #start": "startTest"
@@ -16,6 +17,7 @@ define [
       @eventLog = []
 
     render: ->
+      template = Handlebars.compile(tempfile)
       $(@el).html(template(instructions: @model.get('instructions'), images: @images, frames: @frames))
       $("#infobox").css("visibility", "visible")
       this

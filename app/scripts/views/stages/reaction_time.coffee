@@ -1,7 +1,8 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./reaction_time"], ($, Backbone, template) ->
+  'Handlebars',
+  "text!./reaction_time.hbs"], ($, Backbone, Handlebars, tempfile) ->
   ReactionTime = Backbone.View.extend
     events:
       "click #start": "startTest",
@@ -69,6 +70,7 @@ define [
       sequence
 
     render: ->
+      template = Handlebars.compile(tempfile)
       $(@el).html(template({instructions: @model.get('instructions')}))
       $(".login_logout").css("visibility", "hidden")
       $("#infobox").css("visibility", "visible")

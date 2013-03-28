@@ -4,6 +4,6 @@ define [
     urlRoot: "/api/v1/user_events.json"
 
     initialize: ->
-      @url = AssessmentsApp.apiServerUrl + @urlRoot
+      @url = window.apiServerUrl + @urlRoot
 
   UserEvent

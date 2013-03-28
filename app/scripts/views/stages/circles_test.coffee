@@ -1,8 +1,8 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./circles_test"], ($, Backbone, template) ->
-
+  'Handlebars',
+  "text!./circles_test.hbs"], ($, Backbone, Handlebars, tempfile) ->
   CirclesTest = Backbone.View.extend
     events:
       "click #start": "startTest"
@@ -28,6 +28,7 @@ define [
       @currentStage = 0
 
     render: ->
+      template = Handlebars.compile(tempfile)
       $(@el).html(template({instructions: @model.get('instructions')[@currentStage], circles: @circles}))
       $("#infobox").css("visibility", "visible")
       $(".login_logout").css("visibility", "hidden")

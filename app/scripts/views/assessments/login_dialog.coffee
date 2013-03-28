@@ -2,7 +2,8 @@ define [
   'jquery',
   'Backbone',
   '../../models/user',
-  "hbs!./login_dialog"], ($, Backbone, User, template) ->
+  'Handlebars',
+  "text!./login_dialog.hbs"], ($, Backbone, User, Handlebars, tempfile) ->
   LoginDialog = Backbone.View.extend  
     initialize: (options) ->
       window.OAuthRedirect = @onRedirect
@@ -11,6 +12,7 @@ define [
       @session = @model
 
     render: ->
+      template = Handlebars.compile(tempfile)
       $(@el).html(template({authUrl: @session.authUrl}))
       this
 

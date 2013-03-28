@@ -1,7 +1,8 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./start_view"], ($, Backbone, template) ->
+  'Handlebars',
+  "text!./start_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   StartView = Backbone.View.extend
     events:
       'submit #new_assessment': 'startAssessment'
@@ -10,7 +11,8 @@ define [
       @eventDispatcher = options.eventDispatcher
 
     render: ->
-      $(@el).html(template(definition: @model.get('definition')))
+      template = Handlebars.compile(tempfile)
+      $(@el).html(template({definition: @model.get('definition')}))
       $(".login_logout").css("visibility", "visible")
       this
       

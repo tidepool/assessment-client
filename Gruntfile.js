@@ -48,7 +48,7 @@ module.exports = function (grunt) {
         },
         connect: {
             options: {
-                port: 9000,
+                port: 7000,
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: 'localhost'
             },
@@ -103,14 +103,14 @@ module.exports = function (grunt) {
                 'test/spec/{,*/}*.js'
             ]
         },
-        mocha: {
-            all: {
-                options: {
-                    run: true,
-                    urls: ['http://localhost:<%= connect.options.port %>/index.html']
-                }
-            }
-        },
+        // mocha: {
+        //     all: {
+        //         options: {
+        //             run: true,
+        //             urls: ['http://localhost:<%= connect.options.port %>/index.html']
+        //         }
+        //     }
+        // },
         coffee: {
             dist: {
                 files: [{
@@ -118,7 +118,7 @@ module.exports = function (grunt) {
                     // require them into your main .coffee file
                     expand: true,
                     cwd: '<%= yeoman.app %>/scripts',
-                    src: '*.coffee',
+                    src: '**/*.coffee',
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
@@ -127,7 +127,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '.tmp/spec',
-                    src: '*.coffee',
+                    src: '**/*.coffee',
                     dest: 'test/spec'
                 }]
             }

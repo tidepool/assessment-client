@@ -1,7 +1,9 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./header_view"], ($, Backbone, template) ->
+  'Handlebars',
+  '../views/assessments/login_dialog',
+  "text!./header_view.hbs"], ($, Backbone, Handlebars, LoginDialog, tempfile) ->
   HeaderView = Backbone.View.extend
     events:
       "click #login": "login",
@@ -12,12 +14,14 @@ define [
 
     render: ->
       loggedIn = @model.loggedIn()
+      template = Handlebars.compile(tempfile)
       $(@el).html(template({ userName: @model.get('userName'), loggedIn: loggedIn } ))
       this
 
     login: ->
-      @eventDispatcher.trigger("loginDialogStart")
       event.preventDefault()
+      loginDialog = new LoginDialog({model: @model, nextRoute: "", eventDispatcher: @eventDispatcher})    
+      loginDialog.display()
 
     logout: ->
       @eventDispatcher.trigger("logoutRequest")

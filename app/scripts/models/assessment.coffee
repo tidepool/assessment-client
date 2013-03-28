@@ -4,6 +4,6 @@ define [
     urlRoot: '/api/v1/assessments.json'
 
     initialize:  ->
-      this.url = AssessmentsApp.apiServerUrl + this.urlRoot
+      this.url = window.apiServerUrl + this.urlRoot
  
   Assessment

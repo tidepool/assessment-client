@@ -1,7 +1,8 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./results_view"], ($, Backbone, template) ->
+  'Handlebars',
+  "text!./results_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   ResultsView = Backbone.View.extend
     events:
       "click #go_dashboard": "goDashboard"
@@ -11,6 +12,7 @@ define [
       @noResults = options.noResults
 
     render: ->
+      template = Handlebars.compile(tempfile)
       $(@el).html(template(results: @model, noResults: @noResults))
       $(".login_logout").css("visibility", "visible")
       this

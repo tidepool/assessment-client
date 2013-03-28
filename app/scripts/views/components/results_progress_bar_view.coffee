@@ -1,11 +1,13 @@
 define [
   'jquery',
   'Backbone',
-  "hbs!./results_progress_bar_view"], ($, Backbone, template) ->
+  'Handlebars',
+  "text!./results_progress_bar_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   ResultsProgressBarView = Backbone.View.extend
     initialize: (options) ->
 
     render: ->
+      template = Handlebars.compile(tempfile)
       $(@el).html(template())
       this
 

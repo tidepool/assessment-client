@@ -1,5 +1,5 @@
 define [
-  'jQuery',
+  'jquery',
   'Backbone',
   '../models/session', 
   '../models/assessment',
@@ -21,7 +21,6 @@ define [
     LoginDialog, HeaderView, ResultsView, StartView,
     ProgressBarView, ResultsProgressBarView, 
     CirclesTest, ImageRank, ReactionTime) ->
-
   AssessmentsRouter = Backbone.Router.extend
     routes:
       'stage/:stageNo': 'nextStage'
@@ -36,14 +35,16 @@ define [
       @eventDispatcher = _.extend({}, Backbone.Events)
       @eventDispatcher.bind("startAssessment", @startAssessment)
       @eventDispatcher.bind("userEventCreated", @userEventCreated)
-      @eventDispatcher.bind("loginDialogStart", @loginDialogStart)
-      @eventDispatcher.bind("loginDialogEnd", @loginDialogEnd)
-      @eventDispatcher.bind("logoutRequest", @logoutRequest)
+      # @eventDispatcher.bind("loginDialogStart", @loginDialogStart)
+      # @eventDispatcher.bind("loginDialogEnd", @loginDialogEnd)
+      # @eventDispatcher.bind("logoutRequest", @logoutRequest)
 
-      definitionId = options["definition"]
-      AssessmentsApp.apiServerUrl = options["api_server"]
-      appId = options["app_id"]
-      @session = new Session(AssessmentsApp.apiServerUrl, appId)
+      # TODO: We need to get these in properly. Figure it out!
+      definitionId = options["definition"] || 1
+      window.apiServerUrl = options["api_server"] || "http://api-server.dev"
+      appId = options["app_id"] || "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"
+      
+      @session = new Session(appId)
       header = new HeaderView({model: @session, eventDispatcher: @eventDispatcher})
       $('#header').html(header.render().el)
 
@@ -57,15 +58,9 @@ define [
           # TODO: Error Message
           alert("Error!")
 
-    loginDialogStart: =>
-      loginDialog = new LoginDialog({model: @session, nextRoute: "", eventDispatcher: @eventDispatcher})    
-      loginDialog.display()
-
-    loginDialogEnd: =>
-
-
-    logoutRequest: =>
-
+    setUpViews: ->
+      view = new StartView({model: @assessment, eventDispatcher: @eventDispatcher})
+      $('#content').html(view.render().el)
 
     stringToFunction: (str) ->
       namespace = str.split(".")
@@ -111,9 +106,6 @@ define [
         error: (model, xhr, options) =>
 
 
-    setUpViews: ->
-      view = new StartView({model: @assessment, eventDispatcher: @eventDispatcher})
-      $('#content').html(view.render().el)
 
     tryResult: (assessmentId) =>
       setTimeout =>
