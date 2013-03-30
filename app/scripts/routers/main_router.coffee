@@ -11,74 +11,80 @@ define [
   '../views/assessments/header_view',
   '../views/assessments/results_view',
   '../views/assessments/start_view',
+  '../views/assessments/stages_view',
   '../views/components/progress_bar_view',
   '../views/components/results_progress_bar_view',
   '../views/stages/circles_test',
-  '../views/stages/image_rank',
-  '../views/stages/reaction_time'
+  '../views/stages/image_rank'
   ], ($, Backbone, 
     Session, Assessment, UserEvent, User, Result, Stages, 
-    LoginDialog, HeaderView, ResultsView, StartView,
+    LoginDialog, HeaderView, ResultsView, StartView, StagesView,
     ProgressBarView, ResultsProgressBarView, 
-    CirclesTest, ImageRank, ReactionTime) ->
-  AssessmentsRouter = Backbone.Router.extend
+    CirclesTest, ImageRank) ->
+  MainRouter = Backbone.Router.extend
     routes:
-      'stage/:stageNo': 'nextStage'
+      'start': 'showStart'
+      'stage/:stageNo': 'showStages'
       'result': 'showResult'
-
-    views:
-      'ReactionTime': 'AssessmentsApp.Views.ReactionTime'
-      'ImageRank': 'AssessmentsApp.Views.ImageRank'
-      'CirclesTest': 'AssessmentsApp.Views.CirclesTest'
+      'login': 'showLogin'
 
     initialize: (options) ->
       @eventDispatcher = _.extend({}, Backbone.Events)
-      @eventDispatcher.bind("startAssessment", @startAssessment)
       @eventDispatcher.bind("userEventCreated", @userEventCreated)
-      # @eventDispatcher.bind("loginDialogStart", @loginDialogStart)
-      # @eventDispatcher.bind("loginDialogEnd", @loginDialogEnd)
-      # @eventDispatcher.bind("logoutRequest", @logoutRequest)
 
       # TODO: We need to get these in properly. Figure it out!
-      definitionId = options["definition"] || 1
-      window.apiServerUrl = options["api_server"] || "http://api-server.dev"
-      appId = options["app_id"] || "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"
-      
-      @session = new Session(appId)
-      header = new HeaderView({model: @session, eventDispatcher: @eventDispatcher})
-      $('#header').html(header.render().el)
+      definitionId = options["definition"]
+      window.apiServerUrl = options["apiServer"]
+      appId = options["appId"] 
 
+      @session = new Session(appId)
+      # @listenTo(Session, 'change:login_status', @loginStatusChange)
       @assessment = new Assessment()
-      attribs = {'def_id': definitionId }
-      @assessment.save attribs,
-        success: (model, response, options) =>
-          @setUpViews()
-          @currentStageNo = @assessment.get('stage_completed') + 1
+      @listenTo(@assessment, 'change:stage_completed', @stageCompleted)
+
+      @setUpSkelatalViews()
+
+      # Create an anonymous assessment on the server with the definitionId
+      @assessment.save {'def_id': definitionId },
         error: (model, xhr, options) =>
           # TODO: Error Message
           alert("Error!")
 
-    setUpViews: ->
-      view = new StartView({model: @assessment, eventDispatcher: @eventDispatcher})
+    setUpSkelatalViews: ->
+      header = new HeaderView({model: @session})
+      $('#header').html(header.render().el)
+      @listenTo(header, 'login', @navigate('login', {trigger: true}))
+
+    stageCompleted: ->
+      # Initially no stages completed, so start with -1
+      @currentStageNo = @assessment.get('stage_completed')
+      @numOfStages = @assessment.get('stages').length
+      switch 
+        when @currentStageNo is -1 then @navigate('start', {trigger: true})
+        when @currentStageNo < @numOfStages then @navigate("stage/#{@currentStageNo}", {trigger: true})
+        when @currentStageNo is @numOfStages then @navigate("result", {trigger: true})
+        else alert("Error in stages #{@currentStageNo}!")
+
+    showStart: ->
+      console.log('Show Start')
+      view = new StartView({model: @assessment})
       $('#content').html(view.render().el)
 
-    stringToFunction: (str) ->
-      namespace = str.split(".")
-      func = (window || this)
-      for newFunc in namespace
-        func = func[newFunc]
-      if (typeof func isnt "function")
-        throw new Error("function not found")
-      func
+    showStages: ->
+      console.log("Show Stage ##{@currentStageNo}")
+      view = new StagesView({model: @assessment, currentStageNo: @currentStageNo})
+      view.render()
 
-    getQueryParam: (param) ->
-      query = window.location.search.substring(1)
-      qParams = query.split("&")
-      for qParam in qParams
-        pair = qParam.split("=")
-        if pair[0] == param
-          return unescape(pair[1])
-      return false
+    showResult: ->
+      console.log("Show Result")
+      view = new ResultsView({model: {}, eventDispatcher:@eventDispatcher, noResults:true})
+      $('#content').html(view.render().el)
+
+    showLogin: ->
+      console.log("Show Login")
+      loginDialog = new LoginDialog({model: @model, nextRoute: "", eventDispatcher: @eventDispatcher})    
+      $('#content').html(loginDialog.render().el)
+
 
     startAssessment: =>
       @stages = new Stages(@assessment.get('stages'))
@@ -94,18 +100,6 @@ define [
 
     handleError: (model, xhr, options) =>
       # TODO: Error handling for failed event saves
-
-    assessmentProgress: (stage) ->
-      # Rails 4 is going to introduce support for the PATCH verb in HTTP
-      # TODO: Switch to PATCH when Rails 4 switch happens
-      attrs = { 'stage_completed': stage }
-      @assessment.save attrs,
-        patch: false
-        success: (model, response, options) =>
-
-        error: (model, xhr, options) =>
-
-
 
     tryResult: (assessmentId) =>
       setTimeout =>
@@ -173,7 +167,7 @@ define [
           stageNo = stageCompleted + 1
           priorStage = stageNo - 1
 
-        @assessmentProgress(priorStage)
+        @assessment.updateProgres priorStage
         @progressBarView.setStageCompleted(priorStage)
 
       @currentStageNo = stageNo
@@ -186,4 +180,4 @@ define [
         viewClass = @stringToFunction(@views[@stage.get('view_name')])
         view = new viewClass({model: @stage, eventDispatcher: @eventDispatcher, nextStage: stageNo + 1})
         $('#content').html(view.render().el)
-  AssessmentsRouter
+  MainRouter

@@ -1,15 +1,18 @@
 define [
   'jquery',
+  'underscore',
   'Backbone',
   'Handlebars',
-  "text!./image_rank.hbs"], ($, Backbone, Handlebars, tempfile) ->    
+  'models/user_event',
+  "text!./image_rank.hbs",
+  'models/assessment'], ($, _, Backbone, Handlebars, UserEvent, tempfile) ->    
   ImageRank = Backbone.View.extend
     events:
       "click #start": "startTest"
 
     initialize: (options) ->
-      @eventDispatcher = options.eventDispatcher
-      @nextStage = options.nextStage
+      @stageNo = options.stageNo
+      @assessment = options.assessment
       imageSequence = @model.get('image_sequence')
       @images = ( { index: i, url: image["url"], elements: image["elements"], image_id: image["image_id"], rank: -1 } for image, i in imageSequence)
       @frames = ({image: -1, index: i, rank: i + 1} for i in [0..4])
@@ -22,7 +25,7 @@ define [
       $("#infobox").css("visibility", "visible")
       this
 
-    startTest: =>
+    startTest: ->
       @createUserEvent
         "event_desc": "test_started"
         "image_sequence": @images
@@ -195,15 +198,15 @@ define [
       @createUserEvent
         "final_rank": finalRank
         "event_desc": "test_completed"
-      Backbone.history.navigate("/stage/#{@nextStage}", true)
+      @assessment.updateProgress(@stageNo + 1)
+      # Backbone.history.navigate("/stage/#{@nextStage}", true)
 
-    createUserEvent: (newEvent) =>
-      record_time = new Date().getTime()
-      @eventInfo = 
-        "event_type": "0"
+    createUserEvent: (newEvent) ->
+      eventInfo = 
+        "assessment_id": @assessment.get('id')
         "module": "image_rank"
-        "stage": @nextStage - 1 
-        "record_time": record_time
-      userEvent = _.extend({}, @eventInfo, newEvent)
-      @eventDispatcher.trigger("userEventCreated", userEvent)
+        "stage": @stageNo 
+      fullInfo = _.extend({}, eventInfo, newEvent)
+      userEvent = new UserEvent()
+      userEvent.send(fullInfo)
   ImageRank

@@ -2,15 +2,15 @@ define [
   'jquery',
   'Backbone',
   'Handlebars',
-  '../views/assessments/login_dialog',
-  "text!./header_view.hbs"], ($, Backbone, Handlebars, LoginDialog, tempfile) ->
+  'assessments/login_dialog',
+  'routers/main_router',
+  "text!./header_view.hbs"], ($, Backbone, Handlebars, LoginDialog, MainRouter, tempfile) ->
   HeaderView = Backbone.View.extend
     events:
       "click #login": "login",
       "click #logout": "logout"
 
     initialize: (options) ->
-      @eventDispatcher = options.eventDispatcher
 
     render: ->
       loggedIn = @model.loggedIn()
@@ -20,10 +20,9 @@ define [
 
     login: ->
       event.preventDefault()
-      loginDialog = new LoginDialog({model: @model, nextRoute: "", eventDispatcher: @eventDispatcher})    
-      loginDialog.display()
+      @trigger('login')
 
     logout: ->
-      @eventDispatcher.trigger("logoutRequest")
       event.preventDefault()
+  
   HeaderView

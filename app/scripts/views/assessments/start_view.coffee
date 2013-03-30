@@ -5,10 +5,10 @@ define [
   "text!./start_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   StartView = Backbone.View.extend
     events:
-      'submit #new_assessment': 'startAssessment'
+      'click #startAssessment': 'startAssessment'
 
     initialize: (options) ->
-      @eventDispatcher = options.eventDispatcher
+
 
     render: ->
       template = Handlebars.compile(tempfile)
@@ -17,7 +17,7 @@ define [
       this
       
     startAssessment: (event) ->
-      @eventDispatcher.trigger("startAssessment")
-      event.preventDefault()
+      #TODO: Change this to 0 or -1 by making the initial stage -2.
+      @model.updateProgress(0)
 
   StartView

@@ -1,16 +1,19 @@
 define [
   'jquery',
+  'underscore',
   'Backbone',
   'Handlebars',
-  "text!./circles_test.hbs"], ($, Backbone, Handlebars, tempfile) ->
+  'models/user_event',
+  "text!./circles_test.hbs",
+  'models/assessment'], ($, _, Backbone, Handlebars, UserEvent, tempfile) ->
   CirclesTest = Backbone.View.extend
     events:
       "click #start": "startTest"
       "click #end": "endTest"
 
     initialize: (options) ->
-      @eventDispatcher = options.eventDispatcher
-      @nextStage = options.nextStage
+      @assessment = options.assessment
+      @stageNo = options.stageNo
       inputCircles = @model.get('circles')
       @circles = ({
         "trait1": circle.trait1,
@@ -62,7 +65,8 @@ define [
         "circles": @circles
         "self_coord": { top: @SELF_COORD_TOP, left: @SELF_COORD_LEFT, size: @SELF_COORD_SIZE }
 
-      Backbone.history.navigate("/stage/#{@nextStage}", true)
+      # Backbone.history.navigate("/stage/#{@nextStage}", true)
+      @assessment.updateProgress(@stageNo)
 
     updateCircleCoordsAndSizes: ->
       for circle, i in @circles
@@ -194,12 +198,11 @@ define [
         $("#slider#{i}").css("visibility", visibility)
 
     createUserEvent: (newEvent) =>
-      record_time = new Date().getTime()
-      @eventInfo = 
-        "event_type": "0"
+      eventInfo =
+        "assessment_id": @assessment.get('id') 
         "module": "circles_test"
-        "stage": @nextStage - 1 
-        "record_time": record_time
-      userEvent = _.extend({}, @eventInfo, newEvent)
-      @eventDispatcher.trigger("userEventCreated", userEvent)
+        "stageNo": @stageNo 
+      fullInfo = _.extend({}, eventInfo, newEvent)
+      userEvent = new UserEvent()
+      userEvent.send(fullInfo)
   CirclesTest

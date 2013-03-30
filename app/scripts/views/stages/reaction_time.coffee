@@ -1,16 +1,20 @@
 define [
   'jquery',
+  'underscore',
   'Backbone',
   'Handlebars',
-  "text!./reaction_time.hbs"], ($, Backbone, Handlebars, tempfile) ->
+  'models/stage',
+  'models/user_event',
+  "text!./reaction_time.hbs",
+  'models/assessment'], ($, _, Backbone, Handlebars, Stage, UserEvent, tempfile) ->
   ReactionTime = Backbone.View.extend
     events:
       "click #start": "startTest",
       "click #circle": "circleClicked"
 
     initialize: (options) ->
-      @eventDispatcher = options.eventDispatcher
-      @nextStage = options.nextStage
+      @stageNo = options.stageNo
+      @assessment = options.assessment
       @colors = @model.get('colors')
       @sequenceType = @model.get('sequence_type')
       @colorSequence = @prepareSequence()
@@ -76,10 +80,11 @@ define [
       $("#infobox").css("visibility", "visible")
       this
 
-    waitAndShow: =>
-      setTimeout @showCircle, @colorSequence[@sequenceNo + 1].interval
+    waitAndShow: ->
+      boundShowCircle = _.bind @showCircle, @
+      setTimeout boundShowCircle, @colorSequence[@sequenceNo + 1].interval
 
-    startTest: =>
+    startTest: ->
       colorSequenceInString = (color.color + ":" + color.interval for color in @colorSequence)[..]
       @createUserEvent
         "event_desc": "test_started"
@@ -87,7 +92,7 @@ define [
       $("#infobox").css("visibility", "hidden")
       @waitAndShow()
 
-    showCircle: => 
+    showCircle: ->
       @sequenceNo += 1
       if @sequenceNo < @numOfSequences
         @createUserEvent
@@ -100,7 +105,7 @@ define [
         if next_seq < @numOfSequences
           @waitAndShow()
 
-    circleClicked: =>
+    circleClicked: ->
       switch @sequenceType
         when "simple"
           if @colorSequence[@sequenceNo].color is 'red'
@@ -129,16 +134,17 @@ define [
         @createUserEvent
           "event_desc": "test_completed"
           "sequence_no": @sequenceNo
-        Backbone.history.navigate("/stage/#{@nextStage}", true)
+        @assessment.updateProgress(@stageNo + 1)
+        # Backbone.history.navigate("/stage/#{@nextStage}", true)
    
-    createUserEvent: (newEvent) =>
-      record_time = new Date().getTime()
-      @eventInfo = 
-        "event_type": "0"
+    createUserEvent: (newEvent) ->
+      eventInfo = 
+        "assessment_id": @assessment.get('id')
         "module": "reaction_time"
-        "stage": @nextStage - 1
+        "stage": @stageNo
         "sequence_type": @sequenceType
-        "record_time": record_time
-      userEvent = _.extend({}, @eventInfo, newEvent)
-      @eventDispatcher.trigger("userEventCreated", userEvent)
+      fullInfo = _.extend({}, eventInfo, newEvent)
+      userEvent = new UserEvent()
+      userEvent.send(fullInfo)
+      
   ReactionTime

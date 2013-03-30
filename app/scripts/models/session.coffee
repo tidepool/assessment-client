@@ -10,7 +10,9 @@ define [
       @accessToken = localStorage['access_token']
       $.ajaxSetup
         type: 'POST',
-        headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') }
+        headers:  
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') 
+          'Accept': 'application/json'
         dataType: 'json'
         beforeSend: (jqXHR, options) =>
           if @loggedIn()

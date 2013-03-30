@@ -16,9 +16,6 @@ define [
       $(@el).html(template({authUrl: @session.authUrl}))
       this
 
-    display: ->
-      $("#logindialog").html(@render().el)
-
     close: ->
       $("#logindialog").html("")
 
@@ -32,7 +29,7 @@ define [
 
     onRedirect: (hash) =>
       params = @parseHash(hash)
-
+      console.log("redirected to here 2")
       if params['access_token']
         @session.accessToken = params['access_token']
         localStorage['access_token'] = @session.access_token

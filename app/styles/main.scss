@@ -1,4 +1,9 @@
 @import 'sass-bootstrap/lib/bootstrap';
+@import './basic';
+@import './reaction_time';
+@import './image_rank';
+@import './circles_test';
+@import './progress_bar_view';
 
 .infobox {
   margin-top: 80px;

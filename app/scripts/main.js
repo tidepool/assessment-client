@@ -15,9 +15,18 @@ require.config({
         // handlebars: '../components/handlebars.js/dist/handlebars',
         underscore: '../components/underscore-amd/underscore',
         jquery: '../components/jquery/jquery',
+        jquery_draggable: '../components/jquery-ui/ui/jquery.ui.draggable',
+        jquery_droppable: '../components/jquery-ui/ui/jquery.ui.droppable',
         Backbone: '../components/backbone-amd/backbone',
         text: '../components/requirejs-text/text',
-        json2: '../components/require-handlebars-plugin/hbs/json2'
+        json2: '../components/require-handlebars-plugin/hbs/json2',
+        assessments: './views/assessments',
+        components: './views/components',
+        stages: './views/stages',
+        routers: './routers',
+        models: './models',
+        collections: './collections',
+        helpers: './helpers'
     },
     shim: {
         bootstrap: {
@@ -30,10 +39,15 @@ require.config({
     }
 });
 
-require(['./routers/assessments_router', 'Backbone'], function (AssessmentsRouter, Backbone) {
+require(['routers/main_router', 'Backbone'], function (MainRouter, Backbone) {
     'use strict';
 
-    console.log("Hello world");
-    new AssessmentsRouter();
-    Backbone.history.start();
+    console.log("App Started");
+    var options = {
+        definition: 1,
+        apiServer: "http://api-server.dev",
+        appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"
+    }
+    new MainRouter(options);
+    Backbone.history.start({pushState: true});
 });
