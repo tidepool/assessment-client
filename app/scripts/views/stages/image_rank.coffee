@@ -5,6 +5,8 @@ define [
   'Handlebars',
   'models/user_event',
   "text!./image_rank.hbs",
+  'jqueryui/draggable',
+  'jqueryui/droppable',
   'models/assessment'], ($, _, Backbone, Handlebars, UserEvent, tempfile) ->    
   ImageRank = Backbone.View.extend
     events:
@@ -45,18 +47,18 @@ define [
         helper: "clone"
         cursor: "move"
         revert: "invalid"
-        start: @startDrag
+        start: _.bind(@startDrag, @)
 
     setDroppables: ->
       for frame, i in @frames
         frame_selector = ".frame.f#{i}"
         $(frame_selector).droppable
-          drop: @imageDropInFrame
+          drop: _.bind(@imageDropInFrame, @)
 
       $(".photos").droppable
-        drop: @imageDroppedOutside
+        drop: _.bind(@imageDroppedOutside, @)
 
-    startDrag: (e, ui) =>
+    startDrag: (e, ui) ->
       # DONOT use ui.helper, it is the clone element
       # Instead use the e.target
       itemDragged = $(e.target)
@@ -75,7 +77,7 @@ define [
         "image_no": imageNo 
         "event_desc": "image_drag_start"
 
-    imageDropInFrame: (e, ui) =>
+    imageDropInFrame: (e, ui) ->
       $itemDropped = ui.draggable
       $dropTarget = $(e.target)
 
@@ -151,7 +153,7 @@ define [
         $itemDropped.fadeIn "easeIn", => 
           @setImageDraggable(imageNo)
 
-    imageDroppedOutside: (e, ui) =>
+    imageDroppedOutside: (e, ui) ->
       $itemDropped = ui.draggable
       $dropTarget = $(e.target)
 
@@ -189,7 +191,7 @@ define [
         $itemDropped.fadeIn "easeIn", => 
           @setImageDraggable(imageNo)
 
-    determineEndOfTest: =>
+    determineEndOfTest: ->
       finalRank = []
       for image, i in @images
         finalRank[i] = image.rank

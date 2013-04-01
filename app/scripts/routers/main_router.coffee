@@ -30,25 +30,22 @@ define [
 
     initialize: (options) ->
       @eventDispatcher = _.extend({}, Backbone.Events)
-      @eventDispatcher.bind("userEventCreated", @userEventCreated)
 
       # TODO: We need to get these in properly. Figure it out!
-      definitionId = options["definition"]
+      @definitionId = options["definition"]
       window.apiServerUrl = options["apiServer"]
       appId = options["appId"] 
 
+      # Always create a user, initially as a guest
       @session = new Session(appId)
-      # @listenTo(Session, 'change:login_status', @loginStatusChange)
+      @listenTo(@session, 'session:logged_in', @loginCompleted)
+      @listenTo(@session, 'session:show_dialog', @showLogin)
+      @session.login(true)
+      
       @assessment = new Assessment()
       @listenTo(@assessment, 'change:stage_completed', @stageCompleted)
 
       @setUpSkelatalViews()
-
-      # Create an anonymous assessment on the server with the definitionId
-      @assessment.save {'def_id': definitionId },
-        error: (model, xhr, options) =>
-          # TODO: Error Message
-          alert("Error!")
 
     setUpSkelatalViews: ->
       header = new HeaderView({model: @session})
@@ -77,13 +74,32 @@ define [
 
     showResult: ->
       console.log("Show Result")
-      view = new ResultsView({model: {}, eventDispatcher:@eventDispatcher, noResults:true})
+      if @session.user?
+        isGuest = @session.user.get('guest')
+        if isGuest?
+          # First logout the guest user
+          @session.logout()
+          # Now login the user (no guest allowed)
+          @session.login(false)
+        else
+          @session.user.addAssessment(@assessment)
+          @result = 
+
+      view = new ResultsView({model: @session, assessment: @assessment, noResults:true})
       $('#content').html(view.render().el)
 
-    showLogin: ->
+    showLogin: (options) ->
       console.log("Show Login")
-      loginDialog = new LoginDialog({model: @model, nextRoute: "", eventDispatcher: @eventDispatcher})    
-      $('#content').html(loginDialog.render().el)
+      silentLogin = options.hidden
+      loginDialog = new LoginDialog({model: @session, silentLogin: silentLogin})
+      $('#loginView').html(loginDialog.render().el)
+
+    loginCompleted: ->
+      # Create an anonymous assessment on the server with the definitionId
+      @assessment.save {'def_id': @definitionId },
+        error: (model, xhr, options) =>
+          # TODO: Error Message
+          alert("Error!")
 
 
     startAssessment: =>

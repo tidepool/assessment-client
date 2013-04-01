@@ -5,6 +5,8 @@ define [
   'Handlebars',
   'models/user_event',
   "text!./circles_test.hbs",
+  'jqueryui/draggable',
+  'jqueryui/droppable',
   'models/assessment'], ($, _, Backbone, Handlebars, UserEvent, tempfile) ->
   CirclesTest = Backbone.View.extend
     events:
@@ -37,7 +39,7 @@ define [
       $(".login_logout").css("visibility", "hidden")
       this
 
-    startTest: =>
+    startTest: ->
       $("#infobox").css("visibility", "hidden")
 
       switch @currentStage
@@ -58,7 +60,7 @@ define [
           @setupDraggableCircles()
           $(".self").css("visibility", "visible")
 
-    endTest: =>
+    endTest: ->
       @updateCircleCoordsAndSizes()
       @createUserEvent
         "event_desc": "test_completed"
@@ -76,7 +78,7 @@ define [
         circle.width = $(circleSelector).width()
         circle.height = $(circleSelector).height()
 
-    sliderChanged: (e, ui) =>
+    sliderChanged: (e, ui) ->
       selectedCircleNo = e.target.getAttribute("data-circleid")
       selectedCircle = @circles[selectedCircleNo]
       selectedCircle.changed = true
@@ -121,8 +123,8 @@ define [
             range: "min",
             max: 4,
             value: 4,
-            change: @sliderChanged,
-            slider: @sliderChanged
+            change: _.bind(@sliderChanged, @),
+            slider: _.bind(@sliderChanged, @)
           });
         $("#slider#{i}").slider("option", "step", 1);
 
@@ -135,11 +137,11 @@ define [
         circleSelector = ".circle.c#{i}"
         $(circleSelector).draggable({
           containment: "#characteristics",
-          start: @startDrag,
-          stop: @stopDrag
+          start: _.bind(@startDrag, @),
+          stop: _.bind(@stopDrag, @)
           })
 
-    startDrag: (e, ui) =>
+    startDrag: (e, ui) ->
       selectedCircleNo = e.target.getAttribute("data-circleid")
       selectedCircle = @circles[selectedCircleNo]
       @createUserEvent
@@ -148,7 +150,7 @@ define [
         "circle": selectedCircle
 
 
-    stopDrag: (e, ui) =>
+    stopDrag: (e, ui) ->
       selectedCircleNo = e.target.getAttribute("data-circleid")
       selectedCircle = @circles[selectedCircleNo]
       selectedCircle.top = ui.offset.top
@@ -156,8 +158,8 @@ define [
       selectedCircle.moved = true
       $(e.target).draggable({
         containment: "#characteristics",
-        start: @startDrag,
-        stop: @stopDrag
+        start: _.bind(@startDrag, @),
+        stop: _.bind(@stopDrag, @)
         })
 
       @createUserEvent
@@ -197,7 +199,7 @@ define [
       for circle, i in @circles
         $("#slider#{i}").css("visibility", visibility)
 
-    createUserEvent: (newEvent) =>
+    createUserEvent: (newEvent) ->
       eventInfo =
         "assessment_id": @assessment.get('id') 
         "module": "circles_test"

@@ -8,7 +8,6 @@ define [
       "click #go_dashboard": "goDashboard"
 
     initialize: (options) ->
-      @eventDispatcher = options.eventDispatcher
       @noResults = options.noResults
 
     render: ->
@@ -16,6 +15,9 @@ define [
       $(@el).html(template(results: @model, noResults: @noResults))
       $(".login_logout").css("visibility", "visible")
       this
+
+    getResults: ->
+      @session.user
 
     goDashboard: ->
       window.location.href = "/dash"

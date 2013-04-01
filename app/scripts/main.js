@@ -15,8 +15,7 @@ require.config({
         // handlebars: '../components/handlebars.js/dist/handlebars',
         underscore: '../components/underscore-amd/underscore',
         jquery: '../components/jquery/jquery',
-        jquery_draggable: '../components/jquery-ui/ui/jquery.ui.draggable',
-        jquery_droppable: '../components/jquery-ui/ui/jquery.ui.droppable',
+        jqueryui: '../components/jquery-ui/jqueryui',
         Backbone: '../components/backbone-amd/backbone',
         text: '../components/requirejs-text/text',
         json2: '../components/require-handlebars-plugin/hbs/json2',
@@ -44,9 +43,10 @@ require(['routers/main_router', 'Backbone'], function (MainRouter, Backbone) {
 
     console.log("App Started");
     var options = {
-        definition: 1,
+        definition: 3,
         apiServer: "http://api-server.dev",
-        appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"
+        // appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"
+        appId: "ddc5d7ba3b5f5e12dd7ca5938c9f5fea6fdf4e75f4d92f954367cc9e98700872"
     }
     new MainRouter(options);
     Backbone.history.start({pushState: true});

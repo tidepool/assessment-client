@@ -11,12 +11,26 @@ define [
       "click #logout": "logout"
 
     initialize: (options) ->
+      @user = @model.user
+      @listenTo(@model, 'session:logged_in', @loggedIn)
 
     render: ->
       loggedIn = @model.loggedIn()
       template = Handlebars.compile(tempfile)
-      $(@el).html(template({ userName: @model.get('userName'), loggedIn: loggedIn } ))
+      if @user?
+        if @user.get('guest') is true
+          userName = 'Guest'
+        else
+          userName = @user.get('email')
+      else
+        userName = "Logging In..."
+
+      $(@el).html(template({ userName: userName, loggedIn: loggedIn } ))
       this
+
+    loggedIn: ->
+      @user = @model.user
+      @render()
 
     login: ->
       event.preventDefault()
