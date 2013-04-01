@@ -18,5 +18,8 @@ define [
         error: (model, xhr, options) =>
           # TODO: Error Handling
           alert("stageCompleted error")
+
+      calculateResult: ->
+        
  
   Assessment

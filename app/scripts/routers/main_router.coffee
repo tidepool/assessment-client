@@ -83,7 +83,7 @@ define [
           @session.login(false)
         else
           @session.user.addAssessment(@assessment)
-          @result = 
+          @assessment.calculateResult() 
 
       view = new ResultsView({model: @session, assessment: @assessment, noResults:true})
       $('#content').html(view.render().el)
