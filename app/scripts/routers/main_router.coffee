@@ -13,14 +13,11 @@ define [
   '../views/assessments/start_view',
   '../views/assessments/stages_view',
   '../views/components/progress_bar_view',
-  '../views/components/results_progress_bar_view',
-  '../views/stages/circles_test',
-  '../views/stages/image_rank'
+  '../views/components/results_progress_bar_view'
   ], ($, Backbone, 
     Session, Assessment, UserEvent, User, Result, Stages, 
     LoginDialog, HeaderView, ResultsView, StartView, StagesView,
-    ProgressBarView, ResultsProgressBarView, 
-    CirclesTest, ImageRank) ->
+    ProgressBarView, ResultsProgressBarView) ->
   MainRouter = Backbone.Router.extend
     routes:
       'start': 'showStart'
@@ -36,11 +33,11 @@ define [
       window.apiServerUrl = options["apiServer"]
       appId = options["appId"] 
 
-      # Always create a user, initially as a guest
+      # Always create a user, initially as a guest if someone is not already loggedin
       @session = new Session(appId)
       @listenTo(@session, 'session:logged_in', @loginCompleted)
       @listenTo(@session, 'session:show_dialog', @showLogin)
-      @session.login(true)
+      @session.login(false)
       
       @assessment = new Assessment()
       @listenTo(@assessment, 'change:stage_completed', @stageCompleted)
@@ -80,13 +77,17 @@ define [
           # First logout the guest user
           @session.logout()
           # Now login the user (no guest allowed)
-          @session.login(false)
+          @session.login(true)
         else
-          @session.user.addAssessment(@assessment)
-          @assessment.calculateResult() 
-
-      view = new ResultsView({model: @session, assessment: @assessment, noResults:true})
-      $('#content').html(view.render().el)
+          view = new ResultsProgressBarView()
+          $('#content').html(view.render().el)
+          @assessment.addUser(@session.user)
+          .then =>
+            @result = new Result(@assessment.get('id'))
+            @result.calculateResult() 
+          .then =>
+            view = new ResultsView({model: @result, DoNotShowResults:false})
+            $('#content').html(view.render().el)
 
     showLogin: (options) ->
       console.log("Show Login")
@@ -101,99 +102,4 @@ define [
           # TODO: Error Message
           alert("Error!")
 
-
-    startAssessment: =>
-      @stages = new Stages(@assessment.get('stages'))
-      @progressBarView = new ProgressBarView({numOfStages: @stages.length})
-      $('#progressbarcontainer').html(@progressBarView.render().el)
-      @nextStage(@currentStageNo)
-
-    userEventCreated: (userEvent) =>
-      newUserEvent = _.extend({}, userEvent, {"assessment_id": @assessment.get('id'), "user_id": @assessment.get('user_id')})
-      eventModel = new UserEvent(newUserEvent)
-      eventModel.save {},
-        error:@handleError
-
-    handleError: (model, xhr, options) =>
-      # TODO: Error handling for failed event saves
-
-    tryResult: (assessmentId) =>
-      setTimeout =>
-        @assessment.id = assessmentId
-        @assessment.fetch 
-          data: { results: true },
-          success: @handleAssessmentResults
-          error: @handleFailedAssessmentResults
-      , 2000
-
-    handleAssessmentResults: (model, response, options) =>
-      if response.status is 206
-        @tryResult(@assessment.id)
-        return
-      profileDesc = @assessment.get('profile_description')
-      if profileDesc?
-        view = new ResultsView({model: profileDesc, eventDispatcher: @eventDispatcher})
-        $('#content').html(view.render().el)
-      else
-        @tryResult(@assessment.id)
-        return
-
-    handleFailedAssessmentResults: (model, xhr, options) =>
-      # TODO: Error handling for failed results
-
-    showResult: ->
-      definition = @assessment.get('definition')
-      if definition.experiment is 'MT'
-        # This is for the Mechanical Turk experiments
-        # Donot show the results to Mechanical Turk participants 
-        view = new ResultsView({model: {}, eventDispatcher:@eventDispatcher, noResults:true})
-        $('#content').html(view.render().el)
-        return
-
-      if @session.loggedIn()
-        # User already logged in
-        view = new ResultsProgressBarView()
-        $('#content').html(view.render().el)
-
-        
-        result = new Result(@assessment.id)
-        attribs = {}
-        result.save attribs,
-          success: (model, response, options) =>
-            result = response
-            foo = model
-          error: (model, xhr, options) =>
-            # TODO: Error Message
-            alert("Error!")
-
-        # @tryResult(@assessment.id)
-      else
-        # Login
-        loginDialog = new LoginDialog({model: @session, nextRoute: "/result", eventDispatcher: @eventDispatcher})    
-        loginDialog.display()
-     
-    nextStage: (stageNo) =>
-      stageNo = parseInt(stageNo)
-
-      priorStage = stageNo - 1
-      if priorStage >= 0
-        stageCompleted = @assessment.get('stage_completed')
-        if stageCompleted isnt priorStage - 1
-          # Jumping to far! Prevent jumping back and forth
-          stageNo = stageCompleted + 1
-          priorStage = stageNo - 1
-
-        @assessment.updateProgres priorStage
-        @progressBarView.setStageCompleted(priorStage)
-
-      @currentStageNo = stageNo
-      if stageNo >= @stages.length
-        # Final stage
-        # event_type:1 will trigger the calculation in the backend
-        @showResult()
-      else
-        @stage = @stages.at(stageNo)
-        viewClass = @stringToFunction(@views[@stage.get('view_name')])
-        view = new viewClass({model: @stage, eventDispatcher: @eventDispatcher, nextStage: stageNo + 1})
-        $('#content').html(view.render().el)
   MainRouter

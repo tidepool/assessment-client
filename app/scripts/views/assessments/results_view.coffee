@@ -8,16 +8,17 @@ define [
       "click #go_dashboard": "goDashboard"
 
     initialize: (options) ->
-      @noResults = options.noResults
+      @doNotShowResults = options.DoNotShowResults
 
     render: ->
       template = Handlebars.compile(tempfile)
-      $(@el).html(template(results: @model, noResults: @noResults))
+      result = 
+        name: @model.get('name')
+        logo_url: @model.get('logo_url')
+        one_liner: @model.get('one_liner')
+      $(@el).html(template(result: result, doNotShowResults: @doNotShowResults))
       $(".login_logout").css("visibility", "visible")
       this
-
-    getResults: ->
-      @session.user
 
     goDashboard: ->
       window.location.href = "/dash"

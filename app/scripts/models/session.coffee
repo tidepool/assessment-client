@@ -22,23 +22,24 @@ define [
 
     # If already logged in as a user, then create session for it.
     # If not logged in 
-    login: (guestOk) ->
+    login: (forceNoGuest) ->
       # check if already logged-in
       if @loggedIn()
         @finishLogin()
       else 
-        @authUrl = @setupAuthUrl(window.apiServerUrl, guestOk)
+        @authUrl = @setupAuthUrl(window.apiServerUrl, forceNoGuest)
         window.OAuthRedirect = _.bind(@onRedirect, @)
 
         # Check for renewal
-        renewal = false
-
-        if guestOk? || renewal?
-          # We would like login to happen silently
-          @trigger('session:show_dialog', {hidden:true})
-        else
+        # renewal = false
+        # TODO: Figure out the case where I am logged in 
+        # token expired, and I don't want to log in as guest silently.
+        if forceNoGuest?
           # Show the dialog to get user permissions
           @trigger('session:show_dialog', {hidden:false})
+        else          
+          # We would like login to happen silently
+          @trigger('session:show_dialog', {hidden:true})
 
     logout: ->
       localStorage['access_token'] = ""
@@ -46,8 +47,8 @@ define [
     loggedIn: ->
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
         currentTime = new Date().getTime()
-        expires_in = localStorage['expires_in']
-        token_received = localStorage['token_received']
+        expires_in = parseInt(localStorage['expires_in'])
+        token_received = parseInt(localStorage['token_received'])
         if expires_in? and token_received? and currentTime < token_received + expires_in
           # still not expired
           true
@@ -85,16 +86,17 @@ define [
       user.fetch
         success: (model, response, options) =>
           @user = model
+          localStorage['guest'] = @user.get('guest')
           @trigger('session:logged_in')
         error: (model, xhr, options) =>
           alert("Error!")
 
-    setupAuthUrl: (authServer, guestOk) ->
+    setupAuthUrl: (authServer, forceNoGuest) ->
       authUrl = "#{authServer}/oauth/authorize" 
       redirectUri = "#{window.location.protocol}//#{window.location.host}/redirect.html"
       redirectUri = encodeURIComponent(redirectUri)
-      if guestOk
-        guestParam = "guest=true&"
+      if forceNoGuest
+        guestParam = "force_no_guest=true&"
       else
         guestParam = ""
       "#{authUrl}?#{guestParam}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"   

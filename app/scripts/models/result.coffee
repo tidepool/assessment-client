@@ -1,7 +1,86 @@
 define [
-  'Backbone'], (Backbone) ->  
+  'jquery',
+  'Backbone'], ($, Backbone) ->  
   Result = Backbone.Model.extend
     initialize: (assessment_id) ->
-      @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/results.json"
+      @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/results"
 
+    calculateResult: ->
+      deferred = $.Deferred()
+      @startCalculation()
+      .then =>
+        @checkForProgress()
+      .then =>
+        @getResults()
+      .then =>
+        deferred.resolve()
+
+      deferred.promise()
+
+    startCalculation: ->
+      deferred = $.Deferred()
+      attrs = {}
+      @save(attrs)       
+      .done (data, textStatus, jqXHR) =>
+        console.log("Success: #{textStatus}") 
+        statusCode = jqXHR.statusCode()
+        if statusCode isnt 202
+          # We were expecting 202 (accepted) as status code
+          console.log("Unexpected StatusCode #{statusCode}")
+        @progressLink = data.status.link
+        deferred.resolve(jqXHR.response)
+      .fail (jqXHR, textStatus, errorThrown) ->
+        console.log("Error: #{textStatus}")
+        deferred.reject(textStatus)
+
+      deferred.promise()
+    
+    checkForProgress: ->
+      deferred = $.Deferred()
+      if @progressLink?
+        $.ajax
+          type: 'GET'
+          url: @progressLink
+        .done (data, textStatus, jqXHR) =>
+          console.log("Success: #{textStatus}")
+          statusCode = jqXHR.statusCode()
+          if statusCode isnt 200
+            # We were expecting 200 (ok) as status code
+            console.log("Unexpected StatusCode #{statusCode}")
+          switch data.status.state
+            when 'pending'
+              @progressLink = data.status.link
+              console.log("Still pending for results")
+              # continue pinging every 1s
+              setTimeout => 
+                @checkForProgress()
+              , 1000
+            when 'done'
+              console.log("Done with results")
+              deferred.resolve(jqXHR.response)
+            when 'error'
+              console.log("Server error, no results")
+              deferred.reject(textStatus)
+            else
+              console.log("Unexpected status #{data.status.state}")
+              deferred.reject(textStatus)
+        .fail (jqXHR, textStatus, errorThrown) ->
+          console.log("Error: #{textStatus}")
+          deferred.reject(textStatus)
+      else
+        deferred.reject("No url to check for progress")
+
+      deferred.promise()
+
+    getResults: ->
+      deferred = $.Deferred()
+      @fetch()
+      .done (data, textStatus, jqXHR) =>
+        console.log("Success: #{textStatus}") 
+        deferred.resolve(jqXHR.response)
+      .fail (jqXHR, textStatus, errorThrown) ->
+        console.log("Error: #{textStatus}")
+        deferred.reject(textStatus)
+
+      deferred.promise()
   Result

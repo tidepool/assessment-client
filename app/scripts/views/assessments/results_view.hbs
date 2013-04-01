@@ -1,16 +1,16 @@
 <div id="content" class="container">
   <div class="row">
     <div class="span6 offset3 results">
-        {{#if noResults}}
-          <h3>Thank you for participating!</h3>
-          <p>Your results will help us fine tune our algorithms.</p>
-        {{else}}
-          <h3>You are</h3>
-          <div class="type-icon"><img src="/images/badges/{{results.logo_url}}" alt="{{results.name}}"></div>
-          <h3>{{results.name}}</h3>
-          <p>{{results.one_liner}}</p>
-          <button id="go_dashboard" class="btn btn-primary btn-large btn-orange">Continue</button>
-        {{/if}}
+      {{#if doNotShowResults }}
+        <h3>Thank you for participating!</h3>
+        <p>Your results will help us fine tune our algorithms.</p>
+      {{else}}
+        <h3>You are</h3>
+        <div class="type-icon"><img src="/images/badges/{{result.logo_url}}" alt="{{result.name}}"></div>
+        <h3>{{result.name}}</h3>
+        <p>{{result.one_liner}}</p>
+        <button id="go_dashboard" class="btn btn-primary btn-large btn-orange">Continue</button>
+      {{/if}}
     </div>
   </div>
 </div>

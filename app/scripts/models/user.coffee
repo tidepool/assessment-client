@@ -4,7 +4,6 @@ define [
     initialize:  ->
       @url = "#{window.apiServerUrl}/api/v1/me"
 
-    addAssessment: (assessment) ->
-
+      
   User
     
