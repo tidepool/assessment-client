@@ -17,8 +17,9 @@ define [
       @save attrs,
         patch: false
         url: "#{@url}/#{@get('id')}"
-      .done (data, textStatus, jqXHR) ->
+      .done (data, textStatus, jqXHR) =>
         console.log("Success: #{textStatus}")
+        @trigger('stage_completed_success')
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
         console.log("Error: #{textStatus}")

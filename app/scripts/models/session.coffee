@@ -43,6 +43,10 @@ define [
 
     logout: ->
       localStorage['access_token'] = ""
+      localStorage['expires_in'] = ""
+      localStorage['token_received'] = ""
+      localStorage['refresh_token'] = ""
+      @accessToken = ""
 
     loggedIn: ->
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"

@@ -41,6 +41,7 @@ define [
       
       @assessment = new Assessment()
       @listenTo(@assessment, 'change:stage_completed', @stageCompleted)
+      @listenTo(@assessment, 'stage_completed_success', @stageCompletedSuccess)
 
       @setUpSkelatalViews()
 
@@ -56,8 +57,16 @@ define [
       switch 
         when @currentStageNo is -1 then @navigate('start', {trigger: true})
         when @currentStageNo < @numOfStages then @navigate("stage/#{@currentStageNo}", {trigger: true})
-        when @currentStageNo is @numOfStages then @navigate("result", {trigger: true})
+        when @currentStageNo is @numOfStages then console.log("Waiting the final completed request to be sent.")
         else alert("Error in stages #{@currentStageNo}!")
+
+    stageCompletedSuccess: ->
+      # TODO: This is not ideal, but we need to first send the request to server, 
+      # before logging the (guest) user out. That's why I added this here.
+      @currentStageNo = @assessment.get('stage_completed')
+      @numOfStages = @assessment.get('stages').length
+      if @currentStageNo is @numOfStages
+        @navigate("result", {trigger: true})
 
     showStart: ->
       console.log('Show Start')
