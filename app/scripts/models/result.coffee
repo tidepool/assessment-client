@@ -22,7 +22,7 @@ define [
       attrs = {}
       @save(attrs)       
       .done (data, textStatus, jqXHR) =>
-        console.log("Success: #{textStatus}") 
+        console.log("Start Calculation Success: #{textStatus}") 
         statusCode = jqXHR.statusCode()
         if statusCode isnt 202
           # We were expecting 202 (accepted) as status code
@@ -30,7 +30,7 @@ define [
         @progressLink = data.status.link
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Error: #{textStatus}")
+        console.log("Start Calculation Error: #{textStatus}")
         deferred.reject(textStatus)
 
       deferred.promise()
@@ -42,7 +42,7 @@ define [
           type: 'GET'
           url: @progressLink
         .done (data, textStatus, jqXHR) =>
-          console.log("Success: #{textStatus}")
+          console.log("Check For Progress Success: #{textStatus}")
           statusCode = jqXHR.statusCode()
           if statusCode isnt 200
             # We were expecting 200 (ok) as status code
@@ -65,9 +65,10 @@ define [
               console.log("Unexpected status #{data.status.state}")
               deferred.reject(textStatus)
         .fail (jqXHR, textStatus, errorThrown) ->
-          console.log("Error: #{textStatus}")
+          console.log("Check For Progress Error: #{textStatus}")
           deferred.reject(textStatus)
       else
+        console.log("No url to check for progress")
         deferred.reject("No url to check for progress")
 
       deferred.promise()
@@ -76,10 +77,10 @@ define [
       deferred = $.Deferred()
       @fetch()
       .done (data, textStatus, jqXHR) =>
-        console.log("Success: #{textStatus}") 
+        console.log("Get Results Success: #{textStatus}") 
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Error: #{textStatus}")
+        console.log("Get Results Error: #{textStatus}")
         deferred.reject(textStatus)
 
       deferred.promise()

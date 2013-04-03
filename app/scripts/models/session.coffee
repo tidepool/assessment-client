@@ -29,6 +29,11 @@ define [
       else 
         @authUrl = @setupAuthUrl(window.apiServerUrl, forceNoGuest)
         window.OAuthRedirect = _.bind(@onRedirect, @)
+        whereAmI = location.pathname
+        if whereAmI[0] is '/'
+          whereAmI = whereAmI.substr(1)
+
+        window.currentLocation = whereAmI
 
         # Check for renewal
         # renewal = false
@@ -71,7 +76,7 @@ define [
 
     onRedirect: (hash) ->
       params = @parseHash(hash)
-      console.log("redirected to here")
+      console.log("Redirected with params #{hash}")
       if params['access_token']
         @accessToken = params['access_token']
         localStorage['access_token'] = @accessToken
@@ -86,14 +91,13 @@ define [
       alert("Error!")
 
     finishLogin: ->
-      user = new User()
-      user.fetch
-        success: (model, response, options) =>
-          @user = model
-          localStorage['guest'] = @user.get('guest')
-          @trigger('session:logged_in')
-        error: (model, xhr, options) =>
-          alert("Error!")
+      @user = new User()
+      @user.fetch()
+      .done (data, textStatus, jqXHR) =>
+        localStorage['guest'] = @user.get('guest')
+        @trigger('session:logged_in')
+      .fail (jqXHR, textStatus, errorThrown) ->
+        console.log("Error creating user #{textStatus}")
 
     setupAuthUrl: (authServer, forceNoGuest) ->
       authUrl = "#{authServer}/oauth/authorize" 
@@ -104,5 +108,6 @@ define [
       else
         guestParam = ""
       "#{authUrl}?#{guestParam}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"   
+
 
   Session

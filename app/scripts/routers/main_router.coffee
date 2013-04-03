@@ -1,19 +1,19 @@
 define [
   'jquery',
   'Backbone',
-  '../models/session', 
-  '../models/assessment',
-  '../models/user_event',
-  '../models/user',
-  '../models/result',
-  '../collections/stages',
-  '../views/assessments/login_dialog',
-  '../views/assessments/header_view',
-  '../views/assessments/results_view',
-  '../views/assessments/start_view',
-  '../views/assessments/stages_view',
-  '../views/components/progress_bar_view',
-  '../views/components/results_progress_bar_view'
+  'models/session', 
+  'models/assessment',
+  'models/user_event',
+  'models/user',
+  'models/result',
+  'collections/stages',
+  'assessments/login_dialog',
+  'assessments/header_view',
+  'assessments/results_view',
+  'assessments/start_view',
+  'assessments/stages_view',
+  'components/progress_bar_view',
+  'components/results_progress_bar_view'
   ], ($, Backbone, 
     Session, Assessment, UserEvent, User, Result, Stages, 
     LoginDialog, HeaderView, ResultsView, StartView, StagesView,
@@ -32,10 +32,17 @@ define [
       @definitionId = options["definition"]
       window.apiServerUrl = options["apiServer"]
       appId = options["appId"] 
+      forcefresh = options["forcefresh"]
 
       # Always create a user, initially as a guest if someone is not already loggedin
       @session = new Session(appId)
-      @listenTo(@session, 'session:logged_in', @loginCompleted)
+      if forcefresh 
+        @session.logout()
+      
+      @setUpEventsAndViews()
+
+    setUpEventsAndViews: ->
+      @listenToOnce(@session, 'session:logged_in', @initialLoginCompleted)
       @listenTo(@session, 'session:show_dialog', @showLogin)
       @session.login(false)
       
@@ -85,8 +92,9 @@ define [
         if isGuest?
           # First logout the guest user
           @session.logout()
-          # Now login the user (no guest allowed)
-          @session.login(true)
+          .then =>
+            # Now login the user (no guest allowed)
+            @session.login(true)
         else
           view = new ResultsProgressBarView()
           $('#content').html(view.render().el)
@@ -100,15 +108,21 @@ define [
 
     showLogin: (options) ->
       console.log("Show Login")
+      @navigate("login", {replace:true})
       silentLogin = options.hidden
       loginDialog = new LoginDialog({model: @session, silentLogin: silentLogin})
-      $('#loginView').html(loginDialog.render().el)
+      $('#content').html(loginDialog.render().el)
 
-    loginCompleted: ->
+    initialLoginCompleted: ->
       # Create an anonymous assessment on the server with the definitionId
       @assessment.save {'def_id': @definitionId },
         error: (model, xhr, options) =>
           # TODO: Error Message
           alert("Error!")
+      @listenTo(@session, 'session:logged_in', @loginCompleted)
+
+    loginCompleted: ->
+      @navigate(window.currentLocation, {trigger: true})
+
 
   MainRouter

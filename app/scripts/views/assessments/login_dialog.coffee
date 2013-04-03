@@ -1,9 +1,8 @@
 define [
   'jquery',
   'Backbone',
-  '../../models/user',
   'Handlebars',
-  "text!./login_dialog.hbs"], ($, Backbone, User, Handlebars, tempfile) ->
+  "text!./login_dialog.hbs"], ($, Backbone, Handlebars, tempfile) ->
   LoginDialog = Backbone.View.extend  
     initialize: (options) ->
       @silentLogin = options.silentLogin
@@ -21,7 +20,7 @@ define [
       this
 
     close: ->
-      $("#logindialog").html("")
+      # $("#logindialog").html("")
 
 
   LoginDialog

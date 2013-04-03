@@ -4,7 +4,8 @@ define [
   'Handlebars',
   'assessments/login_dialog',
   'routers/main_router',
-  "text!./header_view.hbs"], ($, Backbone, Handlebars, LoginDialog, MainRouter, tempfile) ->
+  "text!./header_view.hbs",
+  "bootstrap"], ($, Backbone, Handlebars, LoginDialog, MainRouter, tempfile) ->
   HeaderView = Backbone.View.extend
     events:
       "click #login": "login",

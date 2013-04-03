@@ -18,11 +18,11 @@ define [
         patch: false
         url: "#{@url}/#{@get('id')}"
       .done (data, textStatus, jqXHR) =>
-        console.log("Success: #{textStatus}")
+        console.log("Update Progress Success: #{textStatus}")
         @trigger('stage_completed_success')
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Error: #{textStatus}")
+        console.log("Update Progress Error: #{textStatus}")
         deferred.reject(textStatus)
 
       deferred.promise()
@@ -34,10 +34,10 @@ define [
         patch: false
         url: "#{@url}/#{@get('id')}"
       .done (data, textStatus, jqXHR) ->
-        console.log("Success: #{textStatus}")
+        console.log("Add User Success: #{textStatus}")
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Error: #{textStatus}")
+        console.log("Add User Error: #{textStatus}")
         deferred.reject(textStatus)
 
       deferred.promise()
