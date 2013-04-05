@@ -55,7 +55,8 @@ define [
     setUpSkelatalViews: ->
       header = new HeaderView({model: @session})
       $('#header').html(header.render().el)
-      @listenTo(header, 'login', @navigate('login', {trigger: true}))
+      @listenTo(header, 'header_view:login', @navigate('login', {trigger: true}))
+      @listenTo(header, 'header_view:logout', @logout)
 
     stageCompleted: ->
       # Initially no stages completed, so start with -1
@@ -89,9 +90,9 @@ define [
       console.log("Show Result")
       if @session.user?
         isGuest = @session.user.get('guest')
-        if isGuest?
+        if isGuest is true
           # First logout the guest user
-          @session.logout()
+          @session.logout(false)
           .then =>
             # Now login the user (no guest allowed)
             @session.login(true)
@@ -106,6 +107,9 @@ define [
             view = new ResultsView({model: @result, DoNotShowResults:false})
             $('#content').html(view.render().el)
 
+    # This can only be navigated to through the session.login command
+    # DONOT call this directly
+    # TODO: Needs refactoring, rather than a comment like above!
     showLogin: (options) ->
       console.log("Show Login")
       @navigate("login", {replace:true})
@@ -124,5 +128,9 @@ define [
     loginCompleted: ->
       @navigate(window.currentLocation, {trigger: true})
 
+    logout: ->
+      @session.logout(true)
+      .then =>
+        @session.login(true)
 
   MainRouter

@@ -14,6 +14,7 @@ define [
     initialize: (options) ->
       @user = @model.user
       @listenTo(@model, 'session:logged_in', @loggedIn)
+      @listenTo(@model, 'session:logged_out', @loggedOut)
 
     render: ->
       loggedIn = @model.loggedIn()
@@ -33,11 +34,16 @@ define [
       @user = @model.user
       @render()
 
+    loggedOut: ->
+      @user = null
+      @render()
+
     login: ->
       event.preventDefault()
-      @trigger('login')
+      @trigger('header_view:login')
 
     logout: ->
       event.preventDefault()
+      @trigger('header_view:logout')
   
   HeaderView

@@ -2,7 +2,8 @@ define [
   'jquery',
   'underscore',
   'Backbone',
-  'models/user'], ($, _, Backbone, User) ->
+  'Handlebars',
+  'models/user'], ($, _, Backbone, Handlebars, User) ->
   Session = Backbone.Model.extend
     # Inspired by: https://github.com/ptnplanet/backbone-oauth
 
@@ -46,12 +47,34 @@ define [
           # We would like login to happen silently
           @trigger('session:show_dialog', {hidden:true})
 
-    logout: ->
+    logout: (forceRemoteSession) ->
+      deferred = $.Deferred()
       localStorage['access_token'] = ""
       localStorage['expires_in'] = ""
       localStorage['token_received'] = ""
       localStorage['refresh_token'] = ""
       @accessToken = ""
+      # TODO: Below is a fairly hacky way of clearing out session cookies coming
+      # from the api-server origin. 
+      if forceRemoteSession is true 
+        window.logoutRedirect = (hash) =>
+          console.log("loggedOut")
+          $('#logoutView').html("")
+          @user = null
+          @trigger('session:logged_out')
+          deferred.resolve("Logged out")
+        redirectUri = "#{window.location.protocol}//#{window.location.host}/logout_redirect.html"
+        redirectUri = encodeURIComponent(redirectUri)
+        url = "#{window.apiServerUrl}/logout?logout_callback=#{redirectUri}"
+        tempString = "<iframe id='logoutIframe' src='#{url}' style='visibility:hidden;width:1px;height:1px;top:0px;left:0px;' />"
+        # template = Handlebars.compile(tempString)
+        # out = template({url: url})
+        $('#logoutView').html(tempString)
+      else
+        @user = null
+        deferred.resolve("Immediate resolve")
+      
+      deferred.promise()
 
     loggedIn: ->
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
