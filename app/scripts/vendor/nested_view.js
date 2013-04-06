@@ -155,7 +155,8 @@ define(['underscore','Backbone', 'Handlebars'], function(_, Backbone, Handlebars
   // You may want to override this based on your setup:
   // CommonJS vs require vs globals.
   NestedView.getView = function(name) {
-    return require('./' + name);
+    // return require('./' + name);
+    return require('dashboard/' + name)
   };
 
   // Handlebars helper

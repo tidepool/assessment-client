@@ -12,18 +12,20 @@ define [
   'assessments/results_view',
   'assessments/start_view',
   'assessments/stages_view',
+  'dashboard/dashboard_main_view',
   'components/progress_bar_view',
   'components/results_progress_bar_view'
   ], ($, Backbone, 
     Session, Assessment, UserEvent, User, Result, Stages, 
     LoginDialog, HeaderView, ResultsView, StartView, StagesView,
-    ProgressBarView, ResultsProgressBarView) ->
+    DashboardMainView, ProgressBarView, ResultsProgressBarView) ->
   MainRouter = Backbone.Router.extend
     routes:
       'start': 'showStart'
       'stage/:stageNo': 'showStages'
       'result': 'showResult'
       'login': 'showLogin'
+      'dashboard': 'showDashboard'
 
     initialize: (options) ->
       @eventDispatcher = _.extend({}, Backbone.Events)
@@ -106,6 +108,11 @@ define [
           .then =>
             view = new ResultsView({model: @result, DoNotShowResults:false})
             $('#content').html(view.render().el)
+
+    showDashboard: ->
+      console.log("Showing Dashboard")
+      view = new DashboardMainView({model: @result})
+      $('#content').html(view.render().el)
 
     # This can only be navigated to through the session.login command
     # DONOT call this directly

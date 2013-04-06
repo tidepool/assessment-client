@@ -9,7 +9,7 @@ define [
       deferred = $.Deferred()
       @startCalculation()
       .then =>
-        @checkForProgress()
+        @checkForProgress(true, null)
       .then =>
         @getResults()
       .then =>
@@ -35,8 +35,11 @@ define [
 
       deferred.promise()
     
-    checkForProgress: ->
-      deferred = $.Deferred()
+    checkForProgress: (firstTime, deferred) ->
+      if (firstTime) 
+        # Make sure we don't have nested deferred's
+        # This is called on a timer
+        deferred = $.Deferred()
       if @progressLink?
         $.ajax
           type: 'GET'
@@ -53,7 +56,7 @@ define [
               console.log("Still pending for results")
               # continue pinging every 1s
               setTimeout => 
-                @checkForProgress()
+                @checkForProgress(false, deferred)
               , 1000
             when 'done'
               console.log("Done with results")
@@ -71,7 +74,8 @@ define [
         console.log("No url to check for progress")
         deferred.reject("No url to check for progress")
 
-      deferred.promise()
+      if (firstTime)
+        deferred.promise()
 
     getResults: ->
       deferred = $.Deferred()

@@ -4,12 +4,21 @@ define [
   'Backbone',
   'Handlebars', 
   'vendor/nested_view',
-  'text!./detailed_results_view.hbs'], ($, _, Backbone, Handlebars, tempfile) ->
-DetailedResultsView = NestedView.extend
-  getTemplate: ->
-    template = Handlebars.compile(tempfile)
+  'text!./detailed_results_view.hbs'], ($, _, Backbone, Handlebars, NestedView, tempfile) ->
+  DetailedResultsView = NestedView.extend
+    name: 'detailed_results_view'
 
-  getTemplateData: ->
-    
+    postInitialize: ->
 
-DetailedResultsView
+    getTemplate: ->
+      template = Handlebars.compile(tempfile)
+
+    getTemplateData: ->
+      context = @options
+
+      result = 
+        name: context.name
+        logo_url: context.logo_url
+        one_liner: context.one_liner    
+
+  DetailedResultsView

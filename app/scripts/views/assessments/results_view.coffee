@@ -21,6 +21,6 @@ define [
       this
 
     goDashboard: ->
-      window.location.href = "/dash"
+      Backbone.history.navigate('/dashboard', {trigger: true})
       
   ResultsView
