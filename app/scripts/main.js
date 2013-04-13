@@ -18,15 +18,18 @@ require.config({
         jqueryui: '../components/jquery-ui/jqueryui',
         nested_view: './vendor/nested_view',
         bootstrap: 'vendor/bootstrap',
+        chart: 'vendor/Chart',
         Backbone: '../components/backbone-amd/backbone',
         text: '../components/requirejs-text/text',
         json2: '../components/require-handlebars-plugin/hbs/json2',
         assessments: './views/assessments',
         dashboard: './views/dashboard',
         components: './views/components',
+        results: './views/results',
         stages: './views/stages',
         routers: './routers',
         models: './models',
+        controllers: './controllers',
         collections: './collections',
         helpers: './helpers'
     },
@@ -34,6 +37,9 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
+        },
+        chart: {
+            exports: 'Chart'
         }
         // handlebars: {
         //     exports: 'Handlebars'
@@ -46,7 +52,7 @@ require(['routers/main_router', 'Backbone'], function (MainRouter, Backbone) {
 
     console.log("App Started");
     var options = {
-        definition: 3,
+        definition: 2,
         forcefresh: true,
         apiServer: "http://api-server.dev",
         appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"

@@ -14,11 +14,6 @@ define [
       template = Handlebars.compile(tempfile)
 
     getTemplateData: ->
-      context = @options
-
-      result = 
-        name: context.name
-        logo_url: context.logo_url
-        one_liner: context.one_liner    
+      profile = @options    
 
   DetailedResultsView

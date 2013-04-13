@@ -201,7 +201,6 @@ define [
         "final_rank": finalRank
         "event_desc": "test_completed"
       @assessment.updateProgress(@stageNo + 1)
-      # Backbone.history.navigate("/stage/#{@nextStage}", true)
 
     createUserEvent: (newEvent) ->
       eventInfo = 

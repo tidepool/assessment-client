@@ -6,11 +6,10 @@ define [
   'stages/reaction_time',
   'stages/image_rank',
   'stages/circles_test',
-  "text!./stages_view.hbs",
   'models/stage',
   'models/assessment',
-  'models/session'], ($, Backbone, Handlebars, ProgressBarView, ReactionTime, ImageRank, CirclesTest, tempfile) ->
-  StagesView = Backbone.View.extend
+  'models/session'], ($, Backbone, Handlebars, ProgressBarView, ReactionTime, ImageRank, CirclesTest) ->
+  StagesController = ->
     views:
       'ReactionTime': 'ReactionTime'
       'ImageRank': 'ImageRank'
@@ -18,7 +17,8 @@ define [
 
     initialize: (options) ->
       @currentStageNo = options.currentStageNo
-      @stages = new Backbone.Collection(@model.get('stages'))
+      @assessment = options.assessment
+      @stages = new Backbone.Collection(@assessment.get('stages'))
 
     render: ->
       @progressBarView = new ProgressBarView({numOfStages: @stages.length})
@@ -28,18 +28,17 @@ define [
       stage = @stages.at(@currentStageNo)
       viewClassString = @views[stage.get('view_name')]
       viewClass = eval(viewClassString)
-      # viewClass = @stringToFunction(@views[stage.get('view_name')])
-      view = new viewClass({model: stage, assessment: @model, stageNo: @currentStageNo})
+      view = new viewClass({model: stage, assessment: @assessment, stageNo: @currentStageNo})
       $('#content').html(view.render().el)
       this
 
-    stringToFunction: (str) ->
-      namespace = str.split(".")
-      func = (window || this)
-      for newFunc in namespace
-        func = func[newFunc]
-      if (typeof func isnt "function")
-        throw new Error("function not found")
-      func
+    # stringToFunction: (str) ->
+    #   namespace = str.split(".")
+    #   func = (window || this)
+    #   for newFunc in namespace
+    #     func = func[newFunc]
+    #   if (typeof func isnt "function")
+    #     throw new Error("function not found")
+    #   func
 
-  StagesView
+  StagesController

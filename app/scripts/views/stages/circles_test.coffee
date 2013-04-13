@@ -7,6 +7,7 @@ define [
   "text!./circles_test.hbs",
   'jqueryui/draggable',
   'jqueryui/droppable',
+  'jqueryui/slider',
   'models/assessment'], ($, _, Backbone, Handlebars, UserEvent, tempfile) ->
   CirclesTest = Backbone.View.extend
     events:
@@ -67,8 +68,7 @@ define [
         "circles": @circles
         "self_coord": { top: @SELF_COORD_TOP, left: @SELF_COORD_LEFT, size: @SELF_COORD_SIZE }
 
-      # Backbone.history.navigate("/stage/#{@nextStage}", true)
-      @assessment.updateProgress(@stageNo)
+      @assessment.updateProgress(@stageNo + 1)
 
     updateCircleCoordsAndSizes: ->
       for circle, i in @circles
@@ -125,8 +125,8 @@ define [
             value: 4,
             change: _.bind(@sliderChanged, @),
             slider: _.bind(@sliderChanged, @)
-          });
-        $("#slider#{i}").slider("option", "step", 1);
+          })
+        $("#slider#{i}").slider("option", "step", 1)
 
     setupDraggableCircles: ->
       @SELF_COORD_TOP = $(".self").offset().top
@@ -203,7 +203,7 @@ define [
       eventInfo =
         "assessment_id": @assessment.get('id') 
         "module": "circles_test"
-        "stageNo": @stageNo 
+        "stage": @stageNo 
       fullInfo = _.extend({}, eventInfo, newEvent)
       userEvent = new UserEvent()
       userEvent.send(fullInfo)

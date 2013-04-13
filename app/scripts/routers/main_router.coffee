@@ -9,16 +9,15 @@ define [
   'collections/stages',
   'assessments/login_dialog',
   'assessments/header_view',
-  'assessments/results_view',
   'assessments/start_view',
-  'assessments/stages_view',
   'dashboard/dashboard_main_view',
   'components/progress_bar_view',
-  'components/results_progress_bar_view'
+  'controllers/stages_controller',
+  'controllers/summary_results_controller'
   ], ($, Backbone, 
     Session, Assessment, UserEvent, User, Result, Stages, 
-    LoginDialog, HeaderView, ResultsView, StartView, StagesView,
-    DashboardMainView, ProgressBarView, ResultsProgressBarView) ->
+    LoginDialog, HeaderView, StartView, DashboardMainView, ProgressBarView, 
+    StagesController, SummaryResultsController) ->
   MainRouter = Backbone.Router.extend
     routes:
       'start': 'showStart'
@@ -85,33 +84,20 @@ define [
 
     showStages: ->
       console.log("Show Stage ##{@currentStageNo}")
-      view = new StagesView({model: @assessment, currentStageNo: @currentStageNo})
-      view.render()
+      controller = new StagesController()
+      controller.initialize({assessment: @assessment, currentStageNo: @currentStageNo})
+      controller.render()
 
     showResult: ->
       console.log("Show Result")
-      if @session.user?
-        isGuest = @session.user.get('guest')
-        if isGuest is true
-          # First logout the guest user
-          @session.logout(false)
-          .then =>
-            # Now login the user (no guest allowed)
-            @session.login(true)
-        else
-          view = new ResultsProgressBarView()
-          $('#content').html(view.render().el)
-          @assessment.addUser(@session.user)
-          .then =>
-            @result = new Result(@assessment.get('id'))
-            @result.calculateResult() 
-          .then =>
-            view = new ResultsView({model: @result, DoNotShowResults:false})
-            $('#content').html(view.render().el)
+      @result = new Result(@assessment.get('id'))
+      controller = new SummaryResultsController()
+      controller.initialize({assessment: @assessment, result: @result, session: @session})
+      controller.render()      
 
     showDashboard: ->
       console.log("Showing Dashboard")
-      view = new DashboardMainView({model: @result})
+      view = new DashboardMainView({model: @result, assessment: @assessment})
       $('#content').html(view.render().el)
 
     # This can only be navigated to through the session.login command
