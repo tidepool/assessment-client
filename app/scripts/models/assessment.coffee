@@ -9,6 +9,17 @@ define [
     initialize:  ->
       @url = window.apiServerUrl + @urlRoot
 
+    create: (definitionId) ->
+      deferred = $.Deferred()
+      @save({'def_id': definitionId })
+      .done (data, textStatus, jqXHR) ->
+        console.log('Assessment created successfully')
+        deferred.resolve(jqXHR.response)
+      .fail (jqXHR, textStatus, errorThrown) ->
+        console.log('Cannot create an assessment.')
+        deferred.reject(textStatus)
+      deferred.promise()
+
     updateProgress: (stageCompleted) ->
       # Rails 4 is going to introduce support for the PATCH verb in HTTP
       # TODO: Switch to PATCH when Rails 4 switch happens

@@ -7,8 +7,7 @@ define [
   'stages/image_rank',
   'stages/circles_test',
   'models/stage',
-  'models/assessment',
-  'models/session'], ($, Backbone, Handlebars, ProgressBarView, ReactionTime, ImageRank, CirclesTest) ->
+  'models/assessment'], ($, Backbone, Handlebars, ProgressBarView, ReactionTime, ImageRank, CirclesTest) ->
   StagesController = ->
     views:
       'ReactionTime': 'ReactionTime'

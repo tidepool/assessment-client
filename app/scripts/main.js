@@ -27,6 +27,7 @@ require.config({
         components: './views/components',
         results: './views/results',
         stages: './views/stages',
+        user: './views/user',
         routers: './routers',
         models: './models',
         controllers: './controllers',
@@ -55,9 +56,11 @@ require(['routers/main_router', 'Backbone'], function (MainRouter, Backbone) {
         definition: 2,
         forcefresh: true,
         apiServer: "http://api-server.dev",
-        appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5"
+        appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5",
+        appSecret: "ee0c7b9c7017e77a12b10762d753e4e0eb67e68e94293f96dfc5544f0844637b"
         // appId: "ddc5d7ba3b5f5e12dd7ca5938c9f5fea6fdf4e75f4d92f954367cc9e98700872"
     }
-    new MainRouter(options);
     Backbone.history.start({pushState: true});
+
+    new MainRouter(options);
 });

@@ -2,28 +2,34 @@ define [
   'jquery',
   'Backbone',
   'Handlebars',
-  'assessments/login_dialog',
+  'user/login_dialog',
+  'user/profile_dialog',
   'routers/main_router',
   "text!./header_view.hbs",
-  "bootstrap"], ($, Backbone, Handlebars, LoginDialog, MainRouter, tempfile) ->
+  'bootstrap',
+  'controllers/session_controller'], ($, Backbone, Handlebars, LoginDialog, ProfileDialog, MainRouter, tempfile) ->
   HeaderView = Backbone.View.extend
     events:
       "click #login": "login",
       "click #logout": "logout"
+      "click #profile": "showProfile"
 
     initialize: (options) ->
-      @user = @model.user
-      @listenTo(@model, 'session:logged_in', @loggedIn)
-      @listenTo(@model, 'session:logged_out', @loggedOut)
+      @session = options.session
+      @user = @session.user
+      @listenTo(@session, 'session:login_success', @loggedIn)
+      @listenTo(@session, 'session:logout_success', @loggedOut)
 
     render: ->
-      loggedIn = @model.loggedIn()
+      loggedIn = @session.loggedIn()
       template = Handlebars.compile(tempfile)
       if @user?
         if @user.get('guest') is true
           userName = 'Guest'
         else
           userName = @user.get('email')
+          if userName is undefined || userName is ""
+            userName = @user.get('name')
       else
         userName = "Logging In..."
 
@@ -31,19 +37,25 @@ define [
       this
 
     loggedIn: ->
-      @user = @model.user
+      @user = @session.user
       @render()
 
     loggedOut: ->
       @user = null
       @render()
 
-    login: ->
-      event.preventDefault()
-      @trigger('header_view:login')
+    login: (e) ->
+      e.preventDefault()
+      loginDialog = new LoginDialog({session: @session})
+      $('#content').html(loginDialog.render().el)
 
-    logout: ->
-      event.preventDefault()
-      @trigger('header_view:logout')
+    logout: (e) ->
+      e.preventDefault()
+      @session.logout()
+
+    showProfile: (e) ->
+      e.preventDefault()
+      profileDialog = new ProfileDialog({session: @user})
+      $('#content').html(profileDialog.render().el)
   
   HeaderView

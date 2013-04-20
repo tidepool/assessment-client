@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="span4 offset4">
+      <div class="well">
+        <legend>Sign in using: </legend>
+        <button class="btn-info btn" id="facebookLogin">Facebook</button>
+        <button class="btn-info btn" id="twitterLogin">Twitter</button>
+        <button class="btn-info btn" id="fitbitLogin">Fitbit</button>
+        <legend>Or sign in using credentials</legend>
+        <form id="loginForm">
+            <div class="alert alert-error" style="visibility:hidden;" id="error">
+                <a class="close" data-dismiss="alert" href="#">x</a><span id="message"></span>
+            </div>      
+            <input class="span3" placeholder="E-Mail" type="text" name="email" id="email">
+            <input class="span3" placeholder="Password" type="password" name="password" id="password"> 
+            <label class="checkbox">
+                <input type="checkbox" name="remember" value="1" id="rememberMe"> Remember Me
+            </label>
+            <button class="btn-info btn" type="submit">Login</button>      
+        </form>    
+        <p>No account, then you can signup</p>
+        <button class="btn-info btn" id="signup">Signup</button>
+      </div>
+    </div>
+</div>

@@ -1,9 +1,14 @@
 define [
   'Backbone'], (Backbone) ->  
   User = Backbone.Model.extend
-    initialize:  ->
-      @url = "#{window.apiServerUrl}/api/v1/me"
+    urlRoot: ->
+      "#{window.apiServerUrl}/api/v1/users"
 
+    initialize:  ->
+      # @url = "#{window.apiServerUrl}/api/v1/me"
+
+    isGuest: ->
+      @get('guest')
       
   User
     

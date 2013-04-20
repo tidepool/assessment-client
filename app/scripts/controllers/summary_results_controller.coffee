@@ -7,7 +7,7 @@ define [
   'results/mechanical_turk_view',
   'models/stage',
   'models/assessment',
-  'models/session'], ($, Backbone, ResultsProgressBarView, ProfileSummaryView, ScoresSummaryView, MechanicalTurkView) ->
+  'controllers/session_controller'], ($, Backbone, ResultsProgressBarView, ProfileSummaryView, ScoresSummaryView, MechanicalTurkView) ->
   SummaryResultsController = ->
     views:
       'Profile': 'ProfileSummaryView'
@@ -15,10 +15,20 @@ define [
       'MT': 'MechanicalTurkView'
 
     initialize: (options) ->
-      @assessment = options.assessment
       @session = options.session
-      @definition = @assessment.get('definition')
-      @result = options.result
+      @assessment = @session.assessment
+      @result = @session.result
+      
+    render: ->
+      @fetchResults()
+      .done => 
+        definition = @assessment.get('definition')
+        viewClassString = @views[definition.result_view]
+        viewClass = eval(viewClassString)
+        view = new viewClass({model: @result, assessments: @assessment})
+        $('#content').html(view.render().el)
+      .fail =>
+        console.log('TODO:Failed View needs to be displayed')
 
     fetchResults: ->
       deferred = $.Deferred()
@@ -34,15 +44,5 @@ define [
           console.log('Fetch Results failed')
           deferred.reject()
       deferred.promise()
-
-    render: ->
-      @fetchResults()
-      .done => 
-        viewClassString = @views[@definition.result_view]
-        viewClass = eval(viewClassString)
-        view = new viewClass({model: @result, assessments: @assessment})
-        $('#content').html(view.render().el)
-      .fail =>
-        console.log('TODO:Failed View needs to be displayed')
 
   SummaryResultsController
