@@ -30,7 +30,7 @@ Installation:
 
 * Go to the OAuthProvider project (api-server)
 
-  Copy the app_secrets_dev.json file and paste it into app/scripts folder
+  Copy the app_secrets_dev.js file and paste it into app/scripts folder
 
 * Setting up POW (http://pow.cx/): (We are just using POW as a proxy/DNS server, it is not a web server.)
 
