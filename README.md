@@ -6,15 +6,15 @@ Pre-requisites:
 
 * Install node.js
   
-    brew install node
+        brew install node
 
 * Install Yeoman (http://yeoman.io/)
 
-    npm install -g yo grunt-cli bower 
+        npm install -g yo grunt-cli bower 
 
 * Install jqueryui-amd (https://github.com/jrburke/jqueryui-amd)
 
-    npm install -g jqueryui-amd    
+        npm install -g jqueryui-amd    
 
 
 Installation:
@@ -22,11 +22,11 @@ Installation:
 
 * Install the dev dependencies and client-side javascript dependencies:
 
-    npm install && bower install
+        npm install && bower install
 
 * Run the jquery-amd code to create an amd wrapper for the jqueryui components
 
-    jqueryui-amd path/to/jquery-ui-version
+        jqueryui-amd path/to/jquery-ui-version
 
 * Go to the OAuthProvider project (api-server)
 
@@ -34,8 +34,8 @@ Installation:
 
 * Setting up POW (http://pow.cx/): (We are just using POW as a proxy/DNS server, it is not a web server.)
 
-    echo 7000 > ~/.pow/assessments-front
+        echo 7000 > ~/.pow/assessments-front
 
 Now ready to run the front-end:
 
-    grunt server
+        grunt server
