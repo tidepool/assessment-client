@@ -11,8 +11,10 @@ define [
       @appId = options["appId"] 
       @appSecret = options["appSecret"]
       @accessToken = localStorage['access_token']
+      @transferOwnerFlag = false
       $.ajaxSetup
         type: 'POST',
+        timeout: 5000
         headers:  
           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') 
           'Accept': 'application/json'
@@ -119,17 +121,21 @@ define [
       localStorage['token_received'] = new Date().getTime()
       localStorage['refresh_token'] = data['refresh_token']
 
-    logout: (forceRemoteSession) ->
+    logout: ->
+      @clearOutLocalStorage()
+      @trigger('session:logout_success')
+
+    transferOwner: ->
+      @clearOutLocalStorage()
+      @transferOwnerFlag = true
+
+    clearOutLocalStorage: ->
       delete localStorage['access_token']
       delete localStorage['expires_in']
       delete localStorage['token_received']
-      delete localStorage['refresh_token']
+      delete localStorage['refresh_token'] 
       @accessToken = null
-      @user = null
-      @assessment = null
-      @result = null
-      @trigger('session:logout_success')
-
+     
     loggedIn: ->
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
         currentTime = new Date().getTime()
@@ -137,11 +143,11 @@ define [
         token_received = parseInt(localStorage['token_received'])
         if expires_in? and token_received? and currentTime < token_received + expires_in
           # still not expired
-          true
+          return true
         else
-          false
+          return false
       else
-        false
+        return false
 
     loginUsingOauth: (provider, popupWindowSize) ->
       # Inspired by: https://github.com/ptnplanet/backbone-oauth
@@ -164,9 +170,12 @@ define [
 
     onRedirect: (hash) ->
       params = @parseHash(hash)
-      console.log("Redirected with params #{hash}")
+      console.log("Redirected with params #{params['access_token']}, hash #{hash}")
       if params['access_token']
         @accessToken = params['access_token']
+        # We need to clear out the existing user
+        if @user?
+          @user = null
         @persistLocally(params)
         @finishLogin()
       else
@@ -175,19 +184,29 @@ define [
 
     finishLogin: ->
       deferred = $.Deferred()
+      @getUserInfo()
+      .done =>
+        @trigger('session:login_success')
+        deferred.resolve("Success")
+      .fail =>
+        @trigger('session:login_fail')
+        deferred.reject("Fail")
+
+      deferred.promise()
+
+    getUserInfo: ->
+      deferred = $.Deferred()
       if @user?
-        deferred.resolve("Already logged in")
+        deferred.resolve("Already have user info")
       else
         @user = new User({id: '-'})
         @user.fetch()
         .done (data, textStatus, jqXHR) =>
-          localStorage['guest'] = @user.get('guest')
-          @trigger('session:login_success')
+          # localStorage['guest'] = @user.get('guest')
           deferred.resolve(jqXHR.response)
         .fail (jqXHR, textStatus, errorThrown) ->
           console.log("Error creating user #{textStatus}")
           deferred.reject(textStatus)
-          @trigger('session:login_fail')
 
       deferred.promise()
 

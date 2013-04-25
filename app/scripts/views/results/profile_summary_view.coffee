@@ -8,11 +8,14 @@ define [
       "click #go_dashboard": "goDashboard"
 
     initialize: (options) ->
-      @profileDescription = @model.get('profile_description')
+      @result = options.assessment.result
 
     render: ->
       template = Handlebars.compile(tempfile)
-      $(@el).html(template(result: @profileDescription))
+      if @result?
+        profileDescription = @result.get('profile_description')
+
+      $(@el).html(template(result: profileDescription))
       this
 
     goDashboard: ->

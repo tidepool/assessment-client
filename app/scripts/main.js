@@ -32,7 +32,8 @@ require.config({
         models: './models',
         controllers: './controllers',
         collections: './collections',
-        helpers: './helpers'
+        helpers: './helpers',
+        messages: './views/messages'
     },
     shim: {
         bootstrap: {
@@ -52,16 +53,9 @@ require(['routers/main_router', 'underscore', 'Backbone', './app_secrets_dev'], 
     'use strict';
 
     console.log("App Started");
-    var options = {
-        definition: 2}
+    var options = { definition: 1 }
 
     options = _.extend(options, AppConfig);
-    //     forcefresh: true,
-    //     apiServer: "http://api-server.dev",
-    //     appId: "efd40076811c4a9566dd970642dc572151f9e45b75a2fd4f3d2956811b4066b5",
-    //     appSecret: "ee0c7b9c7017e77a12b10762d753e4e0eb67e68e94293f96dfc5544f0844637b"
-    //     // appId: "ddc5d7ba3b5f5e12dd7ca5938c9f5fea6fdf4e75f4d92f954367cc9e98700872"
-    // }
     Backbone.history.start({pushState: false});
 
     new MainRouter(options);

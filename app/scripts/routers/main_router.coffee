@@ -13,14 +13,15 @@ define [
   'controllers/dashboard_controller',
   'components/progress_bar_view',
   'controllers/stages_controller',
-  'controllers/summary_results_controller'
+  'controllers/summary_results_controller',
+  'messages/error_modal_view'
   ], ($, Backbone, 
     SessionController, Assessment, UserEvent, User, Result, Stages, 
     LoginDialog, HeaderView, StartView, DashboardController, ProgressBarView, 
-    StagesController, SummaryResultsController) ->
+    StagesController, SummaryResultsController, ErrorModalView) ->
   MainRouter = Backbone.Router.extend
     routes:
-      'assessment': 'showAssessment'
+      'assessment/:defId': 'showAssessment'
       'start': 'showStart'
       'stage/:stageNo': 'showStages'
       'result': 'showResult'
@@ -28,7 +29,7 @@ define [
 
     initialize: (options) ->
       # TODO: We need to get these in properly. Figure it out!
-      @definitionId = options["definition"]
+      @definitionId = @definitionId(options)      
       window.apiServerUrl = options["apiServer"]
 
       # At the beginning create the session:
@@ -41,7 +42,16 @@ define [
       header = new HeaderView({session: @session})
       $('#header').html(header.render().el)
 
-      @navigate('assessment', {trigger: true})
+      Backbone.history.fragment = ""
+      @navigate("assessment/#{@definitionId}", {trigger: true})
+
+    definitionId: (options) ->
+      routeFragment = Backbone.history.fragment
+      matches = routeFragment.match(/(assessment\/)([1-9]*)/)
+      if matches? and matches.length is 3 and matches[1] is 'assessment/'
+        return parseInt(matches[2])
+      else
+        return options["definition"]
 
     stageCompleted: ->
       # Initially no stages completed, so start with -1
@@ -68,9 +78,14 @@ define [
         console.log("Logged in as guest")
         @navigate('start', {trigger: true})
       .fail =>
-        # TODO: Add some alert here
-        console.log("Login not successful")        
-        @session.logout()
+        # This is a catastrophic fail of the API server, it is probably down.
+        # Let them retry?
+        console.log("Login not successful")  
+        errorView = new ErrorModalView({title: "Login Error", message: "Cannot login to the server, server may be down."})
+        errorView.display()  
+
+        # Backbone.history.fragment = ""
+        # @navigate('assessment', {trigger: true})
 
     showStart: ->
       console.log('Show Start')
@@ -90,13 +105,18 @@ define [
 
     showStages: ->
       console.log("Show Stage ##{@currentStageNo}")
+      if not @session.assessment? or not @currentStageNo?
+        @navigate('assessment', {trigger: true})
+
       controller = new StagesController()
       controller.initialize({assessment: @session.assessment, currentStageNo: @currentStageNo})
       controller.render()
 
     showResult: ->
       console.log("Show Result")
-      @session.result = new Result(@session.assessment.get('id'))
+      if not @session.assessment? 
+        @navigate('assessment', {trigger: true})
+
       controller = new SummaryResultsController()
       controller.initialize({session: @session})
       controller.render()      
@@ -105,7 +125,7 @@ define [
       console.log("Showing Dashboard")
       # Only show it, if the user is not guest
       if @session.user.isGuest()
-        @session.logout()
+        @session.transferOwner()
         loginDialog = new LoginDialog({session: @session})
         $('#content').html(loginDialog.render().el)
       else 

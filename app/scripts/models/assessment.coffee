@@ -4,10 +4,11 @@ define [
   'models/result', 
   'models/user'], ($, Backbone, Result) ->  
   Assessment = Backbone.Model.extend
-    urlRoot: '/api/v1/assessments'
+    urlRoot: ->
+      "#{window.apiServerUrl}/api/v1/assessments"
 
     initialize:  ->
-      @url = window.apiServerUrl + @urlRoot
+      # @url = window.apiServerUrl + @urlRoot
 
     create: (definitionId) ->
       deferred = $.Deferred()
@@ -27,7 +28,7 @@ define [
       deferred = $.Deferred()
       @save attrs,
         patch: false
-        url: "#{@url}/#{@get('id')}"
+        # url: "#{@url()}/#{@get('id')}"
       .done (data, textStatus, jqXHR) =>
         console.log("Update Progress Success: #{textStatus}")
         @trigger('stage_completed_success')
@@ -43,7 +44,7 @@ define [
       deferred = $.Deferred()
       @save attrs,
         patch: false
-        url: "#{@url}/#{@get('id')}"
+        # url: "#{@url()}/#{@get('id')}"
       .done (data, textStatus, jqXHR) ->
         console.log("Add User Success: #{textStatus}")
         deferred.resolve(jqXHR.response)
@@ -53,6 +54,26 @@ define [
 
       deferred.promise()
 
+    getResult: ->
+      deferred = $.Deferred()
 
+      if @result?
+        deferred.resolve("Result already exists")
+      else
+        @result = new Result(@get('id'))
+        if @get('status') is 'results_ready'
+          @result.getResult()
+          .done =>
+            deferred.resolve()
+          .fail =>
+            deferred.reject()
+        else
+          @result.calculateResult()
+          .done =>
+            deferred.resolve()
+          .fail =>
+            deferred.reject()
  
+      deferred.promise()
+
   Assessment

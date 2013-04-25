@@ -3,22 +3,29 @@ define [
   'Backbone'], ($, Backbone) ->  
   Result = Backbone.Model.extend
     initialize: (assessment_id) ->
-      @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/results"
+      @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"
 
     calculateResult: ->
       deferred = $.Deferred()
       @startCalculation()
-      .then =>
+      .done =>
         @checkForProgress(true, null)
-      .then =>
-        @getResults()
-      .then =>
-        deferred.resolve()
+        .done =>
+          @getResult()
+          .done =>
+            deferred.resolve()
+          .fail =>
+            deferred.reject()
+        .fail =>
+          deferred.reject()
+      .fail =>
+        deferred.reject()
 
       deferred.promise()
 
     startCalculation: ->
       deferred = $.Deferred()
+      @timeoutAttempt = 0
       attrs = {}
       @save(attrs)       
       .done (data, textStatus, jqXHR) =>
@@ -55,9 +62,14 @@ define [
               @progressLink = data.status.link
               console.log("Still pending for results")
               # continue pinging every 1s
-              setTimeout => 
-                @checkForProgress(false, deferred)
-              , 1000
+              @timeoutAttempt += 1 
+              if @timeoutAttempt is 4
+                console.log("Timeout limit is reached!")
+                deferred.reject("Timeout limit is reached!")
+              else
+                setTimeout => 
+                  @checkForProgress(false, deferred)
+                , 500
             when 'done'
               console.log("Done with results")
               deferred.resolve(jqXHR.response)
@@ -77,14 +89,14 @@ define [
       if (firstTime)
         deferred.promise()
 
-    getResults: ->
+    getResult: ->
       deferred = $.Deferred()
       @fetch()
       .done (data, textStatus, jqXHR) =>
-        console.log("Get Results Success: #{textStatus}") 
+        console.log("Get Result Success: #{textStatus}") 
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Get Results Error: #{textStatus}")
+        console.log("Get Result Error: #{textStatus}")
         deferred.reject(textStatus)
 
       deferred.promise()

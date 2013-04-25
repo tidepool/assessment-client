@@ -10,8 +10,9 @@ define [
   DashboardMainView = NestedView.extend  
     name: 'dashboard_main_view'
 
-    postInitialize: ->
-      @profile = @model.get('profile_description')
+    postInitialize:  ->
+      result = @options.assessment.result
+      @profile = result.get('profile_description')
       # For debugging now:
       if !@profile?
         @profile = 
@@ -26,7 +27,7 @@ define [
             "Cras mattis consectetur purus sit amet fermentum.",
             "Vestibulum id ligula porta felis euismod semper."
           ]
-      @scores = @model.get('scores')
+      @scores = result.get('scores')
       @assessment = @options.assessment
 
     getTemplate: ->

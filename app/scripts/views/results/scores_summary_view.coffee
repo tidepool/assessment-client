@@ -8,15 +8,20 @@ define [
       "click #go_dashboard": "goDashboard"
 
     initialize: (options) ->
-      @scores = @model.get('scores')
+      @result = options.assessment.result
       
     render: ->
       template = Handlebars.compile(tempfile)
-      data = (score for score_name, score of @scores)
+      
+      if @result?
+        scores = @result.get('scores')
+        data = (score for score_name, score of scores)
+
       $(@el).html(template(results: data))
       this
 
     goDashboard: ->
-      Backbone.history.navigate('/dashboard', {trigger: true})
+      Backbone.history.fragment = ""
+      Backbone.history.navigate('dashboard', {trigger: true})
       
   ScoresSummaryView
