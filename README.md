@@ -24,9 +24,9 @@ Installation:
 
         npm install && bower install
 
-* Run the jquery-amd code to create an amd wrapper for the jqueryui components
+* Run the jquery-amd code from the root of your client folder to create an amd wrapper for the jqueryui components
 
-        jqueryui-amd path/to/jquery-ui-version
+        jqueryui-amd app/components/jquery-ui
 
 * Go to the OAuthProvider project (api-server)
 

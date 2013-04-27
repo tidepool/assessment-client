@@ -4,4 +4,6 @@ dist
 .sass-cache
 app/components
 .DS_Store
+.idea
 app/scripts/app_secrets_dev.js
+
