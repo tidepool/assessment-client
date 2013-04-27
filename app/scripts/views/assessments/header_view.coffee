@@ -55,7 +55,7 @@ define [
 
     showProfile: (e) ->
       e.preventDefault()
-      profileDialog = new ProfileDialog({session: @user})
+      profileDialog = new ProfileDialog({user: @user})
       $('#content').html(profileDialog.render().el)
   
   HeaderView

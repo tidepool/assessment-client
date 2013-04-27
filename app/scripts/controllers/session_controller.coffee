@@ -160,6 +160,15 @@ define [
       window.OAuthRedirect = _.bind(@onRedirect, @)
       window.open(@setupAuthUrl(provider), "Login", "width=#{width}, height=#{height}, left=#{left}, top=#{top}, menubar=no")
 
+    # authorizeThrough: facebook, twitter or fitbit
+    setupAuthUrl: (authorizeThrough) ->
+      authUrl = "#{@apiServer}/oauth/authorize" 
+
+      redirectUri = "#{window.location.protocol}//#{window.location.host}/redirect.html"
+      redirectUri = encodeURIComponent(redirectUri)
+      authorize_param = "authorize_through=#{authorizeThrough}&"
+      "#{authUrl}?#{authorize_param}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"   
+
     parseHash: (hash) ->
       params = {}
       queryString = hash.substring(1)
@@ -168,14 +177,11 @@ define [
         params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
       params
 
-    onRedirect: (hash) ->
+    onRedirect: (hash, location) ->
       params = @parseHash(hash)
       console.log("Redirected with params #{params['access_token']}, hash #{hash}")
       if params['access_token']
         @accessToken = params['access_token']
-        # We need to clear out the existing user
-        if @user?
-          @user = null
         @persistLocally(params)
         @finishLogin()
       else
@@ -184,6 +190,12 @@ define [
 
     finishLogin: ->
       deferred = $.Deferred()
+
+      # This is a new login
+      # We need to clear out the existing user
+      if @user?
+        @user = null
+
       @getUserInfo()
       .done =>
         @trigger('session:login_success')
@@ -207,14 +219,7 @@ define [
         .fail (jqXHR, textStatus, errorThrown) ->
           console.log("Error creating user #{textStatus}")
           deferred.reject(textStatus)
-
       deferred.promise()
 
-    setupAuthUrl: (authorize_through) ->
-      authUrl = "#{@apiServer}/oauth/authorize" 
-      redirectUri = "#{window.location.protocol}//#{window.location.host}/redirect.html"
-      redirectUri = encodeURIComponent(redirectUri)
-      authorize_param = "authorize_through=#{authorize_through}&"
-      "#{authUrl}?#{authorize_param}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"   
 
   SessionController
