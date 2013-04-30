@@ -29,14 +29,16 @@ define [
     setupAddAuthUrl: (provider) ->
       authUrl = "#{window.apiServerUrl}/auth/additional"
 
-      redirectUri = "#{window.location.protocol}//#{window.location.host}/additional_redirect.html?"
+      redirectUri = "#{window.location.protocol}//#{window.location.host}/additional_redirect.html#"
       redirectUri = encodeURIComponent(redirectUri)
       provider_param = "provider=#{provider}&"
       "#{authUrl}?redirect_uri=#{redirectUri}&user_id=#{@get('id')}&provider=#{provider}"   
 
     onAddAuthRedirect: (hash, location) ->
-      console.log("onAddAuthRedirect called with #{location}")
+      # http://assessments-front.dev/additional_redirect.html#user_id=113&provider=twitter 
+      console.log("onAddAuthRedirect called with #{location} and hash #{hash}")
       params = @parseHash(hash)
+      console.log("params are: #{params['user_id']} and #{params['provider']}")
       @trigger('user:authentication_added', params['provider'])
 
   User

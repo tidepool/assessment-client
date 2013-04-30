@@ -8,7 +8,7 @@ define [
       "click #go_dashboard": "goDashboard"
 
     initialize: (options) ->
-      @result = options.assessment.result
+      @result = options.assessment.get('result')
 
     render: ->
       template = Handlebars.compile(tempfile)

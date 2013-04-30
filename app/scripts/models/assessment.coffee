@@ -10,6 +10,19 @@ define [
     initialize:  ->
       # @url = window.apiServerUrl + @urlRoot
 
+    # Embedded model is inspired by 
+    # http://stackoverflow.com/questions/6535948/nested-models-in-backbone-js-how-to-approach
+    
+    embeddedModels:
+      result: Result
+
+    parse: (response) ->
+      for key of @embeddedModels
+        embeddedClass = @embeddedModels[key]
+        embeddedData = response[key]
+        response[key] = new embeddedClass(embeddedData, {parse:true})
+      response
+
     create: (definitionId) ->
       deferred = $.Deferred()
       @save({'def_id': definitionId })
@@ -54,21 +67,38 @@ define [
 
       deferred.promise()
 
+    getLatest: ->
+      deferred = $.Deferred()
+      
+      @fetch
+        url: "#{@url()}/latest"
+      .done (data, textStatus, jqXHR) =>
+        console.log('Got the latest assessment')
+        deferred.resolve()
+      .fail (jqXHR, textStatus, errorThrown) =>
+          deferred.reject()
+
+      deferred.promise()   
+
     getResult: ->
       deferred = $.Deferred()
 
-      if @result?
+      if @get('result')?
         deferred.resolve("Result already exists")
       else
-        @result = new Result(@get('id'))
+        @set({result: new Result()})
         if @get('status') is 'results_ready'
-          @result.getResult()
-          .done =>
-            deferred.resolve()
-          .fail =>
-            deferred.reject()
+          result = @get('result')
+          result.fetch()
+          .done (data, textStatus, jqXHR) =>
+            console.log("Get Result Success: #{textStatus}") 
+            deferred.resolve(jqXHR.response)
+          .fail (jqXHR, textStatus, errorThrown) =>
+            console.log("Get Result Error: #{textStatus}")
+            deferred.reject(textStatus)
         else
-          @result.calculateResult()
+          result = @get('result')
+          result.calculateResult()
           .done =>
             deferred.resolve()
           .fail =>

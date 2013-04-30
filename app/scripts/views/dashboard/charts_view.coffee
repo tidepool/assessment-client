@@ -18,14 +18,15 @@ define [
       @scores = @options
 
     postRender: ->
-      i = 0
       for scoreName, scoreValue of @scores   
-        @renderGraph(scoreValue, i)
-        i += 1
+        @renderGraph(scoreName, scoreValue)
 
-    renderGraph: (scoreValue, graph) ->
-      canvas = @.$el.find("canvas")[graph]
-      context = $(canvas).get(0).getContext("2d")
+    renderGraph: (scoreName, scoreValue) ->
+      chartCanvasName = "##{scoreName}Chart"
+      $canvas = this.$el.find(chartCanvasName)
+      return if not $canvas? || $canvas.length == 0
+
+      context = $canvas[0].getContext("2d")
       labels = (label for label, value of scoreValue.score)
       data = (value for label, value of scoreValue.score)
 

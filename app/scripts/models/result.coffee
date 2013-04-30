@@ -2,8 +2,12 @@ define [
   'jquery',
   'Backbone'], ($, Backbone) ->  
   Result = Backbone.Model.extend
-    initialize: (assessment_id) ->
-      @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"
+    urlRoot: ->
+      assessment_id = @get('assessment_id')
+      "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"
+
+    # initialize: (assessment_id) ->
+    #   @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"
 
     calculateResult: ->
       deferred = $.Deferred()
@@ -11,10 +15,10 @@ define [
       .done =>
         @checkForProgress(true, null)
         .done =>
-          @getResult()
-          .done =>
+          @fetch()
+          .done (data, textStatus, jqXHR) =>
             deferred.resolve()
-          .fail =>
+          .fail (jqXHR, textStatus, errorThrown) =>
             deferred.reject()
         .fail =>
           deferred.reject()
@@ -89,15 +93,15 @@ define [
       if (firstTime)
         deferred.promise()
 
-    getResult: ->
-      deferred = $.Deferred()
-      @fetch()
-      .done (data, textStatus, jqXHR) =>
-        console.log("Get Result Success: #{textStatus}") 
-        deferred.resolve(jqXHR.response)
-      .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Get Result Error: #{textStatus}")
-        deferred.reject(textStatus)
+    # getResult: ->
+    #   deferred = $.Deferred()
+    #   @fetch()
+    #   .done (data, textStatus, jqXHR) =>
+    #     console.log("Get Result Success: #{textStatus}") 
+    #     deferred.resolve(jqXHR.response)
+    #   .fail (jqXHR, textStatus, errorThrown) ->
+    #     console.log("Get Result Error: #{textStatus}")
+    #     deferred.reject(textStatus)
 
-      deferred.promise()
+    #   deferred.promise()
   Result

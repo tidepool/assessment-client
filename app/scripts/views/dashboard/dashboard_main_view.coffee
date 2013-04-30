@@ -11,7 +11,7 @@ define [
     name: 'dashboard_main_view'
 
     postInitialize:  ->
-      result = @options.assessment.result
+      result = @options.assessment.get('result')
       @profile = result.get('profile_description')
       # For debugging now:
       if !@profile?

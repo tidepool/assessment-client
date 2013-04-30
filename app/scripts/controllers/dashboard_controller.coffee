@@ -21,26 +21,14 @@ define [
       deferred = $.Deferred()
       @session.getUserInfo()
       .done =>
-        if @session.assessment?
-          @ensureUser()
-          .done =>
-            # Ensure we have the results 
-            @session.assessment.getResult()
-            .done =>
-              deferred.resolve()
-            .fail => 
-              deferred.reject()
-          .fail =>
-            deferred.reject()
-        else 
-          # Get the last assesment
-          assessment = new Assessment()
-          assessment.fetch({id: 'latest'})
-          .done =>
-            @session.assessment = assesment
-            deferred.resolve()
-          .fail =>
-            deferred.reject()
+        # Get the last assesment
+        @session.assessment = new Assessment()
+        @session.assessment.getLatest()
+        .done (data, textStatus, jqXHR) =>
+          console.log('Got the latest assessment')
+          deferred.resolve()
+        .fail (jqXHR, textStatus, errorThrown) =>
+          deferred.reject()
       .fail =>
         deferred.reject("Cannot get the users")
 

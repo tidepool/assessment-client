@@ -67,6 +67,7 @@ define [
     authenticationAdded: (provider) ->
       @user.fetch()
       .done (data, textStatus, jqXHR) =>
+        console.log("Updated user info")
         @render()
       .fail (jqXHR, textStatus, errorThrown) =>
         console.log("Cannot refresh user info")
