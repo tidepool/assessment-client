@@ -53,7 +53,7 @@ require(['routers/main_router', 'underscore', 'Backbone', './app_secrets_dev'], 
     'use strict';
 
     console.log("App Started");
-    var options = { definition: 1 }
+    var options = { definition: 3, trigger: true }
 
     options = _.extend(options, AppConfig);
     Backbone.history.start({pushState: false});

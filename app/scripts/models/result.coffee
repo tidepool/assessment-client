@@ -93,15 +93,4 @@ define [
       if (firstTime)
         deferred.promise()
 
-    # getResult: ->
-    #   deferred = $.Deferred()
-    #   @fetch()
-    #   .done (data, textStatus, jqXHR) =>
-    #     console.log("Get Result Success: #{textStatus}") 
-    #     deferred.resolve(jqXHR.response)
-    #   .fail (jqXHR, textStatus, errorThrown) ->
-    #     console.log("Get Result Error: #{textStatus}")
-    #     deferred.reject(textStatus)
-
-    #   deferred.promise()
   Result

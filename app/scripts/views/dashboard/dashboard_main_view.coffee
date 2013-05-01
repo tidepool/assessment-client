@@ -12,9 +12,12 @@ define [
 
     postInitialize:  ->
       result = @options.assessment.get('result')
-      @profile = result.get('profile_description')
+      if result?
+        @profile = result.get('profile_description')
+        @scores = result.get('scores')
+
       # For debugging now:
-      if !@profile?
+      if !@profile? or !result?
         @profile = 
           logo_url: "The Stickler.png"
           name: "The Stickler"
@@ -27,7 +30,6 @@ define [
             "Cras mattis consectetur purus sit amet fermentum.",
             "Vestibulum id ligula porta felis euismod semper."
           ]
-      @scores = result.get('scores')
       @assessment = @options.assessment
 
     getTemplate: ->

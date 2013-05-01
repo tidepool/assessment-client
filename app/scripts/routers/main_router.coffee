@@ -26,6 +26,7 @@ define [
       'stage/:stageNo': 'showStages'
       'result': 'showResult'
       'dashboard': 'showDashboard'
+      'foo': 'showFoo'
 
     initialize: (options) ->
       # TODO: We need to get these in properly. Figure it out!
@@ -42,8 +43,14 @@ define [
       header = new HeaderView({session: @session})
       $('#header').html(header.render().el)
 
+      navigateTo = Backbone.history.fragment
       Backbone.history.fragment = ""
-      @navigate("assessment/#{@definitionId}", {trigger: true})
+      @navigate(navigateTo, {trigger: true})
+      # Backbone.history.fragment = ""
+      # @navigate("assessment/#{@definitionId}", {trigger: true})
+
+    showFoo: ->
+      console.log("Foo")
 
     definitionId: (options) ->
       routeFragment = Backbone.history.fragment
@@ -84,8 +91,9 @@ define [
         errorView = new ErrorModalView({title: "Login Error", message: "Cannot login to the server, server may be down."})
         errorView.display()  
 
+        # navigateTo = Backbone.history.fragment
         # Backbone.history.fragment = ""
-        # @navigate('assessment', {trigger: true})
+        # @navigate(navigateTo, {trigger: true})
 
     showStart: ->
       console.log('Show Start')
@@ -123,9 +131,8 @@ define [
 
     showDashboard: ->
       console.log("Showing Dashboard")
-      # Only show it, if the user is not guest
-      if @session.user.isGuest()
-        @session.transferOwner()
+      # Only show it, if the user is not guest and is logged in
+      if (@session.user? and @session.user.isGuest()) or not @session.user? 
         loginDialog = new LoginDialog({session: @session})
         $('#content').html(loginDialog.render().el)
       else 

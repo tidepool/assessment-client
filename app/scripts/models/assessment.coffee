@@ -20,7 +20,10 @@ define [
       for key of @embeddedModels
         embeddedClass = @embeddedModels[key]
         embeddedData = response[key]
-        response[key] = new embeddedClass(embeddedData, {parse:true})
+        if embeddedData is null
+          response[key] = null
+        else
+          response[key] = new embeddedClass(embeddedData, {parse:true})
       response
 
     create: (definitionId) ->
@@ -67,11 +70,11 @@ define [
 
       deferred.promise()
 
-    getLatest: ->
+    getLatestWithProfile: ->
       deferred = $.Deferred()
       
       @fetch
-        url: "#{@url()}/latest"
+        url: "#{@url()}/latest_with_profile"
       .done (data, textStatus, jqXHR) =>
         console.log('Got the latest assessment')
         deferred.resolve()
@@ -86,7 +89,8 @@ define [
       if @get('result')?
         deferred.resolve("Result already exists")
       else
-        @set({result: new Result()})
+        result = new Result({assessment_id: @get('id')})
+        @set({result: result})
         if @get('status') is 'results_ready'
           result = @get('result')
           result.fetch()

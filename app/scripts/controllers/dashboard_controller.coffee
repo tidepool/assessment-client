@@ -23,7 +23,7 @@ define [
       .done =>
         # Get the last assesment
         @session.assessment = new Assessment()
-        @session.assessment.getLatest()
+        @session.assessment.getLatestWithProfile()
         .done (data, textStatus, jqXHR) =>
           console.log('Got the latest assessment')
           deferred.resolve()
@@ -34,19 +34,19 @@ define [
 
       deferred.promise()
 
-    ensureUser: ->
-      deferred = $.Deferred()
-      if @session.transferOwnerFlag is true 
-        # There was a guest user before
-        # We need to transfer the existing assessment in memory to the logged in user
-        @session.assessment.addUser(@session.user)
-        .done =>
-          deferred.resolve()
-        .fail =>
-          deferred.reject()
-      else 
-        deferred.resolve()
+    # ensureUser: ->
+    #   deferred = $.Deferred()
+    #   if @session.transferOwnerFlag is true 
+    #     # There was a guest user before
+    #     # We need to transfer the existing assessment in memory to the logged in user
+    #     @session.assessment.addUser(@session.user)
+    #     .done =>
+    #       deferred.resolve()
+    #     .fail =>
+    #       deferred.reject()
+    #   else 
+    #     deferred.resolve()
 
-      deferred.promise()
+    #   deferred.promise()
 
   DashboardController
