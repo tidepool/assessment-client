@@ -23,6 +23,7 @@ require.config({
         text: '../components/requirejs-text/text',
         json2: '../components/require-handlebars-plugin/hbs/json2',
         assessments: './views/assessments',
+        home: './views/home',
         dashboard: './views/dashboard',
         components: './views/components',
         results: './views/results',
@@ -33,7 +34,8 @@ require.config({
         controllers: './controllers',
         collections: './collections',
         helpers: './helpers',
-        messages: './views/messages'
+        messages: './views/messages',
+        toastr: '../components/toastr'
     },
     shim: {
         bootstrap: {

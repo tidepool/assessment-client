@@ -27,10 +27,13 @@ define [
     loginAsGuest: ->
       @login('guest', '')
 
+    loginAsCurrent: ->
+      @login('current', '')
+
     login: (email, password) ->
       deferred = $.Deferred()
       
-      if @isValid({email: email, password: password}) or email is 'guest'
+      if @isValid({email: email, password: password}) or (email is 'guest') or (email is 'current')
         if @loggedIn()
           @finishLogin()
           .done =>
@@ -187,14 +190,16 @@ define [
     finishLogin: ->
       deferred = $.Deferred()
 
+      params = {}
       if @user? and @user.isGuest
-          guestId = @user.get('id')
+        guestId = @user.get('id')
+        params = { guestId: guestId }
 
       console.log("Guest id is #{guestId}")
 
       @user = new User({id: 'finish_login'})
       @user.fetch
-        data: {guest_id: guestId}
+        data: params
       .done (data, textStatus, jqXHR) =>
         @trigger('session:login_success')
         deferred.resolve(jqXHR.response)
@@ -203,37 +208,6 @@ define [
         @trigger('session:login_fail')
         deferred.reject(textStatus)
       deferred.promise()
-
-      # This is a new login
-      # We need to clear out the existing user
-      # if @user?
-      #   if @user.isGuest
-      #     # We need to add the existing assessment to the new user
-      #     @postLoginTask = 
-      #       action: 'transferOwner'
-      #       guestId: @user.get('id')
-      #       assessmentId: @assessment.get('id')
-      #   @user = null
-
-      # @getUserInfo()
-      # .done =>
-      #   if @postLoginTask?
-      #     @transferOwner()
-      #     .done =>          
-      #       @trigger('session:login_success')
-      #       deferred.resolve("Success")
-      #     .fail =>
-      #       console.log("Could not transfer owner")
-      #       @trigger('session:login_fail')
-      #       deferred.reject("Fail")   
-      #   else
-      #     @trigger('session:login_success')
-      #     deferred.resolve("Success")                  
-      # .fail =>
-      #   @trigger('session:login_fail')
-      #   deferred.reject("Fail")
-
-      # deferred.promise()
 
     getUserInfo: ->
       deferred = $.Deferred()
@@ -249,9 +223,5 @@ define [
           console.log("Error creating user #{textStatus}")
           deferred.reject(textStatus)
       deferred.promise()
-
-    # transferOwner: ->
-    #   @clearOutLocalStorage()
-    #   @transferOwnerFlag = true
 
   SessionController

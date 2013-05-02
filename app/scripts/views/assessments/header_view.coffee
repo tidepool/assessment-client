@@ -16,45 +16,48 @@ define [
 
     initialize: (options) ->
       @session = options.session
-      @user = @session.user
+      
       @listenTo(@session, 'session:login_success', @loggedIn)
       @listenTo(@session, 'session:logout_success', @loggedOut)
 
     render: ->
       loggedIn = @session.loggedIn()
       template = Handlebars.compile(tempfile)
+
+      @user = @session.user
+      isRegisteredUser = true
       if @user?
         if @user.get('guest') is true
           userName = 'Guest'
+          isRegisteredUser = false
         else
           userName = @user.get('email')
           if userName is undefined || userName is ""
             userName = @user.get('name')
       else
-        userName = "Logging In..."
+        userName = ""
 
-      $(@el).html(template({ userName: userName, loggedIn: loggedIn } ))
+      $(@el).html(template({ userName: userName, loggedIn: loggedIn, isRegisteredUser: isRegisteredUser } ))
       this
 
     loggedIn: ->
-      @user = @session.user
       @render()
 
     loggedOut: ->
-      @user = null
       @render()
 
     login: (e) ->
       e.preventDefault()
-      loginDialog = new LoginDialog({session: @session})
-      $('#content').html(loginDialog.render().el)
+      @trigger('command:login')
 
     logout: (e) ->
       e.preventDefault()
+      @trigger('command:logout')
       @session.logout()
 
     showProfile: (e) ->
       e.preventDefault()
+      @trigger('command:profile')
       profileDialog = new ProfileDialog({user: @user})
       $('#content').html(profileDialog.render().el)
   

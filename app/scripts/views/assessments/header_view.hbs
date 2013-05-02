@@ -11,6 +11,7 @@
           </li>
           {{#if loggedIn}}
           <li class="dropdown">
+            {{#if isRegisteredUser }}
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
               <i class="halflings-icon white user"></i>
               <span id="user_name">{{userName}}</span>
@@ -28,6 +29,9 @@
               </a>
               </li>
             </ul>
+            {{else}}
+              <span id="user_name">Welcome Guest</span>
+            {{/if}}
           </li>
           {{else}}
           <li class="dropdown">

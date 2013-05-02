@@ -34,19 +34,4 @@ define [
 
       deferred.promise()
 
-    # ensureUser: ->
-    #   deferred = $.Deferred()
-    #   if @session.transferOwnerFlag is true 
-    #     # There was a guest user before
-    #     # We need to transfer the existing assessment in memory to the logged in user
-    #     @session.assessment.addUser(@session.user)
-    #     .done =>
-    #       deferred.resolve()
-    #     .fail =>
-    #       deferred.reject()
-    #   else 
-    #     deferred.resolve()
-
-    #   deferred.promise()
-
   DashboardController

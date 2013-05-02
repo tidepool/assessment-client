@@ -108,14 +108,14 @@ module.exports = function (grunt) {
                 'test/spec/{,*/}*.js'
             ]
         },
-        // mocha: {
-        //     all: {
-        //         options: {
-        //             run: true,
-        //             urls: ['http://localhost:<%= connect.options.port %>/index.html']
-        //         }
-        //     }
-        // },
+        mocha: {
+            all: {
+                options: {
+                    run: true,
+                    urls: ['http://localhost:<%= connect.options.port %>/index.html']
+                }
+            }
+        },
         coffee: {
             options: {
                 bare: true
@@ -253,6 +253,12 @@ module.exports = function (grunt) {
             all: {
                 rjsConfig: '<%= yeoman.app %>/scripts/main.js'
             }
+        },
+        exec: {
+            convert_jqueryui_amd: {
+                command: 'jqueryui-amd <%= yeoman.app %>/components/jquery-ui',
+                stdout: true
+            }
         }
     });
 
@@ -265,6 +271,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'exec',
             'coffee:dist',
             'compass:server',
             'livereload-start',
@@ -276,6 +283,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
+        'exec',
         'coffee',
         'compass',
         'connect:test',
@@ -284,6 +292,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'exec',
         'coffee',
         'compass:dist',
         'useminPrepare',

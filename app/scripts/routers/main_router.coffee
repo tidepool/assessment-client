@@ -10,6 +10,7 @@ define [
   'user/login_dialog',
   'assessments/header_view',
   'assessments/start_view',
+  'home/home_page_view',
   'controllers/dashboard_controller',
   'components/progress_bar_view',
   'controllers/stages_controller',
@@ -17,20 +18,18 @@ define [
   'messages/error_modal_view'
   ], ($, Backbone, 
     SessionController, Assessment, UserEvent, User, Result, Stages, 
-    LoginDialog, HeaderView, StartView, DashboardController, ProgressBarView, 
+    LoginDialog, HeaderView, StartView, HomePageView, DashboardController, ProgressBarView, 
     StagesController, SummaryResultsController, ErrorModalView) ->
   MainRouter = Backbone.Router.extend
     routes:
+      '': 'showHome'
       'assessment/:defId': 'showAssessment'
-      'start': 'showStart'
       'stage/:stageNo': 'showStages'
       'result': 'showResult'
       'dashboard': 'showDashboard'
-      'foo': 'showFoo'
 
     initialize: (options) ->
-      # TODO: We need to get these in properly. Figure it out!
-      @definitionId = @definitionId(options)      
+      @definitionId = options["definition"]    
       window.apiServerUrl = options["apiServer"]
 
       # At the beginning create the session:
@@ -42,23 +41,15 @@ define [
 
       header = new HeaderView({session: @session})
       $('#header').html(header.render().el)
+      @listenTo(header, 'command:login', @loginCommand)
+      @listenTo(header, 'command:logout', @logoutCommand)
+      @listenTo(header, 'command:profile', @profileCommand)
 
       navigateTo = Backbone.history.fragment
-      Backbone.history.fragment = ""
+      Backbone.history.fragment = "zzz"
       @navigate(navigateTo, {trigger: true})
       # Backbone.history.fragment = ""
       # @navigate("assessment/#{@definitionId}", {trigger: true})
-
-    showFoo: ->
-      console.log("Foo")
-
-    definitionId: (options) ->
-      routeFragment = Backbone.history.fragment
-      matches = routeFragment.match(/(assessment\/)([1-9]*)/)
-      if matches? and matches.length is 3 and matches[1] is 'assessment/'
-        return parseInt(matches[2])
-      else
-        return options["definition"]
 
     stageCompleted: ->
       # Initially no stages completed, so start with -1
@@ -78,12 +69,22 @@ define [
       if @currentStageNo is @numOfStages
         @navigate("result", {trigger: true})
 
+    showHome: ->
+      console.log("Show Home")
+      if @session.loggedIn() and not @session.user?
+        @session.loginAsCurrent()
+
+      view = new HomePageView()
+      $('#content').html(view.render().el)
+
     showAssessment: ->
+      console.log("Show Assessment")
+      @definitionId = @parseDefinitionId()
       # Always create a user, initially as a guest if someone is not already loggedin
       @session.loginAsGuest()
       .done =>
-        console.log("Logged in as guest")
-        @navigate('start', {trigger: true})
+        console.log("Logged in")
+        @createAndShowAssessment(@definitionId)
       .fail =>
         # This is a catastrophic fail of the API server, it is probably down.
         # Let them retry?
@@ -91,25 +92,34 @@ define [
         errorView = new ErrorModalView({title: "Login Error", message: "Cannot login to the server, server may be down."})
         errorView.display()  
 
-        # navigateTo = Backbone.history.fragment
-        # Backbone.history.fragment = ""
-        # @navigate(navigateTo, {trigger: true})
+    parseDefinitionId: ->
+      routeFragment = Backbone.history.fragment
+      matches = routeFragment.match(/(assessment\/)([1-9]*)/)
+      if matches? and matches.length is 3 and matches[1] is 'assessment/'
+        return parseInt(matches[2])
+      else
+        return @definitionId
 
-    showStart: ->
-      console.log('Show Start')
+    createAndShowAssessment: (definitionId) ->
+      console.log('Showing Assessment')
       # Create an anonymous assessment on the server with the definitionId
-      if @session.loggedIn()
+      if @session.assessment?
+        @displayAssessment()
+      else
         assessment = new Assessment()
-        assessment.create(@definitionId)
+        assessment.create(definitionId)
         .done =>
           @session.assessment = assessment
-          @listenTo(@session.assessment, 'change:stage_completed', @stageCompleted)
-          @listenTo(@session.assessment, 'stage_completed_success', @stageCompletedSuccess)
-          view = new StartView({model: @session.assessment})
-          $('#content').html(view.render().el)          
+          @displayAssessment()
         .fail =>
           console.log("Something went wrong, can't create assessment")
           # TODO: Add some alert here
+
+    displayAssessment: ->
+      @listenTo(@session.assessment, 'change:stage_completed', @stageCompleted)
+      @listenTo(@session.assessment, 'stage_completed_success', @stageCompletedSuccess)
+      view = new StartView({model: @session.assessment})
+      $('#content').html(view.render().el)          
 
     showStages: ->
       console.log("Show Stage ##{@currentStageNo}")
@@ -132,34 +142,52 @@ define [
     showDashboard: ->
       console.log("Showing Dashboard")
       # Only show it, if the user is not guest and is logged in
-      if (@session.user? and @session.user.isGuest()) or not @session.user? 
+      if (@session.user? and @session.user.isGuest()) or not @session.loggedIn()
         loginDialog = new LoginDialog({session: @session})
         $('#content').html(loginDialog.render().el)
       else 
-        controller = new DashboardController()
-        controller.initialize({session: @session})
-        controller.render()
+        if @session.user?
+          controller = new DashboardController()
+          controller.initialize({session: @session})
+          controller.render()
+        else 
+          @session.loginAsCurrent()
+          .done =>
+            controller = new DashboardController()
+            controller.initialize({session: @session})
+            controller.render()
+          .fail =>
+            console.log("Something went wrong, cannot login")
+
+    loginCommand: ->
+      @loginDialog = new LoginDialog({session: @session})
+      $('#content').html(loginDialog.render().el)
+
 
     handleSuccessfulLogin: ->
+      if @loginDialog?
+        loginDialog.close()
+      
       currentLocation = Backbone.history.fragment
       locOfInterest = currentLocation.match(/[a-z]*/)[0]
       switch locOfInterest
         when 'dashboard' then newLocation = currentLocation
-        when 'result' then newLocation = 'assessment'
-        when 'stage' then newLocation = 'assessment'
-        when 'assessment' then newLocation = 'start'
-        when 'start' then newLocation = 'assessment'
+        when 'result' then newLocation = "assessment/#{@definitionId}"
+        when 'stage' then newLocation = "assessment/#{@definitionId}"
+        # when 'assessment' then newLocation = currentLocation
 
       # Backbone does not naviagate if it thinks it is there anyways.
       # HACK: So change fragment to ""
-      Backbone.history.fragment = ""
+      Backbone.history.fragment = "zzz"
       @navigate(newLocation, {trigger: true})
 
     handleFailedLogin: ->
 
     handleLogout: ->
-      loginDialog = new LoginDialog({session: @session})
-      $('#content').html(loginDialog.render().el)
+      # loginDialog = new LoginDialog({session: @session})
+      # $('#content').html(loginDialog.render().el)
+      Backbone.history.fragment = "zzz"
+      @navigate('', {trigger: true})
 
 
 
