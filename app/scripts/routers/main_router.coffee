@@ -8,6 +8,7 @@ define [
   'models/result',
   'collections/stages',
   'user/login_dialog',
+  'user/profile_dialog',
   'assessments/header_view',
   'assessments/start_view',
   'home/home_page_view',
@@ -18,7 +19,7 @@ define [
   'messages/error_modal_view'
   ], ($, Backbone, 
     SessionController, Assessment, UserEvent, User, Result, Stages, 
-    LoginDialog, HeaderView, StartView, HomePageView, DashboardController, ProgressBarView, 
+    LoginDialog, ProfileDialog, HeaderView, StartView, HomePageView, DashboardController, ProgressBarView, 
     StagesController, SummaryResultsController, ErrorModalView) ->
   MainRouter = Backbone.Router.extend
     routes:
@@ -161,12 +162,11 @@ define [
 
     loginCommand: ->
       @loginDialog = new LoginDialog({session: @session})
-      $('#content').html(loginDialog.render().el)
-
+      @loginDialog.show()
 
     handleSuccessfulLogin: ->
       if @loginDialog?
-        loginDialog.close()
+        @loginDialog.close()
       
       currentLocation = Backbone.history.fragment
       locOfInterest = currentLocation.match(/[a-z]*/)[0]
@@ -182,6 +182,11 @@ define [
       @navigate(newLocation, {trigger: true})
 
     handleFailedLogin: ->
+
+    
+    profileCommand: ->
+      @profileDialog = new ProfileDialog({user: @session.user})
+      @profileDialog.show()
 
     handleLogout: ->
       # loginDialog = new LoginDialog({session: @session})

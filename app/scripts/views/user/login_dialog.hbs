@@ -1,24 +1,53 @@
-<div class="row">
-    <div class="span4 offset4">
-      <div class="well">
-        <legend>Sign in using: </legend>
-        <button class="btn-info btn" id="facebookLogin">Facebook</button>
-        <button class="btn-info btn" id="twitterLogin">Twitter</button>
-        <button class="btn-info btn" id="fitbitLogin">Fitbit</button>
-        <legend>Or sign in using credentials</legend>
-        <form id="loginForm">
-            <div class="alert alert-error" style="visibility:hidden;" id="error">
-                <a class="close" data-dismiss="alert" href="#">x</a><span id="message"></span>
-            </div>      
-            <input class="span3" placeholder="E-Mail" type="text" name="email" id="email">
-            <input class="span3" placeholder="Password" type="password" name="password" id="password"> 
-            <label class="checkbox">
-                <input type="checkbox" name="remember" value="1" id="rememberMe"> Remember Me
-            </label>
-            <button class="btn-info btn" type="submit">Login</button>      
-        </form>    
-        <p>No account, then you can signup</p>
-        <button class="btn-info btn" id="signup">Signup</button>
-      </div>
+<div id="login-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
+  <div class="dialog-select">
+    <div class="modal-body">
+      <button class="btn-info btn" id="signup">Create an Account</button>
+      <p>OR</p>
+      <button class="btn-info btn" id="signin">Sign In</button>
     </div>
+  </div>
+  <div class="dialog-signin" style="display:none;">
+    <div class="modal-header">
+      <h3 id="signin-label">SIGN IN</h3>
+    </div>
+    <div class="modal-body">
+      <div>
+        <button class="btn-info btn" id="facebook-login">Facebook</button>
+        <button class="btn-info btn" id="fitbit-login">Fitbit</button>
+      </div>
+      <p>OR</p>
+      <form id="signin-form">
+        <input class="span3" placeholder="EMail Address" type="text" name="email" id="email"><br/>
+        <input class="span3" placeholder="Password" type="password" name="password" id="password"><br/>
+        <label class="checkbox">
+          <input type="checkbox" name="remember" value="1" id="remember">Remember Me
+        </label>
+        <button class="btn-info btn" type="submit">SIGN IN</button>      
+      </form>    
+      <p><a href="" id="forgot-pass">Forgot Your Password?</a></p>
+      <p>Don't have an account yet? <a href="" id="need-signup">Sign up</a></p>
+    </div>
+  </div>
+  <div class="dialog-signup" style="display:none;">
+    <div class="modal-header">
+      <h3 id="signup-label">CREATE AN ACCOUNT</h3>
+    </div>
+    <div class="modal-body">
+      <div>
+        <button class="btn-info btn" id="facebook-login">Facebook</button>
+        <button class="btn-info btn" id="fitbit-login">Fitbit</button>
+      </div>
+      <p>OR</p>
+      <form id="signup-form">
+        <input class="span3" placeholder="EMail Address" type="text" name="email" id="email"><br/>
+        <input class="span3" placeholder="Password" type="password" name="password" id="password"><br/>
+        <input class="span3" placeholder="Confirm Password" type="password" name="password-confirm" id="password-confirm"> <br/>
+        <label class="checkbox">
+          <input type="checkbox" name="remember" value="1" id="remember">Remember Me
+        </label>
+        <button class="btn-info btn" type="submit">SIGN IN</button>      
+      </form>    
+      <p>Have an account? <a href="" id="need-signin">Sign in</a></p>
+    </div>
+  </div>
 </div>

@@ -64,6 +64,13 @@ define [
       @enableDisableAvailableAuthentications()
       this
 
+    show: ->
+      $("#messageView").html(@render().el)
+      $("#profile-dialog").modal('show')
+
+    close: -> 
+      $("#profile-dialog").modal('hide')
+
     authenticationAdded: (provider) ->
       @user.fetch()
       .done (data, textStatus, jqXHR) =>
@@ -95,6 +102,24 @@ define [
 
     submitProfile: (e) ->
       e.preventDefault()
+      @getNewValues()
+      @user.save()
+      .done =>
+        console.log("Profile changes saved")
+      .fail =>
+        console.log("Error saving changes")
 
+    getNewValues: ->
+      # TODO: Consider using some databinding library
+      # rivets.js, etc.
+      @user.set
+        name: $('#name').val()
+        email: $('#email').val()
+        date_of_birth: $('#dob').val()
+        gender: $('#gender').val()
+        timezone: $('#timezone').val()
+        city: $('#city').val()
+        state: $('#state').val()
+        country: $('#country').val()
 
   ProfileDialog

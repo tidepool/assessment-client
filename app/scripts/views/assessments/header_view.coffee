@@ -2,12 +2,10 @@ define [
   'jquery',
   'Backbone',
   'Handlebars',
-  'user/login_dialog',
-  'user/profile_dialog',
   'routers/main_router',
   "text!./header_view.hbs",
   'bootstrap',
-  'controllers/session_controller'], ($, Backbone, Handlebars, LoginDialog, ProfileDialog, MainRouter, tempfile) ->
+  'controllers/session_controller'], ($, Backbone, Handlebars, MainRouter, tempfile) ->
   HeaderView = Backbone.View.extend
     events:
       "click #login": "login",
@@ -58,7 +56,5 @@ define [
     showProfile: (e) ->
       e.preventDefault()
       @trigger('command:profile')
-      profileDialog = new ProfileDialog({user: @user})
-      $('#content').html(profileDialog.render().el)
   
   HeaderView

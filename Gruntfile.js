@@ -236,6 +236,21 @@ module.exports = function (grunt) {
             }
         },
         copy: {
+            // Currently SCSS import does not import css files.
+            // This hack copies the files as scss until this is fixed.
+            // See: https://github.com/nex3/sass/issues/556
+            cssImportHack: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/components/toastr',
+                        src: ['**/*.css'],
+                        dest: '<%= yeoman.app %>/components/toastr',
+                        filter: 'isFile',
+                        ext: ".scss"
+                    }
+                ]
+            },
             dist: {
                 files: [{
                     expand: true,
@@ -273,6 +288,7 @@ module.exports = function (grunt) {
             'clean:server',
             'exec',
             'coffee:dist',
+            'copy:cssImportHack',
             'compass:server',
             'livereload-start',
             'connect:livereload',
@@ -285,6 +301,7 @@ module.exports = function (grunt) {
         'clean:server',
         'exec',
         'coffee',
+        'copy:cssImportHack',
         'compass',
         'connect:test',
         'mocha'
@@ -294,6 +311,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'exec',
         'coffee',
+        'copy:cssImportHack',
         'compass:dist',
         'useminPrepare',
         'requirejs',
@@ -302,7 +320,7 @@ module.exports = function (grunt) {
         'concat',
         'cssmin',
         'uglify',
-        'copy',
+        'copy:dist',
         'usemin'
     ]);
 
