@@ -12,6 +12,10 @@ Pre-requisites:
 
         npm install -g yo grunt-cli bower 
 
+* Install jqueryui-amd (https://github.com/jrburke/jqueryui-amd)
+
+        npm install -g jqueryui-amd    
+
 
 Installation:
 -------------
@@ -19,6 +23,10 @@ Installation:
 * Install the dev dependencies and client-side javascript dependencies:
 
         npm install && bower install
+
+* Run the jquery-amd code from the root of your client folder to create an amd wrapper for the jqueryui components
+
+        jqueryui-amd app/components/jquery-ui
 
 * Go to the OAuthProvider project (api-server)
 
