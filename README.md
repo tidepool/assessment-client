@@ -3,14 +3,34 @@ assessment-client
 
 Pre-requisites:
 ---------------
+* Install apple's xcode command line tools
+
+        https://developer.apple.com/downloads/
+
+* Install homebrew
+
+        ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 
 * Install node.js
   
         brew install node
 
+* Add NPM packages to PATH. Add the following two lines to your `~/.profile` or `~/.zshrc` file
+
+        # Add globally installed Node Packages to the PATH variable
+        export PATH=/usr/local/share/npm/bin:$PATH
+
+* Install Compass for front end precompilation
+
+        gem install compass
+
 * Install Yeoman (http://yeoman.io/)
 
-        npm install -g yo grunt-cli bower 
+        npm install -g yo grunt-cli bower
+
+* Install jqueryui-amd (https://github.com/jrburke/jqueryui-amd)
+
+        npm install -g jqueryui-amd
 
 
 Installation:
@@ -19,6 +39,10 @@ Installation:
 * Install the dev dependencies and client-side javascript dependencies:
 
         npm install && bower install
+
+* Run the jquery-amd code from the root of your client folder to create an amd wrapper for the jqueryui components
+
+        jqueryui-amd app/components/jquery-ui
 
 * Go to the OAuthProvider project (api-server)
 
