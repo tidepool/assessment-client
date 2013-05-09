@@ -21,7 +21,7 @@ require.config({
         chart: 'vendor/Chart',
         Backbone: '../components/backbone-amd/backbone',
         text: '../components/requirejs-text/text',
-        json2: '../components/require-handlebars-plugin/hbs/json2',
+        json2: '../components/json2/json2',
         assessments: './views/assessments',
         home: './views/home',
         dashboard: './views/dashboard',

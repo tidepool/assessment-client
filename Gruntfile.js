@@ -72,6 +72,7 @@ module.exports = function (grunt) {
                     middleware: function (connect) {
                         return [
                             mountFolder(connect, '.tmp'),
+                            mountFolder(connect, 'app'),
                             mountFolder(connect, 'test')
                         ];
                     }
@@ -91,6 +92,9 @@ module.exports = function (grunt) {
             server: {
                 // path: 'http://localhost:<%= connect.options.port %>'
                 path: 'http://assessments-front.dev/'
+            },
+            test: {
+                path: 'http://localhost:<%= connect.options.port %>'
             }
         },
         clean: {
@@ -111,8 +115,14 @@ module.exports = function (grunt) {
         mocha: {
             all: {
                 options: {
+                    timeout: 10000000, // This is a hack so the test server keeps running and we can hit browser
+                    // inject: "", // This makes it so that the specs don't run in PhantomJS
+                    mocha: {
+                        ui: 'bdd',
+                        ignoreLeaks: false
+                    },
                     run: true,
-                    urls: ['http://localhost:<%= connect.options.port %>/index.html']
+                    urls: ['http://localhost:<%= connect.options.port %>/test.html']
                 }
             }
         },
@@ -134,9 +144,10 @@ module.exports = function (grunt) {
             test: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/spec',
-                    src: '**/*.coffee',
-                    dest: 'test/spec'
+                    cwd: 'test/spec',
+                    src: '{,*/}*.coffee',
+                    dest: '.tmp/spec',
+                    ext: '.js'
                 }]
             }
         },

@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.0.0",
   "dependencies": {
+    "json2": "",
     "toastr": "~1.2.2",
     "sass-bootstrap": "~2.3.0",
     "requirejs": "~2.1.4",
@@ -13,5 +14,11 @@
     "requirejs-text": "~2.0.5",
     "underscore-amd": "~1.4.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "chai": "~1.6.0",
+    "chai-jquery": "~1.1.1",
+    "chai-backbone": "",
+    "sinon": "~1.6.0"
+  }
 }
