@@ -11,7 +11,7 @@
     "backbone-amd": "~1.0.0",
     "require-handlebars-plugin": "~0.4.0",
     "requirejs-text": "~2.0.5",
-    "underscore-amd": "~1.4.4"
-  },
-  "devDependencies": {}
+    "underscore-amd": "~1.4.4",
+    "bourbon": "~3.1.6"
+  }
 }
