@@ -25,6 +25,7 @@ module.exports = function (grunt) {
         ],
         cssSourceGlob: [
             '<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css',
+            '<%= yeoman.app %>/components/toastr/toastr.css',
             '<%= yeoman.temp %>/**/*.css'
         ]
     };
@@ -232,21 +233,6 @@ module.exports = function (grunt) {
             }
         },
         copy: {
-            // Currently SCSS import does not import css files.
-            // This hack copies the files as scss until this is fixed.
-            // See: https://github.com/nex3/sass/issues/556
-//            cssImportHack: {
-//                files: [
-//                    {
-//                        expand: true,
-//                        cwd: '<%= yeoman.app %>/components/toastr',
-//                        src: ['**/*.css'],
-//                        dest: '<%= yeoman.app %>/components/toastr',
-//                        filter: 'isFile',
-//                        ext: ".scss"
-//                    }
-//                ]
-//            },
             dist: {
                 files: [{
                     expand: true,
