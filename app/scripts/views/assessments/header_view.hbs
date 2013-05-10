@@ -1,47 +1,49 @@
-<div class="navbar">
-  <div class="navbar-inner">
-    <div class="container-fluid">
+<div class="inner">
 
-      <a class="brand" href="" style="padding-top: 0px;"><img src="/images/tidepool-logo.png" width="100px" ></a>
+    <a class="brand" href=""><img src="/images/tidepool-logo.png" width="100px" ></a>
 
-      <div class="nav-no-collapse header-nav">
-        <ul class="nav pull-right">
-          <li>
-            <div id="progressbarcontainer"></div>
-          </li>
-          {{#if loggedIn}}
-          <li class="dropdown">
-            {{#if isRegisteredUser }}
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="halflings-icon white user"></i>
-              <span id="user_name">{{userName}}</span>
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a id="profile">
-                <i class="halflings-icon white user"></i> 
-                Profile
-                </a>
-              </li>
-              <li><a id="logout">
-                <i class="halflings-icon white off"></i>
-                Logout
-              </a>
-              </li>
-            </ul>
-            {{else}}
-              <span id="user_name">Welcome Guest</span>
-            {{/if}}
-          </li>
-          {{else}}
-          <li class="dropdown">
-            <a id="login" class="dropdown-toggle" data-toggle="dropdown" href="#">
-              Login
-            </a>
-          </li>
-          {{/if}}
+    <nav>
+        <ul>
+            <li><a href="#About">About</a></li>
+            <li><a href="#Team">Team</a></li>
+            <li><a href="#Investors">Investors</a></li>
         </ul>
-      </div>
+    </nav>
+
+    <div class="loginArea">
+        {{#if loggedIn}}
+            <li class="dropdown">
+                {{#if isRegisteredUser }}
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="halflings-icon white user"></i>
+                        <span id="user_name">{{userName}}</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a id="profile">
+                            <i class="halflings-icon white user"></i>
+                            Profile
+                        </a>
+                        </li>
+                        <li><a id="logout">
+                            <i class="halflings-icon white off"></i>
+                            Logout
+                        </a>
+                        </li>
+                    </ul>
+                {{else}}
+                    <span id="user_name">Welcome Guest</span>
+                {{/if}}
+            </li>
+        {{else}}
+            <a class="btn btn-primary btn-large" id="login" href="#">
+                Log In
+            </a>
+        {{/if}}
     </div>
-  </div>
+
 </div>
+
+
+
+

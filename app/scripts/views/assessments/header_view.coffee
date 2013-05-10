@@ -1,12 +1,21 @@
 define [
-  'jquery',
-  'Backbone',
-  'Handlebars',
-  'routers/main_router',
-  "text!./header_view.hbs",
-  'bootstrap',
-  'controllers/session_controller'], ($, Backbone, Handlebars, MainRouter, tempfile) ->
+  'jquery'
+  'Backbone'
+  'Handlebars'
+  'routers/main_router'
+  "text!./header_view.hbs"
+  'bootstrap'
+  'controllers/session_controller'
+],
+(
+  $
+  Backbone
+  Handlebars
+  MainRouter
+  tempfile
+) ->
   HeaderView = Backbone.View.extend
+    tagName: 'header'
     events:
       "click #login": "login",
       "click #logout": "logout"
