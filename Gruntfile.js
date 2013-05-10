@@ -23,7 +23,10 @@ module.exports = function (grunt) {
             '<%= yeoman.app %>/scripts/**/*.{scss,sass}',
             '<%= yeoman.app %>/styles/**/*.{scss,sass}'
         ],
-        cssSourceGlob: '<%= yeoman.temp %>/**/*.css'
+        cssSourceGlob: [
+            '<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css',
+            '<%= yeoman.temp %>/**/*.css'
+        ]
     };
 
     grunt.initConfig({
@@ -86,7 +89,7 @@ module.exports = function (grunt) {
                 tasks: ['coffee:test']
             },
             compass: {
-                files: ['<%= yeoman.app %>/styles/**/*.{scss,sass}'],
+                files: '<%= tidepool.sassSourceGlob %>',
                 tasks: ['compass', 'cssmin:dev', 'clean:temp', 'livereload']
             },
             livereload: {
