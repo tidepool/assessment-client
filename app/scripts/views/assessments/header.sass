@@ -1,3 +1,4 @@
+@import '../../../components/bourbon/app/assets/stylesheets/_bourbon.scss'
 @import '../../../styles/_appVars.sass'
 @import '../../../styles/_colorVars.sass'
 
@@ -7,16 +8,25 @@ $headerHeight: 80px
 
 header
   background: white
-  height: $headerHeight
-  line-height: $headerHeight
   margin-bottom: $spaceLil
 
   .inner
     max-width: $maxSiteWidth
     margin: 0 auto
-  .brand
-    display: inline-block
     height: $headerHeight
+    line-height: $headerHeight
+
+  .logo
+    display: inline-block
+    background: $highlightVeryThin //larger hover area
+    background-image: url('../images/brand1x.png')
+    background-position: 0 -41px
+    width: 88px
+    height: 50px
+    vertical-align: middle
+    @include transition (all .15s ease-in-out)
+  .logo:hover
+    @include transform(scale(1.05))
 
 
   // The actual site navigation
