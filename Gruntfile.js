@@ -79,7 +79,7 @@ module.exports = function (grunt) {
             },
             coffee: {
                 files: ['<%= yeoman.app %>/scripts/**/*.coffee'],
-                tasks: ['coffee:dist']
+                tasks: ['coffee:dev']
             },
             coffeeTest: {
                 files: ['test/spec/**/*.coffee'],
