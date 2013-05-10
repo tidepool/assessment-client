@@ -24,7 +24,7 @@ module.exports = function (grunt) {
             '<%= yeoman.app %>/styles/**/*.{scss,sass}'
         ],
         cssSourceGlob: [
-            //'<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css',
+            '<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css',
             '<%= yeoman.app %>/components/toastr/toastr.css',
             '<%= yeoman.temp %>/**/*.css'
         ]
