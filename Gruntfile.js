@@ -5,11 +5,6 @@ var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to match all subfolders:
-// 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
     // load all grunt tasks
@@ -18,38 +13,22 @@ module.exports = function (grunt) {
     // configurable paths
     var yeomanConfig = {
         app: 'app',
-        dist: 'dist'
+        dist: 'dist',
+        dev: '.devServer',
+        temp: '.tmp'
+    };
+
+    var tidepoolConfig = {
+        sassSourceGlob: [
+            '<%= yeoman.app %>/scripts/**/*.{scss,sass}',
+            '<%= yeoman.app %>/styles/**/*.{scss,sass}'
+        ],
+        cssSourceGlob: '<%= yeoman.temp %>/**/*.css'
     };
 
     grunt.initConfig({
         yeoman: yeomanConfig,
-        watch: {
-            hbs: {
-                files: ['<%= yeoman.app %>/scripts/**/*.hbs'],
-                tasks: ['livereload']
-            },
-            coffee: {
-                files: ['<%= yeoman.app %>/scripts/**/*.coffee'],
-                tasks: ['coffee:dist']
-            },
-            coffeeTest: {
-                files: ['test/spec/**/*.coffee'],
-                tasks: ['coffee:test']
-            },
-            compass: {
-                files: ['<%= yeoman.app %>/styles/**/*.{scss,sass}'],
-                tasks: ['compass']
-            },
-            livereload: {
-                files: [
-                    '<%= yeoman.app %>/*.html',
-                    '{.tmp,<%= yeoman.app %>}/styles/**/*.css',
-                    '{.tmp,<%= yeoman.app %>}/scripts/**/*.js',
-                    '<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,webp}'
-                ],
-                tasks: ['livereload']
-            }
-        },
+        tidepool: tidepoolConfig,
         connect: {
             options: {
                 port: 7000,
@@ -61,7 +40,7 @@ module.exports = function (grunt) {
                     middleware: function (connect) {
                         return [
                             lrSnippet,
-                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, '.devServer'), // A grunt variable does not work here
                             mountFolder(connect, 'app')
                         ];
                     }
@@ -71,7 +50,7 @@ module.exports = function (grunt) {
                 options: {
                     middleware: function (connect) {
                         return [
-                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, '<%= yeoman.dev %>'),
                             mountFolder(connect, 'test')
                         ];
                     }
@@ -93,9 +72,37 @@ module.exports = function (grunt) {
                 path: 'http://assessments-front.dev/'
             }
         },
+        watch: {
+            hbs: {
+                files: ['<%= yeoman.app %>/scripts/**/*.hbs'],
+                tasks: ['livereload']
+            },
+            coffee: {
+                files: ['<%= yeoman.app %>/scripts/**/*.coffee'],
+                tasks: ['coffee:dist']
+            },
+            coffeeTest: {
+                files: ['test/spec/**/*.coffee'],
+                tasks: ['coffee:test']
+            },
+            compass: {
+                files: ['<%= yeoman.app %>/styles/**/*.{scss,sass}'],
+                tasks: ['compass', 'cssmin:dev', 'clean:temp', 'livereload']
+            },
+            livereload: {
+                files: [
+                    '<%= yeoman.app %>/*.html',
+                    '{<%= yeoman.dev %>,<%= yeoman.app %>}/styles/**/*.css',
+                    '{<%= yeoman.dev %>,<%= yeoman.app %>}/scripts/**/*.js',
+                    '<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,webp}'
+                ],
+                tasks: ['livereload']
+            }
+        },
         clean: {
-            dist: ['.tmp', '<%= yeoman.dist %>/*'],
-            server: '.tmp'
+            dist: ['<%= yeoman.dev %>', '<%= yeoman.dist %>', '<%= yeoman.temp %>'],
+            dev: ['<%= yeoman.dev %>', '<%= yeoman.temp %>'],
+            temp: '<%= yeoman.temp %>'
         },
         jshint: {
             options: {
@@ -120,21 +127,19 @@ module.exports = function (grunt) {
             options: {
                 bare: true
             },
-            dist: {
+            dev: {
                 files: [{
-                    // rather than compiling multiple files here you should
-                    // require them into your main .coffee file
                     expand: true,
                     cwd: '<%= yeoman.app %>/scripts',
                     src: '**/*.coffee',
-                    dest: '.tmp/scripts',
+                    dest: '<%= yeoman.dev %>/scripts',
                     ext: '.js'
                 }]
             },
             test: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/spec',
+                    cwd: '<%= yeoman.dev %>/spec',
                     src: '**/*.coffee',
                     dest: 'test/spec'
                 }]
@@ -142,26 +147,16 @@ module.exports = function (grunt) {
         },
         compass: {
             options: {
-                sassDir: '<%= yeoman.app %>/styles',
-                cssDir: '.tmp/styles',
-                imagesDir: '<%= yeoman.app %>/images',
-                javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
-                importPath: 'app/components',
-                relativeAssets: true
+                sassDir: '<%= yeoman.app %>',
+                specify: '<%= tidepool.sassSourceGlob %>',
+                cssDir: '<%= yeoman.temp %>',
+                //importPath: 'app/components',
+                //relativeAssets: true,
+                outputStyle: 'compact',
+                noLineComments: true
             },
-            dist: {},
-            server: {
-                options: {
-                    debugInfo: true
-                }
-            }
+            compile: {}
         },
-        // not used since Uglify task does concat,
-        // but still available if needed
-        /*concat: {
-            dist: {}
-        },*/
         requirejs: {
             dist: {
                 // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
@@ -176,7 +171,7 @@ module.exports = function (grunt) {
                     // http://requirejs.org/docs/errors.html#sourcemapcomments
                     preserveLicenseComments: false,
                     useStrict: true,
-                    wrap: true,
+                    wrap: true
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
                 }
             }
@@ -205,13 +200,11 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
+            dev: {
+                files: { '<%= yeoman.dev %>/all-min.css': '<%= tidepool.cssSourceGlob %>' }
+            },
             dist: {
-                files: {
-                    '<%= yeoman.dist %>/styles/main.css': [
-                        '.tmp/styles/{,*/}*.css',
-                        '<%= yeoman.app %>/styles/{,*/}*.css'
-                    ]
-                }
+                files: { '<%= yeoman.dist %>/all-min.css': '<%= tidepool.cssSourceGlob %>' }
             }
         },
         htmlmin: {
@@ -239,18 +232,18 @@ module.exports = function (grunt) {
             // Currently SCSS import does not import css files.
             // This hack copies the files as scss until this is fixed.
             // See: https://github.com/nex3/sass/issues/556
-            cssImportHack: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= yeoman.app %>/components/toastr',
-                        src: ['**/*.css'],
-                        dest: '<%= yeoman.app %>/components/toastr',
-                        filter: 'isFile',
-                        ext: ".scss"
-                    }
-                ]
-            },
+//            cssImportHack: {
+//                files: [
+//                    {
+//                        expand: true,
+//                        cwd: '<%= yeoman.app %>/components/toastr',
+//                        src: ['**/*.css'],
+//                        dest: '<%= yeoman.app %>/components/toastr',
+//                        filter: 'isFile',
+//                        ext: ".scss"
+//                    }
+//                ]
+//            },
             dist: {
                 files: [{
                     expand: true,
@@ -285,11 +278,13 @@ module.exports = function (grunt) {
         }
 
         grunt.task.run([
-            'clean:server',
+            'clean:dev',
             'exec',
-            'coffee:dist',
-            'copy:cssImportHack',
-            'compass:server',
+            'coffee:dev',
+            //'copy:cssImportHack',
+            'compass',
+            'cssmin:dev',
+            'clean:temp',
             'livereload-start',
             'connect:livereload',
             'open',
@@ -311,14 +306,16 @@ module.exports = function (grunt) {
         'clean:dist',
         'exec',
         'coffee',
-        'copy:cssImportHack',
-        'compass:dist',
+        //'copy:cssImportHack',
+        'compass',
+        'cssmin:dist',
+        'clean:temp',
         'useminPrepare',
         'requirejs',
         'imagemin',
         'htmlmin',
         'concat',
-        'cssmin',
+        'cssmin:dist',
         'uglify',
         'copy:dist',
         'usemin'

@@ -23,8 +23,9 @@
     "grunt-mocha": "~0.2.2",
     "grunt-open": "~0.2.0",
     "grunt-exec": "~0.4.0",
-    "matchdep": "~0.1.1", 
-    "jqueryui-amd": "~0.0.2"
+    "matchdep": "~0.1.1",
+    "jqueryui-amd": "~0.0.2",
+    "grunt-contrib-sass": "~0.3.0"
   },
   "engines": {
     "node": ">=0.8.0"
