@@ -122,8 +122,14 @@ module.exports = function (grunt) {
         mocha: {
             all: {
                 options: {
+                    timeout: 10000000, // This is a hack so the test server keeps running and we can hit browser
+                    // inject: "", // This makes it so that the specs don't run in PhantomJS
+                    mocha: {
+                        ui: 'bdd',
+                        ignoreLeaks: false
+                    },
                     run: true,
-                    urls: ['http://localhost:<%= connect.options.port %>/index.html']
+                    urls: ['http://localhost:<%= connect.options.port %>/test.html']
                 }
             }
         },
@@ -146,6 +152,7 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.dev %>/spec',
                     src: '**/*.coffee',
                     dest: 'test/spec'
+                    ext: '.js'
                 }]
             }
         },

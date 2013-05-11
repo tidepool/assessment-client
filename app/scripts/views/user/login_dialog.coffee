@@ -3,9 +3,8 @@ define [
   'underscore',
   'Backbone',
   'Handlebars',
-  'user/signup_dialog',
   "text!./login_dialog.hbs",
-  'controllers/session_controller'], ($, _, Backbone, Handlebars, SignupDialog, tempfile) ->
+  'controllers/session_controller'], ($, _, Backbone, Handlebars, tempfile) ->
   LoginDialog = Backbone.View.extend  
     events:
       "click #facebook-login": "facebookLogin"
@@ -46,10 +45,10 @@ define [
 
     signin: (e) ->
       e.preventDefault()
-      email = $("#email").val()
-      password = $("#password").val()
+      email = $("#signin-form #email").val()
+      password = $("#signin-form #password").val()
       # TODO: Handle RememberMe
-      rememberMe = $("#remember").val()
+      rememberMe = $("signin-form #remember").val()
 
       @session.login(email, password)
       .done (message) =>
@@ -61,9 +60,10 @@ define [
 
     signup: (e) ->
       e.preventDefault()
-      email = $("#email").val()
-      password = $("#password").val()
-      passwordConfirm = $("#password-confirm").val()
+      email = $("#signup-form #email").val()
+      password = $("#signup-form #password").val()
+      passwordConfirm = $("#signup-form #password-confirm").val()
+      rememberMe = $("signup-form #remember").val()
 
       @session.signup(email, password, passwordConfirm)
       .done (message) =>
