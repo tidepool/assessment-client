@@ -1,16 +1,28 @@
-
+@import '_appVars.sass'
+@import '_colorVars.sass'
+@import '_helpers.sass'
 
 
 .infobox
-  margin-top: 80px
-  padding: 30px
-  background: rgba(0, 0, 0, 0.75)
-  font-size: 18px
-  color: white
-  line-height: 27px
+  position: relative
+  margin: 0 auto
+  margin-top: $space
+  padding: $spaceBig $spaceBig $space
+  background: white
+  border-radius: $radiusMed
+  border: 1px solid $colorVeryQuiet
   text-align: center
-  -webkit-border-radius: 12px
-  -moz-border-radius: 12px
-  border-radius: 12px
+  width: 50%
+  min-width: 320px
+  +softShadow
 
+  p
+    color: $colorForegroundMild
+    font-size: $fontSizeLarge
+    font-weight: bold
 
+.infobox.floating
+  position: absolute
+  width: auto
+  left: 25%
+  right: 25%
