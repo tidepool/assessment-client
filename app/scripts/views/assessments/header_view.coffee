@@ -12,7 +12,7 @@ define [
   Backbone
   Handlebars
   MainRouter
-  tempfile
+  tmpl
 ) ->
   HeaderView = Backbone.View.extend
     tagName: 'header'
@@ -29,7 +29,7 @@ define [
 
     render: ->
       loggedIn = @session.loggedIn()
-      template = Handlebars.compile(tempfile)
+      template = Handlebars.compile(tmpl)
 
       @user = @session.user
       isRegisteredUser = true
@@ -42,7 +42,7 @@ define [
           if userName is undefined || userName is ""
             userName = @user.get('name')
       else
-        userName = ""
+        userName = "Guest"
 
       $(@el).html(template({ userName: userName, loggedIn: loggedIn, isRegisteredUser: isRegisteredUser } ))
       this

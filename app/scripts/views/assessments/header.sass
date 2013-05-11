@@ -24,7 +24,6 @@ header
     width: 88px
     height: 50px
     vertical-align: middle
-    @include transition (all .15s ease-in-out)
   .logo:hover
     @include transform(scale(1.05))
 
@@ -59,7 +58,10 @@ header
     margin-right: $spaceTiny
 
 
-
+  .loginArea .userName
+    color: $colorBrandContrast
+    font-weight: bold
+    font-size: 18px
 
 
 

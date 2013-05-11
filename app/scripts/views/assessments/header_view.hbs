@@ -1,48 +1,46 @@
 <div class="inner">
 
-    <a class="logo" href=""></a>
+    <a class="logo" href="#home"></a>
 
-    <nav>
-        <ul>
-            <li><a href="#About">About</a></li>
-            <li><a href="#Team">Team</a></li>
-            <li><a href="#Investors">Investors</a></li>
-        </ul>
-    </nav>
-
-    <div class="loginArea">
-        {{#if loggedIn}}
-            <li class="dropdown">
-                {{#if isRegisteredUser }}
+    {{#if loggedIn}}
+        <div class="loginArea">
+            {{#if isRegisteredUser }}
+                <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="halflings-icon white user"></i>
-                        <span id="user_name">{{userName}}</span>
+                        <!--<i class="icon-user avatar"></i>-->
+                        <span id="userName">{{userName}}</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a id="profile">
                             <i class="halflings-icon white user"></i>
                             Profile
-                        </a>
-                        </li>
+                        </a></li>
                         <li><a id="logout">
                             <i class="halflings-icon white off"></i>
                             Logout
-                        </a>
-                        </li>
+                        </a></li>
                     </ul>
-                {{else}}
-                    <span id="user_name">Welcome Guest</span>
-                {{/if}}
-            </li>
-        {{else}}
+                </li>
+            {{else}}
+                <!--<span id="userName">{{userName}}</span>-->
+            {{/if}}
+        </div>
+    {{else}}
+        <nav>
+            <ul>
+                <li><a href="#About">About</a></li>
+                <li><a href="#Team">Team</a></li>
+                <li><a href="#Investors">Investors</a></li>
+            </ul>
+        </nav>
+        <div class="loginArea">
             <a class="btn btn-primary btn-large" id="login" href="#">
                 <i class="icon-lock icon-large"></i>
                 Log In
             </a>
-        {{/if}}
-    </div>
-
+        </div>
+    {{/if}}
 </div>
 
 
