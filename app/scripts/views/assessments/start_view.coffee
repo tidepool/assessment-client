@@ -18,15 +18,11 @@ define [
       @tmpl = Handlebars.compile tmpl
 
     render: ->
-      debugger
       @$el.html @tmpl
         definition: @model.get('definition')
-
-      $(".login_logout").css("visibility", "visible")
-      this
+      @
       
     startAssessment: (event) ->
-      #TODO: Change this to 0 or -1 by making the initial stage -2.
       @model.updateProgress(0)
 
   StartView

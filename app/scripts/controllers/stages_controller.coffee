@@ -39,12 +39,14 @@ define [
 
     render: ->
       #StepsRemainingView.setStageCompleted(@currentStageNo - 1)
-
-      curLevel = @levels.at(@currentStageNo)
+      curLevel = @levels.at @currentStageNo
       viewClassString = @views[curLevel.get('view_name')]
       viewClass = eval(viewClassString)
-      view = new viewClass({model: curLevel, assessment: @assessment, stageNo: @currentStageNo})
-      $('#content').html(view.render().el)
+      view = new viewClass
+        model: curLevel
+        assessment: @assessment
+        stageNo: @currentStageNo
+      $('#content').html view.render().el
       @
 
   StagesController

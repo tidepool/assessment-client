@@ -46,7 +46,10 @@ require([
     appConfig
     ) {
     'use strict';
-    console.log("App Started");
+
+    window.DEBUG = true;
+
+    DEBUG && console.log("App Started");
     window.apiServerUrl = appConfig.apiServer;
 
     new MainRouter(appConfig);

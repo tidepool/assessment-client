@@ -8,11 +8,10 @@ define [
       "#{window.apiServerUrl}/api/v1/assessments"
 
     initialize:  ->
-      # @url = window.apiServerUrl + @urlRoot
+      @on 'all', (eventName) -> console.log "AssessmentModel Event: #{eventName}"
 
     # Embedded model is inspired by 
     # http://stackoverflow.com/questions/6535948/nested-models-in-backbone-js-how-to-approach
-    
     embeddedModels:
       result: Result
 
@@ -38,6 +37,7 @@ define [
       deferred.promise()
 
     updateProgress: (stageCompleted) ->
+      DEBUG && console.log 'AssessmentModel.updateProgress()'
       # Rails 4 is going to introduce support for the PATCH verb in HTTP
       # TODO: Switch to PATCH when Rails 4 switch happens
       attrs = { 'stage_completed': stageCompleted }
@@ -46,11 +46,9 @@ define [
         patch: false
         # url: "#{@url()}/#{@get('id')}"
       .done (data, textStatus, jqXHR) =>
-        console.log("Update Progress Success: #{textStatus}")
-        @trigger('stage_completed_success')
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Update Progress Error: #{textStatus}")
+        throw new Error "Update Progress Error: #{textStatus}"
         deferred.reject(textStatus)
 
       deferred.promise()

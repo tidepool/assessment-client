@@ -38,7 +38,6 @@ define [
     routes:
       '': 'showHome'
       'game/:defId': 'showGame'
-      'stage/:stageNo': 'showStages'
       'result': 'showResult'
       'dashboard': 'showDashboard'
 
@@ -46,11 +45,12 @@ define [
       # At the beginning create the session:
       @session = new SessionController()
       @session.initialize(options)
-      @listenTo(@session, 'session:login_success', @_handleSuccessfulLogin)
+      #@listenTo(@session, 'session:login_success', @_handleSuccessfulLogin)
       @listenTo(@session, 'session:login_fail', @_handleFailedLogin)
       @listenTo(@session, 'session:logout_success', @_handleLogout)
 
-      @header = new HeaderView({session: @session})
+      @header = new HeaderView
+        session: @session
       @listenTo(@header, 'command:login', @_loginCommand)
       @listenTo(@header, 'command:logout', @_logoutCommand)
       @listenTo(@header, 'command:profile', @_profileCommand)
@@ -60,6 +60,7 @@ define [
     showHome: ->
       console.log("Show Home")
       if @session.loggedIn() and not @session.user?
+        console.log 'showHome(): logged in, but not set as the user'
         @session.loginAsCurrent()
 
       view = new HomePageView()
@@ -70,6 +71,7 @@ define [
       # Always create a user, initially as a guest if someone is not already loggedin
       @session.loginAsGuest()
         .done =>
+          DEBUG && console.log 'main_router.showGame(): Done logging in as guest'
           @_createAndShowAssessment(id)
         .fail =>
           # This is a catastrophic fail of the API server, it is probably down.
@@ -77,15 +79,6 @@ define [
           console.log("Login not successful")
           errorView = new ErrorModalView({title: "Login Error", message: "Cannot log in to the server, server may be down."})
           errorView.display()
-
-    showStages: (stageId) ->
-      @showGame() unless @session.assessment and @currentStageNo
-      console.log "Showing stage #{@currentStageNo}"
-      controller = new StagesController()
-      controller.initialize
-        assessment: @session.assessment
-        currentStageNo: @currentStageNo
-      controller.render()
 
     showResult: ->
       @showGame() unless @session.assessment
@@ -141,30 +134,38 @@ define [
 
     _displayAssessment: ->
       @listenTo(@session.assessment, 'change:stage_completed', @_stageCompleted)
-      @listenTo(@session.assessment, 'stage_completed_success', @_stageCompletedSuccess)
+      #@listenTo(@session.assessment, 'stage_completed_success', @_stageCompletedSuccess)
       view = new StartView
         model: @session.assessment
       $('#content').html view.render().el
 
-
+    _showLevel: (stageId) ->
+      DEBUG && console.log 'main_router._showLevel()'
+      console.log "Showing stage #{@currentStageNo}"
+      controller = new StagesController()
+      controller.initialize
+        assessment: @session.assessment
+        currentStageNo: @currentStageNo
+      controller.render()
 
     _stageCompleted: ->
           # Initially no stages completed, so start with -1
       @currentStageNo = @session.assessment.get('stage_completed')
       @numOfStages = @session.assessment.get('stages').length
-      switch
-      # when @currentStageNo is -1 then @navigate('start', {trigger: true})
-        when @currentStageNo < @numOfStages then @navigate("stage/#{@currentStageNo}", {trigger: true})
-        when @currentStageNo is @numOfStages then console.log("Waiting the final completed request to be sent.")
-        else alert("Error in stages #{@currentStageNo}!")
+      if @currentStageNo < @numOfStages
+        @_showLevel @currentStageNo
+      else if @currentStageNo is @numOfStages
+        console.log 'Waiting the final completed request to be sent.'
+      else
+        throw new Error "Error with stage #{@currentStageNo}"
 
-    _stageCompletedSuccess: ->
-      # TODO: This is not ideal, but we need to first send the request to server,
-      # before logging the (guest) user out. That's why I added this here.
-      @currentStageNo = @session.assessment.get('stage_completed')
-      @numOfStages = @session.assessment.get('stages').length
-      if @currentStageNo is @numOfStages
-        @navigate("result", {trigger: true})
+#    _stageCompletedSuccess: ->
+#      # TODO: This is not ideal, but we need to first send the request to server,
+#      # before logging the (guest) user out. That's why I added this here.
+#      @currentStageNo = @session.assessment.get('stage_completed')
+#      @numOfStages = @session.assessment.get('stages').length
+#      if @currentStageNo is @numOfStages
+#        @navigate("result", {trigger: true})
 
 
     _loginCommand: ->
@@ -195,10 +196,7 @@ define [
       @profileDialog.show()
 
     _handleLogout: ->
-      # loginDialog = new LoginDialog({session: @session})
-      # $('#content').html(loginDialog.render().el)
-      Backbone.history.fragment = "zzz"
-      @navigate('', {trigger: true})
+      @showHome()
 
 
 
