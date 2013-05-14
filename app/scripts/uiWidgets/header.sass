@@ -1,10 +1,8 @@
-@import '../../../components/bourbon/app/assets/stylesheets/_bourbon.scss'
-@import '../../../styles/_appVars.sass'
-@import '../../../styles/_colorVars.sass'
+@import '../../components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
 
 $headerHeight: 80px
-
-
 
 header
   background: white
@@ -15,7 +13,6 @@ header
     margin: 0 auto
     height: $headerHeight
     line-height: $headerHeight
-
   .logo
     display: inline-block
     background: $highlightVeryThin //larger hover area
@@ -24,6 +21,7 @@ header
     width: 88px
     height: 50px
     vertical-align: middle
+    margin-right: $spaceBig
   .logo:hover
     @include transform(scale(1.05))
 
@@ -31,7 +29,6 @@ header
   // The actual site navigation
   nav
     display: inline-block
-    margin-left: $space
   nav ul
     list-style: none
     margin: 0
@@ -42,8 +39,9 @@ header
     display: inline-block
     line-height: $headerHeight
     text-transform: uppercase
-    color: $colorBrandContrastLight
-    font-size: 16px
+    color: $colorBrandContrastNeutral + 50
+    font-size: $fontSizeSmall
+    font-weight: bold
     padding: 0 $spaceLil
   nav a:hover
     background: $colorBackground

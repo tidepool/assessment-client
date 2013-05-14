@@ -3,7 +3,7 @@ define [
   'Backbone'
   'Handlebars'
   'routers/main_router'
-  "text!./header_view.hbs"
+  "text!./header.hbs"
   'bootstrap'
   'controllers/session_controller'
 ],
@@ -23,14 +23,13 @@ define [
 
     initialize: (options) ->
       @session = options.session
-      
       @listenTo(@session, 'session:login_success', @loggedIn)
       @listenTo(@session, 'session:logout_success', @loggedOut)
+      @render()
 
-    render: ->
+    render: (noNav) ->
       loggedIn = @session.loggedIn()
       template = Handlebars.compile(tmpl)
-
       @user = @session.user
       isRegisteredUser = true
       if @user?
@@ -44,8 +43,13 @@ define [
       else
         userName = "Guest"
 
-      $(@el).html(template({ userName: userName, loggedIn: loggedIn, isRegisteredUser: isRegisteredUser } ))
-      this
+      @$el.html template
+        userName: userName
+        loggedIn: loggedIn
+        showNav: !noNav
+        isRegisteredUser: isRegisteredUser
+
+      @
 
     loggedIn: ->
       @render()

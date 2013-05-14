@@ -1,18 +1,27 @@
 define [
-  'jquery',
-  'Backbone',
-  'Handlebars',
-  "text!./start_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
+  'jquery'
+  'Backbone'
+  'Handlebars'
+  "text!./start_view.hbs"
+],
+(
+  $
+  Backbone
+  Handlebars
+  tmpl
+) ->
   StartView = Backbone.View.extend
     events:
       'click #startAssessment': 'startAssessment'
 
     initialize: (options) ->
-
+      @tmpl = Handlebars.compile tmpl
 
     render: ->
-      template = Handlebars.compile(tempfile)
-      $(@el).html(template({definition: @model.get('definition')}))
+      debugger
+      @$el.html @tmpl
+        definition: @model.get('definition')
+
       $(".login_logout").css("visibility", "visible")
       this
       

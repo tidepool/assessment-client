@@ -1,0 +1,29 @@
+@import '../../styles/_appVars.sass'
+@import '../../styles/_colorVars.sass'
+
+.stepsRemaining
+  position: relative
+  display: inline-block
+  box-sizing: border-box
+  xwidth: 320px
+  height: $space
+  line-height: 0
+  background: $colorBackground
+  border: 3px solid $colorVeryQuiet
+  padding: 3px
+  border-radius: $space / 2
+
+  .step
+    display: inline-block
+    width: $spaceBig
+    height: 100%
+    background: $colorVeryQuiet
+    border-radius: $radiusTiny
+  .step.completed
+    background: $colorGood
+  .step:first-child
+    border-bottom-left-radius: $space / 2
+    border-top-left-radius: $space / 2
+  .step:last-child
+    border-bottom-right-radius: $space / 2
+    border-top-right-radius: $space / 2

@@ -1,13 +1,18 @@
 define [
-  'jquery',
-  'Backbone',
-  'components/results_progress_bar_view',
-  'results/profile_summary_view',
-  'results/scores_summary_view',
-  'results/mechanical_turk_view',
-  'models/stage',
-  'models/assessment',
-  'controllers/session_controller'], ($, Backbone, ResultsProgressBarView, ProfileSummaryView, ScoresSummaryView, MechanicalTurkView) ->
+  'jquery'
+  'Backbone'
+  'components/results_progress_bar_view'
+  'results/profile_summary_view'
+  'results/scores_summary_view'
+  'results/mechanical_turk_view'
+], (
+  $
+  Backbone
+  ResultsProgressBarView
+  ProfileSummaryView
+  ScoresSummaryView
+  MechanicalTurkView
+) ->
   SummaryResultsController = ->
     views:
       'Profile': 'ProfileSummaryView'
