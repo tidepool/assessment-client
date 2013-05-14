@@ -54,8 +54,8 @@ module.exports = function (grunt) {
                 options: {
                     middleware: function (connect) {
                         return [
-                            mountFolder(connect, '<%= yeoman.dev %>'),
-                            mountFolder(connect, 'test')
+                            mountFolder(connect, '.devServer'),
+                            mountFolder(connect, 'app')
                         ];
                     }
                 }
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                 tasks: ['coffee:dev']
             },
             coffeeTest: {
-                files: ['test/spec/**/*.coffee'],
+                files: ['<%= yeoman.app %>/scripts/**/*_spec.coffee'],
                 tasks: ['coffee:test']
             },
             compass: {
@@ -115,8 +115,7 @@ module.exports = function (grunt) {
             all: [
                 'Gruntfile.js',
                 '<%= yeoman.app %>/scripts/{,*/}*.js',
-                '!<%= yeoman.app %>/scripts/vendor/*',
-                'test/spec/{,*/}*.js'
+                '!<%= yeoman.app %>/scripts/vendor/*'
             ]
         },
         mocha: {
@@ -129,7 +128,7 @@ module.exports = function (grunt) {
                         ignoreLeaks: false
                     },
                     run: true,
-                    urls: ['http://localhost:<%= connect.options.port %>/test.html']
+                    urls: ['http://localhost:<%= connect.options.port %>/spec.html']
                 }
             }
         },
@@ -137,11 +136,20 @@ module.exports = function (grunt) {
             options: {
                 bare: true
             },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= yeoman.app %>/scripts',
+                    src: ['**/*.coffee', '!**/*_spec.coffee'], // Do not include the spec files
+                    dest: '<%= yeoman.dev %>/scripts',
+                    ext: '.js'
+                }]
+            },
             dev: {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>/scripts',
-                    src: '**/*.coffee',
+                    src: '**/*.coffee', 
                     dest: '<%= yeoman.dev %>/scripts',
                     ext: '.js'
                 }]
@@ -149,9 +157,9 @@ module.exports = function (grunt) {
             test: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.dev %>/spec',
-                    src: '**/*.coffee',
-                    dest: 'test/spec',
+                    cwd: '<%= yeoman.app %>/scripts',
+                    src: '**/*_spec.coffee',
+                    dest: '<%= yeoman.dev %>/scripts',
                     ext: '.js'
                 }]
             }
@@ -248,7 +256,9 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>',
                     src: [
                         '*.{ico,txt}',
-                        '.htaccess'
+                        '.htaccess',
+                        '!spec.html',
+                        '!**/*_spec.*'
                     ]
                 }]
             }
@@ -283,10 +293,9 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('test', [
-        'clean:server',
+        'clean:dev',
         'exec',
         'coffee',
-        'copy:cssImportHack',
         'compass',
         'connect:test',
         'mocha'
@@ -295,7 +304,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'exec',
-        'coffee',
+        'coffee:dist',
         'compass',
         'cssmin:dist',
         'clean:temp',
@@ -317,4 +326,5 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('s', 'server');
+    grunt.registerTask('t', 'test');
 };
