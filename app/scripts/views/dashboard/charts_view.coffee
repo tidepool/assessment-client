@@ -3,7 +3,7 @@ define [
   'underscore',
   'Backbone',
   'Handlebars', 
-  'vendor/nested_view',
+  'nested_view',
   'chart',
   'text!./charts_view.hbs'], ($, _, Backbone, Handlebars, NestedView, Chart, tempfile) ->
   ChartsView = NestedView.extend

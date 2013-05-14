@@ -2,49 +2,37 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Mocha Spec Runner</title>
-    <!-- The links are resolved by the setting in Gruntfile.js 
-        test: {
-            options: {
-                middleware: function (connect) {
-                    return [
-                        mountFolder(connect, '.devServer'),
-                        mountFolder(connect, 'app'),
-                    ];
-                }
-            }
-        }
-    -->
+    <title>TidePool Spec Runner</title>
 
-    <link rel="stylesheet" href="components/mocha/mocha.css">
-</head>
-<body>
-    <div id="mocha"></div>
-    <!-- Mocha and Sinon needs to be loaded like this, Chai will be loaded in Require -->
-    <script src="components/mocha/mocha.js"></script>
-    <!-- Spy/Stub/Mock framework -->
-    <script src="components/sinon/lib/sinon.js"></script>
+    <!-- Jasmine Files -->
+    <link rel="shortcut icon" type="image/png" href="components/jasmine/images/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="components/jasmine/lib/jasmine-core/jasmine.css">
+    <script type="text/javascript" src="components/jasmine/lib/jasmine-core/jasmine.js"></script>
+    <script type="text/javascript" src="components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
 
-    <script src="components/chai/chai.js"></script>
+    <!-- Application Bootstrap -->
+    <script src="components/requirejs/require.js"></script>
+    <script src="./require_config.js"></script>
+    <script>
+        require([
+            'models/user.spec',
+            'helpers/helpers.spec'
+        ], function () {
 
-    <script> 
-        // Mocha is a global variable, so accessible here
-        mocha.setup({
-            ui: 'bdd',
-            ignoreLeaks: true
+            var jasmineEnv = jasmine.getEnv();
+            var htmlReporter = new jasmine.HtmlReporter();
+            jasmineEnv.addReporter(htmlReporter);
+
+            jasmineEnv.specFilter = function(spec) {
+                return htmlReporter.specFilter(spec);
+            };
+            // document.querySelector('.version').innerHTML = jasmineEnv.versionString();
+            jasmineEnv.execute();
         });
 
-        console.log("Mocha setup");
-
-        window.chai = chai;
-        window.expect = chai.expect;
-        window.assert = chai.assert;
-        var should = chai.should();
-        // window.jqueryChai = jqueryChai;
-
-        // chai.use(window.jqueryChai);
     </script>
+</head>
+<body>
 
-    <script data-main="scripts/main_spec" src="components/requirejs/require.js"></script>
 </body>
 </html>

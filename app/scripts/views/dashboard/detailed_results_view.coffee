@@ -3,7 +3,7 @@ define [
   'underscore',
   'Backbone',
   'Handlebars', 
-  'vendor/nested_view',
+  'nested_view',
   'text!./detailed_results_view.hbs'], ($, _, Backbone, Handlebars, NestedView, tempfile) ->
   DetailedResultsView = NestedView.extend
     name: 'detailed_results_view'
