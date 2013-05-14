@@ -253,11 +253,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        bower: {
-            all: {
-                rjsConfig: '<%= yeoman.app %>/scripts/main.js'
-            }
-        },
         exec: {
             convert_jqueryui_amd: {
                 command: 'jqueryui-amd <%= yeoman.app %>/components/jquery-ui',
