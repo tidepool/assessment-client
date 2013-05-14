@@ -13,7 +13,6 @@ require.config({
         jqueryui: '../components/jquery-ui/jqueryui',
         Backbone: '../components/backbone-amd/backbone',
         text: '../components/requirejs-text/text',
-        json2: '../components/json2/json2',
         toastr: '../components/toastr',
 
         // External but not Bower installed, they are downloaded manually
