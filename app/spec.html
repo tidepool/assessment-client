@@ -8,10 +8,8 @@
             options: {
                 middleware: function (connect) {
                     return [
-                        mountFolder(connect, '.tmp'),
-                        mountFolder(connect, 'app/components'),
-                        mountFolder(connect, 'app/scripts'),
-                        mountFolder(connect, 'test')
+                        mountFolder(connect, '.devServer'),
+                        mountFolder(connect, 'app'),
                     ];
                 }
             }
@@ -41,12 +39,12 @@
         window.chai = chai;
         window.expect = chai.expect;
         window.assert = chai.assert;
-        window.should = chai.should();
+        var should = chai.should();
         // window.jqueryChai = jqueryChai;
 
         // chai.use(window.jqueryChai);
     </script>
 
-    <script data-main="spec/main" src="components/requirejs/require.js"></script>
+    <script data-main="scripts/main_spec" src="components/requirejs/require.js"></script>
 </body>
 </html>

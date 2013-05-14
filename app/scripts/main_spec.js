@@ -2,40 +2,39 @@ console.log("Main called");
 
 require.config({
     // Set baseUrl to the root folder
-    baseUrl: '../',
     paths: {
         // Bower installed dependency paths
-        Handlebars: './components/require-handlebars-plugin/Handlebars',
+        Handlebars: '../components/require-handlebars-plugin/Handlebars',
         // i18nprecompile: '../components/components/require-handlebars-plugin/hbs/i18nprecompile',
         // hbs: '../components/components/require-handlebars-plugin/hbs',
         // handlebars: '../components/components/handlebars.js/dist/handlebars',
-        underscore: './components/underscore-amd/underscore',
-        jquery: './components/jquery/jquery',
-        jqueryui: './components/jquery-ui/jqueryui',
-        Backbone: './components/backbone-amd/backbone',
-        text: './components/requirejs-text/text',
-        json2: './components/json2/json2',
-        toastr: './components/toastr',
+        underscore: '../components/underscore-amd/underscore',
+        jquery: '../components/jquery/jquery',
+        jqueryui: '../components/jquery-ui/jqueryui',
+        Backbone: '../components/backbone-amd/backbone',
+        text: '../components/requirejs-text/text',
+        json2: '../components/json2/json2',
+        toastr: '../components/toastr',
 
         // External but not Bower installed, they are downloaded manually
-        nested_view: './scripts/vendor/nested_view',
-        bootstrap: './scripts/vendor/bootstrap',
-        chart: './scripts/vendor/Chart',
+        nested_view: './vendor/nested_view',
+        bootstrap: './vendor/bootstrap',
+        chart: './vendor/Chart',
 
         // Application paths
-        assessments: './scripts/views/assessments',
-        home: './scripts/views/home',
-        dashboard: './scripts/views/dashboard',
-        components: './scripts/views/components',
-        results: './scripts/views/results',
-        stages: './scripts/views/stages',
-        user: './scripts/views/user',
-        routers: './scripts/routers',
-        models: './scripts/models',
-        controllers: './scripts/controllers',
-        collections: './scripts/collections',
-        helpers: './scripts/helpers',
-        messages: './scripts/views/messages'
+        assessments: './views/assessments',
+        home: './views/home',
+        dashboard: './views/dashboard',
+        components: './views/components',
+        results: './views/results',
+        stages: './views/stages',
+        user: './views/user',
+        routers: './routers',
+        models: './models',
+        controllers: './controllers',
+        collections: './collections',
+        helpers: './helpers',
+        messages: './views/messages'
     },
     shim: {
         bootstrap: {
@@ -74,7 +73,7 @@ require.config({
 
     // chai.use(window.jqueryChai);
 
-require(['./spec/models/user_spec'], function(module) {
+require(['models/user_spec'], function(module) {
     console.log("module: ", module);
     if (navigator.userAgent.indexOf('PhantomJS') < 0) {
         mocha.run();
