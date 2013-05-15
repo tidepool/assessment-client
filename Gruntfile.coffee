@@ -42,9 +42,10 @@ module.exports = (grunt) ->
             [mountFolder(connect, "dist")]
 
     open:
-      server:
-      # path: 'http://localhost:<%= connect.options.port %>'
+      devHome:
         path: "http://assessments-front.dev/"
+      devSpec:
+        path: "http://assessments-front.dev/spec.html"
 
     watch:
       hbs:
@@ -227,7 +228,8 @@ module.exports = (grunt) ->
     grunt.task.run [
       "build"
       "devServer"
-      "open"
+      "open:devSpec"
+      "open:devHome"
       "watch"
     ]
 
