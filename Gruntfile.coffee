@@ -20,6 +20,8 @@ module.exports = (grunt) ->
     sassSourceGlob: ["<%= yeoman.app %>/scripts/**/*.{scss,sass}", "<%= yeoman.app %>/styles/**/*.{scss,sass}"]
     cssSourceGlob: ["<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css", "<%= yeoman.app %>/components/toastr/toastr.css", "<%= yeoman.temp %>/**/*.css"]
     coffeeSourceGlob: []
+    specGlob: "**/*.spec.js"
+    specFile: "spec.html"
 
   grunt.initConfig
     yeoman: yeomanConfig
@@ -47,7 +49,7 @@ module.exports = (grunt) ->
 
     watch:
       hbs:
-        files: ["<%= yeoman.app %>/scripts/**/*.hbs"]
+        files: ["<%= yeoman.app %>/**/*.hbs"]
         tasks: ["livereload"]
 
       coffee:
@@ -58,12 +60,16 @@ module.exports = (grunt) ->
         files: ["<%= yeoman.app %>/**/*.spec.coffee"]
         tasks: ["coffee:spec"]
 
+      specScribe:
+        files: "<%= tidepool.specGlob %>"
+        tasks: ["exec:scribeSpecs"]
+
       compass:
         files: "<%= tidepool.sassSourceGlob %>"
         tasks: ["compass", "cssmin:dev", "clean:temp", "livereload"]
 
       livereload:
-        files: ["<%= yeoman.app %>/*.html", "{<%= yeoman.dev %>,<%= yeoman.app %>}/styles/**/*.css", "{<%= yeoman.dev %>,<%= yeoman.app %>}/scripts/**/*.js", "<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,webp}"]
+        files: ["{<%= yeoman.app %>,<%= yeoman.dev %>}/*.html", "<%= yeoman.dev %>/**/*.css", "<%= yeoman.dev %>/**/*.js", "<%= yeoman.app %>/**/*.{png,jpg}"]
         tasks: ["livereload"]
 
     clean:
@@ -195,8 +201,10 @@ module.exports = (grunt) ->
         stdout: true
 
       unitTest:
-        command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/spec.html"
-        #stdout: true
+        command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= tidepool.specFile %>"
+
+      scribeSpecs:
+        command: 'ruby resources/scribeAmdDependencies.rb "<%= yeoman.dev %>/" "<%= yeoman.app %>/" "<%= tidepool.specGlob %>" "<%= tidepool.specFile %>"'
 
   grunt.renameTask "regarde", "watch"
 
@@ -207,6 +215,7 @@ module.exports = (grunt) ->
     "coffee:spec"
     "compass"
     "cssmin:dev"
+    "exec:scribeSpecs"
     "clean:temp"
   ]
 
@@ -233,3 +242,6 @@ module.exports = (grunt) ->
   grunt.registerTask "default", ["test", "open", "watch"]
   grunt.registerTask "s", "server"
   grunt.registerTask "t", "test"
+
+
+	
