@@ -169,7 +169,6 @@ module.exports = (grunt) ->
       dev:
         files:
           "<%= yeoman.dev %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
-
       dist:
         files:
           "<%= yeoman.dist %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
