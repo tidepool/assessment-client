@@ -47,7 +47,7 @@ define [
       expect( $sandbox ).toBeEmpty()
       steps.render().$el.appendTo '#sandbox'
       expect( $sandbox ).not.toBeEmpty()
-      
+
       $steps = $sandbox.find(".stepsRemaining")
       expect($steps).toHaveLength(1)
       expect($steps.find('.step')).toHaveLength(3) # Test data has 3 steps

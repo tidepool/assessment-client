@@ -4,13 +4,13 @@ define [], () ->
     paths:
 
       # 3rd Party Bower Libraries
-      Handlebars: "../components/require-handlebars-plugin/Handlebars"
-      underscore: "../components/underscore-amd/underscore"
-      jquery: "../components/jquery/jquery"
-      jqueryui: "../components/jquery-ui/jqueryui"
-      Backbone: "../components/backbone-amd/backbone"
-      text: "../components/requirejs-text/text"
-      toastr: "../components/toastr"
+      Handlebars: "../bower_components/require-handlebars-plugin/Handlebars"
+      underscore: "../bower_components/underscore-amd/underscore"
+      jquery: "../bower_components/jquery/jquery"
+      jqueryui: "../bower_components/jquery-ui/jqueryui"
+      Backbone: "../bower_components/backbone-amd/backbone"
+      text: "../bower_components/requirejs-text/text"
+      toastr: "../bower_components/toastr"
 
       # 3rd Party non-Bower Libraries
       nested_view: "scripts/vendor/nested_view"

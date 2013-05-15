@@ -17,8 +17,15 @@ module.exports = (grunt) ->
     temp: ".tmp"
 
   tidepoolConfig =
-    sassSourceGlob: ["<%= yeoman.app %>/**/*.sass", "!<%= yeoman.app %>/components/*"]
-    cssSourceGlob: ["<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css", "<%= yeoman.app %>/components/toastr/toastr.css", "<%= yeoman.temp %>/**/*.css"]
+    sassSourceGlob: [
+      "<%= yeoman.app %>/**/*.sass"
+      "!<%= yeoman.app %>/bower_components/*"
+    ]
+    cssSourceGlob: [
+      "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.1.css"
+      "<%= yeoman.app %>/bower_components/toastr/toastr.css"
+      "<%= yeoman.temp %>/**/*.css"
+    ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
 
@@ -100,7 +107,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
-          src: ["**/*.coffee", "!components/**/*.coffee"]
+          src: ["**/*.coffee", "!bower_components/**/*.coffee"]
           dest: "<%= yeoman.dev %>"
           ext: ".js"
         ]
@@ -120,7 +127,7 @@ module.exports = (grunt) ->
         specify: "<%= tidepool.sassSourceGlob %>"
         cssDir: "<%= yeoman.temp %>"
 
-        #importPath: 'app/components',
+        #importPath: 'app/bower_components',
         #relativeAssets: true,
         outputStyle: "compact"
         noLineComments: true
@@ -196,7 +203,7 @@ module.exports = (grunt) ->
 
     exec:
       convert_jqueryui_amd:
-        command: "jqueryui-amd <%= yeoman.app %>/components/jquery-ui"
+        command: "jqueryui-amd <%= yeoman.app %>/bower_components/jquery-ui"
         stdout: true
 
       unitTest:
