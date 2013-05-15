@@ -17,9 +17,8 @@ module.exports = (grunt) ->
     temp: ".tmp"
 
   tidepoolConfig =
-    sassSourceGlob: ["<%= yeoman.app %>/scripts/**/*.{scss,sass}", "<%= yeoman.app %>/styles/**/*.{scss,sass}"]
+    sassSourceGlob: ["<%= yeoman.app %>/**/*.sass", "!<%= yeoman.app %>/components/*"]
     cssSourceGlob: ["<%= yeoman.app %>/components/sass-bootstrap/bootstrap-2.3.1.css", "<%= yeoman.app %>/components/toastr/toastr.css", "<%= yeoman.temp %>/**/*.css"]
-    coffeeSourceGlob: []
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
 
@@ -81,7 +80,7 @@ module.exports = (grunt) ->
       options:
         jshintrc: ".jshintrc"
 
-      all: ["Gruntfile.js", "<%= yeoman.app %>/scripts/{,*/}*.js", "!<%= yeoman.app %>/scripts/vendor/*"]
+      all: ["<%= yeoman.app %>/scripts/{,*/}*.js", "!<%= yeoman.app %>/scripts/vendor/*"]
 
     coffee:
       options:

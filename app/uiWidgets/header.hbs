@@ -2,6 +2,19 @@
 
     <a class="logo" href="#"></a>
 
+    <span id="StepsRemainingHolder"></span>
+
+    {{#showNav}}
+        <nav>
+            <ul>
+                <li><a href="#About">About</a></li>
+                <li><a href="#Team">Team</a></li>
+                <li><a href="#Investors">Investors</a></li>
+            </ul>
+        </nav>
+    {{/showNav}}
+
+
     {{#if loggedIn}}
         <div class="loginArea">
             {{#if isRegisteredUser }}
@@ -27,13 +40,6 @@
             {{/if}}
         </div>
     {{else}}
-        <nav>
-            <ul>
-                <li><a href="#About">About</a></li>
-                <li><a href="#Team">Team</a></li>
-                <li><a href="#Investors">Investors</a></li>
-            </ul>
-        </nav>
         <div class="loginArea">
             <a class="btn btn-primary btn-large" id="login" href="#">
                 <i class="icon-lock icon-large"></i>

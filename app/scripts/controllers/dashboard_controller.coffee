@@ -1,10 +1,14 @@
 define [
-  'jquery',
-  'Backbone',
-  'dashboard/dashboard_main_view',
-  'models/assessment',
-  'models/stage',
-  'controllers/session_controller'], ($, Backbone, DashboardMainView, Assessment) ->
+  'jquery'
+  'Backbone'
+  'dashboard/dashboard_main_view'
+  'models/assessment'
+], (
+  $
+  Backbone
+  DashboardMainView
+  Assessment
+) ->
   DashboardController = ->
     initialize: (options) ->
       _.extend(@, Backbone.Events)

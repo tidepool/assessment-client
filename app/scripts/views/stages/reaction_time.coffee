@@ -3,10 +3,9 @@ define [
   'underscore',
   'Backbone',
   'Handlebars',
-  'models/stage',
   'models/user_event',
   "text!./reaction_time.hbs",
-  'models/assessment'], ($, _, Backbone, Handlebars, Stage, UserEvent, tempfile) ->
+  'models/assessment'], ($, _, Backbone, Handlebars, UserEvent, tempfile) ->
   ReactionTime = Backbone.View.extend
     events:
       "click #start": "startTest",

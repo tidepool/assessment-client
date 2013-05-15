@@ -31,6 +31,7 @@ define [], () ->
       collections: "scripts/collections"
       helpers: "scripts/helpers"
       messages: "scripts/views/messages"
+      modelsAndCollections: "scripts/modelsAndCollections"
     shim:
       bootstrap:
         deps: ["jquery"]

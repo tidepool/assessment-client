@@ -9,14 +9,15 @@ require [
   MainRouter
   _
   Backbone
-  AppConfig
+  appConfig
 ) ->
   "use strict"
   console.log "App Started"
-  options =
-    definition: 3
-    trigger: true
 
-  options = _.extend(options, AppConfig)
-  Backbone.history.start pushState: false
-  new MainRouter(options)
+  window.DEBUG = true
+  DEBUG && console.log("App Started")
+
+  window.apiServerUrl = appConfig.apiServer;
+
+  new MainRouter appConfig
+  Backbone.history.start()

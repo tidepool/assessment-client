@@ -7,6 +7,7 @@ define [
   SessionController = ->
     initialize: (options) ->
       _.extend(@, Backbone.Events)
+      @on 'all', (eventName) -> console.log "SessionController Event: #{eventName}"
       @apiServer = options["apiServer"]
       @appId = options["appId"] 
       @appSecret = options["appSecret"]
@@ -32,7 +33,7 @@ define [
 
     login: (email, password) ->
       deferred = $.Deferred()
-      
+
       if @isValid({email: email, password: password}) or (email is 'guest') or (email is 'current')
         if @loggedIn()
           @finishLogin()
@@ -53,16 +54,16 @@ define [
               client_id: @appId
               client_secret: @appSecret
           .done (data, textStatus, jqXHR) =>
-            console.log("Successful Login")
+            console.log "Successful Login"
             @accessToken = data['access_token']
-            @persistLocally(data)
+            @persistLocally data
             @finishLogin()
             .done  =>
-              deferred.resolve("Success")
+              deferred.resolve "Success"
             .fail  =>
-              deferred.reject("Cannot get user info")
+              deferred.reject "Cannot get user info"
           .fail (jqXHR, textStatus, errorThrown) =>
-            console.log("Unsuccesful Login")
+            console.log "Unsuccesful Login"
             deferred.reject(textStatus)
       else
         deferred.reject(@validationError.message)
@@ -136,6 +137,7 @@ define [
       @accessToken = null
      
     loggedIn: ->
+      console.log 'session_controller.loggedIn()'
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
         currentTime = new Date().getTime()
         expires_in = parseInt(localStorage['expires_in'])
