@@ -9,30 +9,30 @@
     <link rel="stylesheet" type="text/css" href="components/jasmine/lib/jasmine-core/jasmine.css">
     <script type="text/javascript" src="components/jasmine/lib/jasmine-core/jasmine.js"></script>
     <script type="text/javascript" src="components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+    <script type="text/javascript" src="scripts/vendor/jasmine_console_reporter.js"></script>
 
     <!-- Application Bootstrap -->
     <script src="components/requirejs/require.js"></script>
-    <script src="./require_config.js"></script>
     <script>
-        require([
-            'models/user.spec',
-            'helpers/helpers.spec'
-        ], function () {
+        window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
 
-            var jasmineEnv = jasmine.getEnv();
-            var htmlReporter = new jasmine.HtmlReporter();
-            jasmineEnv.addReporter(htmlReporter);
-
-            jasmineEnv.specFilter = function(spec) {
-                return htmlReporter.specFilter(spec);
-            };
-            // document.querySelector('.version').innerHTML = jasmineEnv.versionString();
-            jasmineEnv.execute();
+        require(['require_config'], function () {
+            require([
+                'models/user.spec',
+                'helpers/helpers.spec'
+            ], function () {
+                var jasmineEnv = jasmine.getEnv();
+                var htmlReporter = new jasmine.HtmlReporter();
+                jasmineEnv.addReporter(htmlReporter);
+                jasmineEnv.specFilter = function(spec) {
+                    return htmlReporter.specFilter(spec);
+                };
+                jasmineEnv.addReporter(window.console_reporter);
+                jasmineEnv.execute();
+            });
         });
-
     </script>
 </head>
 <body>
-
 </body>
 </html>

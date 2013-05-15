@@ -27,20 +27,13 @@ module.exports = (grunt) ->
     connect:
       options:
         port: 7000
-
-        # change this to '0.0.0.0' to access the server from outside
-        hostname: "localhost"
+        hostname: "localhost" # change this to '0.0.0.0' to access the server from outside
 
       livereload:
         options:
           middleware: (connect) ->
             # A grunt variable does not work here
             [lrSnippet, mountFolder(connect, ".devServer"), mountFolder(connect, "app")]
-
-      test:
-        options:
-          middleware: (connect) ->
-            [mountFolder(connect, ".devServer"), mountFolder(connect, "app")]
 
       dist:
         options:
@@ -49,7 +42,6 @@ module.exports = (grunt) ->
 
     open:
       server:
-
       # path: 'http://localhost:<%= connect.options.port %>'
         path: "http://assessments-front.dev/"
 
@@ -64,7 +56,7 @@ module.exports = (grunt) ->
 
       coffeeTest:
         files: ["<%= yeoman.app %>/**/*.spec.coffee"]
-        tasks: ["coffee:test"]
+        tasks: ["coffee:spec"]
 
       compass:
         files: "<%= tidepool.sassSourceGlob %>"
@@ -76,7 +68,7 @@ module.exports = (grunt) ->
 
     clean:
       dist: ["<%= yeoman.dev %>", "<%= yeoman.dist %>", "<%= yeoman.temp %>"]
-      dev: ["<%= yeoman.dev %>", "<%= yeoman.temp %>"]
+      dev: ["<%= yeoman.dev %>", "<%= yeoman.temp %>", ".grunt"]
       temp: "<%= yeoman.temp %>"
 
     jshint:
@@ -84,18 +76,6 @@ module.exports = (grunt) ->
         jshintrc: ".jshintrc"
 
       all: ["Gruntfile.js", "<%= yeoman.app %>/scripts/{,*/}*.js", "!<%= yeoman.app %>/scripts/vendor/*"]
-
-    mocha:
-      all:
-        options:
-          timeout: 10000000 # This is a hack so the test server keeps running and we can hit browser
-          # inject: "", // This makes it so that the specs don't run in PhantomJS
-          mocha:
-            ui: "bdd"
-            ignoreLeaks: false
-
-          run: true
-          urls: ["http://localhost:<%= connect.options.port %>/spec.html"]
 
     coffee:
       options:
@@ -114,12 +94,12 @@ module.exports = (grunt) ->
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
-          src: "**/*.coffee"
+          src: ["**/*.coffee", "!components/**/*.coffee"]
           dest: "<%= yeoman.dev %>"
           ext: ".js"
         ]
 
-      test:
+      spec:
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
@@ -148,7 +128,7 @@ module.exports = (grunt) ->
         options:
 
         # `name` and `out` is set by grunt-usemin
-          baseUrl: "app/scripts"
+          #baseUrl: "app/scripts"
           optimize: "none"
 
           # TODO: Figure out how to make sourcemaps work with grunt-usemin
@@ -160,12 +140,10 @@ module.exports = (grunt) ->
           useStrict: true
           wrap: true
 
-
-    #uglify2: {} // https://github.com/mishoo/UglifyJS2
     useminPrepare:
-      html: "<%= yeoman.app %>/index.html"
+      html: "<%= yeoman.app %>/spec.html"
       options:
-        dest: "<%= yeoman.dist %>"
+        dest: "<%= yeoman.dev %>"
 
     usemin:
       html: ["<%= yeoman.dist %>/{,*/}*.html"]
@@ -194,16 +172,6 @@ module.exports = (grunt) ->
     htmlmin:
       dist:
         options: {}
-
-        #removeCommentsFromCDATA: true,
-        #                    // https://github.com/yeoman/grunt-usemin/issues/44
-        #                    //collapseWhitespace: true,
-        #                    collapseBooleanAttributes: true,
-        #                    removeAttributeQuotes: true,
-        #                    removeRedundantAttributes: true,
-        #                    useShortDoctype: true,
-        #                    removeEmptyAttributes: true,
-        #                    removeOptionalTags: true
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
@@ -226,13 +194,42 @@ module.exports = (grunt) ->
         command: "jqueryui-amd <%= yeoman.app %>/components/jquery-ui"
         stdout: true
 
+      unitTest:
+        command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/spec.html"
+        #stdout: true
+
   grunt.renameTask "regarde", "watch"
+
+  grunt.registerTask "build", [
+    "clean:dev"
+    "exec:convert_jqueryui_amd"
+    "coffee:dev"
+    "coffee:spec"
+    "compass"
+    "cssmin:dev"
+    "clean:temp"
+  ]
+
+  grunt.registerTask "devServer", [
+    "livereload-start"
+    "connect:livereload"
+  ]
+
   grunt.registerTask "server", (target) ->
     return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
-    grunt.task.run ["clean:dev", "exec", "coffee:dev", "coffee:test", "compass", "cssmin:dev", "clean:temp", "livereload-start", "connect:livereload", "open", "watch"]
+    grunt.task.run [
+      "build"
+      "devServer"
+      "open"
+      "watch"
+    ]
 
-  grunt.registerTask "test", ["clean:dev", "exec", "coffee:dev", "coffee:test", "compass", "connect:test", "mocha"]
-  grunt.registerTask "build", ["clean:dist", "exec", "coffee:dist", "compass", "cssmin:dist", "clean:temp", "useminPrepare", "requirejs", "imagemin", "htmlmin", "concat", "cssmin:dist", "uglify", "copy:dist", "usemin"]
-  grunt.registerTask "default", ["jshint", "test", "build"]
+  grunt.registerTask "test", [
+    "build"
+    "devServer"
+    "exec:unitTest"
+  ]
+
+  grunt.registerTask "default", ["test", "open", "watch"]
   grunt.registerTask "s", "server"
   grunt.registerTask "t", "test"

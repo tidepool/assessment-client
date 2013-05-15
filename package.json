@@ -24,9 +24,10 @@
     "grunt-exec": "~0.4.0",
     "matchdep": "~0.1.1",
     "jqueryui-amd": "~0.0.2",
-    "grunt-contrib-sass": "~0.3.0"
+    "grunt-contrib-jasmine": "~0.4.2",
+    "phantomjs": "~1.9.0-3"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">`=0.8.0"
   }
 }
