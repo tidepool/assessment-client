@@ -19,38 +19,36 @@ define [
   CirclesTest
 ) ->
 
+  _me = 'controllers/stages_controller'
   _stepsRemainingContainer = '#StepsRemainingHolder'
+  _views =
+    'ReactionTime': 'ReactionTime'
+    'ImageRank': 'ImageRank'
+    'CirclesTest': 'CirclesTest'
 
-  StagesController = ->
-    views:
-      'ReactionTime': 'ReactionTime'
-      'ImageRank': 'ImageRank'
-      'CirclesTest': 'CirclesTest'
-
+  StagesController = Backbone.View.extend
     initialize: (options) ->
-      @currentStageNo = options.currentStageNo
+      throw new Error("Needs arguments[0].assessment") unless options?.assessment
+      console.log "#{_me} initialized"
       @assessment = options.assessment
       @levels = new LevelsCollection @assessment.get('stages')
-      @levels.setComplete @currentStageNo
-
       @stepsRemaining = new StepsRemainingView
         collection: @levels
       $(_stepsRemainingContainer).html @stepsRemaining.render().el
+      @
 
-    render: ->
-      #StepsRemainingView.setStageCompleted(@currentStageNo - 1)
-      curLevel = @levels.at @currentStageNo
-      viewClassString = @views[curLevel.get('view_name')]
-      viewClass = eval(viewClassString)
-      view = new viewClass
+    render: (stageId) ->
+      @levels.setComplete stageId
+      curLevel = @levels.at stageId
+      viewClassString = _views[curLevel.get('view_name')]
+      ViewClass = eval(viewClassString)
+      view = new ViewClass
         model: curLevel
         assessment: @assessment
-        stageNo: @currentStageNo
-      $('#content').html view.render().el
+        stageNo: stageId
+      #@$el.html view.render().el
+      #$('#content').html view.render().el
+      @el = view.render().el
       @
 
   StagesController
-
-
-
-

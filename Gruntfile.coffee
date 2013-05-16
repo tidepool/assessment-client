@@ -52,7 +52,7 @@ module.exports = (grunt) ->
       devHome:
         path: "http://assessments-front.dev/"
       devSpec:
-        path: "http://assessments-front.dev/spec.html"
+        path: "http://assessments-front.dev/spec.html?catch=false"
 
     watch:
       hbs:

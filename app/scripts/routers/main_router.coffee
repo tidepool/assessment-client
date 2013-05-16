@@ -126,7 +126,7 @@ define [
 
     # ----------------------------- Supporting Methods
     _createAndShowAssessment: (definitionId) ->
-      console.log('Showing Assessment')
+      console.log "#{_me}._createAndShowAssessment()"
       # Create an anonymous assessment on the server with the definitionId
       if @session.assessment?
         @_displayAssessment()
@@ -140,6 +140,7 @@ define [
           throw new Error("Something went wrong, can't create assessment")
 
     _displayAssessment: ->
+      console.log "#{_me}._displayAssessment()"
       @listenTo(@session.assessment, 'change:stage_completed', @_stageCompleted)
       #@listenTo(@session.assessment, 'stage_completed_success', @_stageCompletedSuccess)
       view = new StartView
@@ -147,12 +148,12 @@ define [
       $('#content').html view.render().el
 
     _showLevel: (stageId) ->
-      console.log "Showing stage #{@currentStageNo}"
-      controller = new StagesController()
-      controller.initialize
-        assessment: @session.assessment
-        currentStageNo: @currentStageNo
-      controller.render()
+      console.log "#{_me}._showLevel(#{stageId})"
+      if not @controller?
+        @controller = new StagesController
+          assessment: @session.assessment
+      @controller.render(stageId)
+      $('#content').html @controller.el
 
     _stageCompleted: ->
           # Initially no stages completed, so start with -1
@@ -172,7 +173,6 @@ define [
 #      @numOfStages = @session.assessment.get('stages').length
 #      if @currentStageNo is @numOfStages
 #        @navigate("result", {trigger: true})
-
 
     _loginCommand: ->
       @loginDialog = new LoginDialog
