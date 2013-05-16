@@ -2,12 +2,14 @@
 # http://requirejs.org/docs/api.html#packages
 
 define [
+  'underscore'
   'Backbone'
   './config'
   './analytics'
-  './router'
+  'routers/main_router'
 ],
 (
+  _
   Backbone
   config
   Analytics
@@ -15,17 +17,17 @@ define [
 ) ->
 
   _me = 'core/main'
-  console.log "Parsing #{_me}"
 
   Core = ->
-    console.log "#{_me} instantiated"
+    config.debug && console.log "#{_me} instantiated"
     @cfg = config
-    new Analytics @cfg
+    _.extend @, Backbone.Events
     @
 
   Core.prototype =
     start: ->
-      console.log "#{_me} started"
+      @cfg.debug && console.log "#{_me} started"
+      new Analytics @cfg
       new Router @cfg
       Backbone.history.start()
       @
