@@ -9,13 +9,12 @@ define [
 ) ->
 
   _me = 'core/config'
-  _defaults =
+  config =
     appName: 'TidePool'
-    debug: true
+    debug: false
     googleAnalyticsKey: 'UA-40367760-1'
-  console.log "Parsing #{_me}"
 
-  config = _.extend appSecrets, _defaults
+  _.extend config, appSecrets
+  window.apiServerUrl = config.apiServer #TODO: eeeeeew! Encapsulate config instead
 
   config
-
