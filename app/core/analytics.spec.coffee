@@ -7,7 +7,7 @@ define [
   describe 'core/analytics', ->
     it 'exists', ->
       expect(Analytics).toBeDefined()
-    it 'has an enforced API', ->
+    it 'must be instantiated a certain way', ->
       expect( -> new Analtyics ).toThrow()
       anna = new Analytics
         googleAnalyticsKey: 1234

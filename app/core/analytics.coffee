@@ -1,10 +1,9 @@
 define [],() ->
   _me = 'core/analytics'
-  Analytics = (cfg) ->
-    throw new Error('Need arguments[0].googleAnalyticsKey') unless cfg.googleAnalyticsKey
-    console.log "Created #{_me}"
-    # Google code run through js2coffee.org
-    _gaq = [["_setAccount", cfg.googleAnalyticsKey], ["_trackPageview"]]
+
+  # Google Analtyics tracking snippet run through js2coffee.org
+  _setUpGoogle = (key) ->
+    _gaq = [["_setAccount", key], ["_trackPageview"]]
     ((d, t) ->
       g = d.createElement(t)
       s = d.getElementsByTagName(t)[0]
@@ -12,6 +11,11 @@ define [],() ->
       s.parentNode.insertBefore g, s
     ) document, "script"
     @
+
+  Analytics = (cfg) ->
+    throw new Error('Need arguments[0].googleAnalyticsKey') unless cfg.googleAnalyticsKey
+    cfg.debug && console.log "Created #{_me}"
+    _setUpGoogle cfg.googleAnalyticsKey
 
   Analytics
 
