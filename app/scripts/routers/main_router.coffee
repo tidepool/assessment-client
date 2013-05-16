@@ -34,6 +34,8 @@ define [
   SummaryResultsController
   ErrorModalView
 ) ->
+  _me = 'routers/main_router'
+
   MainRouter = Backbone.Router.extend
     routes:
       '': 'showHome'
@@ -42,9 +44,10 @@ define [
       'dashboard': 'showDashboard'
 
     initialize: (options) ->
+      @cfg = options
       # At the beginning create the session:
       @session = new SessionController()
-      @session.initialize(options)
+      @session.initialize options
       #@listenTo(@session, 'session:login_success', @_handleSuccessfulLogin)
       @listenTo(@session, 'session:login_fail', @_handleFailedLogin)
       @listenTo(@session, 'session:logout_success', @_handleLogout)
@@ -58,36 +61,41 @@ define [
 
     # ----------------------------- Actual Route Responses
     showHome: ->
-      console.log("Show Home")
+      console.log "#{_me}.showHome()"
+      @header.showNav().render()
       if @session.loggedIn() and not @session.user?
-        console.log 'showHome(): logged in, but not set as the user'
         @session.loginAsCurrent()
-
       view = new HomePageView()
       $('#content').html(view.render().el)
 
     showGame: (id) ->
+      console.log "#{_me}.showGame()"
+      @header.hideNav().render()
       @definitionId = id || 1
       # Always create a user, initially as a guest if someone is not already loggedin
       @session.loginAsGuest()
         .done =>
-          DEBUG && console.log 'main_router.showGame(): Done logging in as guest'
           @_createAndShowAssessment(id)
         .fail =>
           # This is a catastrophic fail of the API server, it is probably down.
           # Let them retry?
           console.log("Login not successful")
-          errorView = new ErrorModalView({title: "Login Error", message: "Cannot log in to the server, server may be down."})
+          errorView = new ErrorModalView
+            title: "Login Error"
+            message: "Cannot log in to the server, server may be down."
           errorView.display()
 
     showResult: ->
+      console.log "#{_me}.showResult()"
+      @header.showNav().render()
       @showGame() unless @session.assessment
       controller = new SummaryResultsController()
       controller.initialize({session: @session})
       controller.render()
 
     showDashboard: ->
-      console.log("Showing Dashboard")
+      console.log "#{_me}.showDashboard()"
+      @header.showNav().render()
       # Only show it, if the user is not guest and is logged in
       if (@session.user? and @session.user.isGuest()) or not @session.loggedIn()
         loginDialog = new LoginDialog({session: @session})
@@ -128,7 +136,6 @@ define [
         .done =>
           @session.assessment = assessment
           @_displayAssessment()
-          @header.render true # true means hide the nav
         .fail =>
           throw new Error("Something went wrong, can't create assessment")
 
@@ -140,7 +147,6 @@ define [
       $('#content').html view.render().el
 
     _showLevel: (stageId) ->
-      DEBUG && console.log 'main_router._showLevel()'
       console.log "Showing stage #{@currentStageNo}"
       controller = new StagesController()
       controller.initialize

@@ -2,16 +2,17 @@ define [
   'jquery'
   'Backbone'
   'Handlebars'
-  'routers/main_router'
   "text!./header.hbs"
 ],
 (
   $
   Backbone
   Handlebars
-  MainRouter
   tmpl
 ) ->
+
+  _me = 'ui_widgets/header'
+
   HeaderView = Backbone.View.extend
     tagName: 'header'
     events:
@@ -20,40 +21,40 @@ define [
       "click #profile": "showProfile"
 
     initialize: (options) ->
+      throw new Error('arguments[0].session is required') unless options.session
+      @_usingNav = true # default
       @session = options.session
-      @listenTo(@session, 'session:login_success', @loggedIn)
-      @listenTo(@session, 'session:logout_success', @loggedOut)
-      @render()
+      @listenTo(@session, 'session:login_success', @render)
+      @listenTo(@session, 'session:logout_success', @render)
+      @tmpl = Handlebars.compile(tmpl)
 
-    render: (noNav) ->
+    render: () ->
+      console.log "#{_me}.render()"
       loggedIn = @session.loggedIn()
-      template = Handlebars.compile(tmpl)
-      @user = @session.user
       isRegisteredUser = true
-      if @user?
-        if @user.get('guest') is true
+      if @session.user?
+        if @session.user.get('guest') is true
           userName = 'Guest'
           isRegisteredUser = false
         else
-          userName = @user.get('email')
+          userName = @session.user.get('email')
           if userName is undefined || userName is ""
-            userName = @user.get('name')
+            userName = @session.user.get('name')
       else
         userName = "Guest"
-
-      @$el.html template
+      @$el.html @tmpl
         userName: userName
         loggedIn: loggedIn
-        showNav: !noNav
+        showNav: @_usingNav
         isRegisteredUser: isRegisteredUser
-
       @
 
-    loggedIn: ->
-      @render()
-
-    loggedOut: ->
-      @render()
+    hideNav: ->
+      @_usingNav = false
+      @
+    showNav: ->
+      @_usingNav = true
+      @
 
     login: (e) ->
       e.preventDefault()

@@ -137,7 +137,6 @@ define [
       @accessToken = null
      
     loggedIn: ->
-      console.log 'session_controller.loggedIn()'
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
         currentTime = new Date().getTime()
         expires_in = parseInt(localStorage['expires_in'])
@@ -197,7 +196,7 @@ define [
         guestId = @user.get('id')
         params = { guestId: guestId }
 
-      console.log("Guest id is #{guestId}")
+      #console.log("Guest id is #{guestId}")
 
       @user = new User({id: 'finish_login'})
       @user.fetch

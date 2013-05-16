@@ -1,8 +1,13 @@
 define [
-  'jquery',
-  'Backbone',
-  'models/result', 
-  'models/user'], ($, Backbone, Result) ->  
+  'jquery'
+  'Backbone'
+  'models/result'
+],
+(
+  $
+  Backbone
+  Result
+) ->
   Assessment = Backbone.Model.extend
     urlRoot: ->
       "#{window.apiServerUrl}/api/v1/assessments"
@@ -37,7 +42,6 @@ define [
       deferred.promise()
 
     updateProgress: (stageCompleted) ->
-      DEBUG && console.log 'AssessmentModel.updateProgress()'
       # Rails 4 is going to introduce support for the PATCH verb in HTTP
       # TODO: Switch to PATCH when Rails 4 switch happens
       attrs = { 'stage_completed': stageCompleted }
