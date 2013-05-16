@@ -1,6 +1,11 @@
 define [
-  'underscore',
-  'Backbone'], (_, Backbone) ->  
+  'underscore'
+  'Backbone'
+],
+(
+  _
+  Backbone
+) ->
   User = Backbone.Model.extend
     urlRoot: ->
       "#{window.apiServerUrl}/api/v1/users"
@@ -42,4 +47,3 @@ define [
       @trigger('user:authentication_added', params['provider'])
 
   User
-    

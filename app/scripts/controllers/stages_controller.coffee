@@ -3,7 +3,7 @@ define [
   'Backbone'
   'Handlebars'
   'modelsAndCollections/levels'
-  'uiWidgets/steps_remaining'
+  'ui_widgets/steps_remaining'
   'stages/reaction_time'
   'stages/image_rank'
   'stages/circles_test'

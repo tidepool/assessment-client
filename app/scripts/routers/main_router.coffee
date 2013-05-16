@@ -8,7 +8,7 @@ define [
   'models/result'
   'user/login_dialog'
   'user/profile_dialog'
-  'uiWidgets/header'
+  'ui_widgets/header'
   'assessments/start_view'
   'home/home_page_view'
   'controllers/dashboard_controller'

@@ -5,7 +5,7 @@ define [
   StepsRemaining
 ) ->
 
-  describe 'uiWidgets/steps_remaining', ->
+  describe 'ui_widgets/steps_remaining', ->
 
     _step1 =
       isComplete: true

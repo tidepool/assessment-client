@@ -1,6 +1,6 @@
 define [], () ->
   require.config
-    #baseUrl: './.devServer/'
+    packages: [ 'core' ]
     paths:
 
       # 3rd Party Bower Libraries
