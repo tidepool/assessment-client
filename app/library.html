@@ -14,84 +14,91 @@
     <style type="text/css">
         body {
             max-width: 500px;
-            margin: 0 auto;
+            margin: 50px auto;
         }
         h2 {
             margin-top: 50px;
         }
         .btn-group {
-            margin: 25px 0;
+            margin-bottom: 25px;
         }
     </style>
 </head>
-<body class="padder">
+<body>
+    <header class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="spec.html?catch=false">Run Specs</a></li>
+                <li class="active"><a href="library.html">Component Library</a></li>
+            </ul>
+        </div>
+    </header>
 
-    <h1>TidePool Component Library</h1>
-    <p>This page holds UI components so people can see how to implement various options of them and see how they look in one place.</p>
+    <section class="padder">
 
-    <h2>Buttons</h2>
-    <p>You can use the <code>a</code>, <code>button</code>, <code>div</code>, or most any other tag, and you can put any kind of <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon in them.</p>
-    <p><a class="btn btn-link" href="" data-printClasses></a></p>
-    <p>
-        <button class="btn" data-printClasses></button>
-    </p>
-    <p>
-        <div class="btn btn-large" data-printClasses></div>
-    </p>
-    <p>
-        <button class="btn btn-primary" data-printClasses></button>
-    </p>
-    <p>
-        <button class="btn btn-large btn-primary" data-printClasses></button>
-    </p>
-    <p><a class="btn btn-success" data-printClasses href=""></a></p>
-    <p>
-        <button class="btn btn-success btn-large" data-printClasses></button>
-    </p>
-    <p><a class="btn btn-inverse" href="" data-printClasses></a></p>
-    <p>
-        <button class="btn btn-inverse btn-large" data-printClasses></button>
-    </p>
-    <p>
-        <button class="btn btn-inverse btn-large" data-printClasses><i class="icon-thumbs-up icon-large"></i></button>
-    </p>
+        <h1>TidePool Component Library</h1>
+        <p>This page holds UI components so people can see how to implement various options of them and see how they look in one place.</p>
+
+        <h2>Buttons</h2>
+        <p>You can use the <code>a</code>, <code>button</code>, <code>div</code>, or most any other tag, and you can put any kind of <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon in them.</p>
+        <p><a class="btn btn-link" href="" data-printClasses></a></p>
+        <p>
+            <button class="btn" data-printClasses></button>
+        </p>
+        <p>
+            <div class="btn btn-large" data-printClasses></div>
+        </p>
+        <p>
+            <button class="btn btn-primary" data-printClasses></button>
+        </p>
+        <p>
+            <button class="btn btn-large btn-primary" data-printClasses></button>
+        </p>
+        <p><a class="btn btn-success" data-printClasses href=""></a></p>
+        <p>
+            <button class="btn btn-success btn-large" data-printClasses></button>
+        </p>
+        <p><a class="btn btn-inverse" href="" data-printClasses></a></p>
+        <p>
+            <button class="btn btn-inverse btn-large" data-printClasses></button>
+        </p>
+        <p>
+            <button class="btn btn-inverse btn-large" data-printClasses><i class="icon-thumbs-up icon-large"></i></button>
+        </p>
 
 
-    <h2>Decision Groups</h2>
-    <p>These follow the naming conventions and behavior rules from <a href="http://twitter.github.io/bootstrap/javascript.html#buttons">Bootstrap</a> but have overridden styles.</p>
-    <p class="muted">.btn-group.btn-radio</p>
-    <div class="btn-group" data-toggle="buttons-radio">
-        <button class="btn" data-printClasses></button>
-        <button class="btn active" data-printClasses></button>
-        <button class="btn" data-printClasses></button>
-    </div>
+        <h2>Decision Groups</h2>
+        <p>These follow the naming conventions and behavior rules from <a href="http://twitter.github.io/bootstrap/javascript.html#buttons">Bootstrap</a> but have overridden styles.</p>
+        <p class="muted">.btn-group.btn-radio</p>
+        <div class="btn-group" data-toggle="buttons-radio">
+            <button class="btn" data-printClasses></button>
+            <button class="btn active" data-printClasses></button>
+            <button class="btn" data-printClasses></button>
+        </div>
 
-    <p class="muted">.btn-group.btn-radio.btn-rocker</p>
-    <div class="btn-group btn-rocker" data-toggle="buttons-radio">
-        <button class="btn active">Apples</button>
-        <button class="btn">Oranges</button>
-    </div>
+        <p class="muted">.btn-group.btn-rocker</p>
+        <div class="btn-group btn-rocker" data-toggle="buttons-radio">
+            <button class="btn active">Apples</button>
+            <button class="btn">Oranges</button>
+        </div>
 
-    <p class="muted">.btn-rocker</p>
-    <div class="btn-group btn-rocker2" data-toggle="buttons-radio">
-        <button class="btn active">Apples</button>
-        <button class="btn">Oranges</button>
-    </div>
+        <h2>Forms</h2>
+        <form action="">
+            <label for="">Label</label>
+            <input type="text"/>
+        </form>
+        <form action="">
+            <input class="large" type="text" data-printClasses />
+        </form>
 
-    <h2>Forms</h2>
-    <form action="">
-        <label for="">Label</label>
-        <input type="text"/>
-    </form>
-    <form action="">
-        <input class="large" type="text" data-printClasses />
-    </form>
+        <h2>Divider</h2>
+        <div id="DividerHolder"></div>
 
-    <h2>Divider</h2>
-    <div id="DividerHolder"></div>
+        <h2>ui_widgets/steps_remaining</h2>
+        <div id="StepsRemainingHolder"></div>
 
-    <h2>ui_widgets/steps_remaining</h2>
-    <div id="StepsRemainingHolder"></div>
+    </section>
 
     <script src="bower_components/requirejs/require.js"></script>
     <script>

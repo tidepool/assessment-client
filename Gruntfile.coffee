@@ -68,15 +68,21 @@ module.exports = (grunt) ->
         tasks: ["coffee:spec"]
 
       specScribe:
-        files: "<%= tidepool.specGlob %>"
-        tasks: ["exec:scribeSpecs"]
+        files: ["<%= yeoman.app %>/spec.html", "<%= tidepool.specGlob %>"]
+        tasks: ["exec:scribeSpecs", "livereload"]
 
       compass:
         files: "<%= tidepool.sassSourceGlob %>"
         tasks: ["compass", "cssmin:dev", "clean:temp", "livereload"]
 
       livereload:
-        files: ["{<%= yeoman.app %>,<%= yeoman.dev %>}/*.html", "<%= yeoman.dev %>/**/*.css", "<%= yeoman.dev %>/**/*.js", "<%= yeoman.app %>/**/*.{png,jpg}"]
+        files: [
+          "<%= yeoman.app %>/*.html"
+          "<%= yeoman.dev %>/spec.html"
+          "<%= yeoman.dev %>/**/*.css"
+          "<%= yeoman.dev %>/**/*.js"
+          "<%= yeoman.app %>/**/*.{png,jpg}"
+        ]
         tasks: ["livereload"]
 
     clean:

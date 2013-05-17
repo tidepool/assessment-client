@@ -53,43 +53,7 @@
   color: $colorFacebook + 100
 
 
-// Rocker buttons
-$rockerShadow: opacify( $shadeLight, .1 )
 .btn-rocker
-  background: $rockerShadow
-  border-radius: $radiusSmall
-  border-top-right-radius: $radiusMed
-  border-top-left-radius: $radiusMed
-  border-top-color: $colorBackground - 50
-
-  .btn
-    background: $colorBackground
-    min-width: 75px
-    border-color: $colorBackground - 25
-
-    border-bottom-color: $shade
-    box-shadow: none
-  .btn.active
-    border-bottom-color: $colorBackground - 50
-    background-image: none
-  .btn.active,
-  .btn.active:hover
-    xbackground-color: $colorBackground - 20
-    xbackground-image: none
-  .btn:last-child
-    @include linear-gradient( 100deg, $colorBackground, white )
-    border-left: 1px solid $shade
-    @include transform-origin(left center)
-    @include transform(rotate(-2deg))
-  .btn:first-child
-    @include linear-gradient( 100deg, $colorBackground, white )
-    border-right: none
-  .btn:last-child
-    border-right: 2px solid $rockerShadow
-
-
-
-.btn-rocker2
   background: $colorBackground - 40
   padding: 1px
   border-radius: $radiusSmall
