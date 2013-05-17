@@ -17,12 +17,21 @@
   height: $spaceBig
   line-height: $spaceBig
   padding: 0 $space
-.btn-link
-  box-shadow: none
 .btn:hover, .btn:focus
   background-position: 0 0
 .btn.active, .btn:active
   box-shadow: inset 0 2px 0 1px $shadeLight
+
+.btn.btn-link,
+.btn.btn-link:hover, .btn.btn-link:focus,
+.btn.btn-link.active, .btn.btn-link:active
+  background: none
+  box-shadow: none
+  border: none
+  background-image: none
+.btn.active
+  cursor: default
+
 
 // Bootstrap Button Overrides per color
 +magicalButton( '.btn', $colorBackground, 5 )
@@ -42,4 +51,116 @@
   color: $highlight
 .btn-primary.facebook .muted
   color: $colorFacebook + 100
+
+
+// Rocker buttons
+$rockerShadow: opacify( $shadeLight, .1 )
+.btn-rocker
+  background: $rockerShadow
+  border-radius: $radiusSmall
+  border-top-right-radius: $radiusMed
+  border-top-left-radius: $radiusMed
+  border-top-color: $colorBackground - 50
+
+  .btn
+    background: $colorBackground
+    min-width: 75px
+    border-color: $colorBackground - 25
+
+    border-bottom-color: $shade
+    box-shadow: none
+  .btn.active
+    border-bottom-color: $colorBackground - 50
+    background-image: none
+  .btn.active,
+  .btn.active:hover
+    xbackground-color: $colorBackground - 20
+    xbackground-image: none
+  .btn:last-child
+    @include linear-gradient( 100deg, $colorBackground, white )
+    border-left: 1px solid $shade
+    @include transform-origin(left center)
+    @include transform(rotate(-2deg))
+  .btn:first-child
+    @include linear-gradient( 100deg, $colorBackground, white )
+    border-right: none
+  .btn:last-child
+    border-right: 2px solid $rockerShadow
+
+
+
+.btn-rocker2
+  background: $colorBackground - 40
+  padding: 1px
+  border-radius: $radiusSmall
+  .btn
+    color: transparentize($colorForeground, .3)
+    box-shadow: none
+    border: none
+    border-top: 1px solid white
+  .btn.active
+    color: $colorForeground
+    margin: 0
+    z-index: 3
+
+  // Left Side
+  .btn:first-child
+    border-right: none
+    @include linear-gradient( -50deg, $colorBackground - 10, $colorBackground )
+    @include transform-origin(right center)
+    @include transform-style(preserve-3d)
+    @include transform( perspective(300px) rotateY(30deg) scaleX(.97) )
+    box-shadow: inset 1px 0 0 0 white, -1px 0 0 0 $colorBackground - 30, -4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
+    padding-left: $spaceLil + $spaceTiny
+  .btn-large:first-child
+    padding-left: $space
+  .btn.active:first-child
+    //margin-left: 0
+    //padding-right: 0
+    background-image: none
+    background: $colorBackground
+    @include transform(none)
+    border-left: 1px solid white
+    box-shadow: none
+    // Glowing highlight
+    //box-shadow: inset 5px 0 5px -3px transparentize( $colorGoodLight, .5)
+    //box-shadow: inset 0 0 5px 4px $colorBackground, inset 7px 0 5px -1px $colorGood
+    // Flat highlight
+    //box-shadow: inset $spaceTiny 0 transparentize( $colorBrand3, .5 )
+    //box-shadow: inset $spaceTiny 0 $colorGood
+    // Mix Highlight
+    box-shadow: inset -5px 0 1px 8px $colorBackground, inset 5px 0 1px $colorGood
+
+
+  // Right Side
+  .btn:last-child
+    border-left: none
+    @include linear-gradient( 50deg, $colorBackground - 10, $colorBackground )
+    @include transform-origin(left center)
+    @include transform-style(preserve-3d)
+    @include transform( perspective(300px) rotateY(-30deg) scaleX(.97) )
+    box-shadow: inset -1px 0 0 0 white, 1px 0 0 0 $colorBackground - 30, 4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
+    //margin-right: -6px
+    //padding-left: $spaceLil + 6px
+    padding-right: $spaceLil + $spaceTiny
+  .btn-large:last-child
+    padding-right: $space
+  .btn.active:last-child
+    //margin-right: 0
+    //padding-left: 0
+    background-image: none
+    background: $colorBackground
+    @include transform(none)
+    border-right: 1px solid white
+    box-shadow: none
+
+    // Mix Highlight
+    box-shadow: inset 5px 0 1px 8px $colorBackground, inset -5px 0 1px $colorGood
+  .btn:last-child:hover
+    border-left: none
+
+
+
+
+
 

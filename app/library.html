@@ -20,7 +20,7 @@
             margin-top: 50px;
         }
         .btn-group {
-            margin-bottom: 10px;
+            margin: 25px 0;
         }
     </style>
 </head>
@@ -31,6 +31,7 @@
 
     <h2>Buttons</h2>
     <p>You can use the <code>a</code>, <code>button</code>, <code>div</code>, or most any other tag, and you can put any kind of <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon in them.</p>
+    <p><a class="btn btn-link" href="" data-printClasses></a></p>
     <p>
         <button class="btn" data-printClasses></button>
     </p>
@@ -58,17 +59,23 @@
 
     <h2>Decision Groups</h2>
     <p>These follow the naming conventions and behavior rules from <a href="http://twitter.github.io/bootstrap/javascript.html#buttons">Bootstrap</a> but have overridden styles.</p>
-    <label>.btn-group.btn-radio</label>
-    <div class="btn-group btn-radio">
+    <p class="muted">.btn-group.btn-radio</p>
+    <div class="btn-group" data-toggle="buttons-radio">
         <button class="btn" data-printClasses></button>
         <button class="btn active" data-printClasses></button>
         <button class="btn" data-printClasses></button>
     </div>
-    <label>.btn-group.btn-radio.btn-rocker</label>
 
-    <div class="btn-group btn-radio btn-rocker">
-        <button class="btn active" data-printClasses></button>
-        <button class="btn" data-printClasses></button>
+    <p class="muted">.btn-group.btn-radio.btn-rocker</p>
+    <div class="btn-group btn-rocker" data-toggle="buttons-radio">
+        <button class="btn active">Apples</button>
+        <button class="btn">Oranges</button>
+    </div>
+
+    <p class="muted">.btn-rocker</p>
+    <div class="btn-group btn-rocker2" data-toggle="buttons-radio">
+        <button class="btn active">Apples</button>
+        <button class="btn">Oranges</button>
     </div>
 
     <h2>Forms</h2>
@@ -90,7 +97,7 @@
     <script>
 
         require(['require_config'], function (){
-            require(['jquery'],function(){
+            require(['bootstrap', 'jquery'],function(){
                 var $classPrintList = $('[data-printClasses]');
 
                 // Print the class name of a thing inside itself

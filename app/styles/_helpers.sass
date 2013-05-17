@@ -12,7 +12,9 @@
     @include linear-gradient( $color, $color - $shading )
   #{$btnClassName}:hover, #{$btnClassName}:focus
     @include linear-gradient( $color + $highlighting, $color - $shading )
-  #{$btnClassName}:active, #{$color}.active
-    @include linear-gradient( $color + $highlighting*2, $color - $shading )
-  #{$btnClassName}.disabled, #{$btnClassName}[disabled]
+  #{$btnClassName}:active, #{$btnClassName}.active,
+  #{$btnClassName}.active:hover
+    @include linear-gradient( $color - $shading, $color - $shading * 2 )
+  #{$btnClassName}.disabled, #{$btnClassName}[disabled],
+  #{$btnClassName}.disabled:hover, #{$btnClassName}[disabled]:hover
     @include linear-gradient( $color - 100, $color - 115 )
