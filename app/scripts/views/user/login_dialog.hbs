@@ -1,19 +1,51 @@
-<div id="login-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
-  <div class="dialog-select">
-    <div class="modal-body">
-      <button class="btn-info btn" id="signup">Create an Account</button>
-      <p>OR</p>
-      <button class="btn-info btn" id="signin">Sign In</button>
+<div id="login-dialog" class="modal small hide fade" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
+
+
+    <div class="dialog-select">
+        <div class="modal-body">
+            <button class="btn btn-block btn-primary btn-large facebook" id="SigninFacebook">
+              <i class="icon-facebook icon-large"></i>
+              Sign in <span class="muted">with</span> Facebook
+            </button>
+
+            <div class="divider">
+                <b class="rule"></b>
+                <p>OR</p>
+                <b class="rule"></b>
+            </div>
+
+            <h3>
+                Use Your Email
+                <div id="SignInOrRegister" class="btn-group" data-toggle="buttons-radio">
+                    <button class="btn active" value="signIn">Sign In</button>
+                    <button class="btn" value="register">Register</button>
+                </div>
+            </h3>
+
+            <form id="SigninForm" action="">
+                <input class="large input-block-level" type="email" placeholder="Email Address" />
+                <input class="large input-block-level" type="password" placeholder="Password" />
+                <input id="ConfirmPassword" class="large input-block-level" type="password" style="display:none;" placeholder="Confirm Password" />
+                <button class="btn btn-inverse btn-large btn-block" id="signup">Get Started</button>
+            </form>
+
+            <!--<button class="btn btn-link" id="signin">Sign In</button>-->
+            <p>
+                <a class="pull-right small" href="" id="forgot-pass">Forgot Your Password?</a>
+            </p>
+        </div>
     </div>
-  </div>
+
+
+
   <div class="dialog-signin" style="display:none;">
     <div class="modal-header">
       <h3 id="signin-label">SIGN IN</h3>
     </div>
     <div class="modal-body">
       <div>
-        <button class="btn-info btn" id="facebook-login">Facebook</button>
-        <button class="btn-info btn" id="fitbit-login">Fitbit</button>
+        <button class="btn-inverse btn" id="facebook-login">Facebook</button>
+        <button class="btn-inverse btn" id="fitbit-login">Fitbit</button>
       </div>
       <p>OR</p>
       <form id="signin-form">
@@ -22,20 +54,21 @@
         <label class="checkbox">
           <input type="checkbox" name="remember" value="1" id="remember">Remember Me
         </label>
-        <button class="btn-info btn" type="submit">SIGN IN</button>      
+        <button class="btn-inverse btn" type="submit">SIGN IN</button>
       </form>    
       <p><a href="" id="forgot-pass">Forgot Your Password?</a></p>
       <p>Don't have an account yet? <a href="" id="need-signup">Sign up</a></p>
     </div>
   </div>
+
   <div class="dialog-signup" style="display:none;">
     <div class="modal-header">
       <h3 id="signup-label">CREATE AN ACCOUNT</h3>
     </div>
     <div class="modal-body">
       <div>
-        <button class="btn-info btn" id="facebook-login">Facebook</button>
-        <button class="btn-info btn" id="fitbit-login">Fitbit</button>
+        <button class="btn-inverse btn" id="facebook-login">Facebook</button>
+        <button class="btn-inverse btn" id="fitbit-login">Fitbit</button>
       </div>
       <p>OR</p>
       <form id="signup-form">
@@ -45,9 +78,10 @@
         <label class="checkbox">
           <input type="checkbox" name="remember" value="1" id="remember">Remember Me
         </label>
-        <button class="btn-info btn" type="submit">SIGN UP</button>      
+        <button class="btn-inverse btn" type="submit">SIGN UP</button>
       </form>    
       <p>Have an account? <a href="" id="need-signin">Sign in</a></p>
     </div>
   </div>
+
 </div>

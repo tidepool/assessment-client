@@ -1,47 +1,62 @@
 define [
-  'jquery',
-  'underscore',
-  'Backbone',
-  'Handlebars',
-  "text!./login_dialog.hbs",
-  'controllers/session_controller'], ($, _, Backbone, Handlebars, tempfile) ->
+  'jquery'
+  'underscore'
+  'Backbone'
+  'Handlebars'
+  "text!./login_dialog.hbs"
+  'controllers/session_controller'
+],
+(
+  $
+  _
+  Backbone
+  Handlebars
+  tmpl
+) ->
+  _me = "views/user/login_dialog"
+  _signinToggleSel = '#SignInOrRegister'
+  _confirmPassSel = '#ConfirmPassword'
+
   LoginDialog = Backbone.View.extend  
     events:
       "click #facebook-login": "facebookLogin"
-      "click #fitbit-login": "fitbitLogin"
-      "submit #signin-form": "signin"
-      "submit #signup-form": "signup"
-      "click #signup": "launchSignup"
-      "click #need-signup": "launchSignup"
-      "click #signin": "launchSignin"
-      "click #need-signin": "launchSignin"
+      #"click #fitbit-login": "fitbitLogin"
+      #"submit #signin-form": "signin"
+      #"submit #signup-form": "signup"
+      #"click #need-signup": "launchSignup"
+      #"click #need-signin": "launchSignin"
+      "click #SignInOrRegister": "clickedSignInOrRegister"
 
     initialize: (options) ->
       @session = options.session
+      @tmpl = Handlebars.compile tmpl
 
     render: ->
-      template = Handlebars.compile(tempfile)
-      $(@el).html(template())
-      this
+      @$el.html @tmpl()
+      @
 
     show: ->
-      $("#messageView").html(@render().el)
+      $("#messageView").html @render().el
       $("#login-dialog").modal('show')
 
     close: -> 
       $("#login-dialog").modal('hide')
 
-    launchSignin: (e) ->
-      e.preventDefault()
-      $('.dialog-select').css('display', 'none')
-      $('.dialog-signin').css('display', 'block')
-      $('.dialog-signup').css('display', 'none')
 
-    launchSignup: (e) ->
-      e.preventDefault()
-      $('.dialog-select').css('display', 'none')
-      $('.dialog-signup').css('display', 'block')
-      $('.dialog-signin').css('display', 'none')
+    clickedSignInOrRegister: (e) ->
+      $selected = @$(_signinToggleSel).find('.active')
+      mode = $selected.val()
+      console.log mode
+      switch mode # This logic is reversed because we catch the event before the delegated bootstrap button switcher catches the event
+        when 'signIn' then @modeRegister()
+        when 'register' then @modeSignIn()
+        else throw new Error("#{_me}: Unknown mode")
+
+    modeSignIn: ->
+      @$(_confirmPassSel).hide()
+
+    modeRegister: ->
+      @$(_confirmPassSel).show()
 
     signin: (e) ->
       e.preventDefault()
