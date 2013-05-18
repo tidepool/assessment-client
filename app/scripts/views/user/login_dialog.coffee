@@ -19,13 +19,14 @@ define [
 
   LoginDialog = Backbone.View.extend  
     events:
-      "click #facebook-login": "facebookLogin"
+      "click #SignInFacebook": "clickedSignInFacebook"
       #"click #fitbit-login": "fitbitLogin"
       #"submit #signin-form": "signin"
       #"submit #signup-form": "signup"
       #"click #need-signup": "launchSignup"
       #"click #need-signin": "launchSignin"
       "click #SignInOrRegister": "clickedSignInOrRegister"
+      "click #GetStartedButton": "clickedGetStarted"
 
     initialize: (options) ->
       @session = options.session
@@ -54,9 +55,11 @@ define [
 
     modeSignIn: ->
       @$(_confirmPassSel).hide()
-
     modeRegister: ->
       @$(_confirmPassSel).show()
+
+    clickedGetStarted: ->
+      console.log "#{_me}.clickedGetStarted()"
 
     signin: (e) ->
       e.preventDefault()
@@ -88,8 +91,7 @@ define [
         $(".alert-error").css('visibility', 'visible')
         $("form #message").html(message)
 
-    facebookLogin: (e) ->
-      e.preventDefault()
+    clickedSignInFacebook: (e) ->
       @session.loginUsingOauth('facebook', {width: 1006, height: 775})
 
     fitbitLogin: (e) ->

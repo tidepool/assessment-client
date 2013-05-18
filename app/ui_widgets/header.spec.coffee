@@ -1,9 +1,11 @@
 define [
   'underscore'
+  'Backbone'
   './header'
 ],
 (
   _
+  Backbone
   Header
 ) ->
 
@@ -12,6 +14,7 @@ define [
       loggedIn: -> true
     _.extend spoofSession, Backbone.Events
     new Header
+      app: _.extend {}, Backbone.Events
       session: spoofSession
 
   beforeEach ->

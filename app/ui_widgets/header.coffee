@@ -16,20 +16,21 @@ define [
   HeaderView = Backbone.View.extend
     tagName: 'header'
     events:
-      "click #login": "login",
-      "click #logout": "logout"
-      "click #profile": "showProfile"
+      "click #ShowModalLogin": "clickedLogIn"
+      "click #logout": "clickedLogOut"
+      "click #ShowModalProfile": "clickedProfile"
 
     initialize: (options) ->
-      throw new Error('arguments[0].session is required') unless options.session
+      throw new Error('arguments[0].session and .app are required') unless options.session && options.app
       @_usingNav = true # default
       @session = options.session
-      @listenTo(@session, 'session:login_success', @render)
-      @listenTo(@session, 'session:logout_success', @render)
+      @app = options.app
+      @app.on 'session:login_success', @render, @
+      @app.on 'session:logout_success', @render, @
       @tmpl = Handlebars.compile(tmpl)
 
-    render: () ->
-      console.log "#{_me}.render()"
+    render: ->
+      @app.cfg.debug && console.log "#{_me}.render()"
       loggedIn = @session.loggedIn()
       isRegisteredUser = true
       if @session.user?
@@ -55,18 +56,11 @@ define [
     showNav: ->
       @_usingNav = true
       @
-
-    login: (e) ->
-      e.preventDefault()
-      @trigger('command:login')
-
-    logout: (e) ->
-      e.preventDefault()
-      @trigger('command:logout')
-      @session.logout()
-
-    showProfile: (e) ->
-      e.preventDefault()
-      @trigger('command:profile')
+    clickedLogIn: ->
+      @app.trigger 'modal:login'
+    clickedLogOut: ->
+      @app.trigger 'session:logOut'
+    clickedProfile: (e) ->
+      @app.trigger 'modal:profile'
   
   HeaderView

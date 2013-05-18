@@ -3,7 +3,7 @@
 
     <div class="dialog-select">
         <div class="modal-body">
-            <button class="btn btn-block btn-primary btn-large facebook" id="SigninFacebook">
+            <button class="btn btn-block btn-primary btn-large facebook" id="SignInFacebook">
               <i class="icon-facebook icon-large"></i>
               Sign in <span class="muted">with</span> Facebook
             </button>
@@ -26,7 +26,7 @@
                 <input class="large input-block-level" type="email" placeholder="Email Address" />
                 <input class="large input-block-level" type="password" placeholder="Password" />
                 <input id="ConfirmPassword" class="large input-block-level" type="password" style="display:none;" placeholder="Confirm Password" />
-                <button class="btn btn-inverse btn-large btn-block" id="signup">Get Started</button>
+                <button class="btn btn-inverse btn-large btn-block" id="GetStartedButton">Get Started</button>
             </form>
 
             <!--<button class="btn btn-link" id="signin">Sign In</button>-->
@@ -38,39 +38,11 @@
 
 
 
-  <div class="dialog-signin" style="display:none;">
-    <div class="modal-header">
-      <h3 id="signin-label">SIGN IN</h3>
-    </div>
-    <div class="modal-body">
-      <div>
-        <button class="btn-inverse btn" id="facebook-login">Facebook</button>
-        <button class="btn-inverse btn" id="fitbit-login">Fitbit</button>
-      </div>
-      <p>OR</p>
-      <form id="signin-form">
-        <input class="span3" placeholder="EMail Address" type="text" name="email" id="email"><br/>
-        <input class="span3" placeholder="Password" type="password" name="password" id="password"><br/>
-        <label class="checkbox">
-          <input type="checkbox" name="remember" value="1" id="remember">Remember Me
-        </label>
-        <button class="btn-inverse btn" type="submit">SIGN IN</button>
-      </form>    
-      <p><a href="" id="forgot-pass">Forgot Your Password?</a></p>
-      <p>Don't have an account yet? <a href="" id="need-signup">Sign up</a></p>
-    </div>
-  </div>
-
   <div class="dialog-signup" style="display:none;">
     <div class="modal-header">
       <h3 id="signup-label">CREATE AN ACCOUNT</h3>
     </div>
     <div class="modal-body">
-      <div>
-        <button class="btn-inverse btn" id="facebook-login">Facebook</button>
-        <button class="btn-inverse btn" id="fitbit-login">Fitbit</button>
-      </div>
-      <p>OR</p>
       <form id="signup-form">
         <input class="span3" placeholder="EMail Address" type="text" name="email" id="email"><br/>
         <input class="span3" placeholder="Password" type="password" name="password" id="password"><br/>

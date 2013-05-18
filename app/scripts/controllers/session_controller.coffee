@@ -1,16 +1,23 @@
 define [
-  'jquery',
-  'underscore',
-  'Backbone',
-  'Handlebars',
-  'models/user'], ($, _, Backbone, Handlebars, User) ->
+  'jquery'
+  'underscore'
+  'Backbone'
+  'Handlebars'
+  'models/user'
+],
+(
+  $
+  _
+  Backbone
+  Handlebars
+  User
+) ->
   SessionController = ->
-    initialize: (options) ->
-      _.extend(@, Backbone.Events)
-      @on 'all', (eventName) -> console.log "SessionController Event: #{eventName}"
-      @apiServer = options["apiServer"]
-      @appId = options["appId"] 
-      @appSecret = options["appSecret"]
+    initialize: (appCoreInstance) ->
+      @app = appCoreInstance
+      @apiServer = @app.cfg.apiServer
+      @appId = @app.cfg.appId
+      @appSecret = @app.cfg.appSecret
       @accessToken = localStorage['access_token']
       @transferOwnerFlag = false
       $.ajaxSetup
@@ -127,7 +134,7 @@ define [
 
     logout: ->
       @clearOutLocalStorage()
-      @trigger('session:logout_success')
+      @app.trigger('session:logout_success')
 
     clearOutLocalStorage: ->
       delete localStorage['access_token']
@@ -186,7 +193,7 @@ define [
         @finishLogin()
       else
         console.log("Odd Error, no token received but redirected")
-        @trigger('session:login_fail')
+        @app.trigger('session:login_fail')
 
     finishLogin: ->
       deferred = $.Deferred()
@@ -202,11 +209,11 @@ define [
       @user.fetch
         data: params
       .done (data, textStatus, jqXHR) =>
-        @trigger('session:login_success')
+        @app.trigger('session:login_success')
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) =>
         console.log("Error creating user #{textStatus}")
-        @trigger('session:login_fail')
+        @app.trigger('session:login_fail')
         deferred.reject(textStatus)
       deferred.promise()
 

@@ -11,7 +11,7 @@ define [
   _me = 'core/config'
   config =
     appName: 'TidePool'
-    debug: false
+    debug: true
     googleAnalyticsKey: 'UA-40367760-1'
 
   _.extend config, appSecrets

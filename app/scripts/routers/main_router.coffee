@@ -43,20 +43,18 @@ define [
       'result': 'showResult'
       'dashboard': 'showDashboard'
 
-    initialize: (options) ->
-      @cfg = options
+    initialize: (appCoreInstance) ->
+      @app = appCoreInstance
+      @cfg = @app.cfg
+      @_mediator()
+
       # At the beginning create the session:
       @session = new SessionController()
-      @session.initialize options
-      #@listenTo(@session, 'session:login_success', @_handleSuccessfulLogin)
-      @listenTo(@session, 'session:login_fail', @_handleFailedLogin)
-      @listenTo(@session, 'session:logout_success', @_handleLogout)
+      @session.initialize @app
 
       @header = new HeaderView
+        app: @app
         session: @session
-      @listenTo(@header, 'command:login', @_loginCommand)
-      @listenTo(@header, 'command:logout', @_logoutCommand)
-      @listenTo(@header, 'command:profile', @_profileCommand)
       $('body').prepend(@header.el)
 
     # ----------------------------- Actual Route Responses
@@ -116,7 +114,20 @@ define [
             .fail =>
               console.log("Something went wrong, cannot log in")
 
+    showLogin: ->
+      console.log "#{_me}.showLogin()"
+      @loginDialog = new LoginDialog
+        session: @session
+      @loginDialog.show()
 
+    showLogout: ->
+      @session.logout()
+      @showHome()
+
+    showProfile: ->
+      @profileDialog = new ProfileDialog
+        user: @session.user
+      @profileDialog.show()
 
 
 
@@ -125,6 +136,14 @@ define [
 
 
     # ----------------------------- Supporting Methods
+    _mediator: ->
+      #@listenTo(@session, 'session:login_success', @_handleSuccessfulLogin)
+      @listenTo @app, 'session:login_fail', @_handleFailedLogin
+      @listenTo @app, 'session:logout_success', @_handleLogout
+      @listenTo @app, 'modal:login', @showLogin
+      @listenTo @app, 'session:logOut', @showLogout
+      @listenTo @app, 'modal:profile', @showProfile
+
     _createAndShowAssessment: (definitionId) ->
       console.log "#{_me}._createAndShowAssessment()"
       # Create an anonymous assessment on the server with the definitionId
@@ -174,10 +193,6 @@ define [
 #      if @currentStageNo is @numOfStages
 #        @navigate("result", {trigger: true})
 
-    _loginCommand: ->
-      @loginDialog = new LoginDialog
-        session: @session
-      @loginDialog.show()
 
     _handleSuccessfulLogin: ->
       @loginDialog?.close()
@@ -196,10 +211,6 @@ define [
 
     _handleFailedLogin: ->
 
-    
-    _profileCommand: ->
-      @profileDialog = new ProfileDialog({user: @session.user})
-      @profileDialog.show()
 
     _handleLogout: ->
       @showHome()

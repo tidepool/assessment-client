@@ -22,13 +22,14 @@ define [
     config.debug && console.log "#{_me} instantiated"
     @cfg = config
     _.extend @, Backbone.Events
+    @.on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
     @
 
   Core.prototype =
     start: ->
       @cfg.debug && console.log "#{_me} started"
       new Analytics @cfg
-      new Router @cfg
+      @router = new Router @
       Backbone.history.start()
       @
 
