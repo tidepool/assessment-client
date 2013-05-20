@@ -19,14 +19,15 @@ define [
 
   LoginDialog = Backbone.View.extend  
     events:
-      "click #SignInFacebook": "clickedSignInFacebook"
+      "click #SignInFacebook": "_clickedSignInFacebook"
       #"click #fitbit-login": "fitbitLogin"
       #"submit #signin-form": "signin"
       #"submit #signup-form": "signup"
       #"click #need-signup": "launchSignup"
       #"click #need-signin": "launchSignin"
-      "click #SignInOrRegister": "clickedSignInOrRegister"
-      "click #GetStartedButton": "clickedGetStarted"
+      "click #ActionSignIn": "modeSignIn"
+      "click #ActionRegister": "modeRegister"
+      "click #GetStartedButton": "_clickedGetStarted"
 
     initialize: (options) ->
       @session = options.session
@@ -43,22 +44,14 @@ define [
     close: -> 
       $("#login-dialog").modal('hide')
 
-
-    clickedSignInOrRegister: (e) ->
-      $selected = @$(_signinToggleSel).find('.active')
-      mode = $selected.val()
-      console.log mode
-      switch mode # This logic is reversed because we catch the event before the delegated bootstrap button switcher catches the event
-        when 'signIn' then @modeRegister()
-        when 'register' then @modeSignIn()
-        else throw new Error("#{_me}: Unknown mode")
-
     modeSignIn: ->
       @$(_confirmPassSel).hide()
     modeRegister: ->
       @$(_confirmPassSel).show()
 
-    clickedGetStarted: ->
+    _clickedSignInFacebook: (e) ->
+      @session.loginUsingOauth('facebook', {width: 1006, height: 775})
+    _clickedGetStarted: ->
       console.log "#{_me}.clickedGetStarted()"
 
     signin: (e) ->
@@ -91,8 +84,7 @@ define [
         $(".alert-error").css('visibility', 'visible')
         $("form #message").html(message)
 
-    clickedSignInFacebook: (e) ->
-      @session.loginUsingOauth('facebook', {width: 1006, height: 775})
+
 
     fitbitLogin: (e) ->
       e.preventDefault()
