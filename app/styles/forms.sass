@@ -4,11 +4,30 @@
 
 // Bootstrap Form Overrides
 input
-  box-shadow: inset 1px 2px 3px 0 $shadeLight !important
-  background: $colorBackground !important
+  &[type=text],
+  &[type=email],
+  &[type=password],
+  &[type=number],
+  &[type=search]
+    box-shadow: inset 1px 2px 3px 0 $shadeLight
+    background: $colorBackground
+    +transitionable
 
 input.large
-  font-size: $fontSizeBody
-  box-sizing: border-box
-  height: $spaceBig
-  padding: 0 $spaceLil
+  &[type=text],
+  &[type=email],
+  &[type=password],
+  &[type=number],
+  &[type=search]
+    font-size: $fontSizeBody
+    box-sizing: border-box
+    height: $spaceBig
+    padding: 0 $spaceLil
+
+input:focus
+  &[type=text],
+  &[type=email],
+  &[type=password],
+  &[type=number],
+  &[type=search]
+    background-color: white
