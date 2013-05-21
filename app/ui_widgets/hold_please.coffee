@@ -12,6 +12,7 @@ define [
 ) ->
 
   _me = 'ui_widgets/hold_please'
+  _defaultIconSize = ''
 
   Me = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -20,17 +21,45 @@ define [
     events:
       "click": "_clicked"
     initialize: ->
-      @render()
-    render: ->
-      @$el.html @tmpl()
-      console.log @el
+    # Optionally pass in a font-awesome icon size http://fortawesome.github.io/Font-Awesome/examples/#larger-icons
+    render: (iconSize) ->
+      @$el.html @tmpl
+        iconSize: iconSize || _defaultIconSize
+      @
     _clicked: (e) ->
       e.preventDefault()
       e.stopPropagation()
 
-    # Public API
-    show: (selector) -> $(selector).css('position', 'relative').append @el
-    hide: -> @$el.remove()
+    _showOnSelector: (selector, iconSize) ->
+      #Use a small icon for buttons that aren't large
+      iconSize = 'icon-large' if $(selector).hasClass('btn-large')
+      $(selector)
+        .addClass('onHold')
+        .css('position', 'relative')
+        .append @render(iconSize).$el.clone(true) # a .clone(true) sends the event handlers too, important if we want to catch and block click events on loading elements
 
+    _showFullScreen: ->
+      @_showOnSelector 'body', 'icon-4x'
+
+    _hideInSelector: (selector) ->
+      $(selector)
+        .removeClass('onHold')
+        .css('position', '')
+        .find(".#{@className}").remove()
+
+    _hideAll: ->
+      console.log "#{_me}._hideAll()"
+      $(".#{@className}")
+        .remove()
+        .parent()
+          .removeClass('onHold')
+          .css('position', '')
+
+
+    # Public API
+    show: (selector) ->
+      if selector then @_showOnSelector selector else @_showFullScreen()
+    hide: (selector) ->
+      if selector then @_hideInSelector selector else @_hideAll()
 
   new Me()
