@@ -59,12 +59,13 @@ define [
       holdPlease.hide '.btn'
       expect($sandbox).not.toContain _myClassName
       expect($sandbox).not.toContain _parentClassName
-    it 'removes all instances of itself if .hide() is called with no parameters', ->
+    it 'removes all instances of itself and cleans up if .hide() is called with no parameters', ->
       $sandbox = _factory()
       holdPlease.show '.btn'
       expect($sandbox.find(_myClassName)).toHaveLength 2
       holdPlease.hide()
       expect($sandbox).not.toContain _myClassName
+      expect($sandbox).not.toContain _parentClassName
 
 
 

@@ -12,7 +12,6 @@ define [
 ) ->
 
   _me = 'ui_widgets/hold_please'
-  _defaultIconSize = ''
 
   Me = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -24,7 +23,7 @@ define [
     # Optionally pass in a font-awesome icon size http://fortawesome.github.io/Font-Awesome/examples/#larger-icons
     render: (iconSize) ->
       @$el.html @tmpl
-        iconSize: iconSize || _defaultIconSize
+        iconSize: iconSize
       @
     _clicked: (e) ->
       e.preventDefault()
@@ -48,12 +47,11 @@ define [
         .find(".#{@className}").remove()
 
     _hideAll: ->
-      console.log "#{_me}._hideAll()"
       $(".#{@className}")
-        .remove()
         .parent()
           .removeClass('onHold')
           .css('position', '')
+      $(".#{@className}").remove()
 
 
     # Public API
