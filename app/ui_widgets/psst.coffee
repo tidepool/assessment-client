@@ -37,7 +37,7 @@ define [
         selector: opts.sel
       @$el.html @tmpl options
       @$el.attr 'class', "#{@className} #{options.type}"
-      @$el.clone().appendTo options.selector
+      @$el.clone().prependTo options.selector
       @
 
     _hide: ->

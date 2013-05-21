@@ -38,15 +38,15 @@ define [
             jqXHR.setRequestHeader('Authorization', tokenHeader)
 
     loginAsGuest: ->
-      @login('guest', '')
+      @signIn('guest', '')
 
     loginAsCurrent: ->
-      @login('current', '')
+      @signIn('current', '')
 
     signIn: (email, password) ->
       deferred = $.Deferred()
       if @isValid({email: email, password: password}) or (email is 'guest') or (email is 'current')
-        console.log "#{_me}.login() isValid"
+        console.log "#{_me}.signIn() isValid"
         if @loggedIn()
           @finishLogin()
           .done =>
@@ -77,12 +77,10 @@ define [
             console.log "Unsuccesful Login"
             deferred.reject(textStatus)
       else
-        console.log "#{_me}.login() !isValid"
         deferred.reject(@validationError.message)
       deferred.promise()
 
     register: (email, password, passwordConfirm) ->
-      console.log "#{_me}.register()"
       deferred = $.Deferred()
       if not @isValid({email: email, password: password, passwordConfirm: passwordConfirm})
         deferred.reject(@validationError.message)
@@ -91,7 +89,7 @@ define [
         user.save()
         .done (data, textStatus, jqXHR) =>
           console.log("User successfully created.")
-          @login(email, password)
+          @signIn(email, password)
           .done =>
             console.log("User logged in")
             deferred.resolve("User logged in")

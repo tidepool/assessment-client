@@ -168,14 +168,6 @@
                     $("#HoldBtn, #HoldBtnSmall").trigger('click')
 
 
-
-                    var terets = {
-                        'potato': 'Potato',
-                        'tomato': 'Tomato',
-                        'hello': 'Hello',
-                        'pickle': 'Pickle'
-                    }
-
                     function pickRandomProperty(obj) {
                         var result;
                         var count = 0;
@@ -184,13 +176,13 @@
                                 result = prop;
                         return result;
                     }
-
                     $('#ShowNotification').click(function(){
+                        var type = pickRandomProperty(psst.TYPES)
                         psst({
                             sel: '#NotificationArea',
-                            title: pickRandomProperty(terets),
+                            title: type,
                             msg: 'Hello, you special person.',
-                            type: pickRandomProperty(psst.TYPES)
+                            type: type
                         })
                     })
                     $('#ShowNotification').trigger('click')

@@ -57,10 +57,12 @@ define [
       @_isRegisterMode = false
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
+      psst.hide()
     _modeRegister: ->
       @_isRegisterMode = true
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
+      psst.hide()
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
     _submittedForm: (e) ->
@@ -96,8 +98,8 @@ define [
       console.log "#{_me}._callbackSuccess(): #{msg}"
     _callbackFail: (msg) ->
       psst
-        sel: ".#{_className} .modal-body"
-        msg: msg
+        sel: "#LoginErrorHolder"
+        msg: msg || 'Unknown Login Failure'
         type: 'error'
       holdPlease.hide _submitSel
 
