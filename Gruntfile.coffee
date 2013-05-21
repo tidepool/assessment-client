@@ -51,8 +51,6 @@ module.exports = (grunt) ->
     open:
       devHome:
         path: "http://assessments-front.dev/"
-      devSpec:
-        path: "http://assessments-front.dev/spec.html?catch=false"
 
     watch:
       hbs:
@@ -241,7 +239,6 @@ module.exports = (grunt) ->
     grunt.task.run [
       "build"
       "devServer"
-      "open:devSpec"
       "open:devHome"
       "watch"
     ]
