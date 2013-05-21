@@ -5,6 +5,7 @@ define [
   'Handlebars'
   'text!./login_dialog.hbs'
   'ui_widgets/hold_please'
+  'ui_widgets/psst'
 ],
 (
   $
@@ -13,8 +14,10 @@ define [
   Handlebars
   tmpl
   holdPlease
+  psst
 ) ->
   _me = "views/user/login_dialog"
+  _className = 'loginDialog'
   _emailSel = '#Login-email'
   _passSel = '#Login-pass'
   _confirmPassSel = '#Login-confirm'
@@ -23,7 +26,7 @@ define [
 
   LoginDialog = Backbone.View.extend
     tagName: 'aside'
-    className: 'loginDialog modal small hide fade'
+    className: "#{_className} modal small hide fade"
     events:
       "click #SignInFacebook": "_clickedSignInFacebook"
       "click #ActionSignIn": "_modeSignIn"
@@ -62,6 +65,7 @@ define [
       @$(_submitSel).addClass('btn-inverse')
     _submittedForm: (e) ->
       e.preventDefault()
+      psst.hide()
       holdPlease.show _submitSel
       data = @_getVals()
       if data.isRegisterMode
@@ -86,16 +90,15 @@ define [
     _register: (data) ->
       @options.session.register(data.email, data.password, data.passwordConfirm)
         .done(@_callbackSuccess)
-        .fail(@_callbackFail)
+        .fail(_.bind(@_callbackFail, @))
 
     _callbackSuccess: (msg) ->
       console.log "#{_me}._callbackSuccess(): #{msg}"
-      #$(".alert-success").css('visibility', 'visible')
-      #$("form #message").html(message)
     _callbackFail: (msg) ->
-      console.log "#{_me}._callbackFail(): #{msg}"
+      psst
+        sel: ".#{_className} .modal-body"
+        msg: msg
+        type: 'error'
       holdPlease.hide _submitSel
-      #$(".alert-error").css('visibility', 'visible')
-      #$("form #message").html(message)
 
   LoginDialog
