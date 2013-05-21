@@ -1,0 +1,80 @@
+// Rocker buttons are the yes/no choice buttons that look like a rocking lightswitch
+@import '../bower_components/bourbon/app/assets/stylesheets/_bourbon.scss'
+@import '_appVars.sass'
+@import '_colorVars.sass'
+@import '_helpers.sass'
+
+
+
+.btn-rocker
+  background: $colorBackground - 40
+  padding: 1px
+  border-radius: $radiusSmall
+  .btn
+    color: transparentize($colorForeground, .3)
+    box-shadow: none
+    border: none
+    border-top: 1px solid white
+  .btn.active
+    color: $colorForeground
+    margin: 0
+    z-index: 3
+
+  // Left Side
+  .btn:first-child
+    border-right: none
+    @include linear-gradient( -50deg, $colorBackground - 10, $colorBackground )
+    @include transform-origin(right center)
+    @include transform-style(preserve-3d)
+    @include transform( perspective(300px) rotateY(30deg) scaleX(.97) )
+    box-shadow: inset 1px 0 0 0 white, -1px 0 0 0 $colorBackground - 30, -4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
+    padding-left: $spaceLil + $spaceTiny
+  .btn-large:first-child
+    padding-left: $space
+  .btn.active:first-child
+    //margin-left: 0
+    //padding-right: 0
+    background-image: none
+    background: $colorBackground
+    @include transform(none)
+    border-left: 1px solid white
+    box-shadow: none
+    // Glowing highlight
+    //box-shadow: inset 5px 0 5px -3px transparentize( $colorGoodLight, .5)
+    //box-shadow: inset 0 0 5px 4px $colorBackground, inset 7px 0 5px -1px $colorGood
+    // Flat highlight
+    //box-shadow: inset $spaceTiny 0 transparentize( $colorBrand3, .5 )
+    //box-shadow: inset $spaceTiny 0 $colorGood
+    // Mix Highlight
+    box-shadow: inset -5px 0 1px 8px $colorBackground, inset 5px 0 1px $colorGood
+
+
+  // Right Side
+  .btn:last-child
+    border-left: none
+    @include linear-gradient( 50deg, $colorBackground - 10, $colorBackground )
+    @include transform-origin(left center)
+    @include transform-style(preserve-3d)
+    @include transform( perspective(300px) rotateY(-30deg) scaleX(.97) )
+    box-shadow: inset -1px 0 0 0 white, 1px 0 0 0 $colorBackground - 30, 4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
+    //margin-right: -6px
+    //padding-left: $spaceLil + 6px
+    padding-right: $spaceLil + $spaceTiny
+  .btn-large:last-child
+    padding-right: $space
+  .btn.active:last-child
+    //margin-right: 0
+    //padding-left: 0
+    background-image: none
+    background: $colorBackground
+    @include transform(none)
+    border-right: 1px solid white
+    box-shadow: none
+
+    // Mix Highlight
+    box-shadow: inset 5px 0 1px 8px $colorBackground, inset -5px 0 1px $colorGood
+  .btn:last-child:hover
+    border-left: none
+
+
+
