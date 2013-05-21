@@ -20,7 +20,7 @@ define [
       "click #ActionLogOut": "_clickedLogOut"
       "click #ActionShowProfile": "_clickedProfile"
 
-    initialize: () ->
+    initialize: ->
       throw new Error('Need options.app and options.session') unless @options.app? and @options.session?
       @_usingNav = true # default
       @options.app.on 'session:login_success', @render, @

@@ -1,0 +1,20 @@
+@import '../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../styles/appVars'
+@import '../styles/colorVars'
+
+.holdPlease
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background: $highlightThick
+  cursor: default
+.holdPlease [class^="icon-"]
+  color: black
+  @include animation(spin 1.2s ease-in-out infinite)
+  @include transform-origin(65% 50%)
+  text-shadow: 0 0 $space white
+
+.btn .holdPlease
+  border-radius: $radiusSmall

@@ -98,6 +98,11 @@
         <h2>ui_widgets/steps_remaining</h2>
         <div id="StepsRemainingHolder"></div>
 
+        <h2>Loader</h2>
+        <button id="HoldBtn" class="btn btn-large">
+            holdPlease('#HoldBtn')
+        </button>
+
     </section>
 
     <script src="bower_components/requirejs/require.js"></script>
@@ -121,11 +126,13 @@
                 require([
                     'Backbone',
                     'text!ui_widgets/divider.hbs',
-                    'ui_widgets/steps_remaining'
+                    'ui_widgets/steps_remaining',
+                    'ui_widgets/hold_please'
                 ], function (
                     Backbone,
                     dividerMarkup,
-                    StepsRemaining
+                    StepsRemaining,
+                    holdPlease
                 ) {
                     $('#DividerHolder').append( dividerMarkup )
 
@@ -133,7 +140,8 @@
                     steps = new StepsRemaining({
                             collection: new Backbone.Collection(_steps)
                     });
-                    $('#StepsRemainingHolder').append( steps.render().el )
+                    $('#StepsRemainingHolder').append( steps.render().el );
+                    holdPlease.show('#HoldBtn');
                 });
             });
         });
