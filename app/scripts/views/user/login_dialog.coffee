@@ -3,8 +3,8 @@ define [
   'underscore'
   'Backbone'
   'Handlebars'
-  "text!./login_dialog.hbs"
-  'controllers/session_controller'
+  'text!./login_dialog.hbs'
+  'ui_widgets/hold_please'
 ],
 (
   $
@@ -12,6 +12,7 @@ define [
   Backbone
   Handlebars
   tmpl
+  holdPlease
 ) ->
   _me = "views/user/login_dialog"
   _emailSel = '#Login-email'
@@ -44,8 +45,9 @@ define [
     close: ->
       @$el.modal 'hide'
 
-    _clickedSignInFacebook: ->
+    _clickedSignInFacebook: (e) ->
       @options.session.loginUsingOauth('facebook', {width: 1006, height: 775})
+      holdPlease.show $(e.target)
     _clickedForgotPass: ->
       console.log "#{_me}._clickedForgotPass()"
     _modeSignIn: ->
@@ -58,7 +60,8 @@ define [
       @_jazzSubmitBtn()
     _jazzSubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
-    _submittedForm: (e, a, b) ->
+    _submittedForm: ->
+      holdPlease.show _submitSel
       e.preventDefault()
       data = @_getVals()
       console.log "#{_me}._submittedForm()"
