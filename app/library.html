@@ -112,6 +112,15 @@
         <p>
             <button class="btn btn-link" id="HideLoading">holdPlease.hide()</button>
         </p>
+
+        <h2>Notifications</h2>
+        <p>
+            <button id="ShowNotification" class="btn btn-large" title="psst({ sel:'...', msg:'...' })">Add Notification</button>
+        </p>
+        <p id="NotificationArea"></p>
+        <p>
+            <button class="btn btn-link" id="HideNotifications">psst.hide()</button>
+        </p>
     </section>
 
     <script src="bower_components/requirejs/require.js"></script>
@@ -136,12 +145,14 @@
                     'Backbone',
                     'text!ui_widgets/divider.hbs',
                     'ui_widgets/steps_remaining',
-                    'ui_widgets/hold_please'
+                    'ui_widgets/hold_please',
+                    'ui_widgets/psst'
                 ], function (
                     Backbone,
                     dividerMarkup,
                     StepsRemaining,
-                    holdPlease
+                    holdPlease,
+                    psst
                 ) {
                     $('#DividerHolder').append( dividerMarkup )
 
@@ -155,6 +166,37 @@
                     $("#HoldBtn, #HoldBtnSmall").click(function(){ holdPlease.show(this) })
                     $("#HideLoading").click(function(){ holdPlease.hide() })
                     $("#HoldBtn, #HoldBtnSmall").trigger('click')
+
+
+
+                    var terets = {
+                        'potato': 'Potato',
+                        'tomato': 'Tomato',
+                        'hello': 'Hello',
+                        'pickle': 'Pickle'
+                    }
+
+                    function pickRandomProperty(obj) {
+                        var result;
+                        var count = 0;
+                        for (var prop in obj)
+                            if (Math.random() < 1/++count)
+                                result = prop;
+                        return result;
+                    }
+
+                    $('#ShowNotification').click(function(){
+                        psst({
+                            sel: '#NotificationArea',
+                            title: pickRandomProperty(terets),
+                            msg: 'Hello, you special person.',
+                            type: pickRandomProperty(psst.TYPES)
+                        })
+                    })
+                    $('#ShowNotification').trigger('click')
+                    $('#HideNotifications').click(function(){
+                        psst.hide()
+                    })
                 });
             });
         });

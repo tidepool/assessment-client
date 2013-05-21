@@ -25,10 +25,9 @@ define [
       @_usingNav = true # default
       @options.app.on 'session:login_success', @render, @
       @options.app.on 'session:logout_success', @render, @
-      @tmpl = Handlebars.compile(tmpl)
+      @tmpl = Handlebars.compile tmpl
 
     render: ->
-      @options.app.cfg.debug && console.log "#{_me}.render()"
       loggedIn = @options.session.loggedIn()
       isRegisteredUser = true
       if @options.session.user?

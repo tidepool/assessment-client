@@ -29,7 +29,7 @@ define [
       "click #ActionSignIn": "_modeSignIn"
       "click #ActionRegister": "_modeRegister"
       "click #Login-forgot": "_clickedForgotPass"
-      "focus input": "_jazzSubmitBtn"
+      "focus input": "_jazzifySubmitBtn"
       "submit": "_submittedForm"
 
     initialize: ->
@@ -53,19 +53,17 @@ define [
     _modeSignIn: ->
       @_isRegisterMode = false
       @$(_confirmPassSel).hide()
-      @_jazzSubmitBtn()
+      @_jazzifySubmitBtn()
     _modeRegister: ->
       @_isRegisterMode = true
       @$(_confirmPassSel).show()
-      @_jazzSubmitBtn()
-    _jazzSubmitBtn: ->
+      @_jazzifySubmitBtn()
+    _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
-    _submittedForm: ->
-      holdPlease.show _submitSel
+    _submittedForm: (e) ->
       e.preventDefault()
+      holdPlease.show _submitSel
       data = @_getVals()
-      console.log "#{_me}._submittedForm()"
-      console.log data
       if data.isRegisterMode
         @_register(data)
       else
@@ -81,22 +79,23 @@ define [
       }
 
     _signIn: (data) ->
-      @options.session.login(data.email, data.password)
+      @options.session.signIn(data.email, data.password)
         .done(@_callbackSuccess)
         .fail(@_callbackFail)
 
     _register: (data) ->
-      @options.session.login(data.email, data.password, data.passwordConfirm)
+      @options.session.register(data.email, data.password, data.passwordConfirm)
         .done(@_callbackSuccess)
         .fail(@_callbackFail)
 
-    _callbackSuccess: (message) ->
-      console.log "${_me}._callbackSuccess()"
-      $(".alert-success").css('visibility', 'visible')
-      $("form #message").html(message)
-    _callbackFail: (message) ->
-      console.log "${_me}._callbackFail()"
-      $(".alert-error").css('visibility', 'visible')
-      $("form #message").html(message)
+    _callbackSuccess: (msg) ->
+      console.log "#{_me}._callbackSuccess(): #{msg}"
+      #$(".alert-success").css('visibility', 'visible')
+      #$("form #message").html(message)
+    _callbackFail: (msg) ->
+      console.log "#{_me}._callbackFail(): #{msg}"
+      holdPlease.hide _submitSel
+      #$(".alert-error").css('visibility', 'visible')
+      #$("form #message").html(message)
 
   LoginDialog

@@ -43,7 +43,7 @@ define [
     loginAsCurrent: ->
       @login('current', '')
 
-    login: (email, password) ->
+    signIn: (email, password) ->
       deferred = $.Deferred()
       if @isValid({email: email, password: password}) or (email is 'guest') or (email is 'current')
         console.log "#{_me}.login() isValid"
@@ -79,12 +79,11 @@ define [
       else
         console.log "#{_me}.login() !isValid"
         deferred.reject(@validationError.message)
-
       deferred.promise()
 
-    signup: (email, password, passwordConfirm) ->
+    register: (email, password, passwordConfirm) ->
+      console.log "#{_me}.register()"
       deferred = $.Deferred()
-
       if not @isValid({email: email, password: password, passwordConfirm: passwordConfirm})
         deferred.reject(@validationError.message)
       else
@@ -102,7 +101,6 @@ define [
         .fail (jqXHR, textStatus, errorThrown) =>
           console.log("User can not be created.")
           deferred.reject(jqXHR.response)
-
       deferred.promise()
 
     isValid: (attrs) ->
@@ -114,12 +112,12 @@ define [
 
     validate: (attrs) ->
       # From http://stackoverflow.com/a/46181/11236
-      emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      #emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-      if attrs.email? and not emailRegex.test(attrs.email)
-        return {
-          message: "Invalid email format."
-        }
+#      if attrs.email? and not emailRegex.test(attrs.email)
+#        return {
+#          message: "Invalid email format."
+#        }
       if attrs.password? and (attrs.password.length < 8) 
         return {
           message: "Password should be greater than 8 characters."
