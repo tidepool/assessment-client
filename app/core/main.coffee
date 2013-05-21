@@ -6,6 +6,8 @@ define [
   'Backbone'
   './config'
   './analytics'
+  './mediator'
+  'controllers/session_controller'
   'routers/main_router'
 ],
 (
@@ -13,6 +15,8 @@ define [
   Backbone
   config
   Analytics
+  Mediator
+  SessionController
   Router
 ) ->
 
@@ -28,9 +32,18 @@ define [
   Core.prototype =
     start: ->
       @cfg.debug && console.log "#{_me} started"
+      # In the beginning the session was created
+      @session = new SessionController()
+      @session.initialize @
+      # Analytics is fired up
       new Analytics @cfg
+      # Application commands are managed by a mediator
+      @mediator = new Mediator
+        app: @
+      # Url Routes are listened to
       @router = new Router @
       Backbone.history.start()
+
       @
 
   new Core()
