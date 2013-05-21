@@ -14,7 +14,7 @@ define [
       loggedIn: -> true
     _.extend spoofSession, Backbone.Events
     new Header
-      app: _.extend {}, Backbone.Events
+      app: _.extend { cfg: { debug: true }}, Backbone.Events
       session: spoofSession
 
   beforeEach ->

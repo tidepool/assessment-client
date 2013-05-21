@@ -1,59 +1,35 @@
-<div id="login-dialog" class="modal small hide fade" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
 
 
-    <div class="dialog-select">
-        <div class="modal-body">
-            <button class="btn btn-block btn-primary btn-large facebook" id="SignInFacebook">
-              <i class="icon-facebook icon-large"></i>
-              Sign in <span class="muted">with</span> Facebook
-            </button>
-
-            <div class="divider">
-                <b class="rule"></b>
-                <p>OR</p>
-                <b class="rule"></b>
-            </div>
-
-            <h3>
-                Use Your Email
-                <div class="btn-group btn-rocker" data-toggle="buttons-radio">
-                    <button id="ActionSignIn" class="btn active" value="signIn">Sign In</button>
-                    <button id="ActionRegister" class="btn" value="register">Register</button>
-                </div>
-            </h3>
-
-            <form id="SigninForm" action="">
-                <input class="large input-block-level" type="email" placeholder="Email Address" />
-                <input class="large input-block-level" type="password" placeholder="Password" />
-                <input id="ConfirmPassword" class="large input-block-level" type="password" style="display:none;" placeholder="Confirm Password" />
-                <button class="btn btn-inverse btn-large btn-block" id="GetStartedButton">Get Started</button>
-            </form>
-
-            <!--<button class="btn btn-link" id="signin">Sign In</button>-->
-            <p>
-                <a class="pull-right small" href="" id="forgot-pass">Forgot Your Password?</a>
-            </p>
-        </div>
-    </div>
-
-
-
-  <div class="dialog-signup" style="display:none;">
-    <div class="modal-header">
-      <h3 id="signup-label">CREATE AN ACCOUNT</h3>
-    </div>
     <div class="modal-body">
-      <form id="signup-form">
-        <input class="span3" placeholder="EMail Address" type="text" name="email" id="email"><br/>
-        <input class="span3" placeholder="Password" type="password" name="password" id="password"><br/>
-        <input class="span3" placeholder="Confirm Password" type="password" name="password-confirm" id="password-confirm"> <br/>
-        <label class="checkbox">
-          <input type="checkbox" name="remember" value="1" id="remember">Remember Me
-        </label>
-        <button class="btn-inverse btn" type="submit">SIGN UP</button>
-      </form>    
-      <p>Have an account? <a href="" id="need-signin">Sign in</a></p>
-    </div>
-  </div>
+        <button class="btn btn-block btn-primary btn-large facebook" id="SignInFacebook">
+          <i class="icon-facebook icon-large"></i>
+          Sign in <span class="muted">with</span> Facebook
+        </button>
 
-</div>
+        <div class="divider">
+            <b class="rule"></b>
+            <p>Or</p>
+            <b class="rule"></b>
+        </div>
+
+        <h3>
+            Use Your Email
+            <div class="btn-group btn-rocker" data-toggle="buttons-radio">
+                <button id="ActionSignIn" class="btn active" value="signIn">Sign In</button>
+                <button id="ActionRegister" class="btn" value="register">Register</button>
+            </div>
+        </h3>
+
+        <form id="SigninForm" class="form-inline" action="">
+            <input id="Login-email" class="large input-block-level" type="email" placeholder="Email Address" />
+            <input id="Login-pass" class="large input-block-level" type="password" placeholder="Password" />
+            <input id="Login-confirm" class="large input-block-level" type="password" style="display:none;" placeholder="Confirm Password" />
+            <button id="Login-submit" class="btn btn-large btn-block" type="submit">Get Started</button>
+            <label for="Login-remember" class="small">
+                <input id="Login-remember" type="checkbox" checked />
+                Remember Me
+            </label>
+            <a id="Login-forgot" class="pull-right small" href="">Forgot Your Password?</a>
+        </form>
+    </div>
+

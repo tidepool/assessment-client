@@ -38,16 +38,27 @@
 +magicalButton( '.btn-primary', $colorBrand )
 +magicalButton( '.btn-success', $colorGood )
 +magicalButton( '.btn-inverse', $colorForeground, 25, 25 )
-
 +magicalButton( '.btn-primary.facebook', $colorFacebook )
 +magicalButton( '.btn-primary.fitbit', $colorFitbit)
+
+.btn.btn-clear
+  background: none
+  background-image: none
+  box-shadow: none
+  border: none
+.btn.btn-clear:hover
+  background: $shadeVeryLight
+.btn.btn-clear:active
+  background: $shadeLight
 
 
 .btn i // icons in a button
   vertical-align: middle
   margin-right: $spaceLil
 // muted text in a button
-.btn-primary .muted
+.btn-primary .muted,
+.btn-success .muted,
+.btn-inverse .muted
   color: $highlight
 .btn-primary.facebook .muted
   color: $colorFacebook + 100

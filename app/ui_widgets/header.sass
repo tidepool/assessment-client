@@ -7,6 +7,7 @@ $headerHeight: 80px
 header
   background: white
   margin-bottom: $spaceLil
+  font-size: 0 // to get rid of spaces between inline-block elements
 
   .inner
     max-width: $maxSiteWidth
@@ -14,19 +15,34 @@ header
     height: $headerHeight
     line-height: $headerHeight
   .logo
+    position: relative
     display: inline-block
+    height: $headerHeight
+    width: 110px
     background: $highlightVeryThin //larger hover area
-    background-image: url('../images/brand1x.png')
-    background-position: 0 -25px
+    vertical-align: middle
+  .logo h1
+    position: absolute
+    left: -9999px // Text only here for SEO
+    margin: 0
+    padding: 0
+  .logo:hover
+    background-color: $colorBrand
+  .logo:after
+    content: ''
+    position: absolute
+    top: $spaceLil
+    left: 10px
     width: 88px
     height: 50px
-    vertical-align: middle
-    margin-right: $spaceBig
-  .logo:hover
-    @include transform(scale(1.05))
+    background-image: url('../images/brand1x.png')
+    background-position: 0 -25px
+  .logo:hover:after
+    background-color: $colorBrand
+    background-position: -88px -25px
 
 
-  // The actual site navigation
+  // ----------------------------- The actual site navigation
   nav
     display: inline-block
   nav ul
@@ -36,6 +52,7 @@ header
   nav ul li
     display: inline-block
   nav a
+    position: relative
     display: inline-block
     line-height: $headerHeight
     text-transform: uppercase
@@ -44,381 +61,85 @@ header
     font-weight: bold
     padding: 0 $spaceLil
   nav a:hover
-    background: $colorBackground
-    color: $colorForeground
+    background: $colorBrand
+    color: white
     text-decoration: none
+    text-shadow: none
+  // Put a red rounded shape underneath each nav item
+  nav a:hover:after,
+  .logo:hover:before
+    position: absolute
+    box-sizing: border-box
+    width: 100%
+    height: $spaceLil
+    left: 0
+    top: 100%
+    margin-top: - $spaceLil / 2
+    content: ''
+    background: $colorBrand
+    border-bottom-right-radius: $radiusSmall
+    border-bottom-left-radius: $radiusSmall
 
-  // The login area holds either the login in button or the logged in user's information
+
+  // ----------------------------- User & Profile Dropdown
   .loginArea
     float: right
+  .loginArea .avatar
+    display: inline-block
+    width: 50px
+    height: 50px
+    border-radius: 25px //half of the height/width
+    overflow: hidden // make all images circles
+    margin-right: $spaceTiny
+    background-image: url('../images/brand1x.png')
+    background-position: -176px -25px
 
-  .loginArea .userName
-    color: $colorBrandContrast
-    font-weight: bold
-    font-size: 18px
+  .loginArea .dropdown-toggle
+    height: $headerHeight
+    position: relative
+    border-radius: 0
+    top: - $spaceTiny
+    padding-top: $spaceTiny
+    cursor: default
+  .loginArea .dropdown-toggle i:last-child
+    margin-left: $spaceLil
+  .loginArea .dropdown-menu
+    top: $headerHeight - 1 // for any rounding issues
+    width: 100%
+    box-sizing: border-box
+    margin: 0
+    padding: $spaceLil 0
+    text-align: left
+    border-radius: 0
+    border-bottom-right-radius: $radiusMed
+    border-bottom-left-radius: $radiusMed
+    box-shadow: none
+    border: none
+    z-index: 1
+  .loginArea .dropdown-toggle:hover,
+  .loginArea .dropdown-toggle:focus,
+  .loginArea .dropdown-toggle:active,
+  .loginArea .dropdown-menu
+    background: $colorForeground
+    color: white
+    text-shadow: none
+  .loginArea .dropdown-menu li a
+    color: white
+    text-shadow: none
+    padding: $spaceLil $space
+  .loginArea .dropdown-menu li a:hover,
+  .loginArea .dropdown-menu li a:focus
+    background: $colorBrand
+  .loginArea .dropdown-toggle:hover .dropdown-menu,
+  .loginArea .dropdown-toggle:focus .dropdown-menu
+    display: block
+
+  .loginArea .dropdown-menu
+    z-index: 1
+  .loginArea .avatar, loginArea.userName
+    position: relative
+    z-index: 2
 
 
 
 
-
-
-
-
-
-
-    //.navbar
-//  margin-bottom: 60px
-//
-//.navbar-inner
-//  margin-bottom: 0px
-//  min-height: 40px
-//  padding-right: 20px
-//  padding-left: 20px
-//  background: #3b3b41
-//  filter: none
-//  text-shadow: 1px 1px 1px #0a0c0e
-//  border: none
-//  color: #fff
-//  -webkit-border-radius: 0px
-//  -moz-border-radius: 0px
-//  border-radius: 0px
-//  *zoom: 1
-//  border-bottom: 1px solid #38383D
-//  a
-//    color: #7b7b7b
-//    text-shadow: 0 -1px 1px #0b090a
-//    i
-//      margin-top: 2px
-//    &:hover i
-//      opacity: .8
-//      filter: alpha(opacity = 80)
-//      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)"
-//
-//.brand img
-//  position: relative
-//  top: 0px
-//  left: 100px
-//  margin: 0px 0px -35px 0px
-//
-//a.brand span
-//  color: #fff
-//  text-shadow: none
-//
-//.header-nav
-//  padding: 0px
-//  color: #fff !important
-//  background: #000 !important
-//  .nav
-//    border-right: 1px solid #323237
-//    border-left: 1px solid #4E4E53
-//    margin: 0px
-//  .btn
-//    display: inline-block
-//    padding: 21px 20px
-//    margin-top: 0px
-//    margin-left: 0px
-//    font-size: 14px
-//    line-height: 20px
-//    text-align: center
-//    text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.75)
-//    vertical-align: middle
-//    cursor: pointer
-//    background: transparent
-//    border-left: 1px solid #323237
-//    border-right: 1px solid #4E4E53
-//    border-top: 0px
-//    border-bottom: 0px
-//    -webkit-border-radius: 0px
-//    -moz-border-radius: 0px
-//    border-radius: 0px
-//    -webkit-box-shadow: none !important
-//    -moz-box-shadow: none !important
-//    box-shadow: none !important
-//  a.btn
-//    color: #fff !important
-//    text-shadow: none !important
-//    padding: 10px 25px !important
-//  .btn
-//    .caret, &:hover .caret
-//      border-top-color: #fff !important
-//      border-bottom-color: #fff !important
-//
-//
-//
-//.sidebar-nav > ul
-//  margin: 0px 0px 0px 0px
-//  border-top: 1px solid transparent
-//  border-bottom: 1px solid transparent
-//  border-left: none
-//  border-right: none
-//  padding-bottom: 1px
-//  text-align: center !important
-//  font-size: 10px
-//  > li > ul
-//    list-style: none
-//    margin: 0px 0px 0px 0px
-//    display: none
-//
-//.nav-tabs.nav-stacked > li
-//  >
-//    a
-//    margin: 1px 0px 0px 0px
-//    padding: 15px 0px
-//    color: #aaa
-//    text-shadow: 0px 1px 0px #fff
-//    border-top: 1px solid transparent
-//    border-bottom: 1px solid transparent
-//    border-left: none
-//    border-right: none
-//    background: transparent
-//    -webkit-border-radius: 0px
-//    -moz-border-radius: 0px
-//    border-radius: 0px
-//    text-decoration: none
-//    ul > li
-//      > a
-//        margin: 1px 0px 0px 0px
-//        padding: 15px 0px
-//        color: #aaa
-//        text-shadow: 0px 1px 0px #fff
-//        border-top: 1px solid transparent
-//        border-bottom: 1px solid transparent
-//        border-left: none
-//        border-right: none
-//        background: transparent
-//        -webkit-border-radius: 0px
-//        -moz-border-radius: 0px
-//        border-radius: 0px
-//        text-decoration: none
-//      padding: 5px 0px
-//    a > i
-//      opacity: 1
-//      filter: alpha(opacity = 100)
-//      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"
-//      font-size: 22px
-//      display: inline-block
-//      width: 100%
-//    ul > li > a > i
-//      opacity: 1
-//      filter: alpha(opacity = 100)
-//      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"
-//      font-size: 22px
-//      display: inline-block
-//      width: 100%
-//      font-size: 20px
-//    a:hover
-//      > i
-//        opacity: 1
-//        filter: alpha(opacity = 100)
-//        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"
-//      margin: 1px 0px 0px 0px
-//      border-top: 1px solid transparent
-//      border-bottom: 1px solid transparent
-//      border-left: none
-//      border-right: none
-//      color: #666
-//      background: transparent
-//      -webkit-box-shadow: none
-//      -moz-box-shadow: none
-//      box-shadow: none
-//      -webkit-border-radius: 0px
-//      -moz-border-radius: 0px
-//      border-radius: 0px
-//      margin: 1px 0px 0px 0px
-//      border-top: 1px solid transparent
-//      border-bottom: 1px solid transparent
-//      border-left: none
-//      border-right: none
-//      color: #666
-//      background: transparent
-//      -webkit-box-shadow: none
-//      -moz-box-shadow: none
-//      box-shadow: none
-//      -webkit-border-radius: 0px
-//      -moz-border-radius: 0px
-//      border-radius: 0px
-//    ul > li > a:hover
-//      margin: 1px 0px 0px 0px
-//      border-top: 1px solid transparent
-//      border-bottom: 1px solid transparent
-//      border-left: none
-//      border-right: none
-//      color: #666
-//      background: transparent
-//      -webkit-box-shadow: none
-//      -moz-box-shadow: none
-//      box-shadow: none
-//      -webkit-border-radius: 0px
-//      -moz-border-radius: 0px
-//      border-radius: 0px
-//  &.active >
-//    a
-//    margin: 1px 0px 0px 0px
-//    border: 2px solid #eee
-//    border-right: none
-//    color: #3b3b41
-//    background: #fff
-//    -webkit-border-radius: 5px 0px 0px 5px !important
-//    -moz-border-radius: 5px 0px 0px 5px !important
-//    border-radius: 5px 0px 0px 5px !important
-//    position: relative
-//    z-index: 20
-//    ul
-//      margin: -4px 0px 0px 0px
-//      border: 2px solid #eee
-//      padding: 5px 0px
-//      border-top: none
-//      border-right: none
-//      color: #3b3b41
-//      background: #fff
-//      -webkit-border-radius: 0px 0px 0px 5px !important
-//      -moz-border-radius: 0px 0px 0px 5px !important
-//      border-radius: 0px 0px 0px 5px !important
-//      position: relative
-//      z-index: 21
-//  &:first-child > a
-//    margin: 0px 0px 0px 0px
-//    -webkit-border-radius: 0px
-//    -moz-border-radius: 0px
-//    border-radius: 0px
-//  &:last-child > a
-//    -webkit-border-radius: 0px
-//    -moz-border-radius: 0px
-//    border-radius: 0px
-//
-//.navbar .nav li.dropdown
-//  &.open > .dropdown-toggle, &.active > .dropdown-toggle, &.open.active > .dropdown-toggle
-//    color: #555555
-//    background-color: #373737
-//    outline: 0
-//    -webkit-box-shadow: none
-//    -moz-box-shadow: none
-//    box-shadow: none
-//
-//.dropdown-menu
-//  &:after, &:before
-//    display: none !important
-//  position: absolute
-//  top: 100%
-//  left: 0
-//  z-index: 1000
-//  display: none
-//  float: left
-//  min-width: 160px
-//  max-width: 300px
-//  padding: 0px 0
-//  margin: 1px 0 0
-//  list-style: none
-//  text-shadow: none
-//  background-color: #080808
-//  border: 1px solid #080808
-//  -webkit-border-radius: 0px 0px 4px 4px
-//  -moz-border-radius: 0px 0px 4px 4px
-//  border-radius: 0px 0px 4px 4px
-//  -webkit-box-shadow: none
-//  -moz-box-shadow: none
-//  box-shadow: none
-//  opacity: .8
-//  filter: alpha(opacity = 80)
-//  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)"
-//  &.pull-right
-//    right: 0
-//    left: auto
-//  .divider
-//    *width: 100%
-//    height: 1px
-//    margin: 0px 1px
-//    *margin: -5px 0 5px
-//    overflow: hidden
-//    background-color: #e5e5e5
-//    border-bottom: 1px solid #ffffff
-//  li
-//    a
-//      display: block
-//      padding: 5px 10px !important
-//      clear: both
-//      font-weight: normal
-//      line-height: 20px
-//      color: #fff
-//      white-space: normal !important
-//    border-top: 1px solid rgba(255, 255, 255, 0.05)
-//    border-bottom: 1px solid rgba(0, 0, 0, 0.4)
-//    &:first-child
-//      border-top: 0px !important
-//    &:last-child
-//      border-bottom: 0px !important
-//    > a
-//      &:hover, &:focus
-//        color: #ffffff
-//        text-decoration: none
-//        background-color: #0088cc
-//        background-color: #0081c2
-//        background-image: -moz-linear-gradient(top, #0088cc, #0077b3)
-//        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3))
-//        background-image: -webkit-linear-gradient(top, #0088cc, #0077b3)
-//        background-image: -o-linear-gradient(top, #0088cc, #0077b3)
-//        background-image: linear-gradient(to bottom, #0088cc, #0077b3)
-//        background-repeat: repeat-x
-//        filter: progid:dximagetransform.microsoft.gradient(startColorstr = '#ff0088cc', endColorstr = '#ff0077b3', GradientType = 0)
-//
-//.dropdown-submenu:hover > a
-//  color: #ffffff
-//  text-decoration: none
-//  background-color: #0088cc
-//  background-color: #0081c2
-//  background-image: -moz-linear-gradient(top, #0088cc, #0077b3)
-//  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3))
-//  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3)
-//  background-image: -o-linear-gradient(top, #0088cc, #0077b3)
-//  background-image: linear-gradient(to bottom, #0088cc, #0077b3)
-//  background-repeat: repeat-x
-//  filter: progid:dximagetransform.microsoft.gradient(startColorstr = '#ff0088cc', endColorstr = '#ff0077b3', GradientType = 0)
-//
-//.dropdown-menu
-//  .active > a
-//    color: #ffffff
-//    text-decoration: none
-//    background-color: #0088cc
-//    background-color: #0081c2
-//    background-image: linear-gradient(to bottom, #0088cc, #0077b3)
-//    background-image: -moz-linear-gradient(top, #0088cc, #0077b3)
-//    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3))
-//    background-image: -webkit-linear-gradient(top, #0088cc, #0077b3)
-//    background-image: -o-linear-gradient(top, #0088cc, #0077b3)
-//    background-repeat: repeat-x
-//    outline: 0 !important
-//    filter: progid:dximagetransform.microsoft.gradient(startColorstr = '#ff0088cc', endColorstr = '#ff0077b3', GradientType = 0)
-//    &:hover
-//      color: #ffffff
-//      text-decoration: none
-//      background-color: #0088cc
-//      background-color: #0081c2
-//      background-image: linear-gradient(to bottom, #0088cc, #0077b3)
-//      background-image: -moz-linear-gradient(top, #0088cc, #0077b3)
-//      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3))
-//      background-image: -webkit-linear-gradient(top, #0088cc, #0077b3)
-//      background-image: -o-linear-gradient(top, #0088cc, #0077b3)
-//      background-repeat: repeat-x
-//      outline: 0 !important
-//      filter: progid:dximagetransform.microsoft.gradient(startColorstr = '#ff0088cc', endColorstr = '#ff0077b3', GradientType = 0)
-//  .disabled > a
-//    color: #999999
-//    &:hover
-//      color: #999999
-//      text-decoration: none
-//      cursor: default
-//      background-color: transparent
-//
-//.dropdown-menu-title
-//  background-color: #080808
-//  color: #fff
-//  padding: 5px 10px
-//  display: block
-//  font-weight: bold
-//
-//.dropdown-menu ul
-//  padding: 0px !important
-//  margin: 0px !important
-//  li
-//    padding: 0px !important
-//    margin: 0px !important

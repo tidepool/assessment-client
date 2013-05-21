@@ -12,10 +12,15 @@ define [
   Handlebars
   User
 ) ->
+
+  _me = 'controllers/session_controller'
+  _authUrlSuffix = '/oauth/authorize'
+
   SessionController = ->
     initialize: (appCoreInstance) ->
       @app = appCoreInstance
-      @apiServer = @app.cfg.apiServer
+      @_apiServer = @app.cfg.apiServer
+      @_authUrl = "#{@_apiServer}#{_authUrlSuffix}"
       @appId = @app.cfg.appId
       @appSecret = @app.cfg.appSecret
       @accessToken = localStorage['access_token']
@@ -40,8 +45,8 @@ define [
 
     login: (email, password) ->
       deferred = $.Deferred()
-
       if @isValid({email: email, password: password}) or (email is 'guest') or (email is 'current')
+        console.log "#{_me}.login() isValid"
         if @loggedIn()
           @finishLogin()
           .done =>
@@ -49,9 +54,8 @@ define [
           .fail =>
             deferred.reject("Cannot get user info")
         else
-          authUrl = "#{@apiServer}/oauth/authorize" 
           $.ajax
-            url: authUrl
+            url: @_authUrl
             type: 'POST'
             data:
               grant_type: "password"
@@ -73,6 +77,7 @@ define [
             console.log "Unsuccesful Login"
             deferred.reject(textStatus)
       else
+        console.log "#{_me}.login() !isValid"
         deferred.reject(@validationError.message)
 
       deferred.promise()
@@ -159,7 +164,6 @@ define [
     loginUsingOauth: (provider, popupWindowSize) ->
       # Inspired by: https://github.com/ptnplanet/backbone-oauth
       # Popup a Window to let the providers (Facebook, Twitter...) show their login UI
-
       left = window.screenLeft + 50 
       top = window.screenTop + 50
       width = popupWindowSize.width
@@ -169,12 +173,11 @@ define [
 
     # authorizeThrough: facebook, twitter or fitbit
     setupAuthUrl: (authorizeThrough) ->
-      authUrl = "#{@apiServer}/oauth/authorize" 
-
-      redirectUri = "#{window.location.protocol}//#{window.location.host}/redirect.html"
-      redirectUri = encodeURIComponent(redirectUri)
+      redirectUri = encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
       authorize_param = "authorize_through=#{authorizeThrough}&"
-      "#{authUrl}?#{authorize_param}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"   
+      url = "#{@_authUrl}?#{authorize_param}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"
+      console.log url
+      url
 
     parseHash: (hash) ->
       params = {}
@@ -184,6 +187,7 @@ define [
         params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
       params
 
+    # Called as a global object by the opened window
     onRedirect: (hash, location) ->
       params = @parseHash(hash)
       console.log("Redirected with params #{params['access_token']}, hash #{hash}")
@@ -197,13 +201,10 @@ define [
 
     finishLogin: ->
       deferred = $.Deferred()
-
       params = {}
       if @user? and @user.isGuest
         guestId = @user.get('id')
         params = { guestId: guestId }
-
-      #console.log("Guest id is #{guestId}")
 
       @user = new User({id: 'finish_login'})
       @user.fetch

@@ -117,6 +117,7 @@ define [
     showLogin: ->
       console.log "#{_me}.showLogin()"
       @loginDialog = new LoginDialog
+        app: @app
         session: @session
       @loginDialog.show()
 
@@ -132,17 +133,14 @@ define [
 
 
 
-
-
-
     # ----------------------------- Supporting Methods
     _mediator: ->
       #@listenTo(@session, 'session:login_success', @_handleSuccessfulLogin)
       @listenTo @app, 'session:login_fail', @_handleFailedLogin
       @listenTo @app, 'session:logout_success', @_handleLogout
-      @listenTo @app, 'modal:login', @showLogin
+      @listenTo @app, 'session:showLogin', @showLogin
       @listenTo @app, 'session:logOut', @showLogout
-      @listenTo @app, 'modal:profile', @showProfile
+      @listenTo @app, 'session:showProfile', @showProfile
 
     _createAndShowAssessment: (definitionId) ->
       console.log "#{_me}._createAndShowAssessment()"

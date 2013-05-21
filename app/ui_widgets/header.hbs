@@ -1,6 +1,8 @@
 <div class="inner">
 
-    <a class="logo" href="#"></a>
+    <a class="logo" href="#">
+        <h1>TidePool</h1>
+    </a>
 
     <span id="StepsRemainingHolder"></span>
 
@@ -18,36 +20,41 @@
     {{#if loggedIn}}
         <div class="loginArea">
             {{#if isRegisteredUser }}
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <!--<i class="icon-user avatar"></i>-->
-                        <span id="userName">{{userName}}</span>
-                        <b class="caret"></b>
-                    </a>
+                <button class="btn btn-clear btn-large dropdown-toggle">
                     <ul class="dropdown-menu">
-                        <li><a id="ShowModalProfile">
+                        <li><a id="ActionShowProfile">
                             <i class="icon-user"></i>
                             Profile
                         </a></li>
-                        <li><a id="logout">
-                            <i class="icon-user off"></i>
-                            Logout
+                        <li><a id="ActionLogOut">
+                            <i class="icon-off"></i>
+                            Log Out
                         </a></li>
                     </ul>
-                </li>
+
+                    <i class="avatar">
+                        {{#if imageUrl}}
+                            <img src="{{imageUrl}}" alt="{{userName}}'s Avatar" />
+                        {{/if}}
+                    </i>
+                    <span>{{userName}}</span>
+                    <i class="icon-chevron-sign-down muted"></i>
+                </button>
+
             {{else}}
-                <!--<span id="userName">{{userName}}</span>-->
+                <span class="avatar"></span>
+                <span id="userName">{{userName}}</span>
             {{/if}}
         </div>
     {{else}}
-
+        <div class="loginArea">
+            <button id="ActionShowLogin" class="btn btn-primary btn-large" href="">
+                <i class="icon-lock icon-large"></i>
+                Log In
+            </button>
+        </div>
     {{/if}}
-    <div class="loginArea">
-        <button id="ShowModalLogin" class="btn btn-primary btn-large" href="">
-            <i class="icon-lock icon-large"></i>
-            Log In
-        </button>
-    </div>
+
 </div>
 
 

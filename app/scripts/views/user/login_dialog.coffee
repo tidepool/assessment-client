@@ -14,80 +14,86 @@ define [
   tmpl
 ) ->
   _me = "views/user/login_dialog"
-  _signinToggleSel = '#SignInOrRegister'
-  _confirmPassSel = '#ConfirmPassword'
+  _emailSel = '#Login-email'
+  _passSel = '#Login-pass'
+  _confirmPassSel = '#Login-confirm'
+  _submitSel = '#Login-submit'
+  _rememberSel = '#Login-remember'
 
-  LoginDialog = Backbone.View.extend  
+  LoginDialog = Backbone.View.extend
+    tagName: 'aside'
+    className: 'loginDialog modal small hide fade'
     events:
       "click #SignInFacebook": "_clickedSignInFacebook"
-      #"click #fitbit-login": "fitbitLogin"
-      #"submit #signin-form": "signin"
-      #"submit #signup-form": "signup"
-      #"click #need-signup": "launchSignup"
-      #"click #need-signin": "launchSignin"
-      "click #ActionSignIn": "modeSignIn"
-      "click #ActionRegister": "modeRegister"
-      "click #GetStartedButton": "_clickedGetStarted"
+      "click #ActionSignIn": "_modeSignIn"
+      "click #ActionRegister": "_modeRegister"
+      "click #Login-forgot": "_clickedForgotPass"
+      "focus input": "_jazzSubmitBtn"
+      "submit": "_submittedForm"
 
-    initialize: (options) ->
-      @session = options.session
+    initialize: ->
+      throw new Error('Need options.app and options.session') unless @options.app? and @options.session?
       @tmpl = Handlebars.compile tmpl
-
+      @options.app.on 'session:login_success', @close, @
     render: ->
       @$el.html @tmpl()
       @
-
     show: ->
       $("#messageView").html @render().el
-      $("#login-dialog").modal('show')
+      @$el.modal 'show'
+    close: ->
+      @$el.modal 'hide'
 
-    close: -> 
-      $("#login-dialog").modal('hide')
-
-    modeSignIn: ->
+    _clickedSignInFacebook: ->
+      @options.session.loginUsingOauth('facebook', {width: 1006, height: 775})
+    _clickedForgotPass: ->
+      console.log "#{_me}._clickedForgotPass()"
+    _modeSignIn: ->
+      @_isRegisterMode = false
       @$(_confirmPassSel).hide()
-    modeRegister: ->
+      @_jazzSubmitBtn()
+    _modeRegister: ->
+      @_isRegisterMode = true
       @$(_confirmPassSel).show()
-
-    _clickedSignInFacebook: (e) ->
-      @session.loginUsingOauth('facebook', {width: 1006, height: 775})
-    _clickedGetStarted: ->
-      console.log "#{_me}.clickedGetStarted()"
-
-    signin: (e) ->
+      @_jazzSubmitBtn()
+    _jazzSubmitBtn: ->
+      @$(_submitSel).addClass('btn-inverse')
+    _submittedForm: (e, a, b) ->
       e.preventDefault()
-      email = $("#signin-form #email").val()
-      password = $("#signin-form #password").val()
-      # TODO: Handle RememberMe
-      rememberMe = $("signin-form #remember").val()
+      data = @_getVals()
+      console.log "#{_me}._submittedForm()"
+      console.log data
+      if data.isRegisterMode
+        @_register(data)
+      else
+        @_signIn(data)
 
-      @session.login(email, password)
-      .done (message) =>
-        $(".alert-success").css('visibility', 'visible')
-        $("form #message").html(message)
-      .fail (message) ->
-        $(".alert-error").css('visibility', 'visible')
-        $("form #message").html(message)
+    _getVals: ->
+      {
+        isRegisterMode: @_isRegisterMode
+        email: @$(_emailSel).val()
+        password: @$(_passSel).val()
+        passwordConfirm: @$(_confirmPassSel).val()
+        rememberMe: @$(_rememberSel).prop('checked')
+      }
 
-    signup: (e) ->
-      e.preventDefault()
-      email = $("#signup-form #email").val()
-      password = $("#signup-form #password").val()
-      passwordConfirm = $("#signup-form #password-confirm").val()
-      rememberMe = $("signup-form #remember").val()
+    _signIn: (data) ->
+      @options.session.login(data.email, data.password)
+        .done(@_callbackSuccess)
+        .fail(@_callbackFail)
 
-      @session.signup(email, password, passwordConfirm)
-      .done (message) =>
-        $(".alert-success").css('visibility', 'visible')
-        $("form #message").html(message)       
-      .fail (message) ->
-        $(".alert-error").css('visibility', 'visible')
-        $("form #message").html(message)
+    _register: (data) ->
+      @options.session.login(data.email, data.password, data.passwordConfirm)
+        .done(@_callbackSuccess)
+        .fail(@_callbackFail)
 
-
-
-    fitbitLogin: (e) ->
-      e.preventDefault()
-      @session.loginUsingOauth('fitbit', {width: 1006, height: 775})
+    _callbackSuccess: (message) ->
+      console.log "${_me}._callbackSuccess()"
+      $(".alert-success").css('visibility', 'visible')
+      $("form #message").html(message)
+    _callbackFail: (message) ->
+      console.log "${_me}._callbackFail()"
+      $(".alert-error").css('visibility', 'visible')
+      $("form #message").html(message)
 
   LoginDialog

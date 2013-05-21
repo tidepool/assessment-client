@@ -3,6 +3,19 @@
 @import '_helpers.sass'
 
 // Bootstrap Form Overrides
+
+form.form-inline input
+  &[type=text],
+  &[type=email],
+  &[type=password],
+  &[type=number],
+  &[type=search]
+    margin-bottom: $spaceLil
+form.form-inline .btn
+  margin-bottom: $spaceLil
+form.form-inline label
+  margin-bottom: 0
+
 input
   &[type=text],
   &[type=email],
