@@ -8,37 +8,32 @@ define [
   Backbone
   Result
 ) ->
+
+  _me = 'models/assessment'
+
   Assessment = Backbone.Model.extend
     urlRoot: ->
       "#{window.apiServerUrl}/api/v1/assessments"
 
     initialize:  ->
       @on 'all', (eventName) -> console.log "AssessmentModel Event: #{eventName}"
+      @
 
-    # Embedded model is inspired by 
-    # http://stackoverflow.com/questions/6535948/nested-models-in-backbone-js-how-to-approach
-    embeddedModels:
-      result: Result
-
-    parse: (response) ->
-      for key of @embeddedModels
-        embeddedClass = @embeddedModels[key]
-        embeddedData = response[key]
-        if embeddedData is null
-          response[key] = null
-        else
-          response[key] = new embeddedClass(embeddedData, {parse:true})
-      response
+    # Server -> Front End. Translates data we receive from the server
+    parse: (resp) ->
+      # Mix in a result model
+      resp.result = new Result resp.result, {parse:true}
+      resp
 
     create: (definitionId) ->
       deferred = $.Deferred()
       @save({'def_id': definitionId })
-      .done (data, textStatus, jqXHR) ->
-        console.log('Assessment created successfully')
-        deferred.resolve(jqXHR.response)
-      .fail (jqXHR, textStatus, errorThrown) ->
-        console.log('Cannot create an assessment.')
-        deferred.reject(textStatus)
+        .done (data, textStatus, jqXHR) ->
+          console.log("#{_me}.create.save.done()")
+          deferred.resolve(jqXHR.response)
+        .fail (jqXHR, textStatus, errorThrown) ->
+          console.log("#{_me}.create.save.fail()")
+          deferred.reject(textStatus)
       deferred.promise()
 
     updateProgress: (stageCompleted) ->
@@ -74,15 +69,12 @@ define [
 
     getLatestWithProfile: ->
       deferred = $.Deferred()
-      
-      @fetch
-        url: "#{@url()}/latest_with_profile"
-      .done (data, textStatus, jqXHR) =>
-        console.log('Got the latest assessment')
-        deferred.resolve()
-      .fail (jqXHR, textStatus, errorThrown) =>
-          deferred.reject()
-
+      @fetch({ url: "#{@url()}/latest_with_profile" })
+        .done (data, textStatus, jqXHR) =>
+          console.log('Got the latest assessment')
+          deferred.resolve()
+        .fail (jqXHR, textStatus, errorThrown) =>
+            deferred.reject()
       deferred.promise()   
 
     getResult: ->

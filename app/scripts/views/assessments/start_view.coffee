@@ -11,8 +11,9 @@ define [
   tmpl
 ) ->
   StartView = Backbone.View.extend
+    className: 'infobox startView'
     events:
-      'click #startAssessment': 'startAssessment'
+      'click #StartAssessment': 'startAssessment'
 
     initialize: (options) ->
       @tmpl = Handlebars.compile tmpl
@@ -21,7 +22,7 @@ define [
       @$el.html @tmpl
         definition: @model.get('definition')
       @
-      
+
     startAssessment: (event) ->
       @model.updateProgress(0)
 

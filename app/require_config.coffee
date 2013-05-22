@@ -19,7 +19,6 @@ define [], () ->
 
       # Convenience Folder Mapping
       assessments: "scripts/views/assessments"
-      home: "scripts/views/home"
       dashboard: "scripts/views/dashboard"
       components: "scripts/views/components"
       results: "scripts/views/results"

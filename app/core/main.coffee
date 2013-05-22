@@ -7,6 +7,7 @@ define [
   './config'
   './analytics'
   './mediator'
+  './view'
   'controllers/session_controller'
   'routers/main_router'
 ],
@@ -16,6 +17,7 @@ define [
   config
   Analytics
   Mediator
+  View
   SessionController
   Router
 ) ->
@@ -25,8 +27,8 @@ define [
   Core = ->
     config.debug && console.log "#{_me} instantiated"
     @cfg = config
-    _.extend @, Backbone.Events
-    @.on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
+    _.extend this, Backbone.Events
+    @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
     @
 
   Core.prototype =
@@ -37,15 +39,18 @@ define [
       @session.initialize @
       # Analytics is fired up
       new Analytics @cfg
+      # The application manages all of its views starting with this one
+      @view = new View
+        app: @
       # Application commands are managed by a mediator
       @mediator = new Mediator
         app: @
       # Url Routes are listened to
       @router = new Router @
       Backbone.history.start()
-
       @
 
-  new Core()
 
 
+  # Publicize a singleton
+  core = new Core()

@@ -9,28 +9,29 @@
     {{#showNav}}
         <nav>
             <ul>
-                <li><a href="#About">About</a></li>
-                <li><a href="#Team">Team</a></li>
-                <li><a href="#Investors">Investors</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#investors">Investors</a></li>
             </ul>
         </nav>
     {{/showNav}}
 
     {{#if loggedIn}}
-        <div class="loginArea">
-            {{#if isRegisteredUser }}
+        {{#if showUser}}
+            <div class="loginArea">
                 <button class="btn btn-clear btn-large dropdown-toggle">
                     <ul class="dropdown-menu">
+                        {{#if isRegisteredUser }}
                         <li><a id="ActionShowProfile">
                             <i class="icon-user"></i>
                             Profile
                         </a></li>
+                        {{/if}}
                         <li><a id="ActionLogOut">
                             <i class="icon-off"></i>
                             Log Out
                         </a></li>
                     </ul>
-
                     <i class="avatar">
                         {{#if imageUrl}}
                             <img src="{{imageUrl}}" alt="{{userName}}'s Avatar" />
@@ -39,12 +40,8 @@
                     <span>{{userName}}</span>
                     <i class="icon-chevron-sign-down muted"></i>
                 </button>
-
-            {{else}}
-                <span class="avatar"></span>
-                <span id="userName">{{userName}}</span>
-            {{/if}}
-        </div>
+            </div>
+        {{/if}}
     {{else}}
         <div class="loginArea">
             <button id="ActionShowLogin" class="btn btn-link btn-large" href="">
