@@ -20,7 +20,7 @@ define [
 ) ->
 
   _me = 'controllers/stages_controller'
-  _stepsRemainingContainer = '#StepsRemainingHolder'
+  _stepsRemainingContainer = '#HeaderRegion'
   _views =
     'ReactionTime': 'ReactionTime'
     'ImageRank': 'ImageRank'
@@ -34,7 +34,7 @@ define [
       @levels = new LevelsCollection @assessment.get('stages')
       @stepsRemaining = new StepsRemainingView
         collection: @levels
-      $(_stepsRemainingContainer).html @stepsRemaining.render().el
+      $(_stepsRemainingContainer).append @stepsRemaining.render().el
       @
 
     render: (stageId) ->

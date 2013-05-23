@@ -1,0 +1,44 @@
+@import '../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../styles/appVars'
+@import '../styles/colorVars'
+
+
+.siteLogo
+  position: relative
+  display: inline-block
+  height: $headerHeight
+  width: 110px
+  background: $highlightVeryThin //larger hover area
+  vertical-align: top
+
+  h1
+    position: absolute
+    left: -9999px // Text only here for SEO
+    margin: 0
+    padding: 0
+  &:hover
+    background-color: $colorBrand
+  &:after
+    content: ''
+    position: absolute
+    top: $spaceLil
+    left: 10px
+    width: 88px
+    height: 50px
+    background-image: url('../images/brand1x.png')
+    background-position: 0 -25px
+  &:hover:after
+    background-color: $colorBrand
+    background-position: -88px -25px
+  &:hover:before
+    position: absolute
+    box-sizing: border-box
+    width: 100%
+    height: $spaceLil
+    left: 0
+    top: 100%
+    margin-top: - $spaceLil / 2
+    content: ''
+    background: $colorBrand
+    border-bottom-right-radius: $radiusSmall
+    border-bottom-left-radius: $radiusSmall

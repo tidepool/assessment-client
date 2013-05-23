@@ -39,32 +39,40 @@ define [
       throw new Error('Need options.app and options.session') unless @options.app? and @options.session?
       @tmpl = Handlebars.compile tmpl
       @options.app.on 'session:login_success', @close, @
+
     render: ->
       @$el.html @tmpl()
       @
+
     show: ->
-      $("#messageView").html @render().el
+      @render()
       @$el.modal 'show'
+
     close: ->
       @$el.modal 'hide'
 
     _clickedSignInFacebook: (e) ->
       @options.session.loginUsingOauth('facebook', {width: 1006, height: 775})
       holdPlease.show $(e.target)
+
     _clickedForgotPass: ->
       console.log "#{_me}._clickedForgotPass()"
+
     _modeSignIn: ->
       @_isRegisterMode = false
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
       psst.hide()
+
     _modeRegister: ->
       @_isRegisterMode = true
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
       psst.hide()
+
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
+
     _submittedForm: (e) ->
       e.preventDefault()
       psst.hide()

@@ -3,14 +3,12 @@ define [
   'Backbone'
   'models/result'
   'controllers/dashboard_controller'
-  'controllers/summary_results_controller'
 ],
 (
   $
   Backbone
   Result
   DashboardController
-  SummaryResultsController
 ) ->
   _me = 'routers/main_router'
 
@@ -24,10 +22,9 @@ define [
       'result': 'showResult'
       'dashboard': 'showDashboard'
 
-    initialize: (appCoreInstance) ->
-      @app = appCoreInstance
-      @cfg = @app.cfg
-      @on 'route', -> console.log '---------------------- Routing -------------------------'
+    initialize: (appCoreSingleton) ->
+      @app = appCoreSingleton
+      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
 
     # ------------------------------------------------ Actual Route Responses
     showHome: ->      @app.view.asSite 'pages/home'
@@ -37,12 +34,7 @@ define [
     showTeam: ->      @app.view.asSite 'pages/team'
     showInvestors: -> @app.view.asSite 'pages/investors'
     showGame: ->      @app.view.asGame 'pages/game'
-
-
-
-
-    showResult: ->
-
+    showResult: ->    @app.view.asGame 'pages/gameResult'
 
     showDashboard: ->
       console.log "#{_me}.showDashboard()"
@@ -69,8 +61,6 @@ define [
 
 
     # ----------------------------- Supporting Methods
-
-
 #    _stageCompletedSuccess: ->
 #      # TODO: This is not ideal, but we need to first send the request to server,
 #      # before logging the (guest) user out. That's why I added this here.

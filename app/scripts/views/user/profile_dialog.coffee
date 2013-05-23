@@ -65,7 +65,7 @@ define [
       this
 
     show: ->
-      $("#messageView").html(@render().el)
+      #$("#StagingRegion").html @render().el
       $("#profile-dialog").modal('show')
 
     close: -> 

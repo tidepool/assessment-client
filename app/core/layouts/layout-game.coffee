@@ -4,26 +4,29 @@ define [
   'Backbone'
   'Handlebars'
   './layout'
-  'ui_widgets/header'
 ],
 (
   _
   Backbone
   Handlebars
   Layout
-  Header
 ) ->
 
-  _me = 'core/layouts/game'
+  _me = 'core/layouts/layout-game'
 
   Me = Layout.extend
     className: 'gameLayout'
 
     initialize: ->
+      console.log "#{_me}.initialize()"
+      Me.__super__.initialize.call(this)
       @render()
-      @header = new Header
-        app: @options.app
-      @$el.prepend @header.hideNav().render().el
+
+    render: ->
+      console.log "#{_me}.render()"
+      @$el.html @tmpl()
+      Me.__super__.resetHeader.call(this)
+      @$('#HeaderRegion')
 
   Me
 

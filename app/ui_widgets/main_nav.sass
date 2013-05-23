@@ -1,0 +1,38 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+
+.mainNav
+  display: inline-block
+  ul
+    list-style: none
+    margin: 0
+    padding: 0
+  ul li
+    display: inline-block
+  a
+    font-size: $fontSizeSmall
+    position: relative
+    display: inline-block
+    line-height: $headerHeight
+    text-transform: uppercase
+    color: $colorBrandContrastNeutral + 50
+    font-weight: bold
+    padding: 0 $spaceLil
+  a:hover
+    background: $colorBrand
+    color: white
+    text-decoration: none
+    text-shadow: none
+  // Put a red rounded shape underneath each nav item
+  a:hover:after
+    position: absolute
+    box-sizing: border-box
+    width: 100%
+    height: $spaceLil
+    left: 0
+    top: 100%
+    margin-top: - $spaceLil / 2
+    content: ''
+    background: $colorBrand
+    border-bottom-right-radius: $radiusSmall
+    border-bottom-left-radius: $radiusSmall

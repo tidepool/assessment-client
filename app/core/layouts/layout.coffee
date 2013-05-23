@@ -3,11 +3,15 @@ define [
   'underscore'
   'Backbone'
   'Handlebars'
+  'text!./layout.hbs'
+  'text!ui_widgets/site_logo.hbs'
 ],
 (
   _
   Backbone
   Handlebars
+  tmpl
+  markupLogo
 ) ->
 
   _me = 'core/layouts/layout'
@@ -16,8 +20,10 @@ define [
 
     # Override these defaults in your inheriting class
     tagName: 'section'
-    tmpl: '<div class="content" id="Content"></div>'
-    render: -> @$el.html @tmpl
+    tmpl: Handlebars.compile tmpl
+    initialize: ->
+      console.log "#{_me}.initialize()"
+      @
 
     # Private
     _cleanupChildren: ->
@@ -29,10 +35,12 @@ define [
       console.log "#{_me}.render()"
       @_cleanupChildren() # A layout class method
       @_curView = view
-      @$('#Content').html @_curView.render().el
+      @$('#ContentRegion').html @_curView.render().el
 
     close: ->
       @_cleanupChildren()
+
+    resetHeader: -> @$('#HeaderRegion').html markupLogo
 
   Me
 

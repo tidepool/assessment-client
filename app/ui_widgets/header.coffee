@@ -14,16 +14,8 @@ define [
   _me = 'ui_widgets/header'
 
   HeaderView = Backbone.View.extend
-    tagName: 'header'
-    events:
-      "click #ActionShowLogin": "_clickedLogIn"
-      "click #ActionLogOut": "_clickedLogOut"
-      "click #ActionShowProfile": "_clickedProfile"
 
     initialize: ->
-      throw new Error('Need options.app') unless @options.app
-      console.log "#{_me}.initialize()"
-      @_usingNav = true # default
 #      @options.app.on 'session:login_success', @render, @
 #      @options.app.on 'session:logout_success', @render, @
       @listenTo @options.app, 'session:login_success', @render
@@ -54,18 +46,6 @@ define [
         isRegisteredUser: isRegisteredUser
       @
 
-    hideNav: ->
-      @_usingNav = false
-      @
-    showNav: ->
-      @_usingNav = true
-      @
-    _clickedLogIn: ->
-      @options.app.trigger 'session:showLogin'
-    _clickedLogOut: ->
-      @options.app.trigger 'session:logOut'
-    _clickedProfile: (e) ->
-      @options.app.trigger 'session:showProfile'
   
   HeaderView
 

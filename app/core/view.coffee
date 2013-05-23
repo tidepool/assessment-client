@@ -4,12 +4,15 @@ define [
   'Backbone'
   './layouts/layout-site'
   './layouts/layout-game'
+  'ui_widgets/user_menu'
+  'bootstrap' # someone, anyone, has to include it
 ],
 (
   _
   Backbone
   SiteLayout
   GameLayout
+  userMenu
 ) ->
 
   _me = 'core/view'
@@ -18,10 +21,7 @@ define [
 
     initialize: ->
       @setElement('body')
-      @_siteLayout = new SiteLayout
-        app: @options.app
-      @_gameLayout = new GameLayout
-        app: @options.app
+      userMenu.start @options.app
 
     render: ()->
       console.log "#{_me}.render() #{@_curView.className}"
@@ -49,12 +49,14 @@ define [
     # ----------------------------------------- Public API
     asSite: (viewModuleString) ->
       console.log "#{_me}.asSite(#{viewModuleString})"
-      @_curLayout = @_siteLayout
+      @_curLayout = new SiteLayout
+        app: @options.app
       @_loadView(viewModuleString)
 
     asGame: (viewModuleString) ->
       console.log "#{_me}.asGame(#{viewModuleString})"
-      @_curLayout = @_gameLayout
+      @_curLayout = new GameLayout
+        app: @options.app
       @_loadView(viewModuleString)
 
   Me

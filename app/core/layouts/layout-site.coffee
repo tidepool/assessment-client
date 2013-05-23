@@ -4,33 +4,36 @@ define [
   'Backbone'
   'Handlebars'
   './layout'
-  'text!./layout-site.hbs'
-  'ui_widgets/header'
+  'text!ui_widgets/main_nav.hbs'
+  'ui_widgets/user_menu'
 ],
 (
   _
   Backbone
   Handlebars
   Layout
-  tmpl
-  Header
+  markupNav
+  userMenu
 ) ->
 
-  _me = 'core/layouts/site'
+  _me = 'core/layouts/layout-site'
 
   Me = Layout.extend
     className: 'siteLayout'
-    tmpl: Handlebars.compile tmpl
-
     initialize: ->
+      console.log "#{_me}.initialize()"
+      Me.__super__.initialize.call(this)
       @render()
-      @header = new Header
-        app: @options.app
-      @$el.prepend @header.render().el
 
     render: ->
       console.log "#{_me}.render()"
       @$el.html @tmpl()
+      Me.__super__.resetHeader.call(this)
+      userMenu.delegateEvents() # This tells Backbone to set up the view's events again
+      @$('#HeaderRegion')
+        .append(markupNav)
+        .append(userMenu.el)
+      @
 
   Me
 

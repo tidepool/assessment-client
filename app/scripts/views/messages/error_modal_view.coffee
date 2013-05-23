@@ -15,7 +15,7 @@ define [
       @
 
     display: ->
-      $("#messageView").html(@render().el)   
+      #$("#StagingRegion").html @render().el
       $("#errorModal").modal()
       
   ErrorModalView

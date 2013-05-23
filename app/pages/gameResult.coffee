@@ -1,9 +1,11 @@
 define [
   'Backbone'
   'Handlebars'
+  'controllers/summary_results_controller'
 ], (
   Backbone
   Handlebars
+  SummaryResultsController
 ) ->
 
   _me = 'pages/gameResult'
@@ -12,12 +14,13 @@ define [
     className: 'gameResultPage'
     initialize: ->
       console.log "#{_me}.showResult()"
-      @showGame() unless @app.session.assessment
-      controller = new SummaryResultsController()
-      controller.initialize({session: @app.session})
-      controller.render()
+      #Backbone.history.navigate('game') unless @options.app.session.assessment
+      @render()
+
     render: ->
-      @$el.html @tmpl()
+      controller = new SummaryResultsController()
+      controller.initialize({session: @options.app.session})
+      @$el.html controller.render().el
       @
   Me
 

@@ -2,7 +2,6 @@ define [], () ->
   require.config
     packages: [ 'core' ]
     paths:
-
       # 3rd Party Bower Libraries
       Handlebars: "../bower_components/require-handlebars-plugin/Handlebars"
       underscore: "../bower_components/underscore-amd/underscore"

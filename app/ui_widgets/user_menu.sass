@@ -1,0 +1,62 @@
+
+@import '../styles/appVars'
+@import '../styles/colorVars'
+
+.userMenu
+  float: right
+
+  .avatar
+    display: inline-block
+    width: 50px
+    height: 50px
+    border-radius: 25px //half of the height/width
+    overflow: hidden // make all images circles
+    margin-right: $spaceTiny
+    background-image: url('../images/brand1x.png')
+    background-position: -176px -25px
+
+  .dropdown-toggle
+    height: $headerHeight
+    position: relative
+    border-radius: 0
+    top: - $spaceTiny
+    padding-top: $spaceTiny
+    cursor: default
+  .dropdown-toggle i:last-child
+    margin-left: $spaceLil
+  .dropdown-menu
+    top: $headerHeight - 1 // for any rounding issues
+    width: 100%
+    box-sizing: border-box
+    margin: 0
+    padding: $spaceLil 0
+    text-align: left
+    border-radius: 0
+    border-bottom-right-radius: $radiusMed
+    border-bottom-left-radius: $radiusMed
+    box-shadow: none
+    border: none
+    z-index: 1
+  .dropdown-toggle:hover,
+  .dropdown-toggle:focus,
+  .dropdown-toggle:active,
+  .dropdown-menu
+    background: $colorForeground
+    color: white
+    text-shadow: none
+  .dropdown-menu li a
+    color: white
+    text-shadow: none
+    padding: $spaceLil $space
+  .dropdown-menu li a:hover,
+  .dropdown-menu li a:focus
+    background: $colorBrand
+  .dropdown-toggle:hover .dropdown-menu,
+  .dropdown-toggle:focus .dropdown-menu
+    display: block
+
+  .dropdown-menu
+    z-index: 1
+  .avatar, loginArea.userName
+    position: relative
+    z-index: 2
