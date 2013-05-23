@@ -17,7 +17,7 @@
 
     <style type="text/css">
         body {
-            margin-top: 50px;
+            margin-top: 60px;
             background-color: white;
         }
         #HTMLReporter {
@@ -40,7 +40,7 @@
         window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
 
         require(['require_config'], function () {
-            require([
+            require([ 'bootstrap',
 
 /* scribeAmdDependencies.rb Writes Here */
 
@@ -58,7 +58,7 @@
     </script>
 </head>
 <body>
-    <header class="navbar navbar-fixed-top">
+    <header class="mainNav navbar navbar-fixed-top">
         <div class="navbar-inner">
             <ul class="nav">
                 <li><a href="index.html">Home</a></li>

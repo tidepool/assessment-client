@@ -15,6 +15,7 @@
     box-shadow: none
     border: none
     border-top: 1px solid white
+    @include transform-style(preserve-3d)
   .btn.active
     color: $colorForeground
     margin: 0
@@ -25,7 +26,6 @@
     border-right: none
     @include linear-gradient( -50deg, $colorBackground - 10, $colorBackground )
     @include transform-origin(right center)
-    @include transform-style(preserve-3d)
     @include transform( perspective(300px) rotateY(30deg) scaleX(.97) )
     box-shadow: inset 1px 0 0 0 white, -1px 0 0 0 $colorBackground - 30, -4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
     padding-left: $spaceLil + $spaceTiny
@@ -39,12 +39,6 @@
     @include transform(none)
     border-left: 1px solid white
     box-shadow: none
-    // Glowing highlight
-    //box-shadow: inset 5px 0 5px -3px transparentize( $colorGoodLight, .5)
-    //box-shadow: inset 0 0 5px 4px $colorBackground, inset 7px 0 5px -1px $colorGood
-    // Flat highlight
-    //box-shadow: inset $spaceTiny 0 transparentize( $colorBrand3, .5 )
-    //box-shadow: inset $spaceTiny 0 $colorGood
     // Mix Highlight
     box-shadow: inset -5px 0 1px 8px $colorBackground, inset 5px 0 1px $colorGood
 
@@ -54,7 +48,6 @@
     border-left: none
     @include linear-gradient( 50deg, $colorBackground - 10, $colorBackground )
     @include transform-origin(left center)
-    @include transform-style(preserve-3d)
     @include transform( perspective(300px) rotateY(-30deg) scaleX(.97) )
     box-shadow: inset -1px 0 0 0 white, 1px 0 0 0 $colorBackground - 30, 4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
     //margin-right: -6px
@@ -77,4 +70,10 @@
     border-left: none
 
 
-
+  // Gendered rocker button
+  // Assumes Male gender on the left
+.btn-rocker.gendered
+  .btn.active:first-child
+    box-shadow: inset 8px 0 20px -8px transparentize($colorMale,.5), inset -5px 0 1px 8px $colorBackground, inset 5px 0 1px $colorMale
+  .btn.active:last-child
+    box-shadow: inset -8px 0 20px -8px transparentize($colorFemale,.6), inset 5px 0 1px 8px $colorBackground, inset -5px 0 1px $colorFemale

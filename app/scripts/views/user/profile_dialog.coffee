@@ -1,50 +1,43 @@
 define [
-  'jquery',
-  'underscore',
-  'Backbone',
-  'Handlebars',
-  "text!./profile_dialog.hbs"], ($, _, Backbone, Handlebars, tempfile) ->
-  ProfileDialog = Backbone.View.extend  
-    events:
-      "click #addFacebook": "addFacebook"
-      "click #addTwitter": "addTwitter"
-      "click #addFitbit": "addFitbit"
-      "click #removeFacebook": "removeFacebook"
-      "click #removeTwitter": "removeTwitter"
-      "click #removeFitbit": "removeFitbit"
-      "submit #profileForm": "submitProfile"
+  'jquery'
+  'underscore'
+  'Backbone'
+  'Handlebars'
+  "text!./profile_dialog.hbs"
+],
+(
+  $
+  _
+  Backbone
+  Handlebars
+  tmpl
+) ->
 
+  _me = 'views/user/profile_dialog'
+
+  ProfileDialog = Backbone.View.extend
+    className: 'profileDialog modal small hide fade'
+    events:
+      "submit form": "submitProfile"
+
+    # ----------------------------------------------------------- Backbone Methods
     initialize: (options) ->
       @user = options.user
-      @listenTo(@user, 'user:authentication_added', @authenticationAdded)
-      @registerHandlebarsHelpers()
+      @_registerHandlebarsHelpers()
+      @tmpl = Handlebars.compile tmpl
+      @render()
 
-    registerHandlebarsHelpers: ->
+    render: ->
+      @$el.html @tmpl @getTemplateData()
+      @
+
+
+    # ----------------------------------------------------------- Custom / Helper Methods
+    _registerHandlebarsHelpers: ->
       Handlebars.registerHelper 'isMale', (gender) =>
         return "checked" if gender is 'male' 
       Handlebars.registerHelper 'isFemale', (gender) =>
-        return "checked" if gender is 'female' 
-    
-    enableDisableAvailableAuthentications: ->
-      providers = ['facebook', 'fitbit', 'twitter']
-      for provider in providers
-        authExists = @authExists(provider)
-        # Capitalize it
-        provider = provider.charAt(0).toUpperCase() + provider.slice(1)
-        addSelector = "#add#{provider}"
-        removeSelector = "#remove#{provider}"
-        if authExists
-          $(@el).find(addSelector).prop('disabled', true)
-          $(@el).find(removeSelector).prop('disabled', false)
-        else
-          $(@el).find(addSelector).prop('disabled', false)
-          $(@el).find(removeSelector).prop('disabled', true)
-
-    authExists: (provider) ->
-      for auth in @user.get('authentications')
-        if provider is auth.provider
-          return true
-      return false
+        return "checked" if gender is 'female'
 
     getTemplateData: ->
       user = 
@@ -58,60 +51,7 @@ define [
         state: @user.get('state')
         country: @user.get('country')
 
-    render: ->
-      template = Handlebars.compile(tempfile)
-      $(@el).html(template( { user: @getTemplateData() } ))
-      @enableDisableAvailableAuthentications()
-      this
-
-    show: ->
-      #$("#StagingRegion").html @render().el
-      $("#profile-dialog").modal('show')
-
-    close: -> 
-      $("#profile-dialog").modal('hide')
-
-    authenticationAdded: (provider) ->
-      @user.fetch()
-      .done (data, textStatus, jqXHR) =>
-        console.log("Updated user info")
-        @render()
-      .fail (jqXHR, textStatus, errorThrown) =>
-        console.log("Cannot refresh user info")
-
-    addFacebook: (e) ->
-      e.preventDefault()
-      @user.addAuthentication('facebook', {width: 1006, height: 775})
-
-    addTwitter: (e) ->
-      e.preventDefault()
-      @user.addAuthentication('twitter', {width: 1006, height: 775})
-
-    addFitbit: (e) ->
-      e.preventDefault()
-      @user.addAuthentication('fitbit', {width: 1006, height: 775})
-
-    removeFacebook: (e) ->
-      e.preventDefault()
-
-    removeTwitter: (e) ->
-      e.preventDefault()
-
-    removeFitbit: (e) ->
-      e.preventDefault()
-
-    submitProfile: (e) ->
-      e.preventDefault()
-      @getNewValues()
-      @user.save()
-      .done =>
-        console.log("Profile changes saved")
-      .fail =>
-        console.log("Error saving changes")
-
     getNewValues: ->
-      # TODO: Consider using some databinding library
-      # rivets.js, etc.
       @user.set
         name: $('#name').val()
         email: $('#email').val()
@@ -121,5 +61,22 @@ define [
         city: $('#city').val()
         state: $('#state').val()
         country: $('#country').val()
+
+
+    # ----------------------------------------------------------- Event Handlers
+    submitProfile: (e) ->
+      e.preventDefault()
+      @getNewValues()
+      @user.save()
+      .done =>
+        console.log("Profile changes saved")
+      .fail =>
+        console.log("Error saving changes")
+
+
+    # ----------------------------------------------------------- Public API
+    show: -> @$el.modal('show')
+    close: -> @$el.modal('hide')
+
 
   ProfileDialog

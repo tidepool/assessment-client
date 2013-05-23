@@ -4,49 +4,56 @@
 @import '_helpers.sass'
 
 
+// Most of this file is modifications based on an assumption of an underlying bootstrap modal popup component
 
-// Modifications to bootstrap's modal popup component
-.modal
-  position: absolute
-  border-radius: $radiusMed
-  border: $spaceTiny solid $colorBrandContrastNeutralLight
-  +softShadow( transparentize($colorBackground, .3) )
-  text-align: center
 .modal-backdrop
   background-color: $colorBackground
 .modal-backdrop,
 .modal-backdrop.fade.in
   opacity: .9
-
-.modal-body
-  padding: $space
-  max-height: none
-
-.modal.small
-  width: 400px
-  margin-left: -200px
-
 // Faster transitions--the bootstrap ones are too slow
 .fade
   @include transition (opacity .1s linear)
 .modal.fade
   @include transition (opacity .1s linear, top .1s ease-out)
 
-.modal-header
-  border: none
-  padding: 0
+.modal
+  position: absolute
+  border-radius: $radiusMed
+  border: $spaceTiny solid $colorBrandContrastNeutralLight
+  +softShadow( transparentize($colorBackground, .3) )
+  text-align: center
 
-.modal p,
-.modal form
-  text-align: left
-.modal p:last-child,
-.modal form:last-child
-  margin-bottom: 0
-.modal h3
-  text-align: left
-  min-height: $space
-  line-height: inherit
-  margin: 0 0 $space 0
-.modal h3 .btn-group
-  float: right
-  margin-top: -$spaceTiny
+  &.small
+    width: 400px
+    margin-left: -200px
+  .modal-header
+    border: none
+    padding: $space
+    padding-bottom: 0
+  .modal-body
+    padding: $space
+    max-height: none
+  .modal-header+.modal-body
+    padding-top: $spaceLil
+  .modal-footer
+    padding: 0
+    background: none
+    border: none
+    text-align: center
+
+  // Typography
+  p,
+  form
+    text-align: left
+  p:last-child,
+  form:last-child
+    margin-bottom: 0
+  h3
+    text-align: left
+    min-height: $space
+    line-height: inherit
+    margin: 0 0 $space 0
+  h3 .btn-group
+    float: right
+    margin-top: -$spaceTiny

@@ -28,7 +28,6 @@ define [
 
     start: (appCoreSingleton) ->
       throw new Error('Need an options.session.user to start') unless appCoreSingleton.session.user
-      console.log "#{_me}.start()"
       @app = appCoreSingleton
       @model = @app.session.user
       #@listenTo @model, 'all', (e) -> console.log "#{_me}.model event: #{e}"
@@ -42,9 +41,7 @@ define [
       delete @app
       delete @model
 
-
     render: ->
-      console.log "#{_me}.render()"
       @$el.html @tmpl @_parseModel(@model)
       @
 

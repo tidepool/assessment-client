@@ -1,96 +1,32 @@
-<div id="profile-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="signin-label">PROFILE</h3>
-  </div>
-  <div class="modal-body">
-    <form id="profileForm" class="form-horizontal" action=''>
-      <fieldset>
-        <div class="control-group">
-          <label class="control-label" for="email">Profile Image</label>
-          <div class="controls">
-            <img src="{{user.imageUrl}}" />
-          </div>
-        </div>
 
-        <div class="control-group">
-          <label class="control-label" for="name">Name</label>
-          <div class="controls">
-            <input type="text" id="name" name="name" placeholder="" class="input-xlarge" value="{{user.name}}">
-          </div>
-        </div>
 
-        <div class="control-group">
-          <label class="control-label" for="email">E-mail</label>
-          <div class="controls">
-            <input type="text" id="email" name="email" placeholder="" class="input-xlarge" value="{{user.email}}">
-          </div>
-        </div>
-     
-        <div class="control-group">
-          <label class="control-label" for="dob">Date of Birth</label>
-          <div class="controls">
-            <input type="date" id="dob" name="dob" placeholder="" class="input-xlarge" value="{{user.dob}}">
-          </div>
-        </div>
-      
-        <div class="control-group">
-          <label class="control-label">Gender</label>
-          <div class="controls">
-            <label class="radio">
-              <input type="radio" name="genderRadios" id="genderRadio1" value="Male" {{isMale user.gender }} >
-              Male
-            </label>
-            <label class="radio">
-              <input type="radio" name="genderRadios" id="genderRadio2" value="Female" {{isFemale user.gender }} >
-              Female
-            </label>
-          </div>
-        </div>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h2>Profile</h2>
+</div>
 
-        <div class="control-group">
-          <label class="control-label" for="timezone">Timezone</label>
-          <div class="controls">
-            <input type="text" id="timezone" name="timezone" placeholder="" class="input-xlarge" value="{{user.timezone}}">
-          </div>
-        </div>
 
-        <div class="control-group">
-          <label class="control-label" for="city">City</label>
-          <div class="controls">
-            <input type="text" id="city" name="city" placeholder="" class="input-xlarge" value="{{user.city}}">
-          </div>
-        </div>
+<div class="modal-body">
+    <i
+        class="avatar large interactive spaceBelow"
+        title="{{city}}, {{state}}. {{country}}. DOB: {{dob}} timezone: {{timezone}}"
+    >
+        {{#if image}}
+            <img src="{{image}}" alt="{{name}}'s Profile Image" />
+        {{/if}}
+    </i>
 
-        <div class="control-group">
-          <label class="control-label" for="state">State</label>
-          <div class="controls">
-            <input type="text" id="state" name="state" placeholder="" class="input-xlarge" value="{{user.state}}">
-          </div>
-        </div>
+    <form>
 
-        <div class="control-group">
-          <label class="control-label" for="country">Country</label>
-          <div class="controls">
-            <input type="text" id="country" name="country" placeholder="" class="input-xlarge" value="{{user.country}}">
-          </div>
+        <input type="text" id="name" name="name" placeholder="Name" class="input large input-block-level" value="{{name}}" >
+        <input type="text" id="email" name="email" placeholder="email@address.com" class="input large input-block-level" value="{{email}}">
+
+        <div class="btn-group btn-rocker spaceBelow gendered" data-toggle="buttons-radio">
+            <button class="btn active">Male</button>
+            <button class="btn">Female</button>
         </div>
-      </fieldset>
-      <button class="btn-info btn" type="submit">Submit</button>
+        <input type="hidden" name="gender" value="{{gender}}" />
+
+        <button class="btn btn-large btn-block btn-inverse" type="submit">Save</button>
     </form>
-
-    <div class="control-group">
-      <label class="control-label" for="authentications">Authentications</label>
-      <div class="controls">
-        <button class="btn-info btn" id="addFacebook">Add Facebook</button>
-        <button class="btn-info btn" id="removeFacebook">Remove Facebook</button>
-        <br/>
-        <button class="btn-info btn" id="addTwitter">Add Twitter</button>
-        <button class="btn-info btn" id="removeTwitter">Remove Twitter</button>
-        <br/>
-        <button class="btn-info btn" id="addFitbit">Add Fitbit</button>
-        <button class="btn-info btn" id="removeFitbit">Remove Fitbit</button>
-      </div>
-    </div>
-  </div>
 </div>
