@@ -4,12 +4,14 @@ define [
   'Backbone'
   'Handlebars'
   './layout'
+  'ui_widgets/user_menu'
 ],
 (
   _
   Backbone
   Handlebars
   Layout
+  userMenu
 ) ->
 
   _me = 'core/layouts/layout-game'
@@ -27,6 +29,7 @@ define [
       @$el.html @tmpl()
       Me.__super__.resetHeader.call(this)
       @$('#HeaderRegion')
+        .append(userMenu.el)
 
   Me
 

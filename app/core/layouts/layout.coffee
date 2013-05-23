@@ -22,7 +22,7 @@ define [
     tagName: 'section'
     tmpl: Handlebars.compile tmpl
     initialize: ->
-      console.log "#{_me}.initialize()"
+      #console.log "#{_me}.initialize()"
       @
 
     # Private
@@ -32,7 +32,7 @@ define [
 
     # Public
     show: (view) ->
-      console.log "#{_me}.render()"
+      #console.log "#{_me}.render()"
       @_cleanupChildren() # A layout class method
       @_curView = view
       @$('#ContentRegion').html @_curView.render().el

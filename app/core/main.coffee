@@ -25,18 +25,17 @@ define [
   _me = 'core/main'
 
   Core = ->
-    config.debug && console.log "#{_me} instantiated"
+    #config.debug && console.log "#{_me} instantiated"
     @cfg = config
     _.extend this, Backbone.Events
-    @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
+    @cfg.debug && @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
     @
 
   Core.prototype =
     start: ->
-      @cfg.debug && console.log "#{_me} started"
+      #@cfg.debug && console.log "#{_me} started"
       # In the beginning the session was created
-      @session = new SessionController()
-      @session.initialize @
+      @session = new SessionController @
       # Analytics is fired up
       new Analytics @cfg
       # The application manages all of its views starting with this one

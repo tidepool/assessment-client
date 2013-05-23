@@ -24,7 +24,7 @@ define [
       userMenu.start @options.app
 
     render: ()->
-      console.log "#{_me}.render() #{@_curView.className}"
+      #console.log "#{_me}.render() #{@_curView.className}"
       @_curLayout.show @_curView
       @$el.html @_curLayout.el
       @
@@ -48,13 +48,13 @@ define [
 
     # ----------------------------------------- Public API
     asSite: (viewModuleString) ->
-      console.log "#{_me}.asSite(#{viewModuleString})"
+      #console.log "#{_me}.asSite(#{viewModuleString})"
       @_curLayout = new SiteLayout
         app: @options.app
       @_loadView(viewModuleString)
 
     asGame: (viewModuleString) ->
-      console.log "#{_me}.asGame(#{viewModuleString})"
+      #console.log "#{_me}.asGame(#{viewModuleString})"
       @_curLayout = new GameLayout
         app: @options.app
       @_loadView(viewModuleString)

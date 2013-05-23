@@ -16,27 +16,33 @@ define [
   _me = 'controllers/session_controller'
   _authUrlSuffix = '/oauth/authorize'
 
-  SessionController = ->
-    initialize: (appCoreInstance) ->
-      @app = appCoreInstance
-      @_apiServer = @app.cfg.apiServer
-      @_authUrl = "#{@_apiServer}#{_authUrlSuffix}"
-      @appId = @app.cfg.appId
-      @appSecret = @app.cfg.appSecret
-      @accessToken = localStorage['access_token']
-      @transferOwnerFlag = false
-      $.ajaxSetup
-        type: 'POST',
-        timeout: 5000
-        headers:  
-          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') 
-          'Accept': 'application/json'
-        dataType: 'json'
-        beforeSend: (jqXHR, options) =>
-          if @loggedIn()
-            tokenHeader = "Bearer #{@accessToken}"
-            jqXHR.setRequestHeader('Authorization', tokenHeader)
 
+  # Constructor
+  SessionController = (appCoreInstance) ->
+    @app = appCoreInstance
+    @_apiServer = @app.cfg.apiServer
+    @_authUrl = "#{@_apiServer}#{_authUrlSuffix}"
+    @appId = @app.cfg.appId
+    @appSecret = @app.cfg.appSecret
+    @accessToken = localStorage['access_token']
+    @transferOwnerFlag = false
+    @user = new User
+    $.ajaxSetup
+      type: 'POST',
+      timeout: 5000
+      headers:
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'Accept': 'application/json'
+      dataType: 'json'
+      beforeSend: (jqXHR, options) =>
+        if @loggedIn()
+          tokenHeader = "Bearer #{@accessToken}"
+          jqXHR.setRequestHeader('Authorization', tokenHeader)
+    @ # Constructors return `this`
+
+
+  # Prototype
+  SessionController.prototype =
     loginAsGuest: ->
       @signIn('guest', '')
 
@@ -112,6 +118,7 @@ define [
       # From http://stackoverflow.com/a/46181/11236
       #emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
+      # type=email handles client side validation for now
 #      if attrs.email? and not emailRegex.test(attrs.email)
 #        return {
 #          message: "Invalid email format."
@@ -134,15 +141,9 @@ define [
       localStorage['refresh_token'] = data['refresh_token']
 
     logout: ->
-      @clearOutLocalStorage()
+      @_clearOutLocalStorage()
+      @user.clear()
       @app.trigger('session:logout_success')
-
-    clearOutLocalStorage: ->
-      delete localStorage['access_token']
-      delete localStorage['expires_in']
-      delete localStorage['token_received']
-      delete localStorage['refresh_token'] 
-      @accessToken = null
      
     loggedIn: ->
       if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
@@ -197,14 +198,10 @@ define [
 
     finishLogin: ->
       deferred = $.Deferred()
-      params = {}
-      if @user? and @user.isGuest
-        guestId = @user.get('id')
-        params = { guestId: guestId }
-
-      @user = new User({id: 'finish_login'})
+      @user.id = 'finish_login'
       @user.fetch
-        data: params
+        data:
+          guestId = @user.get('id') if @user.isGuest()
       .done (data, textStatus, jqXHR) =>
         @app.trigger('session:login_success')
         deferred.resolve(jqXHR.response)
@@ -219,7 +216,7 @@ define [
       if @user?
         deferred.resolve("Already have user info")
       else
-        @user = new User({id: '-'})
+        @user.id = '-'
         @user.fetch()
         .done (data, textStatus, jqXHR) =>
           # localStorage['guest'] = @user.get('guest')
@@ -228,5 +225,17 @@ define [
           console.log("Error creating user #{textStatus}")
           deferred.reject(textStatus)
       deferred.promise()
+
+
+    # ---------------------------------------------- Private Methods
+    _clearOutLocalStorage: ->
+      delete localStorage['access_token']
+      delete localStorage['expires_in']
+      delete localStorage['token_received']
+      delete localStorage['refresh_token']
+      @accessToken = null
+
+
+
 
   SessionController

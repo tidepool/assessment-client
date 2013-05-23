@@ -14,7 +14,7 @@ define [],() ->
 
   Analytics = (cfg) ->
     throw new Error('Need arguments[0].googleAnalyticsKey') unless cfg.googleAnalyticsKey
-    cfg.debug && console.log "Created #{_me}"
+    #cfg.debug && console.log "Created #{_me}"
     _setUpGoogle cfg.googleAnalyticsKey
 
   Analytics
