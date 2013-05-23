@@ -24,11 +24,10 @@ define [
       "click #ActionLogOut": "_clickedLogOut"
       "click #ActionShowProfile": "_clickedProfile"
 
-    initialize: ->
-      console.log "#{_me}.initialize()"
-      @model = new Backbone.Model()
+    initialize: -> console.log "#{_me}.initialize()"
 
     start: (appCoreSingleton) ->
+      throw new Error('Need an options.session.user to start') unless appCoreSingleton.session.user
       console.log "#{_me}.start()"
       @app = appCoreSingleton
       @model = @app.session.user
@@ -36,6 +35,13 @@ define [
       @listenTo @model, 'change', @render
       @render()
       @
+
+    # Because it's a singleton, this is used for unit testing
+    stop: ->
+      @stopListening()
+      delete @app
+      delete @model
+
 
     render: ->
       console.log "#{_me}.render()"

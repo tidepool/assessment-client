@@ -10,34 +10,52 @@ define [
 ) ->
 
   _fakeUser =
-    showUser: true
-    isRegisteredUser: true
-    userName: 'Billy Bob Thorton'
+    name: 'Billy Bob Thorton'
+  _fakeUser2 =
+    name: 'Kevin Bacon'
 
   beforeEach ->
     jasmine.getFixtures().set sandbox() # Set up an empty #sandbox div that gets cleaned up after every test
 
   describe 'ui_widgets/user_menu', ->
-
     it 'exists', ->
       expect(userMenu).toBeDefined()
-
-    it 'requires an app object in order to be instantiated', ->
-      expect
-
     it 'creates the expected markup by default', ->
       $sandbox = $('#sandbox')
       expect($sandbox).toBeEmpty()
       $sandbox.html userMenu.el
       expect($sandbox).not.toBeEmpty()
       expect($sandbox).toContain '.userMenu'
+    it 'is instantiated by default', ->
+      expect(typeof userMenu).toEqual("object")
 
-    it 'has a .start method. Giving it a model makes it render. When the model changes it re-renders', ->
-      $sandbox = $('#sandbox')
-      $sandbox.html userMenu.el
-      expect(userMenu.start).toBeDefined()
-      userMenu.start new Backbone.Model _fakeUser
-      expect($sandbox).toContainText(_fakeUser.userName)
-      userMenu.model.set 'userName', 'Kevin Bacon'
-      expect($sandbox).toContainText 'Kevin Bacon'
+    describe 'it uses a .start() method', ->
+      it 'has a .start method', ->
+        expect(userMenu.start).toBeDefined()
+      it 'expects the .start method to sent an appInstance', ->
+        expect( -> userMenu.start()).toThrow()
+      it 'populates its model through the start method', ->
+        userMenu.start
+          session:
+            user: new Backbone.Model()
+        expect(userMenu.model).toBeDefined()
+        expect(userMenu.model).toBeInstanceOf(Backbone.Model)
 
+    describe 'it builds itself based on a model', ->
+      it 'renders itself with model data', ->
+        userMenu.start
+          session:
+            user: new Backbone.Model _fakeUser
+        $('#sandbox').html userMenu.el
+        expect($('#sandbox')).toContainText _fakeUser.name
+
+      it 're-renders when its model changes', ->
+        userMenu.start
+          session:
+            user: new Backbone.Model _fakeUser
+        $sandbox = $('#sandbox')
+        $sandbox.html userMenu.el
+        expect($sandbox).toContainText _fakeUser.name
+        expect($sandbox).not.toContainText _fakeUser2.name
+        userMenu.model.set _fakeUser2
+        expect($sandbox).toContainText _fakeUser2.name
