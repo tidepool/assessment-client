@@ -1,5 +1,5 @@
 define [
-  'Backbone'
+  'backbone'
   'Handlebars'
   "text!./team.hbs"
 ], (

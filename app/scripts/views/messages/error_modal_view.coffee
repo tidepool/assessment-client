@@ -1,6 +1,6 @@
 define [
   'jquery',
-  'Backbone',
+  'backbone',
   'Handlebars',
   "text!./error_modal_view.hbs", 
   'bootstrap'], ($, Backbone, Handlebars, tempfile) ->

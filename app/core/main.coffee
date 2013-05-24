@@ -2,12 +2,15 @@
 # http://requirejs.org/docs/api.html#packages
 
 define [
+  # Global Dependencies
   'underscore'
-  'Backbone'
+  'backbone'
+  # Package Dependencies
   './config'
   './analytics'
   './mediator'
   './view'
+  # External Dependencies
   'controllers/session_controller'
   'routers/main_router'
 ],

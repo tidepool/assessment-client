@@ -1,6 +1,6 @@
 define [
   'underscore',
-  'Backbone'], (_, Backbone) ->  
+  'backbone'], (_, Backbone) ->
   UserEvent = Backbone.Model.extend
     urlRoot: "/api/v1/user_events"
 

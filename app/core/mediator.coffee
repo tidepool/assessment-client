@@ -1,7 +1,7 @@
 
 define [
   'underscore'
-  'Backbone'
+  'backbone'
   'user/login_dialog'
   'user/profile_dialog'
 ],
@@ -35,7 +35,7 @@ define [
     _showProfile: ->
       console.log "#{_me}._showProfile()"
       @profileDialog = new ProfileDialog
-        user: @options.app.session.user
+        model: @options.app.session.user
       @profileDialog.show()
 
 

@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'Backbone'
+  'backbone'
   'Handlebars'
   'modelsAndCollections/levels'
   'ui_widgets/steps_remaining'

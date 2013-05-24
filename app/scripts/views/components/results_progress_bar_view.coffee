@@ -1,6 +1,6 @@
 define [
   'jquery',
-  'Backbone',
+  'backbone',
   'Handlebars',
   "text!./results_progress_bar_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   ResultsProgressBarView = Backbone.View.extend

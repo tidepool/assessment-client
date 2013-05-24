@@ -84,6 +84,12 @@
             <button class="btn">Oranges</button>
         </div>
 
+        <p class="muted">.btn-group.btn-rocker.gendered</p>
+        <div class="btn-group btn-rocker gendered" data-toggle="buttons-radio">
+            <button class="btn active">Boys</button>
+            <button class="btn">Girls</button>
+        </div>
+
         <h2>Forms</h2>
         <form action="">
             <label>Label</label>
@@ -143,7 +149,7 @@
                 });
 
                 require([
-                    'Backbone',
+                    'backbone',
                     'text!ui_widgets/divider.hbs',
                     'ui_widgets/steps_remaining',
                     'ui_widgets/hold_please',

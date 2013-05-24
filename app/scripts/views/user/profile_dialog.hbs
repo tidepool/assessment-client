@@ -6,26 +6,30 @@
 </div>
 
 
-<div class="modal-body">
-    <i
-        class="avatar large interactive spaceBelow"
-        title="{{city}}, {{state}}. {{country}}. DOB: {{dob}} timezone: {{timezone}}"
-    >
-        {{#if image}}
+<div class="modal-body" title="{{city}}, {{state}}. {{country}}. DOB: {{date_of_birth}} timezone: {{timezone}}">
+    {{#if image}}
+        <i class="avatar interactive">
             <img src="{{image}}" alt="{{name}}'s Profile Image" />
-        {{/if}}
-    </i>
+        </i>
+    {{else}}
+        <i class="avatar large interactive"></i>
+    {{/if}}
+
 
     <form>
 
         <input type="text" id="name" name="name" placeholder="Name" class="input large input-block-level" value="{{name}}" >
         <input type="text" id="email" name="email" placeholder="email@address.com" class="input large input-block-level" value="{{email}}">
 
-        <div class="btn-group btn-rocker spaceBelow gendered" data-toggle="buttons-radio">
-            <button class="btn active">Male</button>
-            <button class="btn">Female</button>
-        </div>
-        <input type="hidden" name="gender" value="{{gender}}" />
+
+        <!--<div class="btn-group btn-rocker spaceBelow gendered" data-toggle="buttons-radio">-->
+            <!--<button class="btn active" type="button">Male</button> {{! without a type, buttons are submit by default. http://stackoverflow.com/questions/9643806/form-is-submitted-when-i-click-on-the-button-in-form-how-to-avoid-this }}-->
+            <!--<button class="btn" type="button">Female</button>-->
+            <!--<input type="hidden" name="gender" value="{{gender}}" />-->
+        <!--</div>-->
+
+
+        <div id="ProfileErrorHolder"></div>
 
         <button class="btn btn-large btn-block btn-inverse" type="submit">Save</button>
     </form>

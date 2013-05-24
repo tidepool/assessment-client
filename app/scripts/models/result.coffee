@@ -1,6 +1,6 @@
 define [
   'jquery',
-  'Backbone'], ($, Backbone) ->  
+  'backbone'], ($, Backbone) ->
   Result = Backbone.Model.extend
     urlRoot: ->
       assessment_id = @get('assessment_id')

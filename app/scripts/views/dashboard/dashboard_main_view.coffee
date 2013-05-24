@@ -1,7 +1,7 @@
 define [
   'jquery',
   'underscore',
-  'Backbone',
+  'backbone',
   'Handlebars', 
   'nested_view',
   'text!./dashboard_main_view.hbs',

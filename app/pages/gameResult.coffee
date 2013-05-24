@@ -1,5 +1,5 @@
 define [
-  'Backbone'
+  'backbone'
   'Handlebars'
   'controllers/summary_results_controller'
 ], (

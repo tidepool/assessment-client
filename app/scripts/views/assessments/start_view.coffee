@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'Backbone'
+  'backbone'
   'Handlebars'
   "text!./start_view.hbs"
 ],

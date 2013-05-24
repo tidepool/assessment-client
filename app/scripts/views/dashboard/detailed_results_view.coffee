@@ -1,7 +1,7 @@
 define [
   'jquery',
   'underscore',
-  'Backbone',
+  'backbone',
   'Handlebars', 
   'nested_view',
   'text!./detailed_results_view.hbs'], ($, _, Backbone, Handlebars, NestedView, tempfile) ->

@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'Backbone'
+  'backbone'
   'Handlebars'
   "text!./header.hbs"
 ],

@@ -2,7 +2,7 @@
 
 define [
   'jquery'
-  'Backbone'
+  'backbone'
   'Handlebars'
   "text!./steps_remaining.hbs"
 ],

@@ -1,6 +1,6 @@
 define [
   'jquery',
-  'Backbone',
+  'backbone',
   'Handlebars',
   "text!./profile_summary_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   ProfileSummaryView = Backbone.View.extend

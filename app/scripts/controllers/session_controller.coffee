@@ -1,7 +1,7 @@
 define [
   'jquery'
   'underscore'
-  'Backbone'
+  'backbone'
   'Handlebars'
   'models/user'
 ],

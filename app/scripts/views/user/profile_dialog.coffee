@@ -1,9 +1,13 @@
 define [
   'jquery'
   'underscore'
-  'Backbone'
+  'backbone'
   'Handlebars'
-  "text!./profile_dialog.hbs"
+  'text!./profile_dialog.hbs'
+  'syphon'
+  'ui_widgets/hold_please'
+  'ui_widgets/psst'
+  'bower_components_ext/bootstrap_buttons-radio'
 ],
 (
   $
@@ -11,67 +15,53 @@ define [
   Backbone
   Handlebars
   tmpl
+  Syphon
+  holdPlease
+  psst
 ) ->
 
   _me = 'views/user/profile_dialog'
+  _submitBtnSel = '[type=submit]'
+  _errorHolderSel = '#ProfileErrorHolder'
 
   ProfileDialog = Backbone.View.extend
+
     className: 'profileDialog modal small hide fade'
     events:
-      "submit form": "submitProfile"
+      'submit form': '_submitProfile'
+      'input change': '_onInputChange'
+
 
     # ----------------------------------------------------------- Backbone Methods
-    initialize: (options) ->
-      @user = options.user
-      @_registerHandlebarsHelpers()
+    initialize: ->
       @tmpl = Handlebars.compile tmpl
       @render()
 
     render: ->
-      @$el.html @tmpl @getTemplateData()
+      @$el.html @tmpl @model.attributes
       @
 
 
-    # ----------------------------------------------------------- Custom / Helper Methods
-    _registerHandlebarsHelpers: ->
-      Handlebars.registerHelper 'isMale', (gender) =>
-        return "checked" if gender is 'male' 
-      Handlebars.registerHelper 'isFemale', (gender) =>
-        return "checked" if gender is 'female'
-
-    getTemplateData: ->
-      user = 
-        name: @user.get('name')
-        email: @user.get('email')
-        imageUrl: @user.get('image')
-        dob: @user.get('date_of_birth')
-        gender: @user.get('gender')
-        timezone: @user.get('timezone')
-        city: @user.get('city')
-        state: @user.get('state')
-        country: @user.get('country')
-
-    getNewValues: ->
-      @user.set
-        name: $('#name').val()
-        email: $('#email').val()
-        date_of_birth: $('#dob').val()
-        gender: $('#gender').val()
-        timezone: $('#timezone').val()
-        city: $('#city').val()
-        state: $('#state').val()
-        country: $('#country').val()
-
-
     # ----------------------------------------------------------- Event Handlers
-    submitProfile: (e) ->
+    _onInputChange: ->
+      psst.hide()
+
+    _submitProfile: (e) ->
       e.preventDefault()
-      @getNewValues()
-      @user.save()
+      holdPlease.show @$(_submitBtnSel)
+      formData = Syphon.serialize e.target
+      @model.set formData
+      @model.save()
       .done =>
-        console.log("Profile changes saved")
-      .fail =>
-        console.log("Error saving changes")
+        console.log("#{_me}._submitProfile.done()")
+        holdPlease.hide @$(_submitBtnSel)
+        @close()
+      .fail (msg) =>
+        psst
+          sel: _errorHolderSel
+          msg: msg || 'Unknown Error Saving Profile'
+          type: 'error'
+        holdPlease.hide @$(_submitBtnSel)
 
 
     # ----------------------------------------------------------- Public API

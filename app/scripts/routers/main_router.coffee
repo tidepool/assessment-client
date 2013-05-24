@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'Backbone'
+  'backbone'
   'models/result'
   'controllers/dashboard_controller'
 ],

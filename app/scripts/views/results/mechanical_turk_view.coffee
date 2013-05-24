@@ -1,6 +1,6 @@
 define [
   'jquery',
-  'Backbone',
+  'backbone',
   'Handlebars',
   "text!./mechanical_turk_view.hbs"], ($, Backbone, Handlebars, tempfile) ->
   MechanicalTurkView = Backbone.View.extend

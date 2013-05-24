@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'Backbone'
+  'backbone'
   'dashboard/dashboard_main_view'
   'models/assessment'
 ], (

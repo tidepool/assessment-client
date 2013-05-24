@@ -1,7 +1,7 @@
 
 define [
   'underscore'
-  'Backbone'
+  'backbone'
   'Handlebars'
   './layout'
   'text!ui_widgets/main_nav.hbs'

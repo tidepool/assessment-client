@@ -1,7 +1,7 @@
 
 define [
   'underscore'
-  'Backbone'
+  'backbone'
   './layouts/layout-site'
   './layouts/layout-game'
   'ui_widgets/user_menu'

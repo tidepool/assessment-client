@@ -2,7 +2,7 @@
 
 /*global _, Backbone, Handlebars, require, provide, JST */
 
-define(['underscore','Backbone', 'Handlebars'], function(_, Backbone, Handlebars) {
+define(['underscore','backbone', 'Handlebars'], function(_, Backbone, Handlebars) {
 // (function(){
 //   _ = this._ != null ? this._ : require('underscore');
 //   Backbone = this.Backbone != null ? this.Backbone : require('backbone');

@@ -1,5 +1,5 @@
 define [
-  'Backbone'], (Backbone) ->  
+  'backbone'], (Backbone) ->
   Definition = Backbone.Model.extend
 
   Definition

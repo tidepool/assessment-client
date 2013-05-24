@@ -22,16 +22,16 @@
     z-index: 3
 
   // Left Side
-  .btn:first-child
+  .btn:first-of-type
     border-right: none
     @include linear-gradient( -50deg, $colorBackground - 10, $colorBackground )
     @include transform-origin(right center)
     @include transform( perspective(300px) rotateY(30deg) scaleX(.97) )
     box-shadow: inset 1px 0 0 0 white, -1px 0 0 0 $colorBackground - 30, -4px 0 0 -1px $colorBackground - 20, 0 1px 0 0 $colorBackground - 40, 0 -1px 0 0 $colorBackground - 20
     padding-left: $spaceLil + $spaceTiny
-  .btn-large:first-child
+  .btn-large:first-of-type
     padding-left: $space
-  .btn.active:first-child
+  .btn.active:first-of-type
     //margin-left: 0
     //padding-right: 0
     background-image: none
@@ -44,7 +44,7 @@
 
 
   // Right Side
-  .btn:last-child
+  .btn:last-of-type
     border-left: none
     @include linear-gradient( 50deg, $colorBackground - 10, $colorBackground )
     @include transform-origin(left center)
@@ -53,9 +53,9 @@
     //margin-right: -6px
     //padding-left: $spaceLil + 6px
     padding-right: $spaceLil + $spaceTiny
-  .btn-large:last-child
+  .btn-large:last-of-type
     padding-right: $space
-  .btn.active:last-child
+  .btn.active:last-of-type
     //margin-right: 0
     //padding-left: 0
     background-image: none
@@ -66,14 +66,14 @@
 
     // Mix Highlight
     box-shadow: inset 5px 0 1px 8px $colorBackground, inset -5px 0 1px $colorGood
-  .btn:last-child:hover
+  .btn:last-of-type:hover
     border-left: none
 
 
   // Gendered rocker button
   // Assumes Male gender on the left
 .btn-rocker.gendered
-  .btn.active:first-child
+  .btn.active:first-of-type
     box-shadow: inset 8px 0 20px -8px transparentize($colorMale,.5), inset -5px 0 1px 8px $colorBackground, inset 5px 0 1px $colorMale
-  .btn.active:last-child
+  .btn.active:last-of-type
     box-shadow: inset -8px 0 20px -8px transparentize($colorFemale,.6), inset 5px 0 1px 8px $colorBackground, inset -5px 0 1px $colorFemale

@@ -1,6 +1,6 @@
 define [
   'underscore'
-  'Backbone'
+  'backbone'
   'user/profile_dialog'
 ],
 (
@@ -32,7 +32,7 @@ define [
 
     it '.show makes it show up and add expected content to the dom', ->
       p = new Profile
-        user: _mockUser()
+        model: _mockUser()
       p.show()
       waits 200
       runs ->
@@ -43,7 +43,7 @@ define [
 
     it '.close hides it', ->
       p = new Profile
-        user: _mockUser()
+        model: _mockUser()
       p.show()
       waits 200
       runs ->
