@@ -23,7 +23,6 @@ define [], () ->
       components: "scripts/views/components"
       results: "scripts/views/results"
       stages: "scripts/views/stages"
-      user: "scripts/views/user"
       routers: "scripts/routers"
       models: "scripts/models"
       controllers: "scripts/controllers"

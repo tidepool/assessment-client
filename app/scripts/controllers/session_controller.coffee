@@ -3,30 +3,28 @@ define [
   'underscore'
   'backbone'
   'Handlebars'
-  'models/user'
 ],
 (
   $
   _
   Backbone
   Handlebars
-  User
 ) ->
 
   _me = 'controllers/session_controller'
   _authUrlSuffix = '/oauth/authorize'
+  _msgLoginSuccess = "Logged in successfully."
+  _msgLoginError = 'Unable to log in.'
+  _msgUserInfoSuccess = "Got user info successfully."
+  _msgUserInfoError = 'Unable to get user info.'
 
 
-  # Constructor
+  # ----------------------------------------------- Constructor
   SessionController = (appCoreInstance) ->
     @app = appCoreInstance
-    @_apiServer = @app.cfg.apiServer
-    @_authUrl = "#{@_apiServer}#{_authUrlSuffix}"
-    @appId = @app.cfg.appId
-    @appSecret = @app.cfg.appSecret
+    @user = @app.user
+    @_authUrl = "#{@app.cfg.apiServer}#{_authUrlSuffix}"
     @accessToken = localStorage['access_token']
-    @transferOwnerFlag = false
-    @user = new User
     $.ajaxSetup
       type: 'POST',
       timeout: 5000
@@ -35,30 +33,27 @@ define [
         'Accept': 'application/json'
       dataType: 'json'
       beforeSend: (jqXHR, options) =>
-        if @loggedIn()
+        if @_hasCurrentToken()
           tokenHeader = "Bearer #{@accessToken}"
           jqXHR.setRequestHeader('Authorization', tokenHeader)
+
+    @_fetchAuthedUser() # Attempt to get the current user by default.
     @ # Constructors return `this`
 
 
-  # Prototype
+  # ----------------------------------------------- Prototype
   SessionController.prototype =
-    loginAsGuest: ->
-      @signIn('guest', '')
-
-    loginAsCurrent: ->
-      @signIn('current', '')
 
     signIn: (email, password) ->
       deferred = $.Deferred()
       if @isValid({email: email, password: password}) or (email is 'guest') or (email is 'current')
         console.log "#{_me}.signIn() isValid"
-        if @loggedIn()
-          @finishLogin()
-          .done =>
-            deferred.resolve("Success")
-          .fail =>
-            deferred.reject("Cannot get user info")
+        if @_hasCurrentToken()
+          @_fetchAuthedUser()
+          .done ->
+            deferred.resolve _msgUserInfoSuccess
+          .fail ->
+            deferred.reject _msgUserInfoError
         else
           $.ajax
             url: @_authUrl
@@ -68,20 +63,10 @@ define [
               response_type: "password"
               email: email
               password: password
-              client_id: @appId
-              client_secret: @appSecret
-          .done (data, textStatus, jqXHR) =>
-            console.log "Successful Login"
-            @accessToken = data['access_token']
-            @persistLocally data
-            @finishLogin()
-            .done  =>
-              deferred.resolve "Success"
-            .fail  =>
-              deferred.reject "Cannot get user info"
-          .fail (jqXHR, textStatus, errorThrown) =>
-            console.log "Unsuccesful Login"
-            deferred.reject(textStatus)
+              client_id: @app.cfg.appId
+              client_secret: @app.cfg.appSecret
+          .done(@_ajaxAuthSuccess.bind @)
+          .fail(@_ajaxAuthFail.bind @)
       else
         deferred.reject(@validationError.message)
       deferred.promise()
@@ -94,19 +79,20 @@ define [
         user = new User({email: email, password: password, passwordConfirm: passwordConfirm})
         user.save()
         .done (data, textStatus, jqXHR) =>
-          console.log("User successfully created.")
+          console.log "#{_me}.register().done()"
           @signIn(email, password)
           .done =>
-            console.log("User logged in")
-            deferred.resolve("User logged in")
+            console.log "#{_me}.register().done().signIn().done()"
+            deferred.resolve _msgLoginSuccess
           .fail =>
-            console.log("User could not log in")
-            deferred.reject("User could not log in")
-        .fail (jqXHR, textStatus, errorThrown) =>
-          console.log("User can not be created.")
+            console.log "#{_me}.register().done().signIn().fail()"
+            deferred.reject _msgLoginError
+        .fail (jqXHR, textStatus, errorThrown) ->
+          console.log "#{_me}.register().fail()"
           deferred.reject(jqXHR.response)
       deferred.promise()
 
+    # TODO: move property validation into the user model
     isValid: (attrs) ->
       @validationError = @validate(attrs)
       if @validationError?
@@ -131,79 +117,60 @@ define [
         return {
           message: "Passwords do not match."
         }
-
       return null
 
-    persistLocally: (data) ->
-      localStorage['access_token'] = data['access_token']
-      localStorage['expires_in'] = data['expires_in'] * 1000 # Store in ms
-      localStorage['token_received'] = new Date().getTime()
-      localStorage['refresh_token'] = data['refresh_token']
 
-    logout: ->
-      @_clearOutLocalStorage()
-      @user.clear()
-      @app.trigger('session:logout_success')
-     
-    loggedIn: ->
-      if @accessToken? and @accessToken isnt "" and @accessToken isnt "undefined"
+    # ---------------------------------------------- Depreciated Methods
+    # TODO: Have other modules get user info from the user model instead.
+    getUserInfo: ->
+      deferred = $.Deferred()
+      @user.id = '-'
+      @user.fetch()
+      .done (data, textStatus, jqXHR) =>
+        deferred.resolve(jqXHR.response)
+      .fail (jqXHR, textStatus, errorThrown) ->
+        deferred.reject(textStatus)
+      deferred.promise()
+
+
+    # ---------------------------------------------- Callbacks
+    _ajaxAuthSuccess: (data) ->
+      @app.cfg.debug && console.log "#{_me}.signIn().done()"
+      @accessToken = data.access_token
+      @_persistLocally data
+      @app.trigger('session:auth_success')
+      @_fetchAuthedUser()
+        .done  ->
+          @app.cfg.debug && console.log "#{_me}._ajaxAuthSuccess._fetchAuthedUser().done()"
+          #deferred.resolve _msgUserInfoSuccess
+        .fail  ->
+          @app.cfg.debug && console.log "#{_me}._ajaxAuthSuccess._fetchAuthedUser().fail()"
+          #deferred.reject _msgUserInfoError
+
+    _ajaxAuthFail: (jqXHR, textStatus, errorThrown) ->
+      @app.cfg.debug && console.log "#{_me}._ajaxAuthFail()"
+      @app.trigger('session:auth_fail')
+      #deferred.reject(textStatus)
+
+
+    # ---------------------------------------------- Private Login Helpers
+    _hasCurrentToken: ->
+      if @accessToken?.length #and @accessToken isnt "" and @accessToken isnt "undefined"
         currentTime = new Date().getTime()
         expires_in = parseInt(localStorage['expires_in'])
         token_received = parseInt(localStorage['token_received'])
         if expires_in? and token_received? and currentTime < token_received + expires_in
-          # still not expired
-          return true
-        else
-          return false
-      else
-        return false
+          curToken = true
+      curToken
 
-    loginUsingOauth: (provider, popupWindowSize) ->
-      # Inspired by: https://github.com/ptnplanet/backbone-oauth
-      # Popup a Window to let the providers (Facebook, Twitter...) show their login UI
-      left = window.screenLeft + 50 
-      top = window.screenTop + 50
-      width = popupWindowSize.width
-      height = popupWindowSize.height
-      window.OAuthRedirect = _.bind(@onRedirect, @)
-      window.open(@setupAuthUrl(provider), "Login", "width=#{width}, height=#{height}, left=#{left}, top=#{top}, menubar=no")
-
-    # authorizeThrough: facebook, twitter or fitbit
-    setupAuthUrl: (authorizeThrough) ->
-      redirectUri = encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
-      authorize_param = "authorize_through=#{authorizeThrough}&"
-      url = "#{@_authUrl}?#{authorize_param}client_id=#{@appId}&redirect_uri=#{redirectUri}&response_type=token"
-      console.log url
-      url
-
-    parseHash: (hash) ->
-      params = {}
-      queryString = hash.substring(1)
-      regex = /([^&=]+)=([^&]*)/g
-      while (m = regex.exec(queryString)) 
-        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
-      params
-
-    # Called as a global object by the opened window
-    onRedirect: (hash, location) ->
-      params = @parseHash(hash)
-      console.log("Redirected with params #{params['access_token']}, hash #{hash}")
-      if params['access_token']
-        @accessToken = params['access_token']
-        @persistLocally(params)
-        @finishLogin()
-      else
-        console.log("Odd Error, no token received but redirected")
-        @app.trigger('session:login_fail')
-
-    finishLogin: ->
+    _fetchAuthedUser: ->
+      return unless @_hasCurrentToken()
       deferred = $.Deferred()
       @user.id = 'finish_login'
       @user.fetch
         data:
           guestId = @user.get('id') if @user.isGuest()
-      .done (data, textStatus, jqXHR) =>
-        @app.trigger('session:login_success')
+      .done (data, textStatus, jqXHR) ->
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) =>
         console.log("Error creating user #{textStatus}")
@@ -211,29 +178,67 @@ define [
         deferred.reject(textStatus)
       deferred.promise()
 
-    getUserInfo: ->
-      deferred = $.Deferred()
-      if @user?
-        deferred.resolve("Already have user info")
-      else
-        @user.id = '-'
-        @user.fetch()
-        .done (data, textStatus, jqXHR) =>
-          # localStorage['guest'] = @user.get('guest')
-          deferred.resolve(jqXHR.response)
-        .fail (jqXHR, textStatus, errorThrown) ->
-          console.log("Error creating user #{textStatus}")
-          deferred.reject(textStatus)
-      deferred.promise()
 
-
-    # ---------------------------------------------- Private Methods
+    # ---------------------------------------------- Private Utility Methods
     _clearOutLocalStorage: ->
       delete localStorage['access_token']
       delete localStorage['expires_in']
       delete localStorage['token_received']
       delete localStorage['refresh_token']
       @accessToken = null
+
+    # authorizeThrough: facebook, twitter or fitbit
+    _buildExternalServiceUrl: (authorizeThrough) ->
+      redirectUri = encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
+      authorize_param = "authorize_through=#{authorizeThrough}&"
+      url = "#{@_authUrl}?#{authorize_param}client_id=#{@app.cfg.appId}&redirect_uri=#{redirectUri}&response_type=token"
+      url
+
+    _parseHash: (hash) ->
+      params = {}
+      queryString = hash.substring(1)
+      regex = /([^&=]+)=([^&]*)/g
+      while (m = regex.exec(queryString))
+        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
+      params
+
+    _persistLocally: (data) ->
+      localStorage['access_token'] = data['access_token']
+      localStorage['expires_in'] = data['expires_in'] * 1000 # Store in ms
+      localStorage['token_received'] = new Date().getTime()
+      localStorage['refresh_token'] = data['refresh_token']
+
+
+    # ------------------------------------------------ Public API
+    logInAsGuest: -> @signIn('guest', '')
+
+    loginUsingOauth: (provider, popupWindowSize) ->
+      # Inspired by: https://github.com/ptnplanet/backbone-oauth
+      # Popup a Window to let the providers (Facebook, Twitter...) show their login UI
+      left = window.screenLeft + 50
+      top = window.screenTop + 50
+      width = popupWindowSize.width
+      height = popupWindowSize.height
+      window.OAuthRedirect = _.bind(@externalAuthServiceCallback, @)
+      window.open(@_buildExternalServiceUrl(provider), "Login", "width=#{width}, height=#{height}, left=#{left}, top=#{top}, menubar=no")
+
+    logOut: ->
+      @_clearOutLocalStorage()
+      @user.clear()
+      @app.trigger('session:logout_success')
+
+    # Called as a global object by the opened window
+    externalAuthServiceCallback: (hash, location) ->
+      console.log "#{_me}.externalAuthServiceCallback()"
+      params = @_parseHash hash
+      console.log("Redirected with token #{params['access_token']}, hash #{hash}")
+      if params['access_token']
+        @accessToken = params['access_token']
+        @_persistLocally params
+        @_fetchAuthedUser()
+      else
+        console.log 'Odd Error, no token received but redirected'
+        @app.trigger 'session:login_fail'
 
 
 

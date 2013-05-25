@@ -28,36 +28,17 @@ define [
 
     # ------------------------------------------------ Actual Route Responses
     showHome: ->      @app.view.asSite 'pages/home'
-      #if @app.session.loggedIn() and not @app.session.user?
-      #  @app.session.loginAsCurrent()
     showAbout: ->     @app.view.asSite 'pages/about'
     showTeam: ->      @app.view.asSite 'pages/team'
     showInvestors: -> @app.view.asSite 'pages/investors'
     showGame: ->      @app.view.asGame 'pages/game'
     showResult: ->    @app.view.asGame 'pages/gameResult'
-
     showDashboard: ->
       console.log "#{_me}.showDashboard()"
-      # Only show it, if the user is not guest and is logged in
-#      if (@app.session.user? and @app.session.user.isGuest()) or not @app.session.loggedIn()
-#        loginDialog = new LoginDialog({session: @app.session})
-#        $('#content').html loginDialog.render().el
-#      else
-      if @app.session.user?
-        controller = new DashboardController()
-        controller.initialize
-          session: @app.session
-        controller.render()
-      else
-        @app.session.loginAsCurrent()
-          .done =>
-            controller = new DashboardController()
-            controller.initialize
-              session: @app.session
-            controller.render()
-          .fail =>
-            console.log("Something went wrong, cannot log in")
-
+      controller = new DashboardController()
+      controller.initialize
+        session: @app.session
+      controller.render()
 
 
     # ----------------------------- Supporting Methods

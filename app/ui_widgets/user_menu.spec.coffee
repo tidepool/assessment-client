@@ -36,23 +36,20 @@ define [
         expect( -> userMenu.start()).toThrow()
       it 'populates its model through the start method', ->
         userMenu.start
-          session:
-            user: new Backbone.Model()
+          user: new Backbone.Model()
         expect(userMenu.model).toBeDefined()
         expect(userMenu.model).toBeInstanceOf(Backbone.Model)
 
     describe 'it builds itself based on a model', ->
       it 'renders itself with model data', ->
         userMenu.start
-          session:
-            user: new Backbone.Model _fakeUser
+          user: new Backbone.Model _fakeUser
         $('#sandbox').html userMenu.el
         expect($('#sandbox')).toContainText _fakeUser.name
 
       it 're-renders when its model changes', ->
         userMenu.start
-          session:
-            user: new Backbone.Model _fakeUser
+          user: new Backbone.Model _fakeUser
         $sandbox = $('#sandbox')
         $sandbox.html userMenu.el
         expect($sandbox).toContainText _fakeUser.name

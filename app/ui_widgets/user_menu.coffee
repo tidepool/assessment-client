@@ -27,9 +27,9 @@ define [
     initialize: -> console.log "#{_me}.initialize()"
 
     start: (appCoreSingleton) ->
-      throw new Error('Need an options.session.user to start') unless appCoreSingleton.session.user
+      throw new Error('Need an options.user to start') unless appCoreSingleton.user
       @app = appCoreSingleton
-      @model = @app.session.user
+      @model = @app.user
       #@listenTo @model, 'all', (e) -> console.log "#{_me}.model event: #{e}"
       @listenTo @model, 'change', @render
       @render()

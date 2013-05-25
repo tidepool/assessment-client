@@ -11,6 +11,7 @@ define [
   './mediator'
   './view'
   # External Dependencies
+  'models/user'
   'controllers/session_controller'
   'routers/main_router'
 ],
@@ -21,6 +22,7 @@ define [
   Analytics
   Mediator
   View
+  User
   SessionController
   Router
 ) ->
@@ -32,6 +34,7 @@ define [
     @cfg = config
     _.extend this, Backbone.Events
     @cfg.debug && @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
+    @user = new User()
     @
 
   Core.prototype =

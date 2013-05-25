@@ -1,37 +1,32 @@
 define [
   'underscore'
   'backbone'
-  './profile_dialog'
+  './login_dialog'
 ],
 (
   _
   Backbone
-  Profile
+  Dialog
 ) ->
 
-  _myClassName = '.profileDialog'
+  _myClassName = '.loginDialog'
 
   _mockUser = ->
     new Backbone.Model
-      name: 'Jimmy Buffet'
       email: 'jjb@musicians.net'
       gender: 'male'
-      dob: '6/25/1960'
-      timezone: '-7'
-      city: 'San Francisco'
-      state: 'California'
-      country: 'United States'
 
   beforeEach ->
     jasmine.getFixtures().set sandbox() # Set up an empty #sandbox div that gets cleaned up after every test
 
-  describe 'views/user/profile_dialog', ->
+  describe 'views/user/login_dialog', ->
 
     it 'exists', ->
-      expect(Profile).toBeDefined()
+      expect(Dialog).toBeDefined()
 
-    it '.show makes it show up and add expected content to the dom', ->
-      p = new Profile
+    xit '.show makes it show up and add expected content to the dom', ->
+      p = new Dialog
+        app: _.extend {}, Backbone.Events
         model: _mockUser()
       p.show()
       waits 200
@@ -41,8 +36,8 @@ define [
         p.close()
       waits 200
 
-    it '.close hides it', ->
-      p = new Profile
+    xit '.close hides it', ->
+      p = new Dialog
         model: _mockUser()
       p.show()
       waits 200

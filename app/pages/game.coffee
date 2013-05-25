@@ -24,7 +24,7 @@ define [
     initialize: ->
       console.log "#{_me}.initialize()"
       # Always create a user, initially as a guest if someone is not already loggedin
-      app.session.loginAsGuest()
+      app.session.logInAsGuest()
         .done =>
           @_createAndShowAssessment(_defaultAssessmentId)
         .fail =>

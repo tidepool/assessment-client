@@ -38,9 +38,9 @@ define [
 
     # ----------------------------------------------------------- Backbone Methods
     initialize: ->
-      throw new Error('Need options.app and options.session') unless @options.app? and @options.session?
+      throw new Error('Need options.app') unless @options.app?
       @tmpl = Handlebars.compile tmpl
-      @options.app.on 'session:login_success', @close, @
+      @listenTo @model, 'sync', @close
 
     render: ->
       @$el.html @tmpl()
@@ -53,18 +53,18 @@ define [
 
     _logIn: (data) ->
       if data.passwordConfirm
-        @options.session.register(data.email, data.password, data.passwordConfirm)
+        @options.app.session.register(data.email, data.password, data.passwordConfirm)
           .done(@_callbackSuccess)
           .fail(_.bind(@_callbackFail, @))
       else
-        @options.session.signIn(data.email, data.password)
+        @options.app.session.signIn(data.email, data.password)
           .done(@_callbackSuccess)
           .fail(@_callbackFail)
 
 
     # ----------------------------------------------------------- Event Handlers
     _clickedSignInFacebook: (e) ->
-      @options.session.loginUsingOauth('facebook', {width: 1006, height: 775})
+      @options.app.session.loginUsingOauth('facebook', {width: 1006, height: 775})
       holdPlease.show $(e.target)
 
     _clickedForgotPass: ->
@@ -104,12 +104,9 @@ define [
 
 
     # ----------------------------------------------------------- Public API
-    show: ->
-      @render()
-      @$el.modal 'show'
+    show: -> @render().$el.modal 'show'
 
-    close: ->
-      @$el.modal 'hide'
+    close: -> @$el.modal 'hide'
 
 
   LoginDialog

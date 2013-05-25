@@ -2,8 +2,8 @@
 define [
   'underscore'
   'backbone'
-  'user/login_dialog'
-  'user/profile_dialog'
+  'scripts/views/user/login_dialog'
+  'scripts/views/user/profile_dialog'
 ],
 (
   _
@@ -28,21 +28,21 @@ define [
     _showLogin: ->
       console.log "#{_me}._showLogin()"
       @loginDialog = new LoginDialog
+        model: @options.app.user
         app: @options.app
-        session: @options.app.session
       @loginDialog.show()
 
     _showProfile: ->
       console.log "#{_me}._showProfile()"
       @profileDialog = new ProfileDialog
-        model: @options.app.session.user
+        model: @options.app.user
       @profileDialog.show()
 
 
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->
       console.log "#{_me}._actionLogOut()"
-      @options.app.session.logout()
+      @options.app.session.logOut()
 
 
 

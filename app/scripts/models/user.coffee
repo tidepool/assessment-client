@@ -6,11 +6,15 @@ define [
   _
   Backbone
 ) ->
+
+  _me = 'models/user'
+
   User = Backbone.Model.extend
     urlRoot: ->
       "#{window.apiServerUrl}/api/v1/users"
 
     initialize:  ->
+      @on 'all', (e) -> console.log "#{_me} event: #{e}"
 
     isGuest: ->
       @get('guest')

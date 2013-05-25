@@ -23,6 +23,8 @@ define [
 
     fetchData: ->
       deferred = $.Deferred()
+
+      # TODO: Get the user info through the user model instead of through the session
       @session.getUserInfo()
       .done =>
         # Get the last assesment
