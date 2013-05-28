@@ -1,5 +1,5 @@
 
-{{#if name}}
+{{#if nickname}}
     <button class="btn btn-clear btn-large dropdown-toggle">
         <ul class="dropdown-menu">
             {{#if guest }}
@@ -20,10 +20,10 @@
         </ul>
         <i class="avatar">
             {{#if image}}
-                <img src="{{image}}" alt="{{name}}'s Profile Image" />
+                <img src="{{image}}" alt="{{nickname}}'s Profile Image" />
             {{/if}}
         </i>
-        <span title="{{email}}">{{name}}</span>
+        <span title="{{name}}: {{email}}">{{nickname}}</span>
         <i class="icon-chevron-sign-down muted"></i>
     </button>
 {{else}}

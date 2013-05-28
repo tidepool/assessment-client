@@ -30,7 +30,6 @@ define [
       throw new Error('Need an options.user to start') unless appCoreSingleton.user
       @app = appCoreSingleton
       @model = @app.user
-      #@listenTo @model, 'all', (e) -> console.log "#{_me}.model event: #{e}"
       @listenTo @model, 'change', @render
       @render()
       @
@@ -42,11 +41,13 @@ define [
       delete @model
 
     render: ->
-      @$el.html @tmpl @_parseModel(@model)
+      @app.cfg.debug && console.log "#{_me}.render()"
+      userData = @_parseModel @model
+      @$el.html @tmpl userData
       @
 
     _parseModel: (model) ->
-      smplModel = _.pick model.attributes, 'city', 'email', 'name', 'image', 'guest'
+      smplModel = _.pick model.attributes, 'nickname', 'email', 'name', 'city', 'image', 'guest'
       smplModel.name = 'Guest' if smplModel.guest
       smplModel
 

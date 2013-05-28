@@ -41,6 +41,8 @@ define [
       throw new Error('Need options.app') unless @options.app?
       @tmpl = Handlebars.compile tmpl
       @listenTo @model, 'sync', @close
+      @listenTo @model, 'invalid', @_onModelInvalid
+      @listenTo @model, 'error', @_onModelError
 
     render: ->
       @$el.html @tmpl()
@@ -50,17 +52,12 @@ define [
     # ----------------------------------------------------------- Helper Methods
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
-
-    _logIn: (data) ->
-      if data.passwordConfirm
-        @options.app.session.register(data.email, data.password, data.passwordConfirm)
-          .done(@_callbackSuccess)
-          .fail(_.bind(@_callbackFail, @))
-      else
-        @options.app.session.signIn(data.email, data.password)
-          .done(@_callbackSuccess)
-          .fail(@_callbackFail)
-
+    _showErr: (msg) ->
+      psst.hide()
+      psst
+        sel: "#LoginErrorHolder"
+        msg: msg || 'Unknown Error'
+        type: 'error'
 
     # ----------------------------------------------------------- Event Handlers
     _clickedSignInFacebook: (e) ->
@@ -89,18 +86,23 @@ define [
       psst.hide()
       holdPlease.show _submitSel
       formData = Syphon.serialize e.target
-      formData.passwordConfirm = '' if formData.loginType == 'signIn'
-      @_logIn formData
+      formData.passwordConfirm = '' unless formData.loginType == 'register'
+      @model.set formData,
+        silent: true
+      if @model.isValid()
+        if @model.isNew()
+          @options.app.session.register()
+        else
+          @options.app.session.signIn()
 
-    _callbackSuccess: (msg) ->
-      console.log "#{_me}._callbackSuccess(): #{msg}"
-
-    _callbackFail: (msg) ->
-      psst
-        sel: "#LoginErrorHolder"
-        msg: msg || 'Unknown Login Failure'
-        type: 'error'
+    _onModelInvalid: (model, msg) ->
+      @_showErr msg
       holdPlease.hide _submitSel
+
+    _onModelError: (model, xhr, options) ->
+      @_showErr "#{xhr.status}: #{xhr.statusText}"
+      holdPlease.hide _submitSel
+
 
 
     # ----------------------------------------------------------- Public API

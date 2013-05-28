@@ -37,7 +37,7 @@ define [
       console.log "#{_me}.showDashboard()"
       controller = new DashboardController()
       controller.initialize
-        session: @app.session
+        session: @app.user.session
       controller.render()
 
 
