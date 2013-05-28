@@ -196,6 +196,14 @@ module.exports = (grunt) ->
         ]
 
     copy:
+      images: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
+        files: [
+          expand: true
+          cwd: "<%= yeoman.app %>/images/fake_glyphicons"
+          src: "glyphicons*.png"
+          dest: "<%= yeoman.dev %>/img"
+        ]
+
       dist:
         files: [
           expand: true
@@ -221,6 +229,7 @@ module.exports = (grunt) ->
   grunt.registerTask "build", [
     "clean:dev"
     "exec:convert_jqueryui_amd"
+    "copy:images"
     "coffee:dev"
     "coffee:spec"
     "compass"
