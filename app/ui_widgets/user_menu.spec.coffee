@@ -10,9 +10,9 @@ define [
 ) ->
 
   _fakeUser =
-    name: 'Billy Bob Thorton'
+    nickname: 'Billy Bob Thorton'
   _fakeUser2 =
-    name: 'Kevin Bacon'
+    nickname: 'Kevin Bacon'
 
   beforeEach ->
     jasmine.getFixtures().set sandbox() # Set up an empty #sandbox div that gets cleaned up after every test
@@ -45,14 +45,14 @@ define [
         userMenu.start
           user: new Backbone.Model _fakeUser
         $('#sandbox').html userMenu.el
-        expect($('#sandbox')).toContainText _fakeUser.name
+        expect($('#sandbox')).toContainText _fakeUser.nickname
 
       it 're-renders when its model changes', ->
         userMenu.start
           user: new Backbone.Model _fakeUser
         $sandbox = $('#sandbox')
         $sandbox.html userMenu.el
-        expect($sandbox).toContainText _fakeUser.name
-        expect($sandbox).not.toContainText _fakeUser2.name
+        expect($sandbox).toContainText _fakeUser.nickname
+        expect($sandbox).not.toContainText _fakeUser2.nickname
         userMenu.model.set _fakeUser2
-        expect($sandbox).toContainText _fakeUser2.name
+        expect($sandbox).toContainText _fakeUser2.nickname

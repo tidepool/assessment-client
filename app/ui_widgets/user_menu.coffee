@@ -41,7 +41,6 @@ define [
       delete @model
 
     render: ->
-      @app.cfg.debug && console.log "#{_me}.render()"
       userData = @_parseModel @model
       @$el.html @tmpl userData
       @
