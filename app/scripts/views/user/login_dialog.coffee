@@ -59,6 +59,7 @@ define [
         msg: msg || 'Unknown Error'
         type: 'error'
 
+
     # ----------------------------------------------------------- Event Handlers
     _clickedSignInFacebook: (e) ->
       @options.app.session.loginUsingOauth('facebook', {width: 1006, height: 775})
@@ -102,7 +103,6 @@ define [
     _onModelError: (model, xhr, options) ->
       @_showErr "#{xhr.status}: #{xhr.statusText}"
       holdPlease.hide _submitSel
-
 
 
     # ----------------------------------------------------------- Public API

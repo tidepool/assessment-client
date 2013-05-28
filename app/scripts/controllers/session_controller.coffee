@@ -13,10 +13,6 @@ define [
 
   _me = 'controllers/session_controller'
   _authUrlSuffix = '/oauth/authorize'
-  _msgLoginSuccess = "Logged in successfully."
-  _msgLoginError = 'Unable to log in.'
-  _msgUserInfoSuccess = "Got user info successfully."
-  _msgUserInfoError = 'Unable to get user info.'
 
 
   # ----------------------------------------------- Constructor
@@ -62,52 +58,16 @@ define [
           console.log "#{_me}.signIn().ajax().fail()"
           @user.trigger 'error', @user, jqXHR
 
-
-    register: (email, password, passwordConfirm) ->
-      deferred = $.Deferred()
-
-      @user.save({
-        email: email
-        password: password
-        passwordConfirm: passwordConfirm
-      },{
-        wait: true # don't change the local model until the server confirms a save
-      })
+    register: ->
+      @user.save()
       .done (data, textStatus, jqXHR) =>
-        console.log "#{_me}.register().done()"
-        @signIn(email, password)
-        .done =>
-          console.log "#{_me}.register().done().signIn().done()"
-          deferred.resolve _msgLoginSuccess
-        .fail =>
-          console.log "#{_me}.register().done().signIn().fail()"
-          deferred.reject _msgLoginError
-      .fail (jqXHR, textStatus, errorThrown) ->
-        console.log "#{_me}.register().fail()"
-        deferred.reject(jqXHR.response)
-
-      deferred.promise()
-
-    # TODO: move property validation into the user model
-    isValid: (attrs) ->
-      @validationError = @validate(attrs)
-      if @validationError?
-        return false
-      else
-        return true
+        console.log "#{_me}.user.save().done()"
+        @signIn()
 
 
     # ---------------------------------------------- Depreciated Methods
     # TODO: Have other modules get user info from the user model instead.
-    getUserInfo: ->
-      deferred = $.Deferred()
-      @user.id = '-'
-      @user.fetch()
-      .done (data, textStatus, jqXHR) =>
-        deferred.resolve(jqXHR.response)
-      .fail (jqXHR, textStatus, errorThrown) ->
-        deferred.reject(textStatus)
-      deferred.promise()
+    getUserInfo: -> throw new Error ('Get user information from models/user or app.user instead')
 
 
     # ---------------------------------------------- Callbacks

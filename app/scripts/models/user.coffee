@@ -22,7 +22,8 @@ define [
 
     initialize:  ->
       @on 'all', (e) -> console.log "#{_me} event: #{e}"
-      @on 'change', @_calculateNickname
+      @on 'change:name', @_calculateNickname
+      @on 'change:email', @_calculateNickname
       @on 'error', @_onModelError
 
     #http://backbonejs.org/#Model-validate
@@ -36,9 +37,8 @@ define [
       return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
       # Register mode
       if @isNew()
-        debugger
         return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
-        return 'The password and confirm password fields must match' unless attrs.password is attrs.passwordConfirm
+        return 'The passwords should match' unless attrs.password is attrs.passwordConfirm
       return null # no validation errors
 
 
