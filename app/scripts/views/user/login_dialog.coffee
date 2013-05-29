@@ -7,6 +7,7 @@ define [
   'text!./login_dialog.hbs'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
+  'composite_views/perch'
   'bower_components_ext/bootstrap_buttons-radio'
 ],
 (
@@ -18,15 +19,15 @@ define [
   tmpl
   holdPlease
   psst
+  perch
 ) ->
+
   _me = "views/user/login_dialog"
-  _className = 'loginDialog'
   _confirmPassSel = '#Login-confirm'
   _submitSel = '#Login-submit'
 
   LoginDialog = Backbone.View.extend
-    tagName: 'aside'
-    className: "#{_className} modal small hide fade"
+    className: "loginDialog"
     events:
       "click #SignInFacebook": "_clickedSignInFacebook"
       "click #ActionSignIn": "_modeSignIn"
@@ -38,11 +39,12 @@ define [
 
     # ----------------------------------------------------------- Backbone Methods
     initialize: ->
-      throw new Error('Need options.app') unless @options.app?
+      throw new Error('Need options.app and a model') unless @options.app? and @model?
       @tmpl = Handlebars.compile tmpl
-      @listenTo @model, 'sync', @close
+      @listenTo @model, 'sync', @hide
       @listenTo @model, 'invalid', @_onModelInvalid
       @listenTo @model, 'error', @_onModelError
+      @_show()
 
     render: ->
       @$el.html @tmpl()
@@ -50,8 +52,14 @@ define [
 
 
     # ----------------------------------------------------------- Helper Methods
+    _show: ->
+      perch.show
+        content: @
+        btn1: null
+
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
+
     _showErr: (msg) ->
       psst.hide()
       psst
@@ -96,6 +104,10 @@ define [
         else
           @options.app.session.signIn()
 
+    _onSync: (model, data) ->
+      console.log("#{_me}._onSync()")
+      perch.hide()
+
     _onModelInvalid: (model, msg) ->
       @_showErr msg
       holdPlease.hide _submitSel
@@ -106,9 +118,7 @@ define [
 
 
     # ----------------------------------------------------------- Public API
-    show: -> @render().$el.modal 'show'
-
-    close: -> @$el.modal 'hide'
+    hide: -> perch.hide()
 
 
   LoginDialog

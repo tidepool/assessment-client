@@ -13,9 +13,9 @@ define [
 
   _me = 'composite_views/perch'
   _defaultParent = 'body'
-  _bodySel = '#PerchBody'
+  _contentSel = '#PerchBody'
 
-  Model = Backbone.Model.extend
+  PerchModel = Backbone.Model.extend
     defaults:
       title: ''
       content: 'This is the default message.'
@@ -33,8 +33,9 @@ define [
 
     # ---------------------------------------------------------------------- Backbone Methods
     initialize: ->
+      @model = new PerchModel()
+      @render()
       $(_defaultParent).append @el
-      @model = new Model()
       @listenTo @model, 'change', @render
 
     render: ->
@@ -47,9 +48,11 @@ define [
     _onBtn1Click: (e) -> console.log "#{_me}._onBtn1Click()"
     _onBtn2Click: (e) -> console.log "#{_me}._onBtn2Click()"
 
+    _onModalShow: ->
+      console.log "#{_me}._onModalShow()"
+
     _onModalShown: ->
       console.log "#{_me}._onModalShown()"
-      @_addChildView()
 
     _onModalHide: ->
       console.log "#{_me}._onModalHide()"
@@ -62,23 +65,27 @@ define [
     # ---------------------------------------------------------------------- Private Helper Methods
     _showSimpleMsg: (msg) ->
       @_showOptionsObject
+        title: null
         content: "<p>#{msg}</p>"
 
     _showBackboneView: (options) ->
       @_childView = options.content
       options.content = null
+      options.title = options.title || null # blank out the title if one wasn't set
       @_showOptionsObject options
+      @_addChildView()
 
     _showOptionsObject: (options) ->
       @model.set options
-      @$el.modal 'show'
       @_bindDomEvents()
+      @$el.modal 'show'
 
     _addChildView: ->
-      $(_bodySel).prepend @_childView?.render().el
+      $(_contentSel).prepend @_childView?.render().el
 
     _viewCleanup: ->
       @$el
+        .off('show')
         .off('shown')
         .off('hide')
         .off('hidden')
@@ -88,6 +95,7 @@ define [
 
     _bindDomEvents: ->
       @$el
+        .on('show', @_onModalShow.bind @)
         .on('shown', @_onModalShown.bind @)
         .on('hide', @_onModalHide.bind @)
         .on('hidden', @_onModalHidden.bind @)

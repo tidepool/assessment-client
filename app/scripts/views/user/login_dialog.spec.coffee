@@ -10,46 +10,69 @@ define [
 ) ->
 
   _myClassName = '.loginDialog'
+  _animationTime = 350
 
   _mockUser = ->
     new Backbone.Model
       email: 'jjb@musicians.net'
       gender: 'male'
 
-  beforeEach ->
-    jasmine.getFixtures().set sandbox() # Set up an empty #sandbox div that gets cleaned up after every test
+  _factory = ->
+    new Dialog
+      model: _mockUser()
+      app: {}
 
   describe 'views/user/login_dialog', ->
 
     it 'exists', ->
       expect(Dialog).toBeDefined()
 
-    xit '.show makes it show up and add expected content to the dom', ->
-      p = new Dialog
-        app: _.extend {}, Backbone.Events
-        model: _mockUser()
-      p.show()
-      waits 200
+    it 'throws an error if not instantiated properly', ->
+      expect( -> new Dialog()).toThrow()
+
+    it 'instantiation makes it show up and add expected content to the dom', ->
+      login = _factory()
+      waits _animationTime
       runs ->
         expect($('body')).toContain _myClassName
-        expect($(_myClassName)).toContainText _mockUser.name
-        p.close()
-      waits 200
+        expect($(_myClassName)).toContain 'input'
+        login.hide()
+      waits _animationTime
 
-    xit '.close hides it', ->
-      p = new Dialog
-        model: _mockUser()
-      p.show()
-      waits 200
+    it '.hide hides it', ->
+      login = _factory()
+      waits _animationTime
       runs ->
         expect($(_myClassName)).toBeVisible()
-        p.close()
-      waits 200
+        login.hide()
+      waits _animationTime
       runs ->
         expect($(_myClassName)).not.toBeVisible()
 
+    describe 'it can log in or register', ->
 
+      it 'starts in log in mode', ->
+        login = _factory()
+        waits _animationTime
+        runs ->
+          expect($('body')).toContain _myClassName
+          expect( $("[name='passwordConfirm']") ).not.toBeVisible()
+          expect( $("[name='loginType']") ).toHaveValue 'signIn'
+          login.hide()
+        waits _animationTime
 
+      it 'can switch to register mode', ->
+        login = _factory()
+        waits _animationTime
+        runs ->
+          expect($('body')).toContain _myClassName
+          $("#ActionRegister").click()
+          expect( $("[name='passwordConfirm']") ).toBeVisible()
+        waits 10
+        runs ->
+          expect( $("[name='loginType']") ).toHaveValue 'register'
+          login.hide()
+        waits _animationTime
 
 
 

@@ -12,7 +12,11 @@ define [
   _myClassName = 'perch'
   _mySel = ".#{_myClassName}"
   _testMsg = 'Raindrops keep falling on my head.'
-  _animationTime = 250
+  _testMsg2 = 'In Hertford, Hereford, and Hampshire, hurricanes hardly ever happen.'
+  _testObj =
+    title: 'Test Title'
+    content: _testMsg
+  _animationTime = 300
 
   describe 'composite_views/perch', ->
     it 'exists and is already instantiated', -> expect(perch).toBeDefined()
@@ -42,5 +46,20 @@ define [
           perch.hide()
         waits _animationTime
 
+    describe 'in cleans up after itself nicely', ->
 
+      it 'blanks out the title if a previous perch user had a title', ->
+        perch.show _testObj
+        waits _animationTime
+        runs ->
+          expect( $(_mySel) ).toContainText _testObj.title
+          perch.hide()
+        waits _animationTime
+        runs ->
+          perch.show _testMsg2
+        waits _animationTime
+        runs ->
+          expect( $(_mySel) ).not.toContainText _testObj.title
+          perch.hide()
+        waits _animationTime
 

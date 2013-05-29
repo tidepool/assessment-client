@@ -38,7 +38,8 @@ define [
     initialize: ->
       @tmpl = Handlebars.compile tmpl
       @listenTo @model, 'error', @_onError
-      @listenTo @model, 'sync', @_onSync
+      @listenTo @model, 'invalid', @_onInvalid
+      @listenTo @model, 'sync', @hide
       @_show()
 
     render: ->
@@ -68,21 +69,25 @@ define [
         wait: true # Don't update the client model until the server state is changed
         validateProfile: true # Do the validation as a profile save not as a login
 
-    _onSync: (model, data) ->
-      console.log("#{_me}._onSync()")
-      perch.hide()
-
-    _onError: (model, xhr) ->
-      #console.log "#{_me}._onError()"
-      holdPlease.hide @$(_submitBtnSel)
-      if xhr.status is 0
-        msg = 'Unknown Server Error'
-      else
-        msg = "#{xhr.status}: #{xhr.statusText}"
+    _showErr: (msg) ->
+      psst.hide()
       psst
         sel: _errorHolderSel
         msg: msg
         type: 'error'
+      holdPlease.hide @$(_submitBtnSel)
+
+    _onError: (model, xhr) ->
+      if xhr.status is 0
+        msg = 'Unknown Server Error'
+      else
+        msg = "#{xhr.status}: #{xhr.statusText}"
+      @_showErr msg
+
+    _onInvalid: (model, msg) ->
+      @_showErr msg
+
+
 
 
     # ----------------------------------------------------------- Public API

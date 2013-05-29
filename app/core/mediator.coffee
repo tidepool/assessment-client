@@ -29,7 +29,6 @@ define [
       loginDialog = new LoginDialog
         model: @options.app.user
         app: @options.app
-      loginDialog.show()
 
     _showProfile: ->
       profileDialog = new ProfileDialog

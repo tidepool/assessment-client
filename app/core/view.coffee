@@ -20,7 +20,8 @@ define [
   Me = Backbone.View.extend
 
     initialize: ->
-      @setElement('body')
+      #@setElement('body')
+      $('body').append @el
       userMenu.start @options.app
 
     render: ()->

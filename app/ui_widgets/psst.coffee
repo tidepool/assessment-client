@@ -45,6 +45,7 @@ define [
       @$el
         .attr('class', @className)
         .remove()
+      @
 
     _hideAll: ->
       $(".#{_className}").remove()

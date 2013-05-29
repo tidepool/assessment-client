@@ -1,41 +1,38 @@
 
+<button class="btn btn-block btn-primary btn-large facebook" id="SignInFacebook">
+  <i class="icon-facebook icon-large"></i>
+  Sign in <span class="muted">with</span> Facebook
+</button>
 
-    <div class="modal-body">
-        <button class="btn btn-block btn-primary btn-large facebook" id="SignInFacebook">
-          <i class="icon-facebook icon-large"></i>
-          Sign in <span class="muted">with</span> Facebook
-        </button>
+<div class="divider">
+    <b class="rule"></b>
+    <p>Or</p>
+    <b class="rule"></b>
+</div>
 
-        <div class="divider">
-            <b class="rule"></b>
-            <p>Or</p>
-            <b class="rule"></b>
+
+
+<form id="SigninForm">
+    <h3>
+        Use Your Email
+        <div class="btn-group btn-rocker" data-toggle="buttons-radio">
+            <button id="ActionSignIn" class="btn active" value="signIn" type="button">Sign In</button>
+            <button id="ActionRegister" class="btn" value="register" type="button">Register</button>
+            <input id="LoginType" type="hidden" name="loginType" value="signIn" />
         </div>
+    </h3>
 
+    <input name="email" class="large input-block-level" type="email" placeholder="Email Address" />
+    <input name="password" class="large input-block-level" type="password" placeholder="Password" />
+    <input name="passwordConfirm" id="Login-confirm" class="large input-block-level" type="password" style="display:none;" placeholder="Confirm Password" />
 
+    <div id="LoginErrorHolder"></div>
+    <button id="Login-submit" class="btn btn-large btn-block" type="submit">Get Started</button>
 
-        <form id="SigninForm">
-            <h3>
-                Use Your Email
-                <div class="btn-group btn-rocker" data-toggle="buttons-radio">
-                    <button id="ActionSignIn" class="btn active" value="signIn" type="button">Sign In</button>
-                    <button id="ActionRegister" class="btn" value="register" type="button">Register</button>
-                    <input id="LoginType" type="hidden" name="loginType" value="signIn" />
-                </div>
-            </h3>
-
-            <input name="email" class="large input-block-level" type="email" placeholder="Email Address" />
-            <input name="password" class="large input-block-level" type="password" placeholder="Password" />
-            <input name="passwordConfirm" id="Login-confirm" class="large input-block-level" type="password" style="display:none;" placeholder="Confirm Password" />
-
-            <div id="LoginErrorHolder"></div>
-            <button id="Login-submit" class="btn btn-large btn-block" type="submit">Get Started</button>
-
-            <label for="Login-remember" class="small inlineBlock">
-                <input name="rememberMe" id="Login-remember" type="checkbox" checked />
-                Remember Me
-            </label>
-            <a id="Login-forgot" class="pull-right small" href="">Forgot Your Password?</a>
-        </form>
-    </div>
+    <label for="Login-remember" class="small inlineBlock">
+        <input name="rememberMe" id="Login-remember" type="checkbox" checked />
+        Remember Me
+    </label>
+    <a id="Login-forgot" class="pull-right small" href="">Forgot Your Password?</a>
+</form>
 

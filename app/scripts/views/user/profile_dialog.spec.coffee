@@ -10,7 +10,7 @@ define [
 ) ->
 
   _myClassName = '.profileDialog'
-  _animationTime = 250
+  _animationTime = 300
 
   _mockUser = ->
     new Backbone.Model
