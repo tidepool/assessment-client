@@ -39,7 +39,7 @@ define [
       @listenTo @model, 'change', @render
 
     render: ->
-      console.log "#{_me}.render()"
+      #console.log "#{_me}.render()"
       @$el.html @tmpl @model.attributes
       @
 
@@ -48,17 +48,8 @@ define [
     _onBtn1Click: (e) -> console.log "#{_me}._onBtn1Click()"
     _onBtn2Click: (e) -> console.log "#{_me}._onBtn2Click()"
 
-    _onModalShow: ->
-      console.log "#{_me}._onModalShow()"
-
-    _onModalShown: ->
-      console.log "#{_me}._onModalShown()"
-
-    _onModalHide: ->
-      console.log "#{_me}._onModalHide()"
-
     _onModalHidden: ->
-      console.log "#{_me}._onModalHidden()"
+      #console.log "#{_me}._onModalHidden()"
       @_viewCleanup()
 
 
@@ -84,21 +75,13 @@ define [
       $(_contentSel).prepend @_childView?.render().el
 
     _viewCleanup: ->
-      @$el
-        .off('show')
-        .off('shown')
-        .off('hide')
-        .off('hidden')
+      @$el.off('hidden')
       if @_childView?
         @_childView.close?()
         @_childView.remove()
 
     _bindDomEvents: ->
-      @$el
-        .on('show', @_onModalShow.bind @)
-        .on('shown', @_onModalShown.bind @)
-        .on('hide', @_onModalHide.bind @)
-        .on('hidden', @_onModalHidden.bind @)
+      @$el.on 'hidden', _.bind(@_onModalHidden, @)
 
 
     # ---------------------------------------------------------------------- Public API
