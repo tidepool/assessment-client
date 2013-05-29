@@ -53,7 +53,7 @@ define [
             password: @user.get 'password'
             client_id: @cfg.appId
             client_secret: @cfg.appSecret
-        .done( @_ajaxAuthSuccess.bind(@) )
+        .done( _.bind(@_ajaxAuthSuccess, @) )
         .fail (jqXHR, textStatus, errorThrown) =>
           console.log "#{_me}.signIn().ajax().fail()"
           @user.trigger 'error', @user, jqXHR
@@ -117,7 +117,9 @@ define [
 
 
     # ------------------------------------------------ Public API
-    logInAsGuest: -> @signIn('guest', '')
+    logInAsGuest: ->
+      @user.set( email: 'guest' )
+      @signIn()
 
     loginUsingOauth: (provider, popupWindowSize) ->
       # Inspired by: https://github.com/ptnplanet/backbone-oauth

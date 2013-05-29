@@ -1,18 +1,15 @@
 
+
+
+
 {{#if nickname}}
+
     <button class="btn btn-clear btn-large dropdown-toggle">
         <ul class="dropdown-menu">
-            {{#if guest }}
-                <li><a id="ActionShowLogin">
-                    <i class="icon-lock"></i>
-                    Guest Log In
-                </a></li>
-            {{else}}
-                <li><a id="ActionShowProfile">
-                    <i class="icon-user"></i>
-                    Profile
-                </a></li>
-            {{/if}}
+            <li><a id="ActionShowProfile">
+                <i class="icon-user"></i>
+                Profile
+            </a></li>
             <li><a id="ActionLogOut">
                 <i class="icon-unlink"></i>
                 Log Out
@@ -26,7 +23,9 @@
         <span title="{{name}}: {{email}}">{{nickname}}</span>
         <i class="icon-chevron-sign-down muted"></i>
     </button>
+
 {{else}}
+
     <button id="ActionShowLogin" class="btn btn-link btn-large" href="">
         <i class="icon-lock icon-large"></i>
         {{#if guest}}
@@ -35,4 +34,8 @@
             Log In
         {{/if}}
     </button>
+
 {{/if}}
+
+
+

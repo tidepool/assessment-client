@@ -47,7 +47,7 @@ define [
         @render()
 
 
-    # ----------------------------------------- Public API
+    # ------------------------------------------------------------- Public API
     asSite: (viewModuleString) ->
       #console.log "#{_me}.asSite(#{viewModuleString})"
       @_curLayout = new SiteLayout

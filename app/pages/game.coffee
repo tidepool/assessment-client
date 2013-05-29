@@ -21,24 +21,38 @@ define [
 
   Me = Backbone.View.extend
     className: 'gamePage'
+
+
+    # ------------------------------------------------------------- Backbone Methods
     initialize: ->
       console.log "#{_me}.initialize()"
-      # Always create a user, initially as a guest if someone is not already loggedin
-      app.session.logInAsGuest()
-        .done =>
-          @_createAndShowAssessment(_defaultAssessmentId)
-        .fail =>
-          # This is a catastrophic fail of the API server, it is probably down.
-          throw new Error 'session.loginAsGuest().fail()'
-          errorView = new ErrorModalView
-            title: "Login Error"
-            message: "Cannot log in to the server, server may be down."
-          errorView.display()
+      if app.user.isLoggedIn()
+        console.log("#{_me} user is logged in")
+        @_start()
+      else
+        app.session.logInAsGuest()
+
     render: (content) ->
       markup = content || ''
       console.log "#{_me}.render(#{markup})"
       @$el.html markup
       @
+
+
+    # ------------------------------------------------------------- Helper Methods
+    _start: -> @_createAndShowAssessment _defaultAssessmentId
+
+    _whatToDoNext: ->
+      app.session.logInAsGuest()
+        .done =>
+          @_start()
+        .fail =>
+          # This is a catastrophic fail of the API server, it is probably down.
+          throw new Error "#{_me} app.session.loginAsGuest().fail()"
+          errorView = new ErrorModalView
+            title: "Login Error"
+            message: "Cannot log in to the server, server may be down."
+          errorView.display()
 
     _createAndShowAssessment: (definitionId) ->
       console.log "#{_me}._createAndShowAssessment()"
@@ -83,6 +97,8 @@ define [
         console.log 'Waiting the final completed request to be sent.'
       else
         throw new Error "Error with stage #{@currentStageNo}"
+
+    # ------------------------------------------------------------- Public API
 
   Me
 

@@ -36,9 +36,7 @@ define [
 
 
     # ------------------------------------------------ Action command handlers
-    _actionLogOut: ->
-      console.log "#{_me}._actionLogOut()"
-      @options.app.session.logOut()
+    _actionLogOut: -> @options.app.session.logOut()
 
 
   Me

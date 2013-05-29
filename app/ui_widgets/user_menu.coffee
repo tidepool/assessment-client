@@ -47,9 +47,7 @@ define [
       @
 
     _parseModel: (model) ->
-      smplModel = _.pick model.attributes, 'nickname', 'email', 'name', 'city', 'image', 'guest'
-      smplModel.name = 'Guest' if smplModel.guest
-      smplModel
+      _.pick model.attributes, 'nickname', 'email', 'name', 'city', 'image', 'guest'
 
     _clickedLogIn: -> @app?.trigger 'session:showLogin'
     _clickedLogOut: -> @app?.trigger 'session:logOut'

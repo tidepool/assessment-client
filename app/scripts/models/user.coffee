@@ -21,7 +21,7 @@ define [
       }
 
     initialize:  ->
-      #@on 'all', (e) -> console.log "#{_me} event: #{e}"
+      @on 'all', (e) -> console.log "#{_me} event: #{e}"
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'error', @_onModelError
@@ -51,7 +51,7 @@ define [
     # If a nickname isn't specified, use the name or email field
     _calculateNickname: ->
       console.log "#{_me}._calculateNickname()"
-      nick = @get('name') || @get('email')
+      nick = @get('name') || @get('email') if not @isGuest()
       @set
         nickname: nick,
         {silent: true}
@@ -98,6 +98,7 @@ define [
     isNew: -> @get('loginType') == 'register'
     isGuest: -> !! @get('guest')
     hasCurrentToken: ->
+      curToken = false
       if @get('accessToken')?.length #and @accessToken isnt "" and @accessToken isnt "undefined"
         currentTime = new Date().getTime()
         expires_in = parseInt(localStorage['expires_in'])
@@ -105,6 +106,7 @@ define [
         if expires_in? and token_received? and currentTime < token_received + expires_in
           curToken = true
       curToken
+    isLoggedIn: -> @hasCurrentToken()
 
 
   User

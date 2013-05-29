@@ -21,9 +21,6 @@ define [
     # Override these defaults in your inheriting class
     tagName: 'section'
     tmpl: Handlebars.compile tmpl
-    initialize: ->
-      #console.log "#{_me}.initialize()"
-      @
 
     # Private
     _cleanupChildren: ->
@@ -32,8 +29,7 @@ define [
 
     # Public
     show: (view) ->
-      #console.log "#{_me}.render()"
-      @_cleanupChildren() # A layout class method
+      @_cleanupChildren()
       @_curView = view
       @$('#ContentRegion').html @_curView.render().el
 
