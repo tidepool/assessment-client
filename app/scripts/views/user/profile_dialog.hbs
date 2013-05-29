@@ -1,36 +1,28 @@
 
 
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
-    <h2>Profile</h2>
-</div>
+
+{{#if image}}
+    <i class="avatar interactive">
+        <img src="{{image}}" alt="{{name}}'s Profile Image" />
+    </i>
+{{else}}
+    <i class="avatar large interactive"></i>
+{{/if}}
 
 
-<div class="modal-body" title="{{city}}, {{state}}. {{country}}. DOB: {{date_of_birth}} timezone: {{timezone}}">
-    {{#if image}}
-        <i class="avatar interactive">
-            <img src="{{image}}" alt="{{name}}'s Profile Image" />
-        </i>
-    {{else}}
-        <i class="avatar large interactive"></i>
-    {{/if}}
+<form title="{{city}}, {{state}}. {{country}}. DOB: {{date_of_birth}} timezone: {{timezone}}">
+    <input type="text" name="name" placeholder="Name" class="input large input-block-level" value="{{name}}" >
+    <input type="text" name="email" placeholder="email@address.com" class="input large input-block-level" value="{{email}}">
+
+    <!--<div class="btn-group btn-rocker spaceBelow gendered" data-toggle="buttons-radio">-->
+        <!--<button class="btn active" type="button">Male</button> {{! without a type, buttons are submit by default. http://stackoverflow.com/questions/9643806/form-is-submitted-when-i-click-on-the-button-in-form-how-to-avoid-this }}-->
+        <!--<button class="btn" type="button">Female</button>-->
+        <!--<input type="hidden" name="gender" value="{{gender}}" />-->
+    <!--</div>-->
+
+    <div id="ProfileErrorHolder"></div>
+
+    <button class="btn btn-large btn-block btn-inverse" type="submit">Save</button>
+</form>
 
 
-    <form>
-
-        <input type="text" name="name" placeholder="Name" class="input large input-block-level" value="{{name}}" >
-        <input type="text" name="email" placeholder="email@address.com" class="input large input-block-level" value="{{email}}">
-
-
-        <!--<div class="btn-group btn-rocker spaceBelow gendered" data-toggle="buttons-radio">-->
-            <!--<button class="btn active" type="button">Male</button> {{! without a type, buttons are submit by default. http://stackoverflow.com/questions/9643806/form-is-submitted-when-i-click-on-the-button-in-form-how-to-avoid-this }}-->
-            <!--<button class="btn" type="button">Female</button>-->
-            <!--<input type="hidden" name="gender" value="{{gender}}" />-->
-        <!--</div>-->
-
-
-        <div id="ProfileErrorHolder"></div>
-
-        <button class="btn btn-large btn-block btn-inverse" type="submit">Save</button>
-    </form>
-</div>

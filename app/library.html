@@ -19,6 +19,9 @@
         h2 {
             margin-top: 50px;
         }
+        .modal h2 {
+            margin-top: 10px;
+        }
         .btn-group {
             margin-bottom: 25px;
         }
@@ -105,7 +108,7 @@
         <h2>ui_widgets/steps_remaining</h2>
         <div id="StepsRemainingHolder"></div>
 
-        <h2>Loader</h2>
+        <h2>`holdPlease` Loader</h2>
         <p>
             <button id="HoldBtn" class="btn btn-large">
                 holdPlease('#HoldBtn')
@@ -120,7 +123,7 @@
             <button class="btn btn-link" id="HideLoading">holdPlease.hide()</button>
         </p>
 
-        <h2>Notifications</h2>
+        <h2>`psst` Notifications</h2>
         <p>
             <button id="ShowNotification" class="btn btn-large" title="psst({ sel:'...', msg:'...' })">Add Notification</button>
         </p>
@@ -128,6 +131,15 @@
         <p>
             <button class="btn btn-link" id="HideNotifications">psst.hide()</button>
         </p>
+
+        <h2>`perch` Lightbox</h2>
+        <p>The lightbox can accept any of the following: a simple message string, an object of options like msg and title, or a Backbone View.</p>
+        <form id="LightboxData">
+            <input name="title" type="text" placeholder="lightbox .title" />
+            <textarea name="content" rows="3">The rain in spain stays mainly in the plain.</textarea>
+            <button class="btn btn-block btn-large">Launch Lightbox</button>
+        </form>
+
     </section>
 
     <script src="bower_components/requirejs/require.js"></script>
@@ -150,16 +162,20 @@
 
                 require([
                     'backbone',
+                    'syphon',
                     'text!ui_widgets/divider.hbs',
                     'ui_widgets/steps_remaining',
                     'ui_widgets/hold_please',
-                    'ui_widgets/psst'
+                    'ui_widgets/psst',
+                    'composite_views/perch'
                 ], function (
                     Backbone,
+                    Syphon,
                     dividerMarkup,
                     StepsRemaining,
                     holdPlease,
-                    psst
+                    psst,
+                    perch
                 ) {
                     $('#DividerHolder').append( dividerMarkup )
 
@@ -196,6 +212,16 @@
                     $('#HideNotifications').click(function(){
                         psst.hide()
                     })
+
+
+                    $('#LightboxData').submit(function(e){
+                        e.preventDefault()
+                        data = Syphon.serialize(e.target)
+                        console.log(data)
+                        perch.show(data)
+                    })
+
+
                 });
             });
         });

@@ -21,7 +21,7 @@ define [
       }
 
     initialize:  ->
-      @on 'all', (e) -> console.log "#{_me} event: #{e}"
+      #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'error', @_onModelError
@@ -33,8 +33,13 @@ define [
       # Let's use default browser email validation for now
       #emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ # From http://stackoverflow.com/a/46181/11236
       #return 'That doesn\'t look like a valid email address.' unless emailRegex.test attrs.email
-      return 'The password cannot be blank.' unless attrs.password
-      return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
+
+      if options.validateProfile
+        return 'The name must be filled in.' unless attrs.name
+      else
+        return 'The password cannot be blank.' unless attrs.password
+        return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
+
       # Register mode
       if @isNew()
         return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
@@ -46,8 +51,10 @@ define [
     # If a nickname isn't specified, use the name or email field
     _calculateNickname: ->
       console.log "#{_me}._calculateNickname()"
-      nick = @get('nickname') || @get('name') || @get('email')
-      @set({ nickname: nick }, { silent: true })
+      nick = @get('name') || @get('email')
+      @set
+        nickname: nick,
+        {silent: true}
 
 
     # ----------------------------------------------------------- Callbacks

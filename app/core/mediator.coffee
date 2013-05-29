@@ -26,25 +26,20 @@ define [
 
     # ------------------------------------------------ Display command handlers
     _showLogin: ->
-      console.log "#{_me}._showLogin()"
-      @loginDialog = new LoginDialog
+      loginDialog = new LoginDialog
         model: @options.app.user
         app: @options.app
-      @loginDialog.show()
+      loginDialog.show()
 
     _showProfile: ->
-      console.log "#{_me}._showProfile()"
-      @profileDialog = new ProfileDialog
+      profileDialog = new ProfileDialog
         model: @options.app.user
-      @profileDialog.show()
 
 
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->
       console.log "#{_me}._actionLogOut()"
       @options.app.session.logOut()
-
-
 
 
   Me

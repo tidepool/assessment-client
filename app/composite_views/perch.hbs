@@ -1,0 +1,17 @@
+{{#if title}}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h2>{{title}}</h2>
+    </div>
+{{/if}}
+
+<div class="modal-body" id="PerchBody">
+    {{{content}}}
+
+    {{#btn1}}
+        <button id="PerchBtn1" class="btn btn-large {{className}}">{{text}}</button>
+    {{/btn1}}
+    {{#btn2}}
+        <button id="PerchBtn2" class="btn btn-large btn-block btn-inverse">{{text}}</button>
+    {{/btn2}}
+</div>

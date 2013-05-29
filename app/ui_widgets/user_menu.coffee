@@ -30,11 +30,12 @@ define [
       throw new Error('Need an options.user to start') unless appCoreSingleton.user
       @app = appCoreSingleton
       @model = @app.user
+      #@listenTo @model, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @model, 'change', @render
       @render()
       @
 
-    # Because it's a singleton, this is used for unit testing
+    # Because it's a singleton, this needed for unit testing
     stop: ->
       @stopListening()
       delete @app

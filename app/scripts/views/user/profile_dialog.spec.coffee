@@ -10,6 +10,7 @@ define [
 ) ->
 
   _myClassName = '.profileDialog'
+  _animationTime = 250
 
   _mockUser = ->
     new Backbone.Model
@@ -22,6 +23,10 @@ define [
       state: 'California'
       country: 'United States'
 
+  _factory = ->
+    new Profile
+      model: _mockUser()
+
   beforeEach ->
     jasmine.getFixtures().set sandbox() # Set up an empty #sandbox div that gets cleaned up after every test
 
@@ -30,26 +35,22 @@ define [
     it 'exists', ->
       expect(Profile).toBeDefined()
 
-    it '.show makes it show up and add expected content to the dom', ->
-      p = new Profile
-        model: _mockUser()
-      p.show()
-      waits 200
+    it 'instantiation makes it show up and add expected content to the dom', ->
+      p = _factory()
+      waits _animationTime
       runs ->
         expect($('body')).toContain _myClassName
         expect($(_myClassName)).toContainText _mockUser.name
-        p.close()
-      waits 200
+        p.hide()
+      waits _animationTime
 
-    it '.close hides it', ->
-      p = new Profile
-        model: _mockUser()
-      p.show()
-      waits 200
+    it '.hide hides it', ->
+      p = _factory()
+      waits _animationTime
       runs ->
         expect($(_myClassName)).toBeVisible()
-        p.close()
-      waits 200
+        p.hide()
+      waits _animationTime
       runs ->
         expect($(_myClassName)).not.toBeVisible()
 
