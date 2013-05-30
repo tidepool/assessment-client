@@ -72,7 +72,8 @@ define [
       @_addChildView()
 
     _showOptionsObject: (options) ->
-      options.content = options.content || "<p>#{options.msg}</p>"
+      if options.msg
+        options.content = "<p>#{options.msg}</p>"
       @model.set options
       @_bindDomEvents()
       @$el.modal 'show'
