@@ -40,7 +40,7 @@ define [
   SessionController.prototype =
     signIn: ->
       console.log "#{_me}.signIn()"
-      if @user.hasCurrentToken()
+      if @user.hasCurrentToken() and not @user.isGuest()
         @_fetchAuthedUser()
       else
         $.ajax
