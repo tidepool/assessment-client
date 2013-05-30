@@ -1,10 +1,80 @@
+@import '../bower_components/bourbon/app/assets/stylesheets/_bourbon.scss'
 @import '../styles/_appVars.sass'
 @import '../styles/_colorVars.sass'
+@import '../styles/_helpers.sass'
+
+
+// Most of this file is modifications based on an assumption of an underlying bootstrap modal popup component
+.modal-backdrop
+  background-color: $colorBackground
+.modal-backdrop,
+.modal-backdrop.fade.in
+  opacity: .7
+
+// Faster transitions--the bootstrap ones are too slow
+.fade
+  @include transition (opacity .1s linear)
+.modal.fade
+  @include transition (opacity .1s linear, top .1s ease-out)
 
 
 // Bootstrap Modal Overrides
 .perch.modal
+  position: absolute
+  border-radius: $radiusMed
+  border: $spaceTiny solid $colorBrandContrastNeutralLight
+  +softShadow( transparentize($colorBackground, .3) )
+  text-align: center
+
   .modal-header .close
     position: absolute
     top: $space
     right: $space
+
+  .modal-header
+    border: none
+    padding: $space
+    padding-bottom: 0
+  .modal-body
+    padding: $space
+    max-height: none
+  .modal-header+.modal-body
+    padding-top: $spaceLil
+  .modal-footer
+    padding: 0
+    background: none
+    border: none
+    text-align: center
+
+.perch
+  // Buttons as children of modal
+  .btn-large
+    margin-bottom: $spaceLil
+  // Typography in a modal
+  p,
+  form
+    text-align: left
+  p:last-child,
+  form:last-child,
+  .btn:last-child
+    margin-bottom: 0
+  h3
+    text-align: left
+    min-height: $space
+    line-height: inherit
+    margin: 0 0 $space 0
+  h3 .btn-group
+    float: right
+    margin-top: -$spaceTiny
+
+
+
+// Screen Size Adjustments
+.perch.modal.small
+  width: 300px
+  margin-left: -150px
+
+@media all and (min-width: 450px)
+  .perch.modal.small
+    width: 400px
+    margin-left: -200px

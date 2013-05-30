@@ -20,5 +20,5 @@
   #{$btnClassName}.disabled:hover, #{$btnClassName}[disabled]:hover
     @include linear-gradient( $color - 100, $color - 115 )
 
-@mixin transitionable($speed: 0.15s, $easing: ease-in-out)
-  @include transition (all $speed $easing)
+@mixin transitionable($props: all, $speed: 0.15s, $easing: ease-in-out)
+  @include transition ($props $speed $easing)

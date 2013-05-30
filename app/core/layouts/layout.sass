@@ -9,7 +9,12 @@ header
   .inner
     max-width: $maxSiteWidth
     margin: 0 auto
-    padding: 0 $spaceLil
+    padding: 0
     height: $headerHeight
     line-height: $headerHeight
     box-sizing: border-box
+
+// Sizing changes based on screen width
+@media all and (min-width: 601px)
+  header .inner
+    padding: 0 $spaceLil

@@ -1,0 +1,88 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/_bourbon.scss'
+@import '../../../styles/_appVars.sass'
+@import '../../../styles/_colorVars.sass'
+@import '../../../styles/_helpers.sass'
+
+$hugeIconSize: 100px
+
+
+.stage-reactionTime
+  position: relative
+  text-align: center
+
+  .circle
+    position: relative
+    display: inline-block
+    width: 200px
+    height: 200px
+    border-radius: 50%
+    background: $shadeVeryLight
+    //box-shadow: 0 0 0 $spaceTiny transparent, 0 0 0 $spaceTiny transparent, 0 0 0 $spaceTiny transparent
+    //+transitionable(box-shadow)
+
+  // A check icon shows up if you hit the right circle
+  .circle i
+    display: none
+    position: absolute
+    width: $hugeIconSize
+    height: $hugeIconSize
+    line-height: $hugeIconSize
+    top: 48%
+    left: 50%
+    margin-top: - $hugeIconSize / 2
+    margin-left: - $hugeIconSize / 2
+  .circle i,
+  .circle:hover i
+    color: $highlightThick
+    text-decoration: none
+
+  // Colors
+  .red .circle
+    background: $colorRed
+  .yellow .circle
+    background: $colorYellow
+  .green .circle
+    background: $colorGreen
+  .blue .circle
+    background: $colorBlue
+  .purple .circle
+    background: $colorPurple
+
+  // The target circle
+  //.target .circle:hover
+  //  box-shadow: 0 0 0 $spaceLil white, 0 0 0 $space $highlight
+  //.red.target .circle:hover
+  //  box-shadow: 0 0 0 $spaceLil transparentize($colorRed,.8), 0 0 0 $space transparentize($colorRed,.9)
+  .target .circle:active
+    +transform(scale(.98))
+  .target.hit .circle
+    +animation(radiatingRed 0.3s)
+  .target.hit .circle i
+    display: block
+
+
+// Sizing changes based on screen width
+@media all and (min-width: 321px)
+  .stage-reactionTime .circle
+    width: 300px
+    height: 300px
+@media all and (min-width: 601px)
+  .stage-reactionTime .circle
+    width: 400px
+    height: 400px
+@media all and (min-width: 1001px)
+  .stage-reactionTime .circle
+    width: 600px
+    height: 600px
+
+
+
++keyframes(radiatingRed)
+  0%, 100%
+    box-shadow: 0 0 0 $spaceTiny $highlightThick, 0 0 0 $spaceTiny transparent, 0 0 0 $spaceTiny transparent
+  20%, 90%
+    box-shadow: 0 0 0 $space transparentize($colorRed,.8), 0 0 0 $space transparent, 0 0 0 $space transparent
+  40%, 80%
+    box-shadow: 0 0 0 $space transparentize($colorRed,.7), 0 0 0 $space * 2 transparentize($colorRed,.9), 0 0 0 $space * 2 transparent
+  60%
+    box-shadow: 0 0 0 $space transparentize($colorRed,.6), 0 0 0 $space * 2 transparentize($colorRed,.8), 0 0 0 $space * 3 transparentize($colorRed,.9)

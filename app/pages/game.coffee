@@ -75,7 +75,6 @@ define [
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
-      #curLevel = @levels.at stageId
       # Show the next stage
       if curStage is -1 then @_showWelcome model
       else if curStage < stageCount then @_showLevel curStage

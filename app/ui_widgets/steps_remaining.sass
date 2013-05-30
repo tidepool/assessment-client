@@ -12,14 +12,14 @@
   padding: $spaceTiny
   border-radius: $space / 2
   vertical-align: middle
-  font-size: $fontSizeBody //leaves a nice amount of space between each step
+  font-size: 0 // decides amount of space between each step
 
   .step
     display: inline-block
-    width: $space + $spaceLil
+    width: $spaceLil
     height: 100%
     background: $colorVeryQuiet
-    border-radius: $radiusTiny
+    margin-right: 1px
   .step.completed
     background: $colorGood
   .step:first-child
@@ -31,3 +31,17 @@
 
 header .stepsRemaining
   margin-left: $spaceLil
+
+
+
+// Sizing changes based on screen width
+@media all and (min-width: 601px)
+  .stepsRemaining
+    font-size: $fontSizeBody
+  .stepsRemaining .step
+    width: $space
+    border-radius: $radiusTiny
+    margin-right: 0
+@media all and (min-width: 1001px)
+  .stepsRemaining .step
+    width: $space + $spaceLil

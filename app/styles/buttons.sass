@@ -67,8 +67,6 @@
 
 .btn i // icons in a button
   vertical-align: middle
-  margin-right: $spaceLil
-// muted text in a button
 .btn-link i
   margin-right: $spaceTiny
 .btn-primary .muted,
@@ -80,4 +78,24 @@
 
 
 
+// Screen Size Adjustments
+.btn-large
+  padding: 0 $spaceLil
+.btn-large.btn-primary,
+.btn-large.btn-inverse
+  min-width: $spaceBig
+.btn i
+  margin-right: $spaceTiny
 
+@media all and (min-width: 601px)
+  .btn-large.btn-primary,
+  .btn-large.btn-inverse
+    min-width: $spaceBig * 2
+  .btn-large
+    padding: 0 $space
+  .btn i
+    margin-right: $spaceLil
+@media all and (min-width: 1001px)
+  .btn-large.btn-primary,
+  .btn-large.btn-inverse
+    min-width: $spaceBig * 4
