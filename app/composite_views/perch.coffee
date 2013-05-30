@@ -35,13 +35,9 @@ define [
 
     # ---------------------------------------------------------------------- Backbone Methods
     initialize: ->
-      @model = new PerchModel()
-      @render()
       $(_defaultParent).append @el
-      @listenTo @model, 'change', @render
 
     render: ->
-      #console.log "#{_me}.render()"
       @$el.html @tmpl @model.attributes
       @
 
@@ -53,7 +49,6 @@ define [
     _onBtn2Click: (e) -> console.log "#{_me}._onBtn2Click()"
 
     _onModalHidden: ->
-      #console.log "#{_me}._onModalHidden()"
       @model.attributes.onClose?()
       @_viewCleanup()
 
@@ -61,7 +56,6 @@ define [
     # ---------------------------------------------------------------------- Private Helper Methods
     _showSimpleMsg: (msg) ->
       @_showOptionsObject
-        title: null
         msg: msg
 
     _showBackboneView: (options) ->
@@ -93,6 +87,8 @@ define [
 
     # ---------------------------------------------------------------------- Public API
     show: (options) ->
+      @model = new PerchModel()
+      @listenTo @model, 'change', @render
       if typeof options == 'string'
         @_showSimpleMsg options
       else if options?.content instanceof Backbone.View
