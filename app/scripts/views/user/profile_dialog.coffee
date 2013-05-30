@@ -52,7 +52,7 @@ define [
       perch.show
         title: 'Profile'
         content: @
-        btn1: null
+        btn1Text: null
 
 
     # ----------------------------------------------------------- Event Handlers

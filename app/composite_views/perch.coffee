@@ -19,11 +19,11 @@ define [
     defaults:
       title: ''
       content: 'This is the default message.'
-      btn1:
-        text: "Ok"
-        className: "btn-block btn-primary"
-        callback: -> console.log "#{_me}.btn1.callback"
       onClose: -> console.log "#{_me}.onClose"
+      btn1Text: "Ok"
+      btn1ClassName: "btn-large btn-primary"
+      btn1Callback: -> console.log "#{_me}.btn1.callback"
+      mustUseButton: false
 
   Me = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -44,11 +44,12 @@ define [
 
     # ---------------------------------------------------------------------- Event Handlers
     _onBtn1Click: (e) ->
-      @model.attributes.btn1?.callback?()
+      @model.attributes.btn1Callback?()
       @hide()
     _onBtn2Click: (e) -> console.log "#{_me}._onBtn2Click()"
 
     _onModalHidden: ->
+      console.log "#{_me}._onModalHidden()"
       @model.attributes.onClose?()
       @_viewCleanup()
 
@@ -70,7 +71,9 @@ define [
         options.content = "<p>#{options.msg}</p>"
       @model.set options
       @_bindDomEvents()
-      @$el.modal 'show'
+      dropStyle = if options.mustUseButton then 'static' else true
+      @$el.modal
+        backdrop: dropStyle
 
     _addChildView: ->
       $(_contentSel).prepend @_childView?.render().el

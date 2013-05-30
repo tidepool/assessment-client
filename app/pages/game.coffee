@@ -25,7 +25,7 @@ define [
 ) ->
 
   _me = 'pages/game'
-  _defaultAssessmentId = 1
+  _defaultGame = 1
   _stepsRemainingContainer = '#HeaderRegion'
   _views =
     'ReactionTime': 'ReactionTime'
@@ -40,7 +40,7 @@ define [
     initialize: ->
       console.log "#{_me}.initialize()"
       app.session.logInAsGuest() unless app.user.isLoggedIn()
-      @curGame = @_createGame(_defaultAssessmentId)
+      @curGame = @_createGame _defaultGame
       #@listenTo @curGame, 'all', (e) -> console.log "#{_me}.curGame event: #{e}"
       @listenTo @curGame, 'error', @_curGameErr
       @listenTo @curGame, 'change:stage_completed', @_onStageChanged
@@ -57,10 +57,9 @@ define [
       perch.show
         title: 'Welcome'
         msg: assessmentModel.attributes.definition.instructions
-        btn1:
-          text: 'Start'
-          className: 'btn-block btn-primary'
-        onClose: => @curGame.nextStage()
+        btn1Text: 'Start'
+        onClose: _.bind(@curGame.nextStage, @curGame)
+        mustUseButton: true
 
     _trackLevels: ->
       @levels = new LevelsCollection @curGame.get('stages')

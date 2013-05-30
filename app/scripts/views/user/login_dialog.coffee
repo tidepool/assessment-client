@@ -55,7 +55,7 @@ define [
     _show: ->
       perch.show
         content: @
-        btn1: null
+        btn1Text: null
 
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
