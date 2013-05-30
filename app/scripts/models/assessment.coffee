@@ -12,11 +12,12 @@ define [
   _me = 'models/assessment'
 
   Assessment = Backbone.Model.extend
-    urlRoot: ->
-      "#{window.apiServerUrl}/api/v1/assessments"
+
+    # ------------------------------------------------------------- Backbone Methods
+    urlRoot: -> "#{window.apiServerUrl}/api/v1/assessments"
 
     initialize:  ->
-      @on 'all', (eventName) -> console.log "AssessmentModel Event: #{eventName}"
+      #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       @
 
     # Server -> Front End. Translates data we receive from the server
@@ -25,32 +26,6 @@ define [
       resp.result = new Result resp.result, {parse:true}
       resp
 
-    create: (definitionId) ->
-      deferred = $.Deferred()
-      @save({'def_id': definitionId })
-        .done (data, textStatus, jqXHR) ->
-          console.log("#{_me}.create.save.done()")
-          deferred.resolve(jqXHR.response)
-        .fail (jqXHR, textStatus, errorThrown) ->
-          console.log("#{_me}.create.save.fail()")
-          deferred.reject(textStatus)
-      deferred.promise()
-
-    updateProgress: (stageCompleted) ->
-      # Rails 4 is going to introduce support for the PATCH verb in HTTP
-      # TODO: Switch to PATCH when Rails 4 switch happens
-      attrs = { 'stage_completed': stageCompleted }
-      deferred = $.Deferred()
-      @save attrs,
-        patch: false
-        # url: "#{@url()}/#{@get('id')}"
-      .done (data, textStatus, jqXHR) =>
-        deferred.resolve(jqXHR.response)
-      .fail (jqXHR, textStatus, errorThrown) ->
-        throw new Error "Update Progress Error: #{textStatus}"
-        deferred.reject(textStatus)
-
-      deferred.promise()
 
     addUser: (user) ->
       attrs = { 'user_id': user.get('id') }
@@ -103,5 +78,18 @@ define [
             deferred.reject()
  
       deferred.promise()
+
+
+    # ------------------------------------------------------------- Public API
+    create: (gameId) ->
+      @save( def_id: gameId )
+      @
+
+    nextStage: ->
+      i = @get('stage_completed')
+      @save( stage_completed: i + 1 )
+
+
+
 
   Assessment

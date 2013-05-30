@@ -200,7 +200,7 @@ define [
       @createUserEvent
         "final_rank": finalRank
         "event_desc": "test_completed"
-      @assessment.updateProgress(@stageNo + 1)
+      @assessment.nextStage()
 
     createUserEvent: (newEvent) ->
       eventInfo = 

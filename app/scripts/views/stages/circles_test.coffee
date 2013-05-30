@@ -68,7 +68,7 @@ define [
         "circles": @circles
         "self_coord": { top: @SELF_COORD_TOP, left: @SELF_COORD_LEFT, size: @SELF_COORD_SIZE }
 
-      @assessment.updateProgress(@stageNo + 1)
+      @assessment.nextStage()
 
     updateCircleCoordsAndSizes: ->
       for circle, i in @circles

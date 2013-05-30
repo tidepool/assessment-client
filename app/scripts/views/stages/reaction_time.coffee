@@ -133,8 +133,7 @@ define [
         @createUserEvent
           "event_desc": "test_completed"
           "sequence_no": @sequenceNo
-        @assessment.updateProgress(@stageNo + 1)
-        # Backbone.history.navigate("/stage/#{@nextStage}", true)
+        @assessment.nextStage()
    
     createUserEvent: (newEvent) ->
       eventInfo = 

@@ -21,7 +21,9 @@ define [
       content: 'This is the default message.'
       btn1:
         text: "Ok"
-        className: "btn-block btn-inverse"
+        className: "btn-block btn-primary"
+        callback: -> console.log "#{_me}.btn1.callback"
+      onClose: -> console.log "#{_me}.onClose"
 
   Me = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -45,11 +47,14 @@ define [
 
 
     # ---------------------------------------------------------------------- Event Handlers
-    _onBtn1Click: (e) -> console.log "#{_me}._onBtn1Click()"
+    _onBtn1Click: (e) ->
+      @model.attributes.btn1?.callback?()
+      @hide()
     _onBtn2Click: (e) -> console.log "#{_me}._onBtn2Click()"
 
     _onModalHidden: ->
       #console.log "#{_me}._onModalHidden()"
+      @model.attributes.onClose?()
       @_viewCleanup()
 
 
@@ -57,7 +62,7 @@ define [
     _showSimpleMsg: (msg) ->
       @_showOptionsObject
         title: null
-        content: "<p>#{msg}</p>"
+        msg: msg
 
     _showBackboneView: (options) ->
       @_childView = options.content
@@ -67,6 +72,7 @@ define [
       @_addChildView()
 
     _showOptionsObject: (options) ->
+      options.content = options.content || "<p>#{options.msg}</p>"
       @model.set options
       @_bindDomEvents()
       @$el.modal 'show'

@@ -21,7 +21,7 @@ define [
       }
 
     initialize:  ->
-      @on 'all', (e) -> console.log "#{_me} event: #{e}"
+      #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'error', @_onModelError

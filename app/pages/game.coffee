@@ -2,22 +2,35 @@ define [
   'backbone'
   'Handlebars'
   'core'
+  'composite_views/perch'
   'models/assessment'
-  'assessments/start_view'
   'messages/error_modal_view'
-  'controllers/stages_controller'
+  'modelsAndCollections/levels'
+  'ui_widgets/steps_remaining'
+  'stages/reaction_time'
+  'stages/image_rank'
+  'stages/circles_test'
 ], (
   Backbone
   Handlebars
   app
+  perch
   Assessment
-  StartView
   ErrorModalView
-  StagesController
+  LevelsCollection
+  StepsRemainingView
+  ReactionTime
+  ImageRank
+  CirclesTest
 ) ->
 
   _me = 'pages/game'
   _defaultAssessmentId = 1
+  _stepsRemainingContainer = '#HeaderRegion'
+  _views =
+    'ReactionTime': 'ReactionTime'
+    'ImageRank': 'ImageRank'
+    'CirclesTest': 'CirclesTest'
 
   Me = Backbone.View.extend
     className: 'gamePage'
@@ -26,79 +39,67 @@ define [
     # ------------------------------------------------------------- Backbone Methods
     initialize: ->
       console.log "#{_me}.initialize()"
-      if app.user.isLoggedIn()
-        console.log("#{_me} user is logged in")
-        @_start()
-      else
-        app.session.logInAsGuest()
-
-    render: (content) ->
-      markup = content || ''
-      console.log "#{_me}.render(#{markup})"
-      @$el.html markup
-      @
+      app.session.logInAsGuest() unless app.user.isLoggedIn()
+      @curGame = @_createGame(_defaultAssessmentId)
+      #@listenTo @curGame, 'all', (e) -> console.log "#{_me}.curGame event: #{e}"
+      @listenTo @curGame, 'error', @_curGameErr
+      @listenTo @curGame, 'change:stage_completed', @_onStageChanged
 
 
     # ------------------------------------------------------------- Helper Methods
-    _start: -> @_createAndShowAssessment _defaultAssessmentId
+    _createGame: (id) ->
+      console.log "#{_me}._createGame()"
+      game = new Assessment()
+      game.create(id)
 
-    _whatToDoNext: ->
-      app.session.logInAsGuest()
-        .done =>
-          @_start()
-        .fail =>
-          # This is a catastrophic fail of the API server, it is probably down.
-          throw new Error "#{_me} app.session.loginAsGuest().fail()"
-          errorView = new ErrorModalView
-            title: "Login Error"
-            message: "Cannot log in to the server, server may be down."
-          errorView.display()
+    _showWelcome: (assessmentModel) ->
+      @_trackLevels()
+      perch.show
+        title: 'Welcome'
+        msg: assessmentModel.attributes.definition.instructions
+        btn1:
+          text: 'Start'
+          className: 'btn-block btn-primary'
+        onClose: => @curGame.nextStage()
 
-    _createAndShowAssessment: (definitionId) ->
-      console.log "#{_me}._createAndShowAssessment()"
-      # Create an anonymous assessment on the server with the definitionId
-      if app.session.assessment?
-        @_displayAssessment()
-      else
-        assessment = new Assessment()
-        assessment.create(definitionId)
-          .done =>
-            app.session.assessment = assessment
-            @_displayAssessment()
-          .fail =>
-            throw new Error("Something went wrong, can't create assessment")
-      @
+    _trackLevels: ->
+      @levels = new LevelsCollection @curGame.get('stages')
+      @stepsRemaining = new StepsRemainingView
+        collection: @levels
+      $(_stepsRemainingContainer).append @stepsRemaining.render().el
 
-    _displayAssessment: ->
-      console.log "#{_me}._displayAssessment()"
-      # TODO: change so that the listenTo can be set up when `this` is initialized
-      @listenTo app.session.assessment, 'change:stage_completed', @_stageCompleted
-      #@listenTo(app.session.assessment, 'stage_completed_success', @_stageCompletedSuccess)
-      view = new StartView
-        model: app.session.assessment
-      @render view.render().el
 
+    # ------------------------------------------------------------- Event Handlers
+    _onStageChanged: (model) ->
+      console.log "#{_me}._onStageChanged()"
+      curStage = model.attributes.stage_completed
+      stageCount = model.attributes.stages.length
+      # Mark the changed level complete
+      @levels?.setComplete curStage
+      #curLevel = @levels.at stageId
+      # Show the next stage
+      if curStage is -1 then @_showWelcome model
+      else if curStage < stageCount then @_showLevel curStage
+      else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
+
+    _curGameErr: ->
+      console.log "#{_me}._curGameErr()"
+      throw new Error("Something went wrong, can't create assessment")
+
+
+    # ------------------------------------------------------------- Stage Management
     _showLevel: (stageId) ->
       console.log "#{_me}._showLevel(#{stageId})"
-      # TODO: briefer null check syntax
-      if not @controller?
-        @controller = new StagesController
-          assessment: app.session.assessment
-      @controller.render(stageId)
-      @render @controller.el
+      curStage = @curGame.get('stages')[stageId]
+      viewClassString = _views[curStage.view_name]
+      ViewClass = eval(viewClassString)
+      stageView = new ViewClass
+        model: new Backbone.Model(curStage)
+        assessment: @curGame
+        stageNo: stageId
+      @$el.html stageView.render().el
 
-    _stageCompleted: ->
-      # Initially no stages completed, so start with -1
-      @currentStageNo = app.session.assessment.get('stage_completed')
-      @numOfStages = app.session.assessment.get('stages').length
-      if @currentStageNo < @numOfStages
-        @_showLevel @currentStageNo
-      else if @currentStageNo is @numOfStages
-        console.log 'Waiting the final completed request to be sent.'
-      else
-        throw new Error "Error with stage #{@currentStageNo}"
 
-    # ------------------------------------------------------------- Public API
 
   Me
 
