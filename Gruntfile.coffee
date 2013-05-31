@@ -27,9 +27,10 @@ module.exports = (grunt) ->
       "<%= yeoman.temp %>/**/*.css"
     ]
     horseAndBuggyJsGlob: [
-      "bower_components/**"
+      "bower_components/**/{*.js,*.css}"
+      "bower_components_ext/*.js"
       "scripts/app_secrets_dev.js"
-      "scripts/vendor/**"
+      "scripts/vendor/*.js"
       #"bower_components/requirejs/require.js"
       #"bower_components/modernizr/modernizr.js"
     ]
@@ -96,32 +97,27 @@ module.exports = (grunt) ->
         tasks: ["livereload"]
 
     clean:
-      dist: [ "<%= yeoman.dist %>", "<%= yeoman.temp %>"]
       dev: ["<%= yeoman.dev %>", "<%= yeoman.temp %>", ".grunt"]
       temp: "<%= yeoman.temp %>"
-
-    jshint:
-      options:
-        jshintrc: ".jshintrc"
-
-      all: ["<%= yeoman.app %>/scripts/{,*/}*.js", "!<%= yeoman.app %>/scripts/vendor/*"]
+      dist: "<%= yeoman.dist %>"
+      hbs: "<%= yeoman.temp %>/**/*.hbs"
 
     coffee:
       options:
         bare: true
-      dist:
-        files: [
-          expand: true
-          cwd: "<%= yeoman.app %>"
-          src: ["**/*.coffee", "!bower_components/**/*.coffee"]
-          dest: "<%= yeoman.dist %>"
-          ext: ".js"
-        ]
+      temp:
+          files: [
+            expand: true
+            cwd: "<%= yeoman.app %>"
+            src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
+            dest: "<%= yeoman.temp %>"
+            ext: ".js"
+          ]
       dev:
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
-          src: ["**/*.coffee", "!bower_components/**/*.coffee"]
+          src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
           dest: "<%= yeoman.dev %>"
           ext: ".js"
         ]
@@ -145,22 +141,23 @@ module.exports = (grunt) ->
 
     requirejs:
       dist:
-
-      # Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
         options:
-
-        # `name` and `out` is set by grunt-usemin
-          #baseUrl: "app/scripts"
-          optimize: "none"
-
-          # TODO: Figure out how to make sourcemaps work with grunt-usemin
-          # https://github.com/yeoman/grunt-usemin/issues/30
-          #generateSourceMaps: true,
-          # required to support SourceMaps
-          # http://requirejs.org/docs/errors.html#sourcemapcomments
+          mainConfigFile: "<%= yeoman.temp %>/require_config.js"
+          skipDirOptimize: true # don't optimize non AMD files in the dir
+          name: 'core'
+          include: [
+            'pages/about'
+            'pages/game'
+            'pages/gameResult'
+            'pages/home'
+            'pages/investors'
+            'pages/team'
+          ]
+          out: '<%= yeoman.dist %>/core/main.js'
+          optimize: "uglify2"
+          #optimize: "none"
+          generateSourceMaps: true
           preserveLicenseComments: false
-          useStrict: true
-          wrap: true
 
     useminPrepare:
       html: "<%= yeoman.app %>/spec.html"
@@ -190,7 +187,7 @@ module.exports = (grunt) ->
           "<%= yeoman.dev %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
       dist:
         options:
-          banner: '/* Copyright 2013 TidePool, Inc */'
+          #banner: '/* Copyright 2013 TidePool, Inc */'
           report: 'min'
         files:
           "<%= yeoman.dist %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
@@ -201,7 +198,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
-          src: "*.html"
+          src: "index.html"
           dest: "<%= yeoman.dist %>"
         ]
 
@@ -228,10 +225,31 @@ module.exports = (grunt) ->
           src: [
             ".htaccess"
             "*.html"
+            "!spec.html"
             "*.{ico,txt}"
+            #"<%= tidepool.horseAndBuggyJsGlob %>"
+            #"<%= tidepool.handlebarsGlob %>"
+            "<%= tidepool.imagesGlob %>"
+          ]
+        ]
+      requireJsPrep:
+        files: [
+          expand: true
+          cwd: "<%= yeoman.app %>"
+          dest: "<%= yeoman.temp %>"
+          src: [
             "<%= tidepool.horseAndBuggyJsGlob %>"
             "<%= tidepool.handlebarsGlob %>"
-            "<%= tidepool.imagesGlob %>"
+          ]
+        ]
+      requireJsPost:
+        files: [
+          expand: true
+          cwd: "<%= yeoman.temp %>"
+          dest: "<%= yeoman.dist %>"
+          src: [
+            "require_config.js"
+            "<%= tidepool.horseAndBuggyJsGlob %>"
           ]
         ]
 
@@ -283,11 +301,16 @@ module.exports = (grunt) ->
 
   grunt.registerTask "dist", [
     "clean:dist"
-    "copy:dist"
-    "copy:distImages"
+    "clean:temp"
     "compass"
     "cssmin:dist"
-    "coffee:dist"
+    "coffee:temp"
+    "copy:requireJsPrep"
+    "requirejs"
+    "copy:requireJsPost"
+    "copy:dist"
+    "copy:distImages"
+    "htmlmin"
     "clean:temp"
     "open"
     "connect:dist"
@@ -297,5 +320,3 @@ module.exports = (grunt) ->
   grunt.registerTask "s", "server"
   grunt.registerTask "t", "test"
 
-
-	
