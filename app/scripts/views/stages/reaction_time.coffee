@@ -50,6 +50,11 @@ define [
       @colors = @model.get('colors')
       @sequenceType = @model.get('sequence_type')
       @colorSequence = @prepareSequence()
+
+      # Log out the colors. Why does red show up twice in a row sometimes?
+      console.log @colorSequence
+      console.log step.color for step in @colorSequence
+
       @sequenceNo = -1
       @numOfSequences = @colorSequence.length
 
@@ -66,7 +71,6 @@ define [
 
     # ------------------------------------------------------------- Running the Game Level / Stage
     _start: ->
-      console.log "#{_me}._start()"
       colorSequenceInString = (color.color + ":" + color.interval for color in @colorSequence)[..]
       @_createUserEvent
         event_desc: _USEREVENTS.started
@@ -182,7 +186,7 @@ define [
     _trackCorrect: ->
       curStep = @colorSequence[@sequenceNo]
       return if curStep.alreadyTracked
-      console.log("#{_me}._trackCorrect()")
+      #console.log("#{_me}._trackCorrect()")
       @_createUserEvent
         event_desc: _USEREVENTS.correct
         circle_color: curStep.color
@@ -190,7 +194,7 @@ define [
       curStep.alreadyTracked = true
 
     _trackIncorrect: ->
-      console.log("#{_me}._trackIncorrect()")
+      #console.log("#{_me}._trackIncorrect()")
       @_createUserEvent
         event_desc: _USEREVENTS.incorrect
         circle_color: @colorSequence[@sequenceNo]?.color

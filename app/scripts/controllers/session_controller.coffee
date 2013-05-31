@@ -39,7 +39,6 @@ define [
   # ----------------------------------------------- Prototype
   SessionController.prototype =
     signIn: ->
-      console.log "#{_me}.signIn()"
       if @user.hasCurrentToken() and not @user.isGuest()
         @_fetchAuthedUser()
       else
@@ -72,7 +71,7 @@ define [
 
     # ---------------------------------------------- Callbacks
     _ajaxAuthSuccess: (data) ->
-      @cfg.debug && console.log "#{_me}.signIn().done()"
+      #@cfg.debug && console.log "#{_me}._ajaxAuthSuccess()"
       @user.set 'accessToken', data.access_token
       @_persistLocally data
       @_fetchAuthedUser()

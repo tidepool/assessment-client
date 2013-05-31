@@ -23,8 +23,21 @@ module.exports = (grunt) ->
     ]
     cssSourceGlob: [
       "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.1.css"
-      "<%= yeoman.app %>/bower_components/toastr/toastr.css"
+      #"<%= yeoman.app %>/bower_components/toastr/toastr.css"
       "<%= yeoman.temp %>/**/*.css"
+    ]
+    horseAndBuggyJsGlob: [
+      "bower_components/**"
+      "scripts/app_secrets_dev.js"
+      "scripts/vendor/**"
+      #"bower_components/requirejs/require.js"
+      #"bower_components/modernizr/modernizr.js"
+    ]
+    handlebarsGlob: [
+      "**/*.hbs"
+    ]
+    imagesGlob: [
+      "images/**/{*.png,*.jpg,*.jpeg}"
     ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
@@ -36,15 +49,14 @@ module.exports = (grunt) ->
       options:
         port: 7000
         hostname: "localhost" # change this to '0.0.0.0' to access the server from outside
-
       livereload:
         options:
           middleware: (connect) ->
             # A grunt variable does not work here
             [lrSnippet, mountFolder(connect, ".devServer"), mountFolder(connect, "app")]
-
       dist:
         options:
+          keepalive: true
           middleware: (connect) ->
             [mountFolder(connect, "dist")]
 
@@ -84,7 +96,7 @@ module.exports = (grunt) ->
         tasks: ["livereload"]
 
     clean:
-      dist: ["<%= yeoman.dev %>", "<%= yeoman.dist %>", "<%= yeoman.temp %>"]
+      dist: [ "<%= yeoman.dist %>", "<%= yeoman.temp %>"]
       dev: ["<%= yeoman.dev %>", "<%= yeoman.temp %>", ".grunt"]
       temp: "<%= yeoman.temp %>"
 
@@ -97,16 +109,14 @@ module.exports = (grunt) ->
     coffee:
       options:
         bare: true
-
       dist:
         files: [
           expand: true
           cwd: "<%= yeoman.app %>"
-          src: ["**/*.coffee", "!**/*.spec.coffee"] # Do not include the spec files
-          dest: "<%= yeoman.dev %>"
+          src: ["**/*.coffee", "!bower_components/**/*.coffee"]
+          dest: "<%= yeoman.dist %>"
           ext: ".js"
         ]
-
       dev:
         files: [
           expand: true
@@ -115,7 +125,6 @@ module.exports = (grunt) ->
           dest: "<%= yeoman.dev %>"
           ext: ".js"
         ]
-
       spec:
         files: [
           expand: true
@@ -126,17 +135,13 @@ module.exports = (grunt) ->
         ]
 
     compass:
-      options:
-        sassDir: "<%= yeoman.app %>"
-        specify: "<%= tidepool.sassSourceGlob %>"
-        cssDir: "<%= yeoman.temp %>"
-
-        #importPath: 'app/bower_components',
-        #relativeAssets: true,
-        outputStyle: "compact"
-        noLineComments: true
-
-      compile: {}
+      sassPrep:
+        options:
+          sassDir: "<%= yeoman.app %>"
+          specify: "<%= tidepool.sassSourceGlob %>"
+          cssDir: "<%= yeoman.temp %>"
+          outputStyle: "compact"
+          noLineComments: true
 
     requirejs:
       dist:
@@ -179,9 +184,14 @@ module.exports = (grunt) ->
 
     cssmin:
       dev:
+        options:
+          report: 'min'
         files:
           "<%= yeoman.dev %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
       dist:
+        options:
+          banner: '/* Copyright 2013 TidePool, Inc */'
+          report: 'min'
         files:
           "<%= yeoman.dist %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
 
@@ -196,22 +206,35 @@ module.exports = (grunt) ->
         ]
 
     copy:
-      images: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
+      devImages: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
         files: [
           expand: true
           cwd: "<%= yeoman.app %>/images/fake_glyphicons"
           src: "glyphicons*.png"
           dest: "<%= yeoman.dev %>/img"
         ]
-
+      distImages: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
+        files: [
+          expand: true
+          cwd: "<%= yeoman.app %>/images/fake_glyphicons"
+          src: "glyphicons*.png"
+          dest: "<%= yeoman.dist %>/img"
+        ]
       dist:
         files: [
           expand: true
-          dot: true
           cwd: "<%= yeoman.app %>"
           dest: "<%= yeoman.dist %>"
-          src: ["*.{ico,txt}", ".htaccess", "!spec.html", "!**/*.spec.*"]
+          src: [
+            ".htaccess"
+            "*.html"
+            "*.{ico,txt}"
+            "<%= tidepool.horseAndBuggyJsGlob %>"
+            "<%= tidepool.handlebarsGlob %>"
+            "<%= tidepool.imagesGlob %>"
+          ]
         ]
+
 
     exec:
       convert_jqueryui_amd:
@@ -229,7 +252,7 @@ module.exports = (grunt) ->
   grunt.registerTask "build", [
     "clean:dev"
     "exec:convert_jqueryui_amd"
-    "copy:images"
+    "copy:devImages"
     "coffee:dev"
     "coffee:spec"
     "compass"
@@ -248,7 +271,7 @@ module.exports = (grunt) ->
     grunt.task.run [
       "build"
       "devServer"
-      "open:devHome"
+      "open"
       "watch"
     ]
 
@@ -256,6 +279,18 @@ module.exports = (grunt) ->
     "build"
     "devServer"
     "exec:unitTest"
+  ]
+
+  grunt.registerTask "dist", [
+    "clean:dist"
+    "copy:dist"
+    "copy:distImages"
+    "compass"
+    "cssmin:dist"
+    "coffee:dist"
+    "clean:temp"
+    "open"
+    "connect:dist"
   ]
 
   grunt.registerTask "default", ["test", "open", "watch"]

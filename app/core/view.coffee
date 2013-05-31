@@ -5,6 +5,7 @@ define [
   './layouts/layout-site'
   './layouts/layout-game'
   'ui_widgets/user_menu'
+  'composite_views/perch'
   'bootstrap' # someone, anyone, has to include it
 ],
 (
@@ -13,6 +14,7 @@ define [
   SiteLayout
   GameLayout
   userMenu
+  perch
 ) ->
 
   _me = 'core/view'
@@ -30,6 +32,11 @@ define [
       @$el.html @_curLayout.el
       @
 
+    _cleanupOldView: ->
+      perch.hide()
+      @_curView?.close?()
+      @_curView?.remove()
+
     _loadView: (module) ->
       require [
         module
@@ -38,10 +45,7 @@ define [
         ViewClass
       ) =>
         console.log "#{_me}.require().loaded new page"
-        # Cleanup
-        @_curView?.close?()
-        @_curView?.remove()
-        # Instantiate
+        @_cleanupOldView()
         @_curView = new ViewClass()
         # Render
         @render()

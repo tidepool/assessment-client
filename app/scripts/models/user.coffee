@@ -24,6 +24,7 @@ define [
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
+      @on 'change:guest', @_calculateNickname
       @on 'error', @_onModelError
 
     #http://backbonejs.org/#Model-validate
@@ -50,7 +51,7 @@ define [
     # ----------------------------------------------------------- Helper Methods
     # If a nickname isn't specified, use the name or email field
     _calculateNickname: ->
-      console.log "#{_me}._calculateNickname()"
+      #console.log "#{_me}._calculateNickname()"
       nick = @get('name') || @get('email') if not @isGuest()
       @set
         nickname: nick,
