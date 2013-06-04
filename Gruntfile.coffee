@@ -147,7 +147,7 @@ module.exports = (grunt) ->
           name: 'core'
           include: [
             'pages/about'
-            'pages/game'
+            'pages/playGame'
             'pages/gameResult'
             'pages/home'
             'pages/investors'

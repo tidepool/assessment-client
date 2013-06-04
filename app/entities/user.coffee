@@ -7,7 +7,7 @@ define [
   Backbone
 ) ->
 
-  _me = 'models/user'
+  _me = 'entities/user'
 
   User = Backbone.Model.extend
 

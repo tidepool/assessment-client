@@ -1,0 +1,46 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+
+.dropTarget
+  display: inline-block
+  width: 200px
+  height: 200px
+  line-height: 200px
+  border-radius: $radiusSmall
+  color: transparentize($colorInfo, .6)
+  background: $highlight
+  font-size: 40px
+  font-weight: bold
+  box-shadow: 0 0 0 $spaceLil transparentize($colorBrandContrast, .8)
+  //border: $spaceTiny dashed transparentize($colorGood, .6)
+  box-sizing: border-box
+  +transitionable(box-shadow)
+
+  &.nearby
+    //box-shadow: 0 0 0 $spaceLil transparentize($colorBrandContrast, .7)
+  &.onTarget
+    box-shadow: 0 0 0 $spaceLil + $spaceTiny transparentize($colorBrandContrast, .6) //transparentize($colorGood, .3)
+    background-color: transparentize($colorBrandContrast, .9)
+  &.paired
+    //box-shadow: 0 0 0 $spaceLil white, 0 0 0 $spaceLil * 2 transparentize($colorGood, .3)
+    //box-shadow: 0 0 0 $spaceLil * 2 transparentize($colorGood, .5)
+    box-shadow: 0 0 0 $spaceLil transparentize($colorGood, .7)
+    +animation( radiatingSuccess .3s )
+
+
+
+
+
+
++keyframes(radiatingSuccess)
+  0%, 100%
+    box-shadow: 0 0 0 $spaceLil * 2 transparentize($colorGood, .5), 0 0 0 $spaceLil * 3 transparent, 0 0 0 $spaceLil * 4 transparent
+  30%, 70%
+    box-shadow: 0 0 0 $spaceLil * 2 transparentize($colorGood, .5), 0 0 0 $spaceLil * 3 transparentize($colorGood, .6), 0 0 0 $spaceLil * 4 transparent
+  50%
+    box-shadow: 0 0 0 $spaceLil * 2 transparentize($colorGood, .5), 0 0 0 $spaceLil * 3 transparentize($colorGood, .6), 0 0 0 $spaceLil * 4 transparentize($colorGood, .8)

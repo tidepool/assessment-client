@@ -16,7 +16,7 @@ define [
   perch
 ) ->
 
-  _me = 'stages/reaction_time'
+  _me = 'game/levels/reaction_time'
   _colorizerSel = '#CircleColorizer'
   _targetPrequelColor = 'yellow'
   _targetColor = 'red'

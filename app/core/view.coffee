@@ -38,6 +38,7 @@ define [
       @_curView?.remove()
 
     _loadView: (module) ->
+      #console.log "#{_me}._loadView(#{module})"
       require [
         module
       ],

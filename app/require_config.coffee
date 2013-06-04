@@ -1,6 +1,9 @@
 define [], () ->
   require.config
-    packages: [ 'core' ]
+    packages: [
+      'core'
+      'game/levels/rank_images'
+    ]
     paths:
       # 3rd Party Bower Libraries
       Handlebars: "bower_components/require-handlebars-plugin/Handlebars"
@@ -22,14 +25,12 @@ define [], () ->
       dashboard: "scripts/views/dashboard"
       components: "scripts/views/components"
       results: "scripts/views/results"
-      stages: "scripts/views/stages"
       routers: "scripts/routers"
       models: "scripts/models"
       controllers: "scripts/controllers"
       collections: "scripts/collections"
       helpers: "scripts/helpers"
       messages: "scripts/views/messages"
-      modelsAndCollections: "scripts/modelsAndCollections"
     shim:
       bootstrap:
         deps: ["jquery"]

@@ -5,11 +5,12 @@ define [
   'composite_views/perch'
   'models/assessment'
   'messages/error_modal_view'
-  'modelsAndCollections/levels'
+  'entities/levels'
   'ui_widgets/steps_remaining'
-  'stages/reaction_time'
-  'stages/image_rank'
-  'stages/circles_test'
+  'game/levels/reaction_time'
+  #'game/levels/image_rank'
+  'game/levels/rank_images'
+  'game/levels/circles_test'
 ], (
   Backbone
   Handlebars
@@ -24,7 +25,7 @@ define [
   CirclesTest
 ) ->
 
-  _me = 'pages/game'
+  _me = 'pages/playGame'
   _defaultGame = 1
   _stepsRemainingContainer = '#HeaderRegion'
   _views =
@@ -33,7 +34,7 @@ define [
     'CirclesTest': 'CirclesTest'
 
   Me = Backbone.View.extend
-    className: 'gamePage'
+    className: 'playGamePage'
 
 
     # ------------------------------------------------------------- Backbone Methods
@@ -71,7 +72,7 @@ define [
     # ------------------------------------------------------------- Event Handlers
     _onStageChanged: (model) ->
       console.log "#{_me}._onStageChanged()"
-      curStage = model.attributes.stage_completed
+      curStage = model.attributes.stage_completed + 3 # TODO: remove. this is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
