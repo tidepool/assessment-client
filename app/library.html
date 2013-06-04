@@ -11,21 +11,7 @@
     <meta name="viewport" content="width=device-width">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.0/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="all-min.css">
-    <style type="text/css">
-        body {
-            max-width: 500px;
-            margin: 50px auto;
-        }
-        h2 {
-            margin-top: 50px;
-        }
-        .modal h2 {
-            margin-top: 10px;
-        }
-        .btn-group {
-            margin-bottom: 25px;
-        }
-    </style>
+    <link href="library.css" rel="stylesheet">
 </head>
 <body>
 <header class="mainNav navbar navbar-fixed-top">
@@ -42,6 +28,37 @@
 
         <h1>TidePool Component Library</h1>
         <p>This page holds UI components so people can see how to implement various options of them and see how they look in one place.</p>
+
+        <h2>Colors</h2>
+        <p>These colors are used to build all colors in the interface. They are used as a base, and <a href="http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html">SASS functions</a> like transparentize, mix, and addition subtraction are used to make blends and variations.</p>
+        <p class="muted">Brand Colors</p>
+        <p class="colors">
+            <b class="swatch colorBrand" title="colorBrand"></b>
+            <b class="swatch colorBrand1" title="colorBrand1"></b>
+            <b class="swatch colorBrand2" title="colorBrand2"></b>
+            <b class="swatch colorBrand3" title="colorBrand3"></b>
+            <b class="swatch colorBrand4" title="colorBrand4"></b>
+        </p>
+        <p class="muted">Semantic Colors</p>
+        <p class="colors">
+            <b class="swatch colorGood"></b>
+            <b class="swatch colorGoodLight"></b>
+            <b class="swatch colorInfo"></b>
+            <b class="swatch colorInfoLight"></b>
+            <b class="swatch colorQuestion"></b>
+            <b class="swatch colorWarn"></b>
+            <b class="swatch colorWarnBright"></b>
+            <b class="swatch colorBad"></b>
+            <b class="swatch colorQuiet"></b>
+            <b class="swatch colorVeryQuiet"></b>
+            <b class="swatch colorLink"></b>
+        </p>
+        <p class="muted">Gender Colors</p>
+        <p class="colors">
+            <b class="swatch colorMale"></b>
+            <b class="swatch colorFemale"></b>
+        </p>
+
 
         <h2>Buttons</h2>
         <p>You can use the <code>a</code>, <code>button</code>, <code>div</code>, or most any other tag, and you can put any kind of <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon in them.</p>
@@ -221,6 +238,14 @@
                         perch.show(data)
                     })
 
+
+                    addColorNames = function () {
+                        $('.colors .swatch').each(function(){
+                            className = $(this).prop('class').replace('swatch ', '')
+                            $(this).prop('title', className)
+                        })
+                    }
+                    addColorNames()
 
                 });
             });
