@@ -1,6 +1,14 @@
 define [
-  'underscore',
-  'backbone'], (_, Backbone) ->
+  'underscore'
+  'backbone'
+], (
+  _
+  Backbone
+) ->
+
+  _me = 'models/user_event'
+
+
   UserEvent = Backbone.Model.extend
     urlRoot: "/api/v1/user_events"
 
@@ -15,7 +23,10 @@ define [
       eventInfo = _.extend({}, defaultInfo, attribs)
       @save eventInfo,
         error: ->
-          console.log("Error sending event")
+          console.log "#{_me}.save().error()"
+        success: (model) ->
+          console.log "#{_me}.save().success()"
+          console.log model.attributes
 
 
   UserEvent

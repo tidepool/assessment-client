@@ -4,54 +4,111 @@
 @import '../../../styles/helpers'
 
 
+$rankImagesWidth: 238px
+$rankImagesHeight: 198px
+
 .rankImages
   text-align: center
   font-size: 0
+  background: $colorBackgroundWarm
+  background-image: url("../images/bgPat.png")
 
-  .targets label
+  .rankingArea
+    margin: 0
+    padding: $spaceBig 0
+    background-color: $colorBrand1Light
+    +background( linear-gradient(90deg, $colorBrand1Light, $colorMixBrand1GoodLight) )
+    box-shadow: inset 0 -2px $spaceTiny 1px $shadeVeryLight
+
+  .unrankedArea
+    margin: 0
+    padding: $space 0 $spaceBig
+
+
+  // -------------------------------------------------- Instruction Text
+  .message
     display: inline-block
-    color: transparentize($colorInfo, .5)
-    cursor: default
-    font-size: $fontSizeBody
+    font-size: $fontSizeSmall * 2
+    line-height: 1.3
+    width: 80%
+    color: $highlightThick
+    border: $spaceTiny dashed $highlightThin
+    border-radius: $radiusMed
+    box-sizing: border-box
+    background: $highlightVeryThin
+    //background-size: 50px 50px
+    //+linear-gradient(-45deg, $highlightVeryThin 25%, transparent 25%, transparent 50%, $highlightVeryThin 50%, $highlightVeryThin 75%, transparent 75%, transparent)
 
-  ul.targets
-    margin-bottom: $spaceBig * 2
+
+  // -------------------------------------------------- Awesomesauce Best/Worst Text
+  .rankingArea .rankableImage:after,
+  .rankingArea .rankableImage:first-child:after
+    font-size: $fontSizeSmall
+    position: absolute
+    height: $space
+    line-height: $space
+    top: - $space - $spaceTiny
+    left: 0
+    right: 0
+    text-align: center
+    color: $highlight
+    text-transform: uppercase
+    letter-spacing: .1em
+  .rankingArea .rankableImage:last-child:after
+    content: "Worst"
+  .rankingArea .rankableImage:first-child:after
+    content: "Best"
+  // While Dragging
+  .rankingArea .rankableImage.ui-sortable-helper:after
+    content: ''
 
 
   // Sizing changes based on screen width
-  .dropTarget,
-  .rankableImage,
-  label
-    width: 50px
-    height: 50px
-    line-height: 50px
+  .rankingArea,
+  .unrankedArea
+    min-height: ($rankImagesHeight + 10) * .1
+  .message
+    min-height: $rankImagesHeight * .1
+    font-size: $fontSizeLarge
+    padding: $spaceLil
+  .rankableImage
+    width: $rankImagesWidth * .1
+    height: $rankImagesHeight * .1
+    line-height: $rankImagesHeight * .1
+
 
   @media all and (min-width: 321px)
-    .dropTarget,
-    .rankableImage,
-    label
-      width: 100px
-      height: 100px
-      line-height: 100px
-      margin: 0 $spaceLil
+    .rankingArea,
+    .unrankedArea
+      min-height: ($rankImagesHeight + 10) * .3
+    .message
+      min-height: $rankImagesHeight * .3
+    .rankableImage
+      width: $rankImagesWidth * .3
+      height: $rankImagesHeight * .3
+      line-height: $rankImagesHeight * .3
   @media all and (min-width: 601px)
-    .dropTarget,
-    .rankableImage,
-    label
-      width: 150px
-      height: 150px
-      line-height: 150px
-      margin: 0 $spaceLil * 2
+    .rankingArea,
+    .unrankedArea
+      min-height: ($rankImagesHeight + 10) * .4
+    .message
+      min-height: $rankImagesHeight * .4
+    .rankableImage
+      width: $rankImagesWidth * .4
+      height: $rankImagesHeight * .4
+      line-height: $rankImagesHeight * .4
   @media all and (min-width: 1001px)
-    .dropTarget,
-    .rankableImage,
-    label
-      width: 150px
-      height: 150px
-      line-height: 150px
-      margin: 0 $space
+    .rankingArea,
+    .unrankedArea
+      min-height: ($rankImagesHeight + 10) * .8
+    .message
+      min-height: $rankImagesHeight * .8
+      font-size: $fontSizeSmall * 2
+      padding: $spaceBig
+    .rankableImage
+      width: $rankImagesWidth * .8
+      height: $rankImagesHeight * .8
+      line-height: $rankImagesHeight * .8
 
-  label
-    line-height: 1
-    height: $space
-    margin-bottom: $space
+
+

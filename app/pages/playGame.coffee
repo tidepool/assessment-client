@@ -8,8 +8,7 @@ define [
   'entities/levels'
   'ui_widgets/steps_remaining'
   'game/levels/reaction_time'
-  #'game/levels/image_rank'
-  'game/levels/rank_images'
+  'game/levels/rank_images' #'game/levels/image_rank'
   'game/levels/circles_test'
 ], (
   Backbone
@@ -39,7 +38,6 @@ define [
 
     # ------------------------------------------------------------- Backbone Methods
     initialize: ->
-      console.log "#{_me}.initialize()"
       app.session.logInAsGuest() unless app.user.isLoggedIn()
       @curGame = @_createGame _defaultGame
       #@listenTo @curGame, 'all', (e) -> console.log "#{_me}.curGame event: #{e}"
@@ -49,7 +47,6 @@ define [
 
     # ------------------------------------------------------------- Helper Methods
     _createGame: (id) ->
-      console.log "#{_me}._createGame()"
       game = new Assessment()
       game.create(id)
 
@@ -71,8 +68,7 @@ define [
 
     # ------------------------------------------------------------- Event Handlers
     _onStageChanged: (model) ->
-      console.log "#{_me}._onStageChanged()"
-      curStage = model.attributes.stage_completed + 3 # TODO: remove. this is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed #+ 3 # TODO: remove. this is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
@@ -88,7 +84,7 @@ define [
 
     # ------------------------------------------------------------- Stage Management
     _showLevel: (stageId) ->
-      console.log "#{_me}._showLevel(#{stageId})"
+      #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @curGame.get('stages')[stageId]
       viewClassString = _views[curStage.view_name]
       ViewClass = eval(viewClassString)

@@ -20,12 +20,10 @@ define [
     className: 'gameLayout'
 
     initialize: ->
-      console.log "#{_me}.initialize()"
       Me.__super__.initialize.call(this)
       @render()
 
     render: ->
-      console.log "#{_me}.render()"
       @$el.html @tmpl()
       Me.__super__.resetHeader.call(this)
       @$('#HeaderRegion')

@@ -20,8 +20,7 @@ define [
   _meCollection = 'game/levels/rank_images/rankable_images.Collection'
   Collection = Backbone.Collection.extend
     model: Model
-    initialize: ->
-      console.log "#{_meCollection}.initialize()"
+    #initialize: -> console.log "#{_meCollection}.initialize()"
 
 
   Collection

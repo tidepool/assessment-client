@@ -45,7 +45,7 @@ define [
       (
         ViewClass
       ) =>
-        console.log "#{_me}.require().loaded new page"
+        #console.log "#{_me}.require().loaded new page"
         @_cleanupOldView()
         @_curView = new ViewClass()
         # Render
