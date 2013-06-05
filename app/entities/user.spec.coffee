@@ -13,8 +13,4 @@ define [
       user = new User guest:true
       expect(user.isGuest()).toBe true
 
-    describe 'it creates a nickname', ->
-      it 'sets the nickname to email if that is provided', ->
-        user = new User email: _testEmail
-        expect(user.get('nickname')).toEqual _testEmail
 
