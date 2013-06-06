@@ -14,7 +14,7 @@ define [
   Assessment = Backbone.Model.extend
 
     # ------------------------------------------------------------- Backbone Methods
-    urlRoot: -> "#{window.apiServerUrl}/api/v1/assessments"
+    urlRoot: -> "#{window.apiServerUrl}/api/v1/users/-/games"
 
     initialize:  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
@@ -27,20 +27,20 @@ define [
       resp
 
 
-    addUser: (user) ->
-      attrs = { 'user_id': user.get('id') }
-      deferred = $.Deferred()
-      @save attrs,
-        patch: false
-        # url: "#{@url()}/#{@get('id')}"
-      .done (data, textStatus, jqXHR) ->
-        console.log("Add User Success: #{textStatus}")
-        deferred.resolve(jqXHR.response)
-      .fail (jqXHR, textStatus, errorThrown) ->
-        console.log("Add User Error: #{textStatus}")
-        deferred.reject(textStatus)
+    # addUser: (user) ->
+    #   attrs = { 'user_id': user.get('id') }
+    #   deferred = $.Deferred()
+    #   @save attrs,
+    #     patch: false
+    #     # url: "#{@url()}/#{@get('id')}"
+    #   .done (data, textStatus, jqXHR) ->
+    #     console.log("Add User Success: #{textStatus}")
+    #     deferred.resolve(jqXHR.response)
+    #   .fail (jqXHR, textStatus, errorThrown) ->
+    #     console.log("Add User Error: #{textStatus}")
+    #     deferred.reject(textStatus)
 
-      deferred.promise()
+    #   deferred.promise()
 
     getLatestWithProfile: ->
       deferred = $.Deferred()
@@ -82,7 +82,7 @@ define [
 
     # ------------------------------------------------------------- Public API
     create: (gameId) ->
-      @save( def_id: gameId )
+      @save( definition_id: gameId )
       @
 
     nextStage: ->

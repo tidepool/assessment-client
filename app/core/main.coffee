@@ -44,6 +44,8 @@ define [
       @session = new SessionController
         user: @user
         cfg: @cfg
+
+      @user.session = @session
       # Analytics is fired up
       new Analytics @cfg
       # The application manages all of its views starting with this one

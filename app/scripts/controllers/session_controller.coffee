@@ -32,15 +32,20 @@ define [
         if @user.hasCurrentToken()
           tokenHeader = "Bearer #{@user.get('accessToken')}"
           jqXHR.setRequestHeader('Authorization', tokenHeader)
-    @_fetchAuthedUser()
+    @user.fetch() if @user.hasCurrentToken()
     @ # Constructors return `this`
 
 
   # ----------------------------------------------- Prototype
   SessionController.prototype =
     signIn: ->
+      deferred = $.Deferred()
       if @user.hasCurrentToken() and not @user.isGuest()
-        @_fetchAuthedUser()
+        @user.fetch()
+        .done (data, textStatus, jqXHR) =>
+          deferred.resolve("Success")
+        .fail (jqXHR, textStatus, errorThrown) =>
+          deferred.reject(textStatus)
       else
         $.ajax
           url: @_authUrl
@@ -52,16 +57,34 @@ define [
             password: @user.get 'password'
             client_id: @cfg.appId
             client_secret: @cfg.appSecret
-        .done( _.bind(@_ajaxAuthSuccess, @) )
+        .done (data, textStatus, jqXHR) =>
+          @user.set 'accessToken', data.access_token
+          @_persistLocally data
+          @user.fetch()
+          .done (data, textStatus, jqXHR) =>
+            deferred.resolve("Success")
+          .fail (jqXHR, textStatus, errorThrown) =>
+            deferred.reject(textStatus)
         .fail (jqXHR, textStatus, errorThrown) =>
           console.log "#{_me}.signIn().ajax().fail()"
           @user.trigger 'error', @user, jqXHR
+          deferred.reject(textStatus)
+
+      deferred.promise()
 
     register: ->
+      deferred = $.Deferred()
+      
       @user.save()
       .done (data, textStatus, jqXHR) =>
         console.log "#{_me}.user.save().done()"
         @signIn()
+        .done =>
+          deferred.resolve("Success")
+        .fail =>
+          deferred.reject("Fail")
+
+      deferred.promise()
 
 
     # ---------------------------------------------- Depreciated Methods
@@ -70,20 +93,19 @@ define [
 
 
     # ---------------------------------------------- Callbacks
-    _ajaxAuthSuccess: (data) ->
-      #@cfg.debug && console.log "#{_me}._ajaxAuthSuccess()"
-      @user.set 'accessToken', data.access_token
-      @_persistLocally data
-      @_fetchAuthedUser()
+    # _ajaxAuthSuccess: (data) ->
+    #   #@cfg.debug && console.log "#{_me}._ajaxAuthSuccess()"
+    #   @user.set 'accessToken', data.access_token
+    #   @_persistLocally data
+    #   @_fetchAuthedUser()
 
 
     # ---------------------------------------------- Private Login Helpers
-    _fetchAuthedUser: ->
-      return unless @user.hasCurrentToken()
-      @user.id = 'finish_login'
-      @user.fetch
-        data:
-          guestId = @user.get('id') if @user.isGuest()
+    # _fetchAuthedUser: ->
+    #   return unless @user.hasCurrentToken()
+    #   @user.fetch
+        # data:
+        #   guestId = @user.get('id') if @user.isGuest()
 
 
     # ---------------------------------------------- Private Utility Methods
@@ -92,15 +114,22 @@ define [
       delete localStorage['expires_in']
       delete localStorage['token_received']
       delete localStorage['refresh_token']
+      delete localStorage['guest']
 
     # authorizeThrough: facebook, twitter or fitbit
     _buildExternalServiceUrl: (authorizeThrough) ->
       redirectUri = encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
-      authorize_param = "authorize_through=#{authorizeThrough}&"
-      url = "#{@_authUrl}?#{authorize_param}client_id=#{@cfg.appId}&redirect_uri=#{redirectUri}&response_type=token"
+      authorize_param = "provider=#{authorizeThrough}&"
+      if @user.get('guest')
+        # If the current logged-in user is guest, we need to pass this for potential mutation to new user
+        guest_param = "guest_id=#{@user.get('id')}&"
+      else
+        guest_param = ""
+      url = "#{@_authUrl}?#{authorize_param}#{guest_param}client_id=#{@cfg.appId}&redirect_uri=#{redirectUri}&response_type=token"
       url
 
     _parseHash: (hash) ->
+      debugger
       params = {}
       queryString = hash.substring(1)
       regex = /([^&=]+)=([^&]*)/g
@@ -117,8 +146,15 @@ define [
 
     # ------------------------------------------------ Public API
     logInAsGuest: ->
-      @user.set( email: 'guest' )
-      @signIn()
+      # @user.set( email: 'guest' )
+      deferred = $.Deferred()
+      @user.set( guest: true )
+      @register()
+      .done ->
+        deferred.resolve("Success")
+      .fail ->
+        deferred.reject("Fail")
+      deferred.promise()
 
     loginUsingOauth: (provider, popupWindowSize) ->
       # Inspired by: https://github.com/ptnplanet/backbone-oauth
@@ -141,8 +177,9 @@ define [
       console.log("Redirected with token #{params['access_token']}, hash #{hash}")
       if params['access_token']
         @user.set 'accessToken', params['access_token']
+        @user.set 'id', '-'
         @_persistLocally params
-        @_fetchAuthedUser()
+        @user.fetch()
       else
         console.log 'Odd Error, no token received but redirected'
 

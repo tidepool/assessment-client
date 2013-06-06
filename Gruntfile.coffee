@@ -22,7 +22,7 @@ module.exports = (grunt) ->
       "!<%= yeoman.app %>/bower_components/*"
     ]
     cssSourceGlob: [
-      "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.1.css"
+      "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
       #"<%= yeoman.app %>/bower_components/toastr/toastr.css"
       "<%= yeoman.temp %>/**/*.css"
     ]
@@ -276,7 +276,7 @@ module.exports = (grunt) ->
     "compass"
     "cssmin:dev"
     "exec:scribeSpecs"
-    "clean:temp"
+    # "clean:temp"
   ]
 
   grunt.registerTask "devServer", [

@@ -96,13 +96,22 @@ define [
       holdPlease.show _submitSel
       formData = Syphon.serialize e.target
       formData.passwordConfirm = '' unless formData.loginType == 'register'
-      @model.set formData,
-        silent: true
-      if @model.isValid()
-        if @model.isNew()
-          @options.app.session.register()
-        else
-          @options.app.session.signIn()
+
+
+
+      if formData.loginType is 'register'
+        @model.save formData
+      else
+        @model.set formData,
+          silent: true
+        @options.app.session.signIn()
+
+      #@model.save formData
+      # if @model.isValid()
+      #   if @model.isNew()
+      #     @options.app.session.register()
+      #   else
+      #     @options.app.session.signIn()
 
     _onSync: (model, data) ->
       console.log("#{_me}._onSync()")

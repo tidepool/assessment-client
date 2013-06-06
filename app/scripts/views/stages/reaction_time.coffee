@@ -202,7 +202,7 @@ define [
 
     _createUserEvent: (newEvent) ->
       eventInfo = 
-        assessment_id: @assessment.get('id')
+        game_id: @assessment.get('id')
         module: "reaction_time"
         stage: @stageNo
         sequence_type: @sequenceType

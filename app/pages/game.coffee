@@ -39,18 +39,33 @@ define [
     # ------------------------------------------------------------- Backbone Methods
     initialize: ->
       console.log "#{_me}.initialize()"
-      app.session.logInAsGuest() unless app.user.isLoggedIn()
-      @curGame = @_createGame _defaultGame
+      @curGame = app.user.createAssessment()
+      @_register_events()
+
+
+      # if app.user.isLoggedIn()
+      #   @curGame = @_createGame _defaultGame
+      #   @_register_events()
+      # else
+      #   app.session.logInAsGuest()
+      #   .done =>
+      #     @curGame = @_createGame _defaultGame
+      #     @_register_events()
+      #   .fail =>
+      #     console.log("Failed!")
       #@listenTo @curGame, 'all', (e) -> console.log "#{_me}.curGame event: #{e}"
+
+
+    # ------------------------------------------------------------- Helper Methods
+    _register_events: ->
       @listenTo @curGame, 'error', @_curGameErr
       @listenTo @curGame, 'change:stage_completed', @_onStageChanged
 
 
-    # ------------------------------------------------------------- Helper Methods
-    _createGame: (id) ->
-      console.log "#{_me}._createGame()"
-      game = new Assessment()
-      game.create(id)
+    # _createGame: (id) ->
+    #   console.log "#{_me}._createGame()"
+    #   game = new Assessment()
+    #   game.create(id)
 
     _showWelcome: (assessmentModel) ->
       @_trackLevels()
