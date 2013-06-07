@@ -71,7 +71,7 @@ define [
     _onGameSync: -> #console.log "#{_me}._onGameSync()"
 
     _onStageChanged: (model) ->
-      curStage = model.attributes.stage_completed #+ 4 # TODO: remove. this is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed + 4 # TODO: remove. this is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage

@@ -5,6 +5,7 @@
 
 
 $circleProximityCircleSize: $space * 4
+$circleProximityIncrement: 0.25
 
 .circleProximity .circle
   //position: absolute
@@ -14,10 +15,11 @@ $circleProximityCircleSize: $space * 4
   height: $circleProximityCircleSize
   line-height: $circleProximityCircleSize
   border-radius: 50%
-  margin: $spaceLil
+  margin-bottom: $spaceBig
   color: white
   font-size: $fontSizeVeryLarge
   vertical-align: middle
+  +transitionable
 
   // The `/` is emphasized
   em
@@ -28,4 +30,18 @@ $circleProximityCircleSize: $space * 4
     padding: 0 $spaceTiny
 
 
-
+  // Scale of circles
+  &.size1
+    +transform( scale(0.4) )
+    background: $colorBrand1 + (75 * $circleProximityIncrement * 2 )
+  &.size2
+    +transform( scale(0.7) )
+    background: $colorBrand1 + (75 * $circleProximityIncrement )
+  &.size3
+    +transform( scale(1.0) )
+  &.size4
+    +transform( scale(1.3) )
+    background: $colorBrand1 - (75 * $circleProximityIncrement )
+  &.size5
+    +transform( scale(1.6) )
+    background: $colorBrand1 - (75 * $circleProximityIncrement * 2 )

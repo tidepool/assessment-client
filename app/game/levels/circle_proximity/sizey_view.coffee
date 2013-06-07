@@ -16,23 +16,27 @@ define [
 
   _me = 'game/levels/circle_proximity/sizey_view'
   _sliderMarkup = '<div class="slider"></div>'
-  _maxSize = 10
 
-  View = CircleView.extend
+
+  View = Backbone.View.extend
 
     # ----------------------------------------------------- Backbone Extensions
     className: 'sizey'
     sliderTmpl: Handlebars.compile sliderTmpl
-    # initialize: -> #_.bindAll @, 'onSlide'
+    initialize: ->
+      _.bindAll @, 'onSlide'
+      @circle = new CircleView
+        model: @model
 
     render: ->
-      @$el.html @circleTmpl @model.attributes
+      @$el.html @circle.render().el
       @slider = $(_sliderMarkup).slider
         value: @model.get('size')
-        max: _maxSize
+        min: @model.minSize
+        max: @model.maxSize
         slide: @onSlide
       @$el.append @slider
-      return this
+      @
 
 
 
@@ -40,11 +44,20 @@ define [
 
 
 
-      # ----------------------------------------------------- Private Methods
+    # ----------------------------------------------------- Private Methods
+#    _setCircleSize: (newSize) ->
+#      $circle = @$el.find '.circle'
+#      $circle.removeProp 'class'
+#      @$el.addClass "circle #{_SIZES[newSize]}"
+#      debugger
 
 
-      # ----------------------------------------------------- Event Callbacks
-      onSlide: -> console.log "#{_me}.onSlide"
+    # ----------------------------------------------------- Event Callbacks
+    onSlide: (e, ui) ->
+      #console.log "#{_me}.onSlide"
+      @model.set 'size', ui.value
+
+
 
 
   View

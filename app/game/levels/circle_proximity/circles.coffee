@@ -8,8 +8,10 @@ define [
   # A Single Image
   _meModel = 'game/levels/circle_proximity/circles Model'
   Model = Backbone.Model.extend
+    maxSize: 5
+    minSize: 1
     defaults:
-      size: 5
+      size: 3
       trait1: ''
       trait2: ''
       abbreviation: ''
