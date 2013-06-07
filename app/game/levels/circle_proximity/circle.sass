@@ -1,0 +1,31 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+$circleProximityCircleSize: $space * 4
+
+.circleProximity .circle
+  //position: absolute
+  display: inline-block
+  background: $colorBrand1
+  width: $circleProximityCircleSize
+  height: $circleProximityCircleSize
+  line-height: $circleProximityCircleSize
+  border-radius: 50%
+  margin: $spaceLil
+  color: white
+  font-size: $fontSizeVeryLarge
+  vertical-align: middle
+
+  // The `/` is emphasized
+  em
+    color: $highlightThick
+    font-style: normal
+    font-size: $fontSizeVeryLarge + $spaceLil
+    vertical-align: middle
+    padding: 0 $spaceTiny
+
+
+

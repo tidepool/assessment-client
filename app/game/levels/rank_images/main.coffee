@@ -5,6 +5,7 @@ define [
   './rankable_images'
   'models/user_event'
   'jqueryui/sortable'
+  'ui_widgets/proceed'
 ],
 (
   Backbone
@@ -13,6 +14,7 @@ define [
   RankableImages
   UserEvent
   Sortable
+  proceed
 ) ->
 
   _me = 'game/levels/rank_images/main'
@@ -20,6 +22,7 @@ define [
   _unrankedSel = '#UnrankedArea'
   _sortableSel = '.connectedSortable'
   _msgHtml = '<li class="message">Rank from best to worst by clicking or dragging images.</li>'
+  _researchModuleName = 'image_rank'
   _USEREVENTS =
     started: "test_started"
     ranked: "image_ranked"
@@ -34,13 +37,12 @@ define [
     className: 'rankImages'
 
     initialize: ->
-      @stageNo = @options.stageNo
-      @assessment = @options.assessment
       @collection = new RankableImages @model.get('image_sequence')
       # Bind the funky callbacks we need for jQuery Sortable
-      _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick'
+      _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onProceedClick'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
+      @listenTo proceed, 'click', @onProceedClick
       @render()
       @_trackStart()
 
@@ -80,6 +82,10 @@ define [
       @$(_rankingSel).append @$msg
     _hideMsg: ->
       @$msg.remove()
+    _userTasksFinished: ->
+      proceed.show()
+    _userTasksUnfinished: ->
+      proceed.hide()
     _checkOnRanks: ->
       # For each collection, check if it's ranked or not, and use its index to set the ranking on the data model
       @collection.each (model) ->
@@ -87,20 +93,29 @@ define [
           model.set rank: model.view.$el.index() + 1
         else
           model.set rank: model.defaults.rank
-
+      rankedImages = @collection.filter (image) ->
+        image.get('rank')
+      if rankedImages.length is @collection.length
+        @_userTasksFinished()
+      else
+        @_userTasksUnfinished()
 
 
     # ----------------------------------------------------- Event Handlers
     onUnrankedImageClick: (e) ->
-      console.log "#{_me}.onUnrankedImageClick"
+      #console.log "#{_me}.onUnrankedImageClick()"
       @$(_rankingSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
     onRankedImageClick: (e) ->
-      console.log "#{_me}.onRankedImageClick"
+      #console.log "#{_me}.onRankedImageClick()"
       @$(_unrankedSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
+    onProceedClick: (e) ->
+      @_trackEnd()
+      @options.assessment.nextStage()
+      proceed.hide()
     onOver: -> @_checkOnMsg()
     onSortStart: (e, ui) ->
       id = $(e.currentTarget).find('img').data('id')
@@ -108,7 +123,7 @@ define [
       # Remove the helper from the original location. This way css labels on :first-child and :last-child will work beautifully
       ui.helper.appendTo('body') # The appendTo option seems broken, but manually removing the helper like this seems to work well
     onSortEnd: (e, ui) ->
-      console.log "#{_me}.onSortEnd"
+      #console.log "#{_me}.onSortEnd"
       @_checkOnRanks()
     onRankChange: (model, value, options) ->
       #console.log "#{_me}.onRankingChange new rank for image #{model.attributes.image_id}: #{model.attributes.rank}"
@@ -118,13 +133,12 @@ define [
         @_trackRanked model.attributes.image_id, value
 
 
-
     # ----------------------------------------------------- User Event Tracking
     _trackUserEvent: (newEvent) ->
       eventInfo =
-        assessment_id: @assessment.get('id')
-        module: "image_rank"
-        stage: @stageNo
+        assessment_id: @options.assessment.get('id')
+        module: _researchModuleName
+        stage: @options.stageNo
       userEvent = new UserEvent()
       userEvent.send _.extend(eventInfo, newEvent)
     _trackStart: ->
@@ -146,7 +160,8 @@ define [
         image_no: id
         event_desc: _USEREVENTS.dragged
     _trackEnd: ->
-
+      @_trackUserEvent
+        event_desc: _USEREVENTS.completed
 
   View
 

@@ -1,0 +1,44 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+
+.circleProximity .sizey
+  display: inline-block
+  margin: 0 $space
+
+
+  // -------------------------------------------------------------------- Trait Label Text
+  label
+    font-size: $fontSizeSmall
+    font-weight: bold
+    line-height: 1.3
+    text-transform: uppercase
+    margin-bottom: $spaceLil
+
+
+  // -------------------------------------------------------------------- The Size selection slider
+  $circleProximitySliderColor: desaturate( $colorBrand1, 75% )
+  .slider.ui-slider
+    display: inline-block
+    background: $circleProximitySliderColor
+    border: 1px solid $circleProximitySliderColor
+    border-top: 1px solid $shadeDark
+    border-bottom: 1px solid $circleProximitySliderColor + 100
+  .slider.ui-slider .ui-slider-handle
+    border-radius: 50%
+    background: $circleProximitySliderColor - 65
+    border-color: white
+    box-shadow: inset 0 0 0 2px white, 0 0 0 1px $shadeLight, 0 2px 1px $shade
+    cursor: pointer
+
+
+
+
+
+  // -------------------------------------------------------------------- Fixed Sizing
+  .slider.ui-slider
+    width: $space * 5

@@ -9,7 +9,7 @@ define [
   'ui_widgets/steps_remaining'
   'game/levels/reaction_time'
   'game/levels/rank_images' #'game/levels/image_rank'
-  'game/levels/circles_test'
+  'game/levels/circle_proximity' #'game/levels/circles_test'
 ], (
   Backbone
   Handlebars
@@ -42,6 +42,7 @@ define [
       @curGame = @_createGame _defaultGame
       #@listenTo @curGame, 'all', (e) -> console.log "#{_me}.curGame event: #{e}"
       @listenTo @curGame, 'error', @_curGameErr
+      @listenTo @curGame, 'sync', @_onGameSync
       @listenTo @curGame, 'change:stage_completed', @_onStageChanged
 
 
@@ -67,8 +68,10 @@ define [
 
 
     # ------------------------------------------------------------- Event Handlers
+    _onGameSync: -> #console.log "#{_me}._onGameSync()"
+
     _onStageChanged: (model) ->
-      curStage = model.attributes.stage_completed #+ 3 # TODO: remove. this is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed #+ 4 # TODO: remove. this is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage

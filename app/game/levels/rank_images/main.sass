@@ -23,6 +23,7 @@ $rankImagesHeight: 198px
   .unrankedArea
     margin: 0
     padding: $space 0 $spaceBig
+    min-height: 300px
 
 
   // -------------------------------------------------- Instruction Text
@@ -64,8 +65,7 @@ $rankImagesHeight: 198px
 
 
   // Sizing changes based on screen width
-  .rankingArea,
-  .unrankedArea
+  .rankingArea
     min-height: ($rankImagesHeight + 10) * .1
   .message
     min-height: $rankImagesHeight * .1
@@ -78,8 +78,7 @@ $rankImagesHeight: 198px
 
 
   @media all and (min-width: 321px)
-    .rankingArea,
-    .unrankedArea
+    .rankingArea
       min-height: ($rankImagesHeight + 10) * .3
     .message
       min-height: $rankImagesHeight * .3
@@ -88,8 +87,7 @@ $rankImagesHeight: 198px
       height: $rankImagesHeight * .3
       line-height: $rankImagesHeight * .3
   @media all and (min-width: 601px)
-    .rankingArea,
-    .unrankedArea
+    .rankingArea
       min-height: ($rankImagesHeight + 10) * .4
     .message
       min-height: $rankImagesHeight * .4
@@ -98,8 +96,7 @@ $rankImagesHeight: 198px
       height: $rankImagesHeight * .4
       line-height: $rankImagesHeight * .4
   @media all and (min-width: 1001px)
-    .rankingArea,
-    .unrankedArea
+    .rankingArea
       min-height: ($rankImagesHeight + 10) * .8
     .message
       min-height: $rankImagesHeight * .8

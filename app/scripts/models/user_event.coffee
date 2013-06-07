@@ -25,8 +25,8 @@ define [
         error: ->
           console.log "#{_me}.save().error()"
         success: (model) ->
-          console.log "#{_me}.save().success()"
-          console.log model.attributes
+          #console.log "#{_me}.save().success()"
+          #console.log model.attributes
 
 
   UserEvent

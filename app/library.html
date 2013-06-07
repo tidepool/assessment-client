@@ -29,6 +29,13 @@
         <h1>TidePool Component Library</h1>
         <p>This page holds UI components so people can see how to implement various options of them and see how they look in one place.</p>
 
+
+        <h2>`Proceed` ui_widget</h2>
+        <p>This is a gui element that allows the user to indicate when he or she is ready to proceed, but does not block them from continuing their present activity.</p>
+        <button id="ActionShowProceed" class="btn btn-large btn-primary">Show `Proceed`</button>
+        <button id="ActionHideProceed" class="btn btn-large">Hide</button>
+
+
         <h2>Colors</h2>
         <p>These colors are used to build all colors in the interface. They are used as a base, and <a href="http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html">SASS functions</a> like `transparentize` are used to make blends and variations.</p>
         <p class="muted">Brand Colors</p>
@@ -184,7 +191,8 @@
                     'ui_widgets/steps_remaining',
                     'ui_widgets/hold_please',
                     'ui_widgets/psst',
-                    'composite_views/perch'
+                    'composite_views/perch',
+                    'ui_widgets/proceed'
                 ], function (
                     Backbone,
                     Syphon,
@@ -192,7 +200,8 @@
                     StepsRemaining,
                     holdPlease,
                     psst,
-                    perch
+                    perch,
+                    proceed
                 ) {
                     $('#DividerHolder').append( dividerMarkup )
 
@@ -246,6 +255,9 @@
                         })
                     }
                     addColorNames()
+
+                    $('#ActionShowProceed').on('click', proceed.show)
+                    $('#ActionHideProceed').on('click', proceed.hide)
 
                 });
             });

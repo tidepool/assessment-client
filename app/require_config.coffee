@@ -3,6 +3,7 @@ define [], () ->
     packages: [
       'core'
       'game/levels/rank_images'
+      'game/levels/circle_proximity'
     ]
     paths:
       # 3rd Party Bower Libraries
