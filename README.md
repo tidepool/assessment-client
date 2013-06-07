@@ -40,9 +40,18 @@ Installation:
 
         npm install && bower install
 
-* Go to the OAuthProvider project (api-server)
+* .env file in your client project needs to contain:
+        
+        DEV_APISERVER=
+        DEV_APPSECRET=
+        DEV_APPID=
+        PROD_APISERVER=
+        PROD_APPSECRET=
+        PROD_APPID=
 
-  Copy the app_secrets_dev.js file and paste it into app/scripts folder
+    To get the DEV_* versions of those values, go to the OAuthProvider project (api-server). The contents of the .client_env file will provide the necessary environment variables for connecting to the api-server. Copy those in your .env file in the client project. If not you may need to run rake:db_seed to let it generate those values on your dev machine. 
+
+    To get the PROD_* versions, contact your deployment person in TidePool. The PROD_* versions are used for generating (grunt dist) the production deployment files. Generally this should be only happening on the Teamcity deployment server.   
 
 * Setting up POW (http://pow.cx/): (We are just using POW as a proxy/DNS server, it is not a web server.)
 

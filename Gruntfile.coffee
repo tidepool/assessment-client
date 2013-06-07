@@ -6,8 +6,17 @@ mountFolder = (connect, dir) ->
 
 module.exports = (grunt) ->
 
+  # envVars = ["DEV_APISERVER", "DEV_APPID", "DEV_APPSECRET", "PROD_APISERVER", "PROD_APPID", "PROD_APPSECRET"]
+
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
+
+  # load the server configuration from .env file
+  serverConfig = {}
+  require("fs").readFileSync("./.env").toString().split('\n').forEach (line) ->
+    contents = line.split('=')
+    console.log line
+    serverConfig[contents[0]] = contents[1]
 
   # configurable paths
   yeomanConfig =
@@ -29,7 +38,6 @@ module.exports = (grunt) ->
     horseAndBuggyJsGlob: [
       "bower_components/**/{*.js,*.css}"
       "bower_components_ext/*.js"
-      "scripts/app_secrets_dev.js"
       "scripts/vendor/*.js"
       #"bower_components/requirejs/require.js"
       #"bower_components/modernizr/modernizr.js"
@@ -42,10 +50,17 @@ module.exports = (grunt) ->
     ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
+    # DEV_APISERVER: process.env.DEV_APISERVER
+    # DEV_APPID: process.env.DEV_APPID
+    # DEV_APPSECRET: process.env.DEV_APPSECRET
+    # PROD_APISERVER: process.env.PROD_APISERVER
+    # PROD_APPID: process.env.PROD_APPID
+    # PROD_APPSECRET: process.env.PROD_APPSECRET
 
   grunt.initConfig
     yeoman: yeomanConfig
     tidepool: tidepoolConfig
+    tidepoolServer: serverConfig
     connect:
       options:
         port: 7000
@@ -202,6 +217,34 @@ module.exports = (grunt) ->
           dest: "<%= yeoman.dist %>"
         ]
 
+    replace: 
+      dist:
+        options:
+          variables: 
+            'APISERVER': "<%= tidepoolServer.PROD_APISERVER %>"
+            'APPSECRET' : "<%= tidepoolServer.PROD_APPSECRET %>" 
+            'APPID' : "<%= tidepoolServer.PROD_APPID %>" 
+          prefix: '@@'
+        files: [
+          expand: true 
+          flatten: true 
+          src: ["<%= yeoman.temp %>/core/config.js"] 
+          dest: "<%= yeoman.temp %>/core/"
+        ]
+      dev:
+        options:
+          variables: 
+            'APISERVER': "<%= tidepoolServer.DEV_APISERVER %>"
+            'APPSECRET' : "<%= tidepoolServer.DEV_APPSECRET %>" 
+            'APPID' : "<%= tidepoolServer.DEV_APPID %>"
+          prefix: '@@'
+        files: [
+          expand: true 
+          flatten: true 
+          src: ["<%= yeoman.dev %>/core/config.js"] 
+          dest: "<%= yeoman.dev %>/core/"
+        ]
+
     copy:
       devImages: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
         files: [
@@ -272,6 +315,7 @@ module.exports = (grunt) ->
     "exec:convert_jqueryui_amd"
     "copy:devImages"
     "coffee:dev"
+    "replace:dev"
     "coffee:spec"
     "compass"
     "cssmin:dev"
@@ -305,6 +349,7 @@ module.exports = (grunt) ->
     "compass"
     "cssmin:dist"
     "coffee:temp"
+    "replace:dist"
     "copy:requireJsPrep"
     "requirejs"
     "copy:requireJsPost"

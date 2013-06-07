@@ -6,5 +6,6 @@ dist/
 app/bower_components
 .DS_Store
 .idea
+.env
 app/scripts/app_secrets_dev.js
 *.css
