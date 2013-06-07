@@ -89,7 +89,7 @@ define [
 
     # ---------------------------------------------- Depreciated Methods
     # TODO: Have other modules get user info from the user model instead.
-    getUserInfo: -> throw new Error ('Get user information from models/user or app.user instead')
+    getUserInfo: -> throw new Error ('Get user information from app.user instead')
 
 
     # ---------------------------------------------- Callbacks

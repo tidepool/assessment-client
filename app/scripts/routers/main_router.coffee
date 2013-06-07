@@ -31,7 +31,7 @@ define [
     showAbout: ->     @app.view.asSite 'pages/about'
     showTeam: ->      @app.view.asSite 'pages/team'
     showInvestors: -> @app.view.asSite 'pages/investors'
-    showGame: ->      @app.view.asGame 'pages/game'
+    showGame: ->      @app.view.asGame 'pages/playGame'
     showResult: ->    @app.view.asGame 'pages/gameResult'
     showDashboard: ->
       console.log "#{_me}.showDashboard()"

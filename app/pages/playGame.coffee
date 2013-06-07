@@ -5,11 +5,11 @@ define [
   'composite_views/perch'
   'models/assessment'
   'messages/error_modal_view'
-  'modelsAndCollections/levels'
+  'entities/levels'
   'ui_widgets/steps_remaining'
-  'stages/reaction_time'
-  'stages/image_rank'
-  'stages/circles_test'
+  'game/levels/reaction_time'
+  'game/levels/rank_images' #'game/levels/image_rank'
+  'game/levels/circle_proximity' #'game/levels/circles_test'
 ], (
   Backbone
   Handlebars
@@ -24,7 +24,7 @@ define [
   CirclesTest
 ) ->
 
-  _me = 'pages/game'
+  _me = 'pages/playGame'
   _defaultGame = 1
   _stepsRemainingContainer = '#HeaderRegion'
   _views =
@@ -33,7 +33,7 @@ define [
     'CirclesTest': 'CirclesTest'
 
   Me = Backbone.View.extend
-    className: 'gamePage'
+    className: 'playGamePage'
 
 
     # ------------------------------------------------------------- Backbone Methods
@@ -42,30 +42,11 @@ define [
       @curGame = app.user.createAssessment()
       @_register_events()
 
-
-      # if app.user.isLoggedIn()
-      #   @curGame = @_createGame _defaultGame
-      #   @_register_events()
-      # else
-      #   app.session.logInAsGuest()
-      #   .done =>
-      #     @curGame = @_createGame _defaultGame
-      #     @_register_events()
-      #   .fail =>
-      #     console.log("Failed!")
-      #@listenTo @curGame, 'all', (e) -> console.log "#{_me}.curGame event: #{e}"
-
-
     # ------------------------------------------------------------- Helper Methods
     _register_events: ->
       @listenTo @curGame, 'error', @_curGameErr
+      @listenTo @curGame, 'sync', @_onGameSync
       @listenTo @curGame, 'change:stage_completed', @_onStageChanged
-
-
-    # _createGame: (id) ->
-    #   console.log "#{_me}._createGame()"
-    #   game = new Assessment()
-    #   game.create(id)
 
     _showWelcome: (assessmentModel) ->
       @_trackLevels()
@@ -84,9 +65,10 @@ define [
 
 
     # ------------------------------------------------------------- Event Handlers
+    _onGameSync: -> #console.log "#{_me}._onGameSync()"
+
     _onStageChanged: (model) ->
-      console.log "#{_me}._onStageChanged()"
-      curStage = model.attributes.stage_completed
+      curStage = model.attributes.stage_completed #+ 4 # TODO: remove. this is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
@@ -102,7 +84,7 @@ define [
 
     # ------------------------------------------------------------- Stage Management
     _showLevel: (stageId) ->
-      console.log "#{_me}._showLevel(#{stageId})"
+      #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @curGame.get('stages')[stageId]
       viewClassString = _views[curStage.view_name]
       ViewClass = eval(viewClassString)

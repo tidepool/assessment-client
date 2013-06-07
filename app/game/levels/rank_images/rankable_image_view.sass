@@ -1,0 +1,35 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+
+.rankableImage
+  position: relative
+  display: inline-block
+  vertical-align: top
+  margin: 0 $spaceTiny
+  background: white
+  border-radius: $radiusSmall
+  cursor: pointer
+  padding: $spaceTiny
+  box-shadow: 0 1px 1px 1px $shadeLight
+
+  img
+    max-width: 100%
+    max-height: 100%
+
+  // Interactions
+  &.placeholder
+    background: $highlightThin
+    background-size: 50px 50px
+    +linear-gradient(-45deg, $highlightVeryThin 25%, transparent 25%, transparent 50%, $highlightVeryThin 50%, $highlightVeryThin 75%, transparent 75%, transparent)
+
+    box-shadow: 0 1px 0 1px $shadeVeryLight, inset 0 0 0 $spaceTiny $highlight
+  &.ui-sortable-helper
+    +transform( translateY(- $spaceTiny) scale(1.02) rotateZ(2deg) )
+    box-shadow: 1px $spaceTiny + 2 2px 1px $shadeLight
+
+

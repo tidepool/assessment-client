@@ -24,8 +24,6 @@ define [
       "click #ActionLogOut": "_clickedLogOut"
       "click #ActionShowProfile": "_clickedProfile"
 
-    initialize: -> console.log "#{_me}.initialize()"
-
     start: (appCoreSingleton) ->
       throw new Error('Need an options.user to start') unless appCoreSingleton.user
       @app = appCoreSingleton

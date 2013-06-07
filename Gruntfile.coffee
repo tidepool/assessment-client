@@ -34,6 +34,7 @@ module.exports = (grunt) ->
       "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
       #"<%= yeoman.app %>/bower_components/toastr/toastr.css"
       "<%= yeoman.temp %>/**/*.css"
+      "!<%= yeoman.temp %>/library.css"
     ]
     horseAndBuggyJsGlob: [
       "bower_components/**/{*.js,*.css}"
@@ -101,11 +102,16 @@ module.exports = (grunt) ->
         files: "<%= tidepool.sassSourceGlob %>"
         tasks: ["compass", "cssmin:dev", "clean:temp", "livereload"]
 
+      libraryCss:
+        files: "<%= yeoman.temp %>/library.css"
+        tasks: "copy:libraryCss"
+
       livereload:
         files: [
           "<%= yeoman.app %>/*.html"
           "<%= yeoman.dev %>/spec.html"
           "<%= yeoman.dev %>/**/*.css"
+          "<%= yeoman.app %>/library.css"
           "<%= yeoman.dev %>/**/*.js"
           "<%= yeoman.app %>/**/*.{png,jpg}"
         ]
@@ -162,7 +168,7 @@ module.exports = (grunt) ->
           name: 'core'
           include: [
             'pages/about'
-            'pages/game'
+            'pages/playGame'
             'pages/gameResult'
             'pages/home'
             'pages/investors'
@@ -260,6 +266,9 @@ module.exports = (grunt) ->
           src: "glyphicons*.png"
           dest: "<%= yeoman.dist %>/img"
         ]
+      libraryCss:
+        src: "<%= yeoman.temp %>/library.css"
+        dest: "<%= yeoman.app %>/library.css"
       dist:
         files: [
           expand: true
@@ -320,7 +329,7 @@ module.exports = (grunt) ->
     "compass"
     "cssmin:dev"
     "exec:scribeSpecs"
-    # "clean:temp"
+    "copy:libraryCss"
   ]
 
   grunt.registerTask "devServer", [

@@ -1,6 +1,7 @@
 // Tidepool Colors
 $colorBrand: #e43e45
 $colorBrand1: rgb(24,143,244)
+$colorBrand1Light: lighten( $colorBrand1, 17% ) //rgb(101,188,228) //#65bce4
 $colorBrand2: rgb(255,210,0)
 $colorBrand3: rgb(248,109,24)
 $colorBrand4: rgb(127,76,174)
@@ -10,14 +11,14 @@ $colorBrandContrast: $colorBrand1
 $colorBrandContrastLight: #d6efff
 $colorBrandContrastNeutral: #3b3b41
 $colorBrandContrastNeutralLight: $colorBrandContrastNeutral + 170
-$colorBackground: #F5F5F5
+$colorBackground: #f5f5f5
+$colorBackgroundWarm: #eae8e5
 $colorForeground: #363636
 $colorForegroundMild: #8b8b8b
 
 // Semantic Colors
-//$colorGood: #35a589
-$colorGood: rgb(28,170,176)
-$colorGoodLight: $colorGood + 100
+$colorGood: #35a589 //alt version: rgb(28,170,176)
+$colorGoodLight: lighten( $colorGood, 70% )
 $colorInfo: #73829d
 $colorInfoLight: #99acd0
 $colorInfoDark: #4c576a
@@ -28,6 +29,10 @@ $colorBad: #e96267
 $colorQuiet: #b7b7b7
 $colorVeryQuiet: #dadada
 $colorLink: $colorBrand1
+
+// Blend Colors
+$colorMixBrand1Good: mix( $colorBrand1, $colorGood, 20% )
+$colorMixBrand1GoodLight: lighten( $colorMixBrand1Good, 30% ) //rgb(140,222,220) //#8cdedc
 
 // Named Colors (usually you should access semantically or by brand, but these are useful for the scientific assessments)
 $colorRed: $colorBrand

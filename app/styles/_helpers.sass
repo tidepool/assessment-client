@@ -22,3 +22,8 @@
 
 @mixin transitionable($props: all, $speed: 0.15s, $easing: ease-in-out)
   @include transition ($props $speed $easing)
+
+@mixin floating($distance: $spaceLil, $shadowColor: $shadeLight)
+  box-shadow: $distance / 2 $distance 0 0 $shadowColor
+
+

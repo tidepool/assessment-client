@@ -11,7 +11,7 @@ define [
   './mediator'
   './view'
   # External Dependencies
-  'models/user'
+  'entities/user'
   'controllers/session_controller'
   'routers/main_router'
 ],
