@@ -354,6 +354,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask "dist", [
     "clean:dist"
+    "exec:convert_jqueryui_amd"
     "clean:temp"
     "compass"
     "cssmin:dist"
