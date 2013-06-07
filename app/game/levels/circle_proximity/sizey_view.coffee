@@ -39,17 +39,7 @@ define [
       @
 
 
-
-
-
-
-
     # ----------------------------------------------------- Private Methods
-#    _setCircleSize: (newSize) ->
-#      $circle = @$el.find '.circle'
-#      $circle.removeProp 'class'
-#      @$el.addClass "circle #{_SIZES[newSize]}"
-#      debugger
 
 
     # ----------------------------------------------------- Event Callbacks
