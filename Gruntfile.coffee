@@ -367,8 +367,8 @@ module.exports = (grunt) ->
     "copy:distImages"
     "htmlmin"
     "clean:temp"
-    "open"
-    "connect:dist"
+    # "open"
+    # "connect:dist"
   ]
 
   grunt.registerTask "default", ["test", "open", "watch"]
