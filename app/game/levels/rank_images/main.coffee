@@ -112,7 +112,7 @@ define [
       @$(_unrankedSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
-    onProceedClick: (e) ->
+    onProceedClick: ->
       @_trackEnd()
       @options.assessment.nextStage()
       proceed.hide()
@@ -136,7 +136,7 @@ define [
     # ----------------------------------------------------- User Event Tracking
     _trackUserEvent: (newEvent) ->
       eventInfo =
-        assessment_id: @options.assessment.get('id')
+        game_id: @options.assessment.get('id')
         module: _researchModuleName
         stage: @options.stageNo
       userEvent = new UserEvent()

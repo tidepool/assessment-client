@@ -11,32 +11,35 @@
   margin: 0 $space
 
 
-  // -------------------------------------------------------------------- Trait Label Text
-  label
-    font-size: $fontSizeSmall
-    font-weight: bold
-    line-height: 1.3
-    text-transform: uppercase
-    margin-bottom: $spaceLil
+  // -------------------------------------------------------------------- Circles
+  .circle
+    display: inline-block
+    position: static
+    margin: $spaceBig 0
+    +transitionable
+
+
 
 
   // -------------------------------------------------------------------- The Size selection slider
   $circleProximitySliderColor: desaturate( $colorBrand1, 75% )
   .slider.ui-slider
-    display: inline-block
     background: $circleProximitySliderColor
     border: 1px solid $circleProximitySliderColor
     border-top: 1px solid $shadeDark
     border-bottom: 1px solid $circleProximitySliderColor + 100
+    margin-bottom: $spaceLil
   .slider.ui-slider .ui-slider-handle
     border-radius: 50%
-    background: $circleProximitySliderColor - 65
+    background: $circleProximitySliderColor - 50
     border-color: white
     box-shadow: inset 0 0 0 2px white, 0 0 0 1px $shadeLight, 0 2px 1px $shade
     cursor: pointer
-
-
-
+  .slider.ui-slider .ui-slider-handle:focus
+    background: mix( $colorBrand1, $circleProximitySliderColor )
+    outline: none
+  .slider.ui-slider .ui-slider-handle:hover
+    background: $colorBrand1
 
 
   // -------------------------------------------------------------------- Fixed Sizing

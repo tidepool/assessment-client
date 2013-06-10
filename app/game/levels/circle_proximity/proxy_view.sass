@@ -1,0 +1,38 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+
+.circleProximity .proxy
+  position: absolute
+  display: block
+
+
+  label
+    color: $shade
+    +transitionable
+    text-shadow: 0 0 $spaceTiny $colorBackground
+
+  .line
+    display: none
+    position: absolute
+    width: $spaceTiny
+    background-color: transparentize( $colorBrand1, .75 )
+    +transform-origin( top center )
+
+  .dot
+    position: absolute
+    width: 5px
+    height: 5px
+    left: -1px
+    top: -2px
+    border-radius: 50%
+    background: $colorQuiet
+    box-shadow: 0 0 0 1px $colorBackground
+
+
+  label.active
+    color: $colorForeground

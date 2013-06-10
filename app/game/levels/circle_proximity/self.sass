@@ -4,17 +4,47 @@
 @import '../../../styles/helpers'
 
 
+$size: $space * 2
 
-
-.circleProximity.self
+.circleProximity .self
+  display: block
   position: absolute
-  top: $space
-  left: 50%
-  margin-left: -$spaceBig * 2
-  width: $spaceBig * 4
-  height: $spaceBig * 4
-  background-color: $colorGood
+  background-color: lighten( $colorGood, 5% )
   border-radius: 50%
+  //box-shadow: 0 0 0 $spaceBig * 4 $shadeVeryLight, 0 0 0 $spaceBig * 2 $shadeVeryLight, 0 0 0 $spaceBig $shadeVeryLight
+
 
   .icon-user
-    font-size: $spaceBig * 2
+    position: absolute
+    top: 50%
+    margin-top: - $size/2 - 5
+    left: 50%
+    margin-left: - $size/2
+    font-size: $size
+    width: $size
+    height: $size
+    line-height: $size
+    color: white
+    vertical-align: middle
+
+
+
+  &.yay
+    +animation( selfLove .7s )
+
+
+
+
+
++keyframes(selfLove)
+  0%, 100%
+    +transform( scale(1) )
+    box-shadow: 0 0 0 0 transparent
+  10%, 80%
+    box-shadow: 0 0 0 $size transparentize($colorGood,.95), 0 0 0 $size transparent
+  20%, 60%
+    box-shadow: 0 0 0 $size transparentize($colorGood,.9), 0 0 0 $size * 2 transparentize($colorGood,.95), 0 0 0 $size * 2 transparent
+  30%
+    +transform( scale(1.05) )
+    box-shadow: 0 0 0 $size transparentize($colorGood,.8), 0 0 0 $size * 2 transparentize($colorGood,.9), 0 0 0 $size * 3 transparentize($colorGood,.95)
+

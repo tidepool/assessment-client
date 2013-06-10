@@ -19,7 +19,7 @@ define [
     defaults:
       title: ''
       content: 'This is the default message.'
-      onClose: -> console.log "#{_me}.onClose"
+      onClose: -> #console.log "#{_me}.onClose"
       btn1Text: "Ok"
       btn1ClassName: "btn-large btn-primary"
       btn1Callback: -> console.log "#{_me}.btn1.callback"
@@ -49,7 +49,7 @@ define [
     _onBtn2Click: (e) -> console.log "#{_me}._onBtn2Click()"
 
     _onModalHidden: ->
-      console.log "#{_me}._onModalHidden()"
+      #console.log "#{_me}._onModalHidden()"
       @model.attributes.onClose?()
       @_viewCleanup()
 

@@ -57,7 +57,7 @@ $hugeIconSize: 100px
   .target .circle:active
     +transform(scale(.99))
   .target.hit .circle
-    +animation(radiatingRed 0.3s)
+    +animation(radiatingRed 0.5s)
   .target.hit .circle i
     display: block
 
@@ -80,10 +80,12 @@ $hugeIconSize: 100px
 
 +keyframes(radiatingRed)
   0%, 100%
+    +transform( scale(1) )
     box-shadow: 0 0 0 $spaceTiny $highlightThick, 0 0 0 $spaceTiny transparent, 0 0 0 $spaceTiny transparent
-  20%, 90%
+  10%, 80%
     box-shadow: 0 0 0 $space transparentize($colorRed,.8), 0 0 0 $space transparent, 0 0 0 $space transparent
-  40%, 80%
+  20%, 60%
     box-shadow: 0 0 0 $space transparentize($colorRed,.7), 0 0 0 $space * 2 transparentize($colorRed,.9), 0 0 0 $space * 2 transparent
-  60%
+  30%
+    +transform( scale(1.05) )
     box-shadow: 0 0 0 $space transparentize($colorRed,.6), 0 0 0 $space * 2 transparentize($colorRed,.8), 0 0 0 $space * 3 transparentize($colorRed,.9)
