@@ -1,10 +1,12 @@
 define [
   'underscore'
   'backbone'
+  'models/assessment'
 ],
 (
   _
   Backbone
+  Assessment
 ) ->
 
   _me = 'entities/user'
@@ -15,13 +17,18 @@ define [
     urlRoot: ->
       "#{window.apiServerUrl}/api/v1/users"
 
+
     defaults: ->
       return {
+        id: '-' # Convention to refer to the current user
         accessToken: localStorage['access_token']
       }
 
     initialize:  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
+      @on 'change', (model) ->
+        console.log "#{_me}.onChange"
+        console.log model.attributes
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'change:guest', @_calculateNickname
@@ -30,7 +37,8 @@ define [
     #http://backbonejs.org/#Model-validate
     validate: (attrs, options) ->
       console.log "#{_me}.validate()"
-      return 'The email address cannot be blank.' unless attrs.email
+      return null if attrs.guest is true
+      return 'The email address cannot be blank.' unless attrs.email 
       # Let's use default browser email validation for now
       #emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ # From http://stackoverflow.com/a/46181/11236
       #return 'That doesn\'t look like a valid email address.' unless emailRegex.test attrs.email
@@ -42,7 +50,7 @@ define [
         return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
 
       # Register mode
-      if @isNew()
+      if attrs.loginType == 'register'
         return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
         return 'The passwords should match' unless attrs.password is attrs.passwordConfirm
       return null # no validation errors
@@ -96,7 +104,22 @@ define [
 
 
     # ----------------------------------------------------------- Public API
-    isNew: -> @get('loginType') == 'register'
+    isNew: -> ! @get('accessToken')
+
+    createAssessment: (gameId)->
+      curGame = new Assessment()
+      if @isLoggedIn()
+        curGame.create(gameId)
+      else
+        @session.logInAsGuest()
+        .done =>
+          curGame.create(gameId)
+        .fail =>
+          @trigger 'error:createAssessment'
+          console.log "#{_me}.createAssessment.fail()"
+      curGame
+
+
     isGuest: -> !! @get('guest')
     hasCurrentToken: ->
       curToken = false

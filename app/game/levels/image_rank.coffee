@@ -204,7 +204,7 @@ define [
 
     createUserEvent: (newEvent) ->
       eventInfo = 
-        "assessment_id": @assessment.get('id')
+        "game_id": @assessment.get('id')
         "module": "image_rank"
         "stage": @stageNo 
       fullInfo = _.extend({}, eventInfo, newEvent)

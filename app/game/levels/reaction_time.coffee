@@ -47,9 +47,9 @@ define [
     initialize: (options) ->
       @stageNo = options.stageNo
       @assessment = options.assessment
-      @colors = @model.get('colors')
+      # @colors = @model.get('colors')
       @sequenceType = @model.get('sequence_type')
-      @colorSequence = @prepareSequence()
+      @colorSequence = @model.get('sequence')
 
       # Log out the colors. Why does red show up twice in a row sometimes?
       console.log @colorSequence
@@ -104,58 +104,6 @@ define [
       delay = @colorSequence[@sequenceNo + 1].interval
       setTimeout _.bind(@_showCircle, @), delay
 
-
-    # ------------------------------------------------------------- Game Level Data Preparation
-    prepareSequence: ->
-      numberOfReds = parseInt @model.get('number_of_reds')
-      intervalFloor = parseInt @model.get('interval_floor')
-      intervalCeil = parseInt @model.get('interval_ceil')
-      limitTo = parseInt @model.get('limit_to')
-      max = @colors.length - 1
-      min = 0
-      redCount = 0
-      yellowCount = 0
-      count = 0
-      sequence = []
-      exit = false
-      priorColor = null
-      
-      # TODO: Refactor this!
-      while (not exit)
-        timeInterval = Math.floor(Math.random() * (intervalCeil - intervalFloor + 1) + intervalFloor)
-        outcome = Math.floor(Math.random() * (max - min + 1) + min)
-        switch @sequenceType
-          when _TYPES.simple
-            color = @colors[outcome]
-            if color is _targetColor
-              redCount += 1
-            if redCount > numberOfReds or count > limitTo
-              # Always force the last one to be red
-              exit = true
-              color = _targetColor
-            sequence[count] = { color: color, interval: timeInterval } 
-          when _TYPES.complex
-            if @colors[outcome] is _targetPrequelColor
-              yellowCount +=1
-            priorColor = sequence[count - 1].color if count > 0
-            sequence[count] = { color: @colors[outcome], interval: timeInterval } 
-            if @colors[outcome] is _targetColor and priorColor is _targetPrequelColor
-              exit = true
-            else if yellowCount is 3 and @colors[outcome] is _targetPrequelColor
-              # Force the red outcome if there are already 3 yellows
-              exit = true
-              count += 1
-              timeInterval = Math.floor(Math.random() * (intervalCeil - intervalFloor + 1) + intervalFloor)
-              sequence[count] = { color: _targetColor, interval: timeInterval }
-            else if count > limitTo - 1
-              # force read after yellow after the limit is reached
-              exit = true
-              sequence[count] = { color: _targetPrequelColor, interval: timeInterval }
-              timeInterval = Math.floor(Math.random() * (intervalCeil - intervalFloor + 1) + intervalFloor)
-              sequence[count + 1] = { color: _targetColor, interval: timeInterval }
-        count += 1
-
-      sequence
 
 
     # ------------------------------------------------------------- Event Handlers
