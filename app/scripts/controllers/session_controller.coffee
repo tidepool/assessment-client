@@ -129,7 +129,6 @@ define [
       url
 
     _parseHash: (hash) ->
-      debugger
       params = {}
       queryString = hash.substring(1)
       regex = /([^&=]+)=([^&]*)/g
@@ -168,7 +167,7 @@ define [
 
     logOut: ->
       @_clearOutLocalStorage()
-      @user.clear()
+      @user.clear().set @user.defaults()
 
     # Called as a global object by the opened window
     externalAuthServiceCallback: (hash, location) ->
@@ -176,8 +175,7 @@ define [
       params = @_parseHash hash
       console.log("Redirected with token #{params['access_token']}, hash #{hash}")
       if params['access_token']
-        @user.set 'accessToken', params['access_token']
-        @user.set 'id', '-'
+        @user.clear().set @user.defaults()
         @_persistLocally params
         @user.fetch()
       else
