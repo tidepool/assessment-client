@@ -6,8 +6,6 @@ mountFolder = (connect, dir) ->
 
 module.exports = (grunt) ->
 
-  # envVars = ["DEV_APISERVER", "DEV_APPID", "DEV_APPSECRET", "PROD_APISERVER", "PROD_APPID", "PROD_APPSECRET"]
-
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
 
@@ -32,7 +30,6 @@ module.exports = (grunt) ->
     ]
     cssSourceGlob: [
       "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
-      #"<%= yeoman.app %>/bower_components/toastr/toastr.css"
       "<%= yeoman.temp %>/**/*.css"
       "!<%= yeoman.temp %>/library.css"
     ]
@@ -40,8 +37,6 @@ module.exports = (grunt) ->
       "bower_components/**/{*.js,*.css}"
       "bower_components_ext/*.js"
       "scripts/vendor/*.js"
-      #"bower_components/requirejs/require.js"
-      #"bower_components/modernizr/modernizr.js"
     ]
     handlebarsGlob: [
       "**/*.hbs"
@@ -51,17 +46,13 @@ module.exports = (grunt) ->
     ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
-    # DEV_APISERVER: process.env.DEV_APISERVER
-    # DEV_APPID: process.env.DEV_APPID
-    # DEV_APPSECRET: process.env.DEV_APPSECRET
-    # PROD_APISERVER: process.env.PROD_APISERVER
-    # PROD_APPID: process.env.PROD_APPID
-    # PROD_APPSECRET: process.env.PROD_APPSECRET
 
   grunt.initConfig
     yeoman: yeomanConfig
     tidepool: tidepoolConfig
     tidepoolServer: serverConfig
+    bowerPkg: grunt.file.readJSON 'bower.json'
+    nodePkg: grunt.file.readJSON 'package.json'
     connect:
       options:
         port: 7000
@@ -150,6 +141,16 @@ module.exports = (grunt) ->
           dest: "<%= yeoman.dev %>"
           ext: ".spec.js"
         ]
+
+    sass:
+      dev:
+        options:
+          #debugInfo: true
+          #lineNumbers: true
+          trace: true
+          style: 'compact'
+        files:
+          "<%= yeoman.dev %>/all-min.css": "<%= tidepool.sassSourceGlob %>"
 
     compass:
       sassPrep:
@@ -321,6 +322,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask "build", [
     "clean:dev"
+    "clean:temp"
     "exec:convert_jqueryui_amd"
     "copy:devImages"
     "coffee:dev"
@@ -335,6 +337,10 @@ module.exports = (grunt) ->
   grunt.registerTask "devServer", [
     "livereload-start"
     "connect:livereload"
+  ]
+  grunt.registerTask 'distServer', [
+    'open'
+    'connect:dist'
   ]
 
   grunt.registerTask "server", (target) ->
@@ -367,8 +373,6 @@ module.exports = (grunt) ->
     "copy:distImages"
     "htmlmin"
     "clean:temp"
-    # "open"
-    # "connect:dist"
   ]
 
   grunt.registerTask "default", ["test", "open", "watch"]
