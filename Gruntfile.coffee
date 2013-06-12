@@ -79,7 +79,7 @@ module.exports = (grunt) ->
 
       coffee:
         files: ["<%= yeoman.app %>/**/*.coffee"]
-        tasks: ["coffee:dev"]
+        tasks: ["coffee:dev", "replace:dev"]
 
       coffeeTest:
         files: ["<%= yeoman.app %>/**/*.spec.coffee"]

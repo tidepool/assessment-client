@@ -4,17 +4,23 @@
 @import '../../../styles/helpers'
 
 
-$size: $space * 2
+
 
 .circleProximity .self
+  $size: $spaceBig * 4
+  $color: lighten( $colorGood, 5% )
   display: block
   position: absolute
-  background-color: lighten( $colorGood, 5% )
+  width: $size
+  height: $size
+  line-height: $size
+  background-color: $color
   border-radius: 50%
-  //box-shadow: 0 0 0 $spaceBig * 4 $shadeVeryLight, 0 0 0 $spaceBig * 2 $shadeVeryLight, 0 0 0 $spaceBig $shadeVeryLight
-
+  text-align: center
+  box-shadow: 0 0 0 $spaceTiny $colorBackgroundWarm
 
   .icon-user
+    $size: $space * 2
     position: absolute
     top: 50%
     margin-top: - $size/2 - 5
@@ -26,14 +32,27 @@ $size: $space * 2
     line-height: $size
     color: white
     vertical-align: middle
-
-
+    text-shadow: 2px 2px $color, -2px 2px $color, 2px -2px $color, -2px -2px $color // most favest css hax evar
 
   &.yay
     +animation( selfLove .7s )
 
+  .borderPatrol
+    position: absolute
+    width: $spaceBig * 4
+    height: $spaceBig * 4
+    border-radius: 50%
+    top: 0
+    left: 0
+    box-shadow: 0 0 0 $spaceTiny $colorBackgroundWarm, inset 0 0 0 $spaceTiny $color
 
-
+  .line
+    display: none
+    position: absolute
+    width: $spaceTiny
+    background-color: $colorGood
+    +transform-origin( top center )
+    height: 300px
 
 
 +keyframes(selfLove)
@@ -41,10 +60,10 @@ $size: $space * 2
     +transform( scale(1) )
     box-shadow: 0 0 0 0 transparent
   10%, 80%
-    box-shadow: 0 0 0 $size transparentize($colorGood,.95), 0 0 0 $size transparent
+    box-shadow: 0 0 0 $space * 2 transparentize($colorGood,.95), 0 0 0 $space * 2 transparent
   20%, 60%
-    box-shadow: 0 0 0 $size transparentize($colorGood,.9), 0 0 0 $size * 2 transparentize($colorGood,.95), 0 0 0 $size * 2 transparent
+    box-shadow: 0 0 0 $space * 2 transparentize($colorGood,.9), 0 0 0 $space * 2 * 2 transparentize($colorGood,.95), 0 0 0 $space * 2 * 2 transparent
   30%
     +transform( scale(1.05) )
-    box-shadow: 0 0 0 $size transparentize($colorGood,.8), 0 0 0 $size * 2 transparentize($colorGood,.9), 0 0 0 $size * 3 transparentize($colorGood,.95)
+    box-shadow: 0 0 0 $space * 2 transparentize($colorGood,.8), 0 0 0 $space * 2 * 2 transparentize($colorGood,.9), 0 0 0 $space * 2 * 3 transparentize($colorGood,.95)
 

@@ -17,7 +17,7 @@ define [
   proceed
 ) ->
 
-  _me = 'game/levels/rank_images/main'
+  _me = 'game/levels/rank_images'
   _rankingSel= '#RankingArea'
   _unrankedSel = '#UnrankedArea'
   _sortableSel = '.connectedSortable'
@@ -42,7 +42,7 @@ define [
       _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onProceedClick'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
-      @listenTo proceed, 'click', @onProceedClick
+      @listenToOnce proceed, 'click', @onProceedClick
       @render()
       @_trackStart()
 

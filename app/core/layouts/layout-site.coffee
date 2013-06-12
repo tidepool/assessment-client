@@ -33,6 +33,7 @@ define [
       @$('#HeaderRegion')
         .append(markupNav)
         .append(userMenu.el)
+      $('body').prop 'class', "background-#{@className}"
       @
 
   Me

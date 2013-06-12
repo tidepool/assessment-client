@@ -7,32 +7,93 @@
 
 
 .circleProximity .proxy
-  position: absolute
-  display: block
+  $size: $space * 3
+  display: inline-block
+  position: absolute !important // Prevents JQ Draggable from putting pos: relative on them and making them behave oddly
+  text-align: center
+  //margin: $size * 6 $space $space $space
+  //vertical-align: bottom
 
 
+  .circle
+    position: relative
+    top: 0
+    left: 0
+    margin-bottom: $spaceTiny
+    cursor: pointer
+    box-shadow: 0 0 0 $spaceTiny $colorBackgroundWarm
+    z-index: 1 // Be above the label
+  .circle:hover
+    background-color: $colorBrand1 + 15
+
+  // Labels. They only show before they've been interacted with and when dragging
   label
-    color: $shade
+    position: absolute
+    font-size: $fontSizeBody
+    font-weight: bold
+    line-height: 1.3
+    width: $size * 2
+    left: 50%
+    margin-left: -$size
+    opacity: 0.01
+    +transform( translateY(-$space * 2) )
     +transitionable
-    text-shadow: 0 0 $spaceTiny $colorBackground
+  &.showLabel label,
+  &.ui-draggable-dragging label,
+  .circle:hover+label
+    opacity: .99
+    +transform( translateY($spaceLil/2 + $spaceTiny) )
 
-  .line
-    display: none
+  //&.ui-draggable
+  //  z-index: 1
+  //&.ui-draggable.ui-draggable-dragging
+  //  z-index: 2
+  //&.ui-draggable:hover
+  //  z-index: 3
+
+  label .inner //BS needed to halign center pos:absolute content
+    display: inline-block
+    padding: $spaceTiny $spaceLil
+    border-radius: $radiusSmall
+    background: transparentize( $colorBackgroundWarm, 0.25 )
+
+  label .fluff.arrowTop
     position: absolute
-    width: $spaceTiny
-    background-color: transparentize( $colorBrand1, .75 )
-    +transform-origin( top center )
-
-  .dot
-    position: absolute
-    width: 5px
-    height: 5px
-    left: -1px
-    top: -2px
-    border-radius: 50%
-    background: $colorQuiet
-    box-shadow: 0 0 0 1px $colorBackground
+    top: -$spaceLil
+    left: 50%
+    margin-left: -$spaceLil/2
+    border: $spaceLil/2 solid transparent
+    border-bottom-color: transparentize( $colorBackgroundWarm, 0.25 )
 
 
-  label.active
-    color: $colorForeground
+  // Scale for Draggable circles
+  // This has to be managed differently because JqDraggable can't read sizes on transformed elements
+  =circleSize( $scale: 1.0 )
+    +transform(none)
+    font-size: $fontSizeVeryLarge * $scale
+    width: $size * $scale
+    height: $size * $scale
+    line-height: $size * $scale
+    em
+      font-size: ( $fontSizeVeryLarge + $spaceLil ) * $scale
+
+  .circle.size1
+    +circleSize(0.4)
+  .circle.size2
+    +circleSize(0.7)
+  .circle.size3
+    +circleSize(1.0)
+  .circle.size4
+    +circleSize(1.3)
+  .circle.size5
+    +circleSize(1.6)
+
+
+
+
+
+
+
+
+
+

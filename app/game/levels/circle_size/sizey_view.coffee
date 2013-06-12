@@ -3,27 +3,26 @@ define [
   'backbone'
   'Handlebars'
   './circle_view'
-  'text!./slider.hbs'
-  'text!./label.hbs'
+  'text!./sizey_view.hbs'
   'jqueryui/slider'
 ],
 (
   Backbone
   Handlebars
   CircleView
-  sliderTmpl
-  labelTmpl
+  tmpl
   JqSlider
 ) ->
 
   _me = 'game/levels/circle_proximity/sizey_view'
   _sliderSel = '.slider'
+  _circleSel = '.circle'
 
   View = Backbone.View.extend
 
     # ----------------------------------------------------- Backbone Extensions
     className: 'sizey'
-    labelTmpl: Handlebars.compile labelTmpl
+    tmpl: Handlebars.compile tmpl
     initialize: ->
       _.bindAll @, 'onSlide'
       @circle = new CircleView
@@ -31,8 +30,7 @@ define [
 
     render: ->
       @$el.html @circle.render().el
-      @$el.append sliderTmpl
-      @$el.append @labelTmpl @model.attributes
+      @$el.append @tmpl @model.attributes
       @$el.find(_sliderSel).slider
         value: @model.get('size')
         max: @model.maxSize
@@ -41,13 +39,23 @@ define [
 
 
     # ----------------------------------------------------- Private Methods
-
+    _setWidthBySize: (size) ->
+      @model.set
+        width: @model.sizeToScale[size] * @$(_circleSel).width()
 
     # ----------------------------------------------------- Event Callbacks
     onSlide: (e, ui) ->
-      #console.log "#{_me}.onSlide"
-      @model.set 'size', ui.value
+      @model.set size: ui.value
+      @_setWidthBySize ui.value
 
+
+
+    # ----------------------------------------------------- Public
+    close: ->
+      unless @model.get 'width'
+        @_setWidthBySize @model.get 'size'
+      @remove()
+      @
 
 
 

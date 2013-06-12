@@ -135,7 +135,7 @@ define [
         token_received = parseInt(localStorage['token_received'])
         if expires_in? and token_received? and currentTime < token_received + expires_in
           curToken = true
-      console.log "#{_me}.hasCurrentToken(): #{curToken}"
+      #console.log "#{_me}.hasCurrentToken(): #{curToken}"
       curToken
     isLoggedIn: -> @hasCurrentToken()
 

@@ -7,9 +7,9 @@ define [
   'messages/error_modal_view'
   'entities/levels'
   'ui_widgets/steps_remaining'
-  'game/levels/reaction_time'
-  'game/levels/rank_images' #'game/levels/image_rank'
-  'game/levels/circle_proximity' #'game/levels/circles_test'
+  'game/levels/reaction_time_disc'
+  'game/levels/rank_images'
+  'game/levels/circle_size_and_proximity'
 ], (
   Backbone
   Handlebars
@@ -38,7 +38,6 @@ define [
 
     # ------------------------------------------------------------- Backbone Methods
     initialize: ->
-      console.log "#{_me}.initialize()"
       @curGame = app.user.createAssessment()
       @_register_events()
 
@@ -67,14 +66,16 @@ define [
     # ------------------------------------------------------------- Event Handlers
     _onGameSync: -> #console.log "#{_me}._onGameSync()"
 
-    _onStageChanged: (model) ->
-      curStage = model.attributes.stage_completed + 4 # TODO: remove. this is for testing only to skip to the level you're working on
+    _onStageChanged: (model, stage) ->
+      #console.log "#{_me}._onStageChanged(model, #{stage})"
+      curStage = model.attributes.stage_completed + 8 # TODO: remove increment. It's for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
       # Show the next stage
       if curStage is -1 then @_showWelcome model
       else if curStage < stageCount then @_showLevel curStage
+      else if curStage is stageCount then @_completeGame()
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
     _curGameErr: ->
@@ -82,18 +83,21 @@ define [
       throw new Error("Something went wrong, can't create assessment")
 
 
-    # ------------------------------------------------------------- Stage Management
+    # ------------------------------------------------------------- Game and Level Management
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @curGame.get('stages')[stageId]
       viewClassString = _views[curStage.view_name]
       ViewClass = eval(viewClassString)
-      stageView = new ViewClass
+      @curLevel?.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
+      @curLevel = new ViewClass
         model: new Backbone.Model(curStage)
         assessment: @curGame
         stageNo: stageId
-      @$el.html stageView.render().el
-
+      @$el.html @curLevel.render().el
+    _completeGame: ->
+      app.router.navigate 'dashboard',
+        trigger: true
 
 
   Me

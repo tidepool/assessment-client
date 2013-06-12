@@ -1,12 +1,12 @@
-@import '../../bower_components/bourbon/app/assets/stylesheets/bourbon'
-@import '../../styles/appVars'
-@import '../../styles/colorVars'
-@import '../../styles/helpers'
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
 
 $hugeIconSize: 100px
 
 
-.stage-reactionTime
+.reactionTimeDisc
   position: relative
   text-align: center
   padding-top: $space
@@ -62,19 +62,19 @@ $hugeIconSize: 100px
     display: block
 
 
-// Sizing changes based on screen width
-@media all and (min-width: 321px)
-  .stage-reactionTime .circle
-    width: 250px
-    height: 250px
-@media all and (min-width: 601px)
-  .stage-reactionTime .circle
-    width: 350px
-    height: 350px
-@media all and (min-width: 1001px)
-  .stage-reactionTime .circle
-    width: 500px
-    height: 500px
+  // Sizing changes based on screen width
+  @media all and (min-width: 321px)
+    .circle
+      width: 250px
+      height: 250px
+  @media all and (min-width: 601px)
+    .circle
+      width: 350px
+      height: 350px
+  @media all and (min-width: 1001px)
+    .circle
+      width: 500px
+      height: 500px
 
 
 

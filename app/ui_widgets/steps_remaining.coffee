@@ -26,7 +26,7 @@ define [
       @
 
     _onChange: ->
-      console.log 'Steps remaining change event fired'
+      #console.log 'Steps remaining change event fired'
       @render()
 
 

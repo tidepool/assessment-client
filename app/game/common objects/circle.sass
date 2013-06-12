@@ -1,0 +1,28 @@
+@import '../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/helpers'
+
+
+
+.circle
+  $size: $space * 3
+  display: inline-block
+  background: $colorBrand1
+  width: $size
+  height: $size
+  line-height: $size
+  border-radius: 50%
+  color: white
+  font-size: $fontSizeVeryLarge
+  vertical-align: middle
+  +user-select(none)
+
+  // The `/` is emphasized
+  em
+    color: $highlightThick
+    font-style: normal
+    font-size: $fontSizeVeryLarge + $spaceLil
+    vertical-align: middle
+    padding: 0 $spaceTiny
+

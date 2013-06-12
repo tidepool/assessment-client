@@ -22,7 +22,7 @@ define [
       onClose: -> #console.log "#{_me}.onClose"
       btn1Text: "Ok"
       btn1ClassName: "btn-large btn-primary"
-      btn1Callback: -> console.log "#{_me}.btn1.callback"
+      btn1Callback: -> #console.log "#{_me}.btn1.callback"
       mustUseButton: false
 
   Me = Backbone.View.extend

@@ -86,6 +86,7 @@ define [
       @
 
     nextStage: ->
+      #console.log "#{_me}.nextStage()"
       i = @get('stage_completed')
       @save( stage_completed: i + 1 )
 

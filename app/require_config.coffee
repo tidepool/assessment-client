@@ -2,7 +2,9 @@ define [], () ->
   require.config
     packages: [
       'core'
+      'game/levels/reaction_time_disc'
       'game/levels/rank_images'
+      'game/levels/circle_size'
       'game/levels/circle_proximity'
     ]
     paths:

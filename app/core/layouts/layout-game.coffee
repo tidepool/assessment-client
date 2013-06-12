@@ -28,6 +28,8 @@ define [
       Me.__super__.resetHeader.call(this)
       @$('#HeaderRegion')
         .append(userMenu.el)
+      $('body').prop 'class', "background-#{@className}"
+      @
 
   Me
 

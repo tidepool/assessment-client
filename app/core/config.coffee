@@ -12,6 +12,7 @@ define [
     appName: 'TidePool'
     debug: true
     googleAnalyticsKey: 'UA-40367760-1'
+    kissMetricsKey: ''
     apiServer: '@@APISERVER'
     appSecret: '@@APPSECRET'
     appId: '@@APPID'

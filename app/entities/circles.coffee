@@ -29,6 +29,10 @@ define [
       trait2: ''
       abbreviation: ''
       size: 2
+      selfProximityPx: null
+      selfProximityRank: null
+      selfOverlapPx: null
+      selfOverlapRatio: null
       image: null # Used if there should be an image in the circle
       #iconClass: icon-user # Used if there should be an icon in the circle
       userChangedSize: false
@@ -42,8 +46,7 @@ define [
 
     initialize: ->
       @_calcAbbreviation()
-      #TODO: remove this. temp kludge because the data is sending sizes with '5', but the scale is 0-4
-      @set 'size', 2 #@get('size') - 1
+      @set 'size', 2 #@get('size') - 1 #TODO: remove this. temp kludge because the data is sending sizes with '5', but the scale is 0-4
       @on 'change:size', @onChangeSize
       @on 'change:pos', @onChangePos
 
@@ -53,29 +56,15 @@ define [
       abbr = "#{t1}<em>/</em>#{t2}"
       @set 'abbreviation', abbr
 
+
     # ------------------------------------------------------------------- Event Handlers
-    onChangeSize: (model, sz) ->
-      #console.log "#{_meModel}.onChangeSize(): #{sz}"
-      @calculateWidth()
-      @set 'userChangedSize', true
-    onChangePos: (model, pos) ->
-      @set
-        left: pos.x
-        top: pos.y
+    onChangeSize: (model, sz) -> @set 'userChangedSize', true
+    onChangePos: (model, pos) -> @set 'userChangedPos', true
+
 
     # ------------------------------------------------------------------- Public API
-    positionToCenter: (position) ->
-      centerer = @get('width') / 2
-      center =
-        x: position.x + centerer
-        y: position.y + centerer
     getScale: ->
       @sizeToScale[ @get('size') ]
-    calculateWidth: ->
-      return if not @view?.circle?
-      #console.log "#{_meModel}.calculateWidth(): #{@view.circle.$el.width() * @getScale()}"
-      @set 'width', @view.circle.$el.width() * @getScale()
-
 
 
   # --------------------------------------------------------------------- Collection

@@ -20,7 +20,7 @@ define [
     model: Model
     setComplete: (LevelId) ->
       level = @at LevelId
-      level.set 'isComplete', true
+      level.set('isComplete', true) if level?
 
   Collection
 

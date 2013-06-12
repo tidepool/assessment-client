@@ -4,7 +4,7 @@ define [
   'backbone'
   'Handlebars'
   'models/user_event'
-  "text!./reaction_time.hbs"
+  "text!./main.hbs"
   'composite_views/perch'
 ], (
   $
@@ -16,7 +16,7 @@ define [
   perch
 ) ->
 
-  _me = 'game/levels/reaction_time'
+  _me = 'game/levels/reaction_time_disc'
   _colorizerSel = '#CircleColorizer'
   _targetPrequelColor = 'yellow'
   _targetColor = 'red'
@@ -36,7 +36,7 @@ define [
 
   ReactionTime = Backbone.View.extend
 
-    className: 'stage-reactionTime'
+    className: 'reactionTimeDisc'
     tmpl: Handlebars.compile(tmpl)
     events:
       "click #ReactionTimeTarget": "_onCircleClicked"
@@ -50,11 +50,7 @@ define [
       # @colors = @model.get('colors')
       @sequenceType = @model.get('sequence_type')
       @colorSequence = @model.get('sequence')
-
-      # Log out the colors. Why does red show up twice in a row sometimes?
-      console.log @colorSequence
-      console.log step.color for step in @colorSequence
-
+#      console.log step.color for step in @colorSequence
       @sequenceNo = -1
       @numOfSequences = @colorSequence.length
 
