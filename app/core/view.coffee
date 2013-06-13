@@ -4,6 +4,7 @@ define [
   'backbone'
   './layouts/layout-site'
   './layouts/layout-game'
+  './layouts/layout-dashboard'
   'ui_widgets/user_menu'
   'composite_views/perch'
   'bootstrap' # someone, anyone, has to include it
@@ -13,6 +14,7 @@ define [
   Backbone
   SiteLayout
   GameLayout
+  DashLayout
   userMenu
   perch
 ) ->
@@ -38,14 +40,14 @@ define [
       @_curView?.remove()
 
     _loadView: (module) ->
-      #console.log "#{_me}._loadView(#{module})"
+      console.log "#{_me}._loadView(#{module})"
       require [
         module
       ],
       (
         ViewClass
       ) =>
-        #console.log "#{_me}.require().loaded new page"
+        console.log "#{_me}.require().loaded new page"
         @_cleanupOldView()
         @_curView = new ViewClass()
         # Render
@@ -62,6 +64,11 @@ define [
     asGame: (viewModuleString) ->
       #console.log "#{_me}.asGame(#{viewModuleString})"
       @_curLayout = new GameLayout
+        app: @options.app
+      @_loadView(viewModuleString)
+
+    asDash: (viewModuleString) ->
+      @_curLayout = new DashLayout
         app: @options.app
       @_loadView(viewModuleString)
 

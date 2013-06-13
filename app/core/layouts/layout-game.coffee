@@ -26,9 +26,8 @@ define [
     render: ->
       @$el.html @tmpl()
       Me.__super__.resetHeader.call(this)
-      @$('#HeaderRegion')
-        .append(userMenu.el)
-      $('body').prop 'class', "background-#{@className}"
+#      @$('#HeaderRegion')
+#        .append(userMenu.el)
       @
 
   Me

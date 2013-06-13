@@ -22,6 +22,9 @@ define [
     tagName: 'section'
     tmpl: Handlebars.compile tmpl
 
+    initialize: ->
+      $('body').prop 'class', "background-#{@className}"
+
     # Private
     _cleanupChildren: ->
       @_curView?.close?()

@@ -24,7 +24,7 @@ define [
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
-      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
+      #@on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
 
     # ------------------------------------------------ Actual Route Responses
     showHome: ->      @app.view.asSite 'pages/home'
@@ -33,12 +33,12 @@ define [
     showInvestors: -> @app.view.asSite 'pages/investors'
     showGame: ->      @app.view.asGame 'pages/playGame'
     showResult: ->    @app.view.asGame 'pages/gameResult'
-    showDashboard: ->
-      console.log "#{_me}.showDashboard()"
-      controller = new DashboardController()
-      controller.initialize
-        session: @app.user.session
-      controller.render()
+    showDashboard: -> @app.view.asDash 'pages/dashboard/personality'
+#      console.log "#{_me}.showDashboard()"
+#      controller = new DashboardController()
+#      controller.initialize
+#        session: @app.user.session
+#      controller.render()
 
 
     # ----------------------------- Supporting Methods
