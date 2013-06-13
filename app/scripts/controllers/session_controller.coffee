@@ -19,6 +19,7 @@ define [
   SessionController = (options) ->
     throw new Error('Need .user and .cfg to construct') unless options.user and options.cfg
     @user = options.user
+    @user.set accessToken: localStorage['access_token']
     @cfg = options.cfg
     @_authUrl = "#{@cfg.apiServer}#{_authUrlSuffix}"
     $.ajaxSetup
@@ -167,7 +168,7 @@ define [
 
     logOut: ->
       @_clearOutLocalStorage()
-      @user.clear().set @user.defaults()
+      @user.reset()
 
     # Called as a global object by the opened window
     externalAuthServiceCallback: (hash, location) ->
@@ -175,7 +176,7 @@ define [
       params = @_parseHash hash
       console.log("Redirected with token #{params['access_token']}, hash #{hash}")
       if params['access_token']
-        @user.clear().set @user.defaults()
+        @user.reset()
         @_persistLocally params
         @user.fetch()
       else

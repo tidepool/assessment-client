@@ -20,7 +20,6 @@ define [
     defaults: ->
       return {
         id: '-' # Convention to refer to the current user
-        accessToken: localStorage['access_token']
       }
 
     initialize:  ->
@@ -139,5 +138,7 @@ define [
       curToken
     isLoggedIn: -> @hasCurrentToken()
 
+    # Set the client version of the model back to as if it were new
+    reset: -> @clear().set @defaults()
 
   User
