@@ -19,7 +19,7 @@ define [
   SessionController = (options) ->
     throw new Error('Need .user and .cfg to construct') unless options.user and options.cfg
     @user = options.user
-    @user.set accessToken: localStorage['access_token']
+    @user.on 'sync', -> console.log 'user.sync event'
     @cfg = options.cfg
     @_authUrl = "#{@cfg.apiServer}#{_authUrlSuffix}"
     $.ajaxSetup
@@ -172,12 +172,12 @@ define [
 
     # Called as a global object by the opened window
     externalAuthServiceCallback: (hash, location) ->
-      console.log "#{_me}.externalAuthServiceCallback()"
       params = @_parseHash hash
-      console.log("Redirected with token #{params['access_token']}, hash #{hash}")
+      #console.log("Redirected with token #{params['access_token']}, hash #{hash}")
       if params['access_token']
-        @user.reset()
+        @logOut()
         @_persistLocally params
+        @user.reset() # Reset to defaults. Defaults includes getting the token out of local storage, so this does a fetch with a user with an id `-` and an accessToken
         @user.fetch()
       else
         console.log 'Odd Error, no token received but redirected'

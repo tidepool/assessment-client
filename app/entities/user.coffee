@@ -14,12 +14,12 @@ define [
   User = Backbone.Model.extend
 
     # ----------------------------------------------------------- Backbone Methods
-    urlRoot: ->
-      "#{window.apiServerUrl}/api/v1/users"
+    urlRoot: "#{window.apiServerUrl}/api/v1/users"
 
     defaults: ->
       return {
         id: '-' # Convention to refer to the current user
+        accessToken: localStorage['access_token']
       }
 
     initialize:  ->
@@ -28,6 +28,8 @@ define [
       @on 'change:email', @_calculateNickname
       @on 'change:guest', @_calculateNickname
       @on 'error', @_onModelError
+      @on 'change', (model, val) -> console.log model.attributes
+
 
     #http://backbonejs.org/#Model-validate
     validate: (attrs, options) ->
@@ -128,7 +130,7 @@ define [
 
     hasCurrentToken: ->
       curToken = false
-      if @get('accessToken')?.length #and @accessToken isnt "" and @accessToken isnt "undefined"
+      if @get('accessToken')?.length
         currentTime = new Date().getTime()
         expires_in = parseInt(localStorage['expires_in'])
         token_received = parseInt(localStorage['token_received'])
