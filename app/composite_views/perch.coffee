@@ -87,6 +87,18 @@ define [
     _bindDomEvents: ->
       @$el.on 'hidden', _.bind(@_onModalHidden, @)
 
+    _trackLightbox: (opts) ->
+      return unless @options.app?
+      if typeof opts is 'string'
+        name = opts
+      else if opts.title
+        name = opts.title
+      else
+        name = ''
+      @options.app.analytics.track(
+        @options.app.analytics.CATEGORIES.viewLightbox, name, '', opts
+      )
+
 
     # ---------------------------------------------------------------------- Public API
     show: (options) ->
@@ -102,6 +114,8 @@ define [
         @_showBackboneView options
       else
         @_showOptionsObject options
+      @_trackLightbox options unless options.supressTracking
+      return this
 
     hide: ->
       @$el.modal('hide')

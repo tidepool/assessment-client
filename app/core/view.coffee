@@ -52,6 +52,7 @@ define [
         @_curView = new ViewClass()
         # Render
         @render()
+        @options.app.analytics.trackPage module
 
 
     # ------------------------------------------------------------- Public API

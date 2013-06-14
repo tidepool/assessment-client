@@ -54,7 +54,7 @@ define [
       personalityChart = new WidgetPersonalityChart()
       $mastahBlastah.append personalityChart.render().el
       $mastahBlastah.append tmplPremiumTeaser
-      $mastahBlastah.append tmplEmptyHappiness
+      #$mastahBlastah.append tmplEmptyHappiness
       interestsChart = new WidgetInterestsChart()
       $mastahBlastah.append interestsChart.render().el
       $mastahBlastah.append tmplRandomRecc

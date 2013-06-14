@@ -1,6 +1,12 @@
 {
   "name": "TidePool",
   "version": "0.1.0",
+  "googleAnalyticsKeyDev": "UA-41751970-1",
+  "googleAnalyticsKeyProd": "UA-41751970-1",
+  "kissKeyDev": "7d7eb35ca9a41145cdbd8606f3186f871812618e",
+  "kissIdDev": "3d76e0f0-b450-0130-498f-1231381fa34d",
+  "kissKeyProd": "e984c464402cf32c0c208795aeede25f8a24d221",
+  "kissIdProd": "218e5da0-b438-0130-cb49-12313d23508a",
   "dependencies": {
     "toastr": "~1.2.2",
     "sass-bootstrap": "~2.3.0",

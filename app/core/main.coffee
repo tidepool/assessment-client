@@ -42,12 +42,11 @@ define [
       #@cfg.debug && console.log "#{_me} started"
       # In the beginning the session was created
       @session = new SessionController
-        user: @user
-        cfg: @cfg
+        app: @
 
       @user.session = @session
       # Analytics is fired up
-      new Analytics @cfg
+      @analytics = new Analytics @cfg
       # The application manages all of its views starting with this one
       @view = new View
         app: @

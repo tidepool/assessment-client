@@ -11,8 +11,8 @@ define [
   config =
     appName: 'TidePool'
     debug: true
-    googleAnalyticsKey: 'UA-40367760-1'
-    kissMetricsKey: ''
+    googleAnalyticsKey: '@@googleAnalyticsKey'
+    kissKey: '@@kissKey'
     apiServer: '@@APISERVER'
     appSecret: '@@APPSECRET'
     appId: '@@APPID'
@@ -20,3 +20,5 @@ define [
   window.apiServerUrl = config.apiServer #TODO: eeeeeew! Encapsulate config instead
 
   config
+
+

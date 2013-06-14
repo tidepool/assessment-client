@@ -2,12 +2,14 @@
 define [
   'underscore'
   'backbone'
+  'composite_views/perch'
   'scripts/views/user/login_dialog'
   'scripts/views/user/profile_dialog'
 ],
 (
   _
   Backbone
+  perch
   LoginDialog
   ProfileDialog
 ) ->
@@ -17,6 +19,7 @@ define [
   Me = Backbone.View.extend
     initialize: ->
       throw new Error('Need options.app') unless @options.app?
+      perch.options.app = @options.app
       @_mediate()
     _mediate: ->
       @listenTo @options.app, 'session:showLogin', @_showLogin
@@ -43,7 +46,9 @@ define [
 
 
     # ------------------------------------------------ Action command handlers
-    _actionLogOut: -> @options.app.session.logOut()
+    _actionLogOut: ->
+      @options.app.analytics.track 'session', 'Pressed Log Out'
+      @options.app.session.logOut()
 
 
   Me

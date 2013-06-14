@@ -17,9 +17,11 @@ define [
 
   # ----------------------------------------------- Constructor
   SessionController = (options) ->
-    throw new Error('Need .user and .cfg to construct') unless options.user and options.cfg
-    @user = options.user
-    @cfg = options.cfg
+    @options = options
+    @user = @options.app.user
+    @cfg = @options.app.cfg
+    _.bindAll @, 'onUserSync'
+    @user.on 'sync', @onUserSync
     @_authUrl = "#{@cfg.apiServer}#{_authUrlSuffix}"
     $.ajaxSetup
       type: 'POST',
@@ -62,8 +64,10 @@ define [
           @_persistLocally data
           @user.fetch()
           .done (data, textStatus, jqXHR) =>
+            @options.app.analytics.track 'session', 'Successful Sign In'
             deferred.resolve("Success")
           .fail (jqXHR, textStatus, errorThrown) =>
+            @options.app.analytics.track 'session', 'Failed Sign In'
             deferred.reject(textStatus)
         .fail (jqXHR, textStatus, errorThrown) =>
           console.log "#{_me}.signIn().ajax().fail()"
@@ -74,25 +78,25 @@ define [
 
     register: ->
       deferred = $.Deferred()
-      
       @user.save()
       .done (data, textStatus, jqXHR) =>
         console.log "#{_me}.user.save().done()"
         @signIn()
         .done =>
+          @options.app.analytics.track 'session', 'Successful Registration'
           deferred.resolve("Success")
         .fail =>
+          @options.app.analytics.track 'session', 'Failed Registration'
           deferred.reject("Fail")
 
       deferred.promise()
 
 
-    # ---------------------------------------------- Depreciated Methods
-    # TODO: Have other modules get user info from the user model instead.
-    getUserInfo: -> throw new Error ('Get user information from app.user instead')
-
-
     # ---------------------------------------------- Callbacks
+    onUserSync: (model) ->
+      readableUserId = if model.isGuest() then model.attributes.id else model.attributes.email
+      @options.app.analytics.setUserIdentity readableUserId
+
     # _ajaxAuthSuccess: (data) ->
     #   #@cfg.debug && console.log "#{_me}._ajaxAuthSuccess()"
     #   @user.set 'accessToken', data.access_token
@@ -180,6 +184,7 @@ define [
         @user.fetch()
       else
         console.log 'Odd Error, no token received but redirected'
+      @options.app.analytics.track 'session', 'Successful External Auth Login'
 
 
 

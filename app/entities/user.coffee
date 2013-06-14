@@ -22,7 +22,7 @@ define [
         accessToken: localStorage['access_token']
       }
 
-    initialize:  ->
+    initialize: ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       #@on 'change', (model, val) -> console.log model.attributes
       @on 'change:name', @_calculateNickname
@@ -47,6 +47,7 @@ define [
       if attrs.loginType == 'register'
         return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
         return 'The passwords should match' unless attrs.password is attrs.passwordConfirm
+
       return null # no validation errors
 
 
@@ -75,7 +76,6 @@ define [
       # Flush the local cache whenever we get a login exception from the server
       if xhr.status is 401
         @session?.logOut()
-
 
     # ----------------------------------------------------------- URL related Methods
     parseHash: (hash) ->

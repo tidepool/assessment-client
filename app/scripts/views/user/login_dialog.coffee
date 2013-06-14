@@ -42,13 +42,13 @@ define [
     initialize: ->
       throw new Error('Need options.app and a model') unless @options.app? and @model?
       @tmpl = Handlebars.compile tmpl
-      @listenTo @model, 'sync', @hide
+      @listenTo @model, 'sync', @_onSync
       @listenTo @model, 'invalid', @_onModelInvalid
       @listenTo @model, 'error', @_onModelError
       @_show()
       if @options.register
         @$(_registerBtnSel).trigger 'click'
-        @_modeRegister()
+        @_modeRegister
 
     render: ->
       @$el.html @tmpl()
@@ -60,15 +60,18 @@ define [
       perch.show
         content: @
         btn1Text: null
+        supressTracking: true
+      @options.app.analytics.track @className, 'show'
 
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
 
     _showErr: (msg) ->
+      msg = msg || 'Unknown Error'
       psst.hide()
       psst
         sel: "#LoginErrorHolder"
-        msg: msg || 'Unknown Error'
+        msg: msg
         type: 'error'
 
 
@@ -76,6 +79,7 @@ define [
     _clickedSignInFacebook: (e) ->
       @options.app.session.loginUsingOauth('facebook', {width: 1006, height: 775})
       holdPlease.show $(e.target)
+      @options.app.analytics.track @className, 'Pressed Facebook Sign In'
 
     _clickedForgotPass: ->
       console.log "#{_me}._clickedForgotPass()"
@@ -85,12 +89,14 @@ define [
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
       psst.hide()
+      @options.app.analytics.track @className, 'modeSignIn'
 
     _modeRegister: ->
       @_isRegisterMode = true
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
       psst.hide()
+      @options.app.analytics.track @className, 'modeRegister'
 
 
     # ----------------------------------------------------------- Callback Handlers
@@ -109,15 +115,14 @@ define [
         @model.set formData,
           silent: true
         @options.app.session.signIn()
+      @options.app.analytics.track @className, 'Submitted Form', formData.loginType
 
-
-    _onSync: (model, data) ->
-      console.log("#{_me}._onSync()")
-      perch.hide()
+    _onSync: (model, data) -> perch.hide()
 
     _onModelInvalid: (model, msg) ->
       @_showErr msg
       holdPlease.hide _submitSel
+      @options.app.analytics.track @className, 'Validation Issue'
 
     _onModelError: (model, xhr, options) ->
       @_showErr "#{xhr.status}: #{xhr.statusText}"

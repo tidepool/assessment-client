@@ -228,9 +228,11 @@ module.exports = (grunt) ->
       dist:
         options:
           variables: 
-            'APISERVER': "<%= tidepoolServer.PROD_APISERVER %>"
-            'APPSECRET' : "<%= tidepoolServer.PROD_APPSECRET %>" 
-            'APPID' : "<%= tidepoolServer.PROD_APPID %>" 
+            APISERVER: "<%= tidepoolServer.PROD_APISERVER %>"
+            APPSECRET: "<%= tidepoolServer.PROD_APPSECRET %>"
+            APPID: "<%= tidepoolServer.PROD_APPID %>"
+            kissKey: "<%= bowerPkg.kissKeyProd %>"
+            googleAnalyticsKey: "<%= bowerPkg.googleAnalyticsKeyProd %>"
           prefix: '@@'
         files: [
           expand: true 
@@ -244,6 +246,8 @@ module.exports = (grunt) ->
             'APISERVER': "<%= tidepoolServer.DEV_APISERVER %>"
             'APPSECRET' : "<%= tidepoolServer.DEV_APPSECRET %>" 
             'APPID' : "<%= tidepoolServer.DEV_APPID %>"
+            kissKey: "<%= bowerPkg.kissKeyDev %>"
+            googleAnalyticsKey: "<%= bowerPkg.googleAnalyticsKeyDev %>"
           prefix: '@@'
         files: [
           expand: true 

@@ -18,7 +18,7 @@ define [
 ) ->
 
   _me = 'game/levels/circle_size'
-  _userMaySkipThisMany = 1
+  _userMaySkipThisMany = 0
   _USEREVENTS =
     resized: 'circle_resized'
 
