@@ -37,6 +37,7 @@ define [
         btn1Text: "I'm Ready"
         btn1Callback: @render
         mustUseButton: true
+        supressTracking: true
 
     render: ->
       # For each circle, make it a new sizey view that has a reference to the circle

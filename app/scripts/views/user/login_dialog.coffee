@@ -48,7 +48,7 @@ define [
       @_show()
       if @options.register
         @$(_registerBtnSel).trigger 'click'
-        @_modeRegister
+        @_modeRegister()
 
     render: ->
       @$el.html @tmpl()

@@ -28,6 +28,7 @@ define [
 
     # ------------------------------------------------------------- Helper Methods
     _getGameResults: ->
+      app.analytics.track @className, 'Get game results'
       promise = @model.getResult()
       promise.done @_gotGameResults
       promise.fail @_errGameResults
@@ -43,11 +44,12 @@ define [
 
     # ------------------------------------------------------------- Callbacks
     _gotGameResults: (msg) ->
+      app.analytics.track @className, 'Successfully got game results'
       # TODO: remove the setTimeout, it's only to make it feel right for testing
       setTimeout @_showResults, 1500
 
     _errGameResults: (msg) ->
-      console.log "#{_me}._errGameResults()"
+      app.analytics.track @className, 'Error Getting game results'
       #TODO: log analytics error/notify Tidepool. An error calculating analytics results is catastrophic and means a user wasted 10 minutes or so.
       #TODO: try again a few times before going asplodey
       perch.show

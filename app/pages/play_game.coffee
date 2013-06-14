@@ -59,7 +59,7 @@ define [
 
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed + 9 # TODO: remove increment. It's for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed + 8 # TODO: remove increment. It's for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
@@ -85,6 +85,7 @@ define [
       #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @curGame.get('stages')[stageId]
       viewClassString = _views[curStage.view_name]
+      app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', viewClassString
       ViewClass = eval(viewClassString)
       @curLevel?.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
       @curLevel = new ViewClass

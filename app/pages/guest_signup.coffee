@@ -66,7 +66,9 @@ define [
         type: psst.TYPES.error
       })
 
-    onClickedSignUp: -> app.trigger 'session:showRegister'
+    onClickedSignUp: ->
+      app.analytics.track @className, 'Pressed Sign Up'
+      app.trigger 'session:showRegister'
 
     onUserSync: (userModel) ->
       console.log 'user registered or signed in'

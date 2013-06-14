@@ -62,6 +62,7 @@ define [
         btn1Text: "I'm Ready"
         btn1Callback: _.bind(@_start, @)
         mustUseButton: true
+        supressTracking: true
       @
 
 

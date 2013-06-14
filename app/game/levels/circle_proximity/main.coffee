@@ -40,6 +40,7 @@ define [
         btn1Text: "I'm Ready"
         btn1Callback: _.bind @render, @
         mustUseButton: true
+        supressTracking: true
 
     render: ->
       #console.log "#{_me}.render()"

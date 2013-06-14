@@ -41,7 +41,7 @@ define [],() ->
   # --------------------------------------------------------------------------- Private Static Methods
   _trackKiss = (eventName, props) ->
     return unless eventName? and _kmq?
-    console.log 'tracking to kiss'
+    #console.log 'tracking to kiss'
     _kmq.push [
       'record'
       eventName
@@ -91,6 +91,11 @@ define [],() ->
     _setUpGoogle(cfg.googleAnalyticsKey) if cfg.googleAnalyticsKey
     _setUpGeneSimmons(cfg.kissKey) if cfg.kissKey
 
+    # Track all javascript errors
+    window.onerror = (msg, url, lineNumber) =>
+      @track @CATEGORIES.jsErr, msg, url, lineNumber
+      return false # let the default handler run, too
+
     return this
 
   # Prototype
@@ -99,7 +104,8 @@ define [],() ->
     CATEGORIES:
       viewPage: 'ViewPage: '
       viewLightbox: 'ViewLightbox: '
-      error: 'Error: '
+      jsErr: 'JS Error: '
+      serverError: 'Server Error: '
 
     # --------------------------------------------------------------------------- Public API
     trackPage: (name) ->
