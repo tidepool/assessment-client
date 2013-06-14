@@ -169,10 +169,10 @@ module.exports = (grunt) ->
           name: 'core'
           include: [
             'pages/about'
-            'pages/playGame'
-            'pages/gameResult'
+            'pages/guest_signup'
             'pages/home'
             'pages/investors'
+            'pages/play_game'
             'pages/team'
           ]
           out: '<%= yeoman.dist %>/core/main.js'
