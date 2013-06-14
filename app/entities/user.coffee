@@ -24,14 +24,12 @@ define [
 
     initialize:  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
+      #@on 'change', (model, val) -> console.log model.attributes
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'change:guest', @_calculateNickname
       @on 'error', @_onModelError
-      @on 'change', (model, val) -> console.log model.attributes
 
-
-    #http://backbonejs.org/#Model-validate
     validate: (attrs, options) ->
       return null if attrs.guest is true
       return 'The email address cannot be blank.' unless attrs.email 
@@ -72,9 +70,10 @@ define [
     # ----------------------------------------------------------- Callbacks
     _onModelError: (model, xhr, options) ->
       console.log "#{_me}._onModelError() xhr.statusText: #{xhr.statusText}"
+      console.log
+        xhr: xhr
       # Flush the local cache whenever we get a login exception from the server
-      # TODO: replace with a more specific listener when the server throws 403s
-      if xhr.status is 0
+      if xhr.status is 401
         @session?.logOut()
 
 
@@ -136,6 +135,8 @@ define [
         token_received = parseInt(localStorage['token_received'])
         if expires_in? and token_received? and currentTime < token_received + expires_in
           curToken = true
+        else
+          @_clearOutLocalStorage()
       #console.log "#{_me}.hasCurrentToken(): #{curToken}"
       curToken
     isLoggedIn: -> @hasCurrentToken()

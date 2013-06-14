@@ -14,7 +14,7 @@ define [
   Assessment = Backbone.Model.extend
 
     # ------------------------------------------------------------- Backbone Methods
-    urlRoot: -> "#{window.apiServerUrl}/api/v1/users/-/games"
+    urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
 
     initialize:  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
@@ -23,7 +23,8 @@ define [
     # Server -> Front End. Translates data we receive from the server
     parse: (resp) ->
       # Mix in a result model
-      resp.result = new Result resp.result, {parse:true}
+      if resp.result?
+        resp.result = new Result resp.result, {parse:true}
       resp
 
 
@@ -54,7 +55,6 @@ define [
 
     getResult: ->
       deferred = $.Deferred()
-
       if @get('result')?
         deferred.resolve("Result already exists")
       else

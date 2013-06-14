@@ -33,7 +33,7 @@ define [
     #config.debug && console.log "#{_me} instantiated"
     @cfg = config
     _.extend this, Backbone.Events
-    @cfg.debug && @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
+    #@cfg.debug && @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
     @user = new User()
     @
 

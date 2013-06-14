@@ -40,14 +40,14 @@ define [
       @_curView?.remove()
 
     _loadView: (module) ->
-      console.log "#{_me}._loadView(#{module})"
+      #console.log "#{_me}._loadView(#{module})"
       require [
         module
       ],
       (
         ViewClass
       ) =>
-        console.log "#{_me}.require().loaded new page"
+        #console.log "#{_me}.require().loaded new page"
         @_cleanupOldView()
         @_curView = new ViewClass()
         # Render

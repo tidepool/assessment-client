@@ -20,6 +20,7 @@ define [
       @_mediate()
     _mediate: ->
       @listenTo @options.app, 'session:showLogin', @_showLogin
+      @listenTo @options.app, 'session:showRegister', @_showRegister
       @listenTo @options.app, 'session:showProfile', @_showProfile
       @listenTo @options.app, 'session:logOut', @_actionLogOut
 
@@ -29,6 +30,12 @@ define [
       loginDialog = new LoginDialog
         model: @options.app.user
         app: @options.app
+
+    _showRegister: ->
+      loginDialog = new LoginDialog
+        model: @options.app.user
+        app: @options.app
+        register: true
 
     _showProfile: ->
       profileDialog = new ProfileDialog

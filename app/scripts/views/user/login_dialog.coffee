@@ -25,6 +25,7 @@ define [
   _me = "views/user/login_dialog"
   _confirmPassSel = '#Login-confirm'
   _submitSel = '#Login-submit'
+  _registerBtnSel = '#ActionRegister'
 
   LoginDialog = Backbone.View.extend
     className: "loginDialog"
@@ -45,6 +46,9 @@ define [
       @listenTo @model, 'invalid', @_onModelInvalid
       @listenTo @model, 'error', @_onModelError
       @_show()
+      if @options.register
+        @$(_registerBtnSel).trigger 'click'
+        @_modeRegister()
 
     render: ->
       @$el.html @tmpl()

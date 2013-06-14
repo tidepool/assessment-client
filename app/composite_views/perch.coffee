@@ -28,7 +28,7 @@ define [
   Me = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
     tagName: 'aside'
-    className: 'perch modal small hide fade'
+    className: 'perch modal hide fade'
     events:
       'click #PerchBtn1': '_onBtn1Click'
 
@@ -91,6 +91,10 @@ define [
     # ---------------------------------------------------------------------- Public API
     show: (options) ->
       @model = new PerchModel()
+      if options.large
+        @$el.removeClass 'small'
+      else
+        @$el.addClass 'small'
       @listenTo @model, 'change', @render
       if typeof options == 'string'
         @_showSimpleMsg options

@@ -19,7 +19,6 @@ define [
   SessionController = (options) ->
     throw new Error('Need .user and .cfg to construct') unless options.user and options.cfg
     @user = options.user
-    @user.on 'sync', -> console.log 'user.sync event'
     @cfg = options.cfg
     @_authUrl = "#{@cfg.apiServer}#{_authUrlSuffix}"
     $.ajaxSetup

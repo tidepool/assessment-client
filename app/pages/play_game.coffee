@@ -3,25 +3,23 @@ define [
   'Handlebars'
   'core'
   'composite_views/perch'
-  'models/assessment'
-  'messages/error_modal_view'
   'entities/levels'
   'ui_widgets/steps_remaining'
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'
   'game/levels/circle_size_and_proximity'
+  'game/calculate_results'
 ], (
   Backbone
   Handlebars
   app
   perch
-  Assessment
-  ErrorModalView
   LevelsCollection
   StepsRemainingView
   ReactionTime
   ImageRank
   CirclesTest
+  CalculateResultsView
 ) ->
 
   _me = 'pages/playGame'
@@ -35,11 +33,10 @@ define [
   Me = Backbone.View.extend
     className: 'playGamePage'
 
-
-    # ------------------------------------------------------------- Backbone Methods
     initialize: ->
       @curGame = app.user.createAssessment()
       @_register_events()
+
 
     # ------------------------------------------------------------- Helper Methods
     _register_events: ->
@@ -56,12 +53,6 @@ define [
         onClose: _.bind(@curGame.nextStage, @curGame)
         mustUseButton: true
 
-    _trackLevels: ->
-      @levels = new LevelsCollection @curGame.get('stages')
-      @stepsRemaining = new StepsRemainingView
-        collection: @levels
-      $(_stepsRemainingContainer).append @stepsRemaining.render().el
-
 
     # ------------------------------------------------------------- Event Handlers
     _onGameSync: -> #console.log "#{_me}._onGameSync()"
@@ -75,15 +66,21 @@ define [
       # Show the next stage
       if curStage is -1 then @_showWelcome model
       else if curStage < stageCount then @_showLevel curStage
-      else if curStage is stageCount then @_completeGame()
+      else if curStage is stageCount then @_calculateResults model
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
     _curGameErr: ->
       console.log "#{_me}._curGameErr()"
-      throw new Error("Something went wrong, can't create assessment")
+      console.error "#{_me}: Error on the curGame model"
 
 
     # ------------------------------------------------------------- Game and Level Management
+    _trackLevels: ->
+      @levels = new LevelsCollection @curGame.get('stages')
+      @stepsRemaining = new StepsRemainingView
+        collection: @levels
+      $(_stepsRemainingContainer).append @stepsRemaining.render().el
+
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @curGame.get('stages')[stageId]
@@ -95,9 +92,13 @@ define [
         assessment: @curGame
         stageNo: stageId
       @$el.html @curLevel.render().el
-    _completeGame: ->
-      app.router.navigate 'dashboard',
-        trigger: true
+
+
+    # ------------------------------------------------------------- Results
+    _calculateResults: (gameModel) ->
+      @curLevel = new CalculateResultsView
+        model: gameModel
+      @$el.html @curLevel.render().el
 
 
   Me

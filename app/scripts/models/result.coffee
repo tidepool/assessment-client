@@ -4,7 +4,7 @@ define [
   Result = Backbone.Model.extend
     urlRoot: ->
       assessment_id = @get('assessment_id')
-      "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"
+      "#{window.apiServerUrl}/api/v1/users/-/games/#{assessment_id}/result"
 
     # initialize: (assessment_id) ->
     #   @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"

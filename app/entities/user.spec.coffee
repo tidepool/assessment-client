@@ -13,4 +13,3 @@ define [
       user = new User guest:true
       expect(user.isGuest()).toBe true
 
-

@@ -1,20 +1,34 @@
-@import '../../styles/_appVars.sass'
-@import '../../styles/_colorVars.sass'
-@import '../../styles/_helpers.sass'
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/helpers'
 
 
 .widget
   //$size: $space * 8
   position: relative
   display: block
-  padding: $spaceLil
+  padding: $spaceLil $space
   margin: $spaceTiny
   background: $colorBackground
   border-radius: $radiusSmall
   box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 0 0 transparent
   cursor: pointer
+  overflow: scroll
   +box-sizing(border-box)
   +transitionable
+
+  .dogEar
+    position: absolute
+    top: 0
+    right: 0
+    width: 0
+    height: 0
+    border: $space solid transparent
+    border-top-color: $colorBrand2
+    border-right-color: $colorBrand2
+
+  p
+    position: relative // stay above pos absolute things like the .dogear
 
   &:hover
     background: white

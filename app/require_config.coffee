@@ -1,3 +1,4 @@
+
 define [], () ->
   require.config
     packages: [
@@ -17,16 +18,13 @@ define [], () ->
       syphon: 'bower_components/backbone.syphon/lib/amd/backbone.syphon'
       text: "bower_components/requirejs-text/text"
       toastr: "bower_components/toastr"
+      chart: "bower_components/Chart.js/Chart.min"
 
       # 3rd Party non-Bower Libraries
       nested_view: "scripts/vendor/nested_view"
       bootstrap: "scripts/vendor/bootstrap"
-      chart: "scripts/vendor/Chart"
 
       # Convenience Folder Mapping
-      assessments: "scripts/views/assessments"
-      dashboard: "scripts/views/dashboard"
-      components: "scripts/views/components"
       results: "scripts/views/results"
       routers: "scripts/routers"
       models: "scripts/models"
@@ -40,5 +38,4 @@ define [], () ->
         exports: "jquery"
       chart:
         exports: "Chart"
-
 
