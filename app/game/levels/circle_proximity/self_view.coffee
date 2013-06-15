@@ -13,7 +13,7 @@ define [
     defaults:
       pxSize: 200 # Needed in px for back end processing
       size: 200
-      top: 150
+      top: 200
       left: 0
 
 
