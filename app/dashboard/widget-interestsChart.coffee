@@ -1,11 +1,13 @@
 
 define [
+  'underscore'
   'backbone'
   'Handlebars'
-  'text!./widget-interestsChart.hbs'
-  'text!./chartColors.json'
+  'text!./widget-chart.hbs'
+  './chartColors'
   'chart'
 ], (
+  _
   Backbone
   Handlebars
   tmpl
@@ -15,6 +17,7 @@ define [
 
   _canvasSel = 'canvas'
   _widgetSel = '.widget'
+  _chartName = 'Interests'
 
   View = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -23,37 +26,32 @@ define [
     initialize: ->
 
     render: ->
-      @$el.html tmpl
+      data = @_prepareData()
+      @$el.html @tmpl data
       $canvas = @$(_canvasSel)
-      @_renderChartOnCanvas $canvas
+      @_renderChartOnCanvas $canvas, data.chartValues
       @
 
 
   # ---------------------------------------------------------------------------- Private
-    _renderChartOnCanvas: ($canvas) ->
-      return unless $canvas
-      chartCanvasName = "Hello"
-
-      scoreValue =
-        score:
-          'apple': 8
-          'rainbow': 4
-          'orange': 7
-          'grape': 3
-          'tomato': 10
-          'unicorn': 3
-
-      chartData = []
-      colors = JSON.parse chartColors
-      for label, value of scoreValue.score
-        chartData.push
+    _prepareData: ->
+      data = {}
+      chartValues = []
+      colors = _.clone chartColors
+      for label, value of @model.attributes
+        chartValues.push
+          label: label
           color: colors.pop()
           value: value
+      data.chartValues = chartValues
+      data.name = _chartName
+      data
+
+    _renderChartOnCanvas: ($canvas, data) ->
       options =
         percentageInnerCutout: 33
-
       ctx = $canvas[0].getContext("2d")
-      barChart = new Chart(ctx).Doughnut(chartData, options)
+      barChart = new Chart(ctx).Doughnut(data, options)
 
 
   View

@@ -1,12 +1,19 @@
 
+
 <div class="widget">
-    <img class="personalityBadge" src="/images/badges/{{logo_url}}" alt="{{name}}">
-    <h3 class="hero">
+
+    <p class="hero">
+        {{#if logo_url}}
+            <img class="personalityBadge" src="/images/badges/{{logo_url}}" alt="{{name}}">
+        {{/if}}
         {{one_liner}}
-    </h3>
+    </p>
     <ul>
         {{#each bullet_description}}
-            <li>{{ this }}</li>
+            <li>
+                <i class="icon-bookmark icon-2x"></i>
+                {{{ this }}}
+            </li>
         {{/each}}
     </ul>
 </div>

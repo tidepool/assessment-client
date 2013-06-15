@@ -174,6 +174,7 @@ module.exports = (grunt) ->
             'pages/investors'
             'pages/play_game'
             'pages/team'
+            'pages/dashboard/personality'
           ]
           out: '<%= yeoman.dist %>/core/main.js'
           optimize: "uglify2"

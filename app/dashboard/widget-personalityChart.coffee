@@ -2,8 +2,8 @@
 define [
   'backbone'
   'Handlebars'
-  'text!./widget-personalityChart.hbs'
-  'text!./chartColors.json'
+  'text!./widget-chart.hbs'
+  './chartColors'
   'chart'
 ], (
   Backbone
@@ -15,6 +15,7 @@ define [
 
   _canvasSel = 'canvas'
   _widgetSel = '.widget'
+  _chartName = 'Personality'
 
   View = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -23,42 +24,39 @@ define [
     initialize: ->
 
     render: ->
-      @$el.html tmpl
+      data = @_prepareData()
+      @$el.html @tmpl data
       $canvas = @$(_canvasSel)
-      @_renderChartOnCanvas $canvas
+      @_renderChartOnCanvas $canvas, data.chartValues
       @
 
 
     # ---------------------------------------------------------------------------- Private
-    _renderChartOnCanvas: ($canvas) ->
-      return unless $canvas
-      chartCanvasName = "Hello"
-
-      scoreValue =
-        score:
-          'apple': 2
-          'rainbow': 4
-          'orange': 7
-          'grape': 4
-          'tomato': 10
-
-      chartData = []
-      colors = JSON.parse chartColors
-      for label, value of scoreValue.score
-        chartData.push
+    _prepareData: ->
+      data = {}
+      chartValues = []
+      colors = _.clone chartColors
+      for label, value of @model.attributes
+        chartValues.push
+          label: label
           color: colors.pop()
           value: value
 
+      data.chartValues = chartValues
+      data.name = _chartName
+      data
+
+    _renderChartOnCanvas: ($canvas, chartData) ->
       options =
         scaleShowLine: false
         scaleShowLabels: false
         scaleOverride: true
-        scaleSteps: 10
-        scaleStepWidth: 1
         scaleStartValue: 0
-
+        scaleSteps: 100
       ctx = $canvas[0].getContext("2d")
       barChart = new Chart(ctx).PolarArea(chartData, options)
+
+    _drawKey: (data) ->
 
 
   View

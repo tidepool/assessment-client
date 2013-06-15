@@ -27,8 +27,51 @@
     border-top-color: $colorBrand2
     border-right-color: $colorBrand2
 
-  p
+  &>p
     position: relative // stay above pos absolute things like the .dogear
+    text-align: center
+    font-weight: bold
+    font-size: $fontSizeSmall
+
+  h3
+    font-size: $fontSizeBody
+    background: $colorGoodThin
+    text-transform: uppercase
+    margin-top: -$spaceLil // Make it flush with edge of widget
+    margin-left: -$space
+    margin-right: -$space
+    margin-bottom: $space
+    padding: $spaceLil $space
+  &.premium h3
+    background-color: $colorBrand2
+    color: $shadeDark
+
+
+
+  // widgets that contain charts
+  canvas
+    float: left
+    margin-right: $spaceLil
+
+  ul.key
+    list-style: none
+    margin: 0
+    margin-top: $spaceBig
+  ul.key li
+    font-size: $fontSizeTiny
+    color: $colorForeground
+    margin: 0
+    line-height: 1.3
+  ul.key .swatch
+    display: inline-block
+    width: $spaceLil
+    height: $spaceLil
+    box-shadow: 0 1px 1px 0 $shadeLight
+    border-radius: $radiusTiny
+    vertical-align: middle
+
+
+
 
   &:hover
     background: white

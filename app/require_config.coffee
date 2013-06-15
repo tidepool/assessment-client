@@ -19,6 +19,7 @@ define [], () ->
       text: "bower_components/requirejs-text/text"
       toastr: "bower_components/toastr"
       chart: "bower_components/Chart.js/Chart.min"
+      markdown: 'bower_components/markdown/lib/markdown'
 
       # 3rd Party non-Bower Libraries
       nested_view: "scripts/vendor/nested_view"
@@ -38,4 +39,6 @@ define [], () ->
         exports: "jquery"
       chart:
         exports: "Chart"
+      markdown:
+        exports: 'markdown'
 

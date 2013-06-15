@@ -70,7 +70,7 @@ define [
             @options.app.analytics.track 'session', 'Failed Sign In'
             deferred.reject(textStatus)
         .fail (jqXHR, textStatus, errorThrown) =>
-          console.log "#{_me}.signIn().ajax().fail()"
+          #console.log "#{_me}.signIn().ajax().fail()"
           @user.trigger 'error', @user, jqXHR
           deferred.reject(textStatus)
 
@@ -80,7 +80,7 @@ define [
       deferred = $.Deferred()
       @user.save()
       .done (data, textStatus, jqXHR) =>
-        console.log "#{_me}.user.save().done()"
+        #console.log "#{_me}.user.save().done()"
         @signIn()
         .done =>
           @options.app.analytics.track 'session', 'Successful Registration'

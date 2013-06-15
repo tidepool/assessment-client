@@ -21,7 +21,6 @@ define [],() ->
 
   # Kiss Metrics
   _setUpGeneSimmons = (key) ->
-    console.log "#{_me}._setUpGeneSimmons()"
     _kms = (u) ->
       setTimeout (->
         d = document

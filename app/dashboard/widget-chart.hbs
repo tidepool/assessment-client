@@ -1,0 +1,19 @@
+
+
+<div class="widget">
+    <h3>{{name}}</h3>
+    <canvas width="130" height="130"></canvas>
+    <ul class="key">
+    {{#each chartValues}}
+        <li title="{{value}}">
+            <i class="swatch" style="background-color:{{color}}"></i>
+            {{label}}
+        </li>
+    {{/each}}
+    </ul>
+</div>
+
+
+
+
+
