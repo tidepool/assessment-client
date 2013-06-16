@@ -10,7 +10,7 @@ define [
   'dashboard/widget-coreResults'
   'dashboard/widget-personalityChart'
   'dashboard/widget-interestsChart'
-  'text!dashboard/widget-randomRecc.hbs'
+  'dashboard/widget-dailyRecc'
   'text!dashboard/widget-premiumTeaser.hbs'
 ], (
   Backbone
@@ -22,7 +22,7 @@ define [
   WidgetCoreResults
   WidgetPersonalityChart
   WidgetInterestsChart
-  tmplRandomRecc
+  WidgetDailyRecc
   tmplPremiumTeaser
 ) ->
 
@@ -78,7 +78,8 @@ define [
         model: new Backbone.Model @model.attributes.holland6_score
       $mastahBlastah.append interestsChart.render().el
 
-      $mastahBlastah.append tmplRandomRecc
+      dailyRecc = new WidgetDailyRecc()
+      $mastahBlastah.append dailyRecc.el
       #$mastahBlastah.append tmplEmptyCareer
 
 

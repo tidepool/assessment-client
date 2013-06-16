@@ -19,7 +19,6 @@ define [
   Me = Backbone.View.extend
 
     # Override these defaults in your inheriting class
-    tagName: 'section'
     tmpl: Handlebars.compile tmpl
 
     initialize: ->

@@ -1,0 +1,60 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+@import '../styles/helpers'
+
+
+
+
+
+
+.widgetMaster .dailyRecc .widget
+
+
+
+
+
+.dailyReccDetails
+  hgroup
+    margin-bottom: $space
+    .pull-left
+      margin-right: $spaceLil
+
+
+  .title
+    text-transform: uppercase
+    text-align: left
+    color: $colorGood
+    font-weight: bold
+    margin: 0
+
+  .footer
+    display: block
+    position: relative
+    padding: $spaceLil
+    padding-right: $spaceBig
+    margin: -$space
+    margin-top: $space
+    border-bottom-left-radius: $radiusMed
+    border-bottom-right-radius: $radiusMed
+    background: $colorBackground
+    border-top: 1px solid $colorBackgroundWarm
+    text-align: left
+    min-height: $spaceBig
+    +box-sizing(border-box)
+  a.footer:hover
+    background: transparentize( $colorBrand1, .9 )
+  a.footer:hover .icon-stack
+    text-decoration: none
+
+  .footer .icon-stack
+    position: absolute
+    top: 50%
+    right: 0
+    width: $spaceBig
+    height: $spaceBig
+    line-height: $spaceBig
+    margin-top: -($spaceBig / 2)
+    .icon-stack-base
+      font-size: $space + $spaceLil
+
+

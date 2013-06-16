@@ -1,0 +1,27 @@
+
+<div class="dailyReccDetails">
+
+    <hgroup>
+        <i class="icon icon-bulb-circle pull-left"></i>
+        <h2 class="title">Daily Recommendation</h2>
+        <p class="strong">
+            Based on your personality, TidePool recommends this <em>{{link_type}}</em>.
+        </p>
+    </hgroup>
+
+    <p>{{sentence}}</p>
+    {{#if link}}
+        <a href="{{link}}" class="footer" target="_blank">
+            <i class="icon icon-reccType-{{link_type}}"></i>
+            <span class="icon-stack pull-right">
+                <i class="icon-circle-blank icon-stack-base"></i>
+                <i class="icon-arrow-right"></i>
+            </span>
+            {{link_title}}
+        </a>
+    {{/if}}
+
+</div>
+
+
+
