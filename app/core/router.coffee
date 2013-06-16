@@ -1,12 +1,11 @@
+
 define [
   'jquery'
   'backbone'
-  'models/result'
 ],
 (
   $
   Backbone
-  Result
 ) ->
   _me = 'routers/main_router'
 
@@ -23,10 +22,10 @@ define [
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
-      #@on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
+  #@on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
 
 
-    # ------------------------------------------------ Actual Route Responses
+  # ------------------------------------------------ Actual Route Responses
     showHome: ->        @app.view.asSite 'pages/home'
     showAbout: ->       @app.view.asSite 'pages/about'
     showTeam: ->        @app.view.asSite 'pages/team'

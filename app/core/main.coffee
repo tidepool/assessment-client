@@ -10,10 +10,10 @@ define [
   './analytics'
   './mediator'
   './view'
+  './router'
   # External Dependencies
   'entities/user'
   'controllers/session_controller'
-  'routers/main_router'
 ],
 (
   _
@@ -22,9 +22,9 @@ define [
   Analytics
   Mediator
   View
+  Router
   User
   SessionController
-  Router
 ) ->
 
   _me = 'core/main'

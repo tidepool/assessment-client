@@ -1,12 +1,12 @@
 define [
   'underscore'
   'backbone'
-  'models/assessment'
+  'entities/games'
 ],
 (
   _
   Backbone
-  Assessment
+  Game
 ) ->
 
   _me = 'entities/user'
@@ -102,7 +102,7 @@ define [
       "#{authUrl}?redirect_uri=#{redirectUri}&user_id=#{@get('id')}&provider=#{provider}"   
 
     onAddAuthRedirect: (hash, location) ->
-      # http://assessments-front.dev/additional_redirect.html#user_id=113&provider=twitter 
+      # additional_redirect.html#user_id=113&provider=twitter
       console.log("onAddAuthRedirect called with #{location} and hash #{hash}")
       params = @parseHash(hash)
       console.log("params are: #{params['user_id']} and #{params['provider']}")
@@ -112,8 +112,8 @@ define [
     # ----------------------------------------------------------- Public API
     isNew: -> ! @get('accessToken')
 
-    createAssessment: (gameId)->
-      curGame = new Assessment()
+    createGame: (gameId)->
+      curGame = new Game()
       if @isLoggedIn()
         curGame.create(gameId)
       else
@@ -121,8 +121,8 @@ define [
         .done =>
           curGame.create(gameId)
         .fail =>
-          @trigger 'error:createAssessment'
-          console.log "#{_me}.createAssessment.fail()"
+          @trigger 'error:createGame'
+          console.log "#{_me}.createGame.fail()"
       curGame
 
     isGuest: -> !! @get('guest')

@@ -1,13 +1,25 @@
-define [
-  'jquery',
-  'backbone'], ($, Backbone) ->
-  Result = Backbone.Model.extend
-    urlRoot: ->
-      assessment_id = @get('assessment_id')
-      "#{window.apiServerUrl}/api/v1/users/-/games/#{assessment_id}/result"
 
-    # initialize: (assessment_id) ->
-    #   @url = "#{window.apiServerUrl}/api/v1/assessments/#{assessment_id}/result"
+
+define [
+  'jquery'
+  'backbone'
+], (
+  $
+  Backbone
+) ->
+
+
+
+  Model = Backbone.Model.extend
+    urlRoot: ->
+      gameId = @get('game_id')
+      "#{window.apiServerUrl}/api/v1/users/-/games/#{gameId}/result"
+
+    initialize: ->
+      @calculateResult()
+
+
+
 
     calculateResult: ->
       deferred = $.Deferred()
@@ -24,7 +36,6 @@ define [
           deferred.reject()
       .fail =>
         deferred.reject()
-
       deferred.promise()
 
     startCalculation: ->
@@ -33,11 +44,7 @@ define [
       attrs = {}
       @save(attrs)       
       .done (data, textStatus, jqXHR) =>
-        console.log("Start Calculation Success: #{textStatus}") 
-        statusCode = jqXHR.statusCode()
-        if statusCode isnt 202
-          # We were expecting 202 (accepted) as status code
-          console.log("Unexpected StatusCode #{statusCode}")
+        console.log("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 202
         @progressLink = data.status.link
         deferred.resolve(jqXHR.response)
       .fail (jqXHR, textStatus, errorThrown) ->
@@ -56,41 +63,38 @@ define [
           type: 'GET'
           url: @progressLink
         .done (data, textStatus, jqXHR) =>
-          console.log("Check For Progress Success: #{textStatus}")
-          statusCode = jqXHR.statusCode()
-          if statusCode isnt 200
-            # We were expecting 200 (ok) as status code
-            console.log("Unexpected StatusCode #{statusCode}")
+          console.log("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 200
           switch data.status.state
             when 'pending'
               @progressLink = data.status.link
-              console.log("Still pending for results")
               # continue pinging every 1s
               @timeoutAttempt += 1 
               if @timeoutAttempt is 4
-                console.log("Timeout limit is reached!")
-                deferred.reject("Timeout limit is reached!")
+                deferred.reject 'Timed out waiting for results.'
               else
-                setTimeout => 
+                setTimeout =>
                   @checkForProgress(false, deferred)
                 , 500
             when 'done'
               console.log("Done with results")
+              @set 'status', data.status
               deferred.resolve(jqXHR.response)
             when 'error'
-              console.log("Server error, no results")
               deferred.reject(textStatus)
             else
               console.log("Unexpected status #{data.status.state}")
               deferred.reject(textStatus)
         .fail (jqXHR, textStatus, errorThrown) ->
-          console.log("Check For Progress Error: #{textStatus}")
           deferred.reject(textStatus)
       else
-        console.log("No url to check for progress")
         deferred.reject("No url to check for progress")
 
       if (firstTime)
         deferred.promise()
 
-  Result
+
+
+      # ----------------------------------------------------------------------------------- Public API
+
+
+  Model

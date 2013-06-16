@@ -4,6 +4,7 @@ define [
   'core'
   'composite_views/perch'
   'entities/levels'
+  'entities/results'
   'ui_widgets/steps_remaining'
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'
@@ -15,6 +16,7 @@ define [
   app
   perch
   LevelsCollection
+  Results
   StepsRemainingView
   ReactionTime
   ImageRank
@@ -34,7 +36,7 @@ define [
     className: 'playGamePage'
 
     initialize: ->
-      @curGame = app.user.createAssessment()
+      @curGame = app.user.createGame()
       @_register_events()
 
 
@@ -59,7 +61,7 @@ define [
 
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed #+ 6 # TODO: remove increment. It's for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed + 6 # TODO: remove increment. It's for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage
@@ -98,7 +100,8 @@ define [
     # ------------------------------------------------------------- Results
     _calculateResults: (gameModel) ->
       @curLevel = new CalculateResultsView
-        model: gameModel
+        model: new Results
+          game_id: gameModel.get 'id'
       @$el.html @curLevel.render().el
 
 
