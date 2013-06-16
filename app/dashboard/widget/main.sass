@@ -49,9 +49,13 @@
   &.premium h3
     background-color: $colorBrand2
     color: $shadeDark
+    font-weight: bold
   &.feature h3
     background-color: $colorGood
     color: white
+    font-weight: bold
+  &.feature p
+    font-size: $fontSizeBody
 
   &.hasFooter
     padding-bottom: $space
@@ -72,11 +76,13 @@
   canvas
     float: left
     margin-right: $spaceLil
+    margin-left: -$spaceLil
 
   ul.key
     list-style: none
     margin: 0
     margin-top: $spaceBig
+    text-align: left
   ul.key li
     font-size: $fontSizeTiny
     color: $colorForeground
@@ -94,8 +100,8 @@
 
 
   &:hover
-    box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight
-    +transform( translateY(-$spaceTiny) )
+    box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight, 0 0 0 $spaceTiny $shadeLight
+    //+transform( translateY(-$spaceTiny) ) // If this is in place chrome has a bizarre flicker during the transition
     z-index: 1
 
   &.empty
