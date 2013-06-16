@@ -18,6 +18,9 @@ define [
 
     initialize:  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
+      @on 'reset', (model) -> console.log model.attributes
+      @on 'sync', (model) -> console.log model.attributes
+      @on 'change', (model) -> console.log model.attributes
       @
 
     # Server -> Front End. Translates data we receive from the server

@@ -3,7 +3,7 @@ define [
   'underscore'
   'backbone'
   'Handlebars'
-  'models/user_event'
+  'entities/user_event'
   "text!./main.hbs"
   'composite_views/perch'
 ], (

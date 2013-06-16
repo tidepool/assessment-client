@@ -9,11 +9,12 @@
   display: block
   padding: $spaceLil $space
   margin: $spaceTiny
-  background: $colorBackground
+  background: white
   border-radius: $radiusSmall
   box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 0 0 transparent
   cursor: pointer
   overflow: scroll
+  text-align: center
   +box-sizing(border-box)
   +transitionable
 
@@ -27,6 +28,8 @@
     border-top-color: $colorBrand2
     border-right-color: $colorBrand2
 
+  p
+    text-align: left
   &>p
     position: relative // stay above pos absolute things like the .dogear
     text-align: center
@@ -34,17 +37,34 @@
     font-size: $fontSizeSmall
 
   h3
+    text-align: left
     font-size: $fontSizeBody
     background: $colorGoodThin
     text-transform: uppercase
     margin-top: -$spaceLil // Make it flush with edge of widget
+    margin-bottom: $space
     margin-left: -$space
     margin-right: -$space
-    margin-bottom: $space
     padding: $spaceLil $space
   &.premium h3
     background-color: $colorBrand2
     color: $shadeDark
+  &.feature h3
+    background-color: $colorGood
+    color: white
+
+  &.hasFooter
+    padding-bottom: $space
+  .footer
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+    padding: $spaceTiny 0
+    border-top: 1px solid $colorBackgroundWarm
+    background: $colorBackground
+    font-size: $fontSizeLarge
+    color: $colorBrand2 - 25
 
 
 
@@ -74,7 +94,6 @@
 
 
   &:hover
-    background: white
     box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight
     +transform( translateY(-$spaceTiny) )
     z-index: 1

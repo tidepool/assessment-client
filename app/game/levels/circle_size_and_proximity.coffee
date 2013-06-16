@@ -3,7 +3,7 @@ define [
   'underscore'
   'backbone'
   'Handlebars'
-  'models/user_event'
+  'entities/user_event'
   'entities/circles'
   'game/levels/circle_size'
   'game/levels/circle_proximity'

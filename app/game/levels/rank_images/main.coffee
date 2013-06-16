@@ -3,7 +3,7 @@ define [
   'Handlebars'
   'text!./main.hbs'
   './rankable_images'
-  'models/user_event'
+  'entities/user_event'
   'jqueryui/sortable'
   'ui_widgets/proceed'
 ],

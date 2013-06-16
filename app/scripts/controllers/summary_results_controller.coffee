@@ -22,7 +22,7 @@ define [
     initialize: (options) ->
       @session = options.session
       @assessment = @session.assessment
-      
+
     render: ->
       @fetchResult()
       .done => 
