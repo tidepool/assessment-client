@@ -1,11 +1,13 @@
 
 define [
+  'underscore'
   'backbone'
   'Handlebars'
   'text!./widget-chart.hbs'
   './chartColors'
   'chart'
 ], (
+  _
   Backbone
   Handlebars
   tmpl
@@ -41,18 +43,23 @@ define [
           label: label
           color: colors.pop()
           value: value
-
       data.chartValues = chartValues
       data.name = _chartName
       data
 
     _renderChartOnCanvas: ($canvas, chartData) ->
+      # Compute the upward bound of the chart
+      max = _.max chartData, (d) -> d.value
+      max = Math.ceil max.value
+
       options =
         scaleShowLine: false
         scaleShowLabels: false
         scaleOverride: true
+        scaleSteps: max
+        scaleStepWidth: 1
         scaleStartValue: 0
-        scaleSteps: 100
+
       ctx = $canvas[0].getContext("2d")
       barChart = new Chart(ctx).PolarArea(chartData, options)
 

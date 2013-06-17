@@ -83,10 +83,7 @@ define [
     # ---------------------------------------------------------------- Event Callbacks
     onUserSync: -> @_getPersonality()
     onLogOut: -> app.router.navigate 'home', trigger:true
-
-    onModelSync: (model, data) ->
-      @_addWidgets()
-
+    onModelSync: (model, data) -> @_addWidgets()
     onModelErr: (model, xhr) ->
 #      console.log
 #        model: model
