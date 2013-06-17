@@ -25,8 +25,9 @@ define [
     parse: (resp) ->
       htmlBullets = []
       # Parse markdown in html bullets
-      htmlBullets.push _markdown bullet for bullet in resp.profile_description.bullet_description
-      resp.profile_description.bullet_description = htmlBullets
+      if resp?.profile_description?.bullet_description?
+        htmlBullets.push _markdown bullet for bullet in resp.profile_description.bullet_description
+        resp.profile_description.bullet_description = htmlBullets
       resp
 
     onSync: (model) ->

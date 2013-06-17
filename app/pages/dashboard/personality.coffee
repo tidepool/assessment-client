@@ -61,8 +61,6 @@ define [
       @_emptyWidgets()
       $mastahBlastah = @$(_widgetMasterSel)
 
-      console.log @model.attributes
-
       coreResults = new WidgetCoreResults
         model: new Backbone.Model @model.attributes.profile_description
       $mastahBlastah.append coreResults.render().el

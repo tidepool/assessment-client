@@ -61,7 +61,7 @@ define [
 
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed + 6 # TODO: remove increment. It's for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed #+ 6 # TODO: remove increment. It's for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       # Mark the changed level complete
       @levels?.setComplete curStage

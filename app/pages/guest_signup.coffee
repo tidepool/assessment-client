@@ -37,7 +37,7 @@ define [
       @listenTo @personalityFull, 'sync', @onSync
       @listenTo @personalityFull, 'error', @onError
       @listenTo app.user, 'sync', @onUserSync
-      # Show the sign up form
+      @personalityFull.fetch()
 
     render: ->
       @$el.html tmpl
@@ -72,9 +72,7 @@ define [
 
     onUserSync: (userModel) ->
       console.log 'user registered or signed in'
-      if userModel.isGuest()
-        console.log 'somehow they\'re still a guest'
-      else
+      unless userModel.isGuest()
         app.router.navigate( 'dashboard', trigger: true )
 
   Me
