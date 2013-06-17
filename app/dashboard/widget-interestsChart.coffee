@@ -4,15 +4,15 @@ define [
   'backbone'
   'Handlebars'
   'text!./widget-chart.hbs'
-  './chartColors'
-  'chart'
+  'charts/doughnut'
+  'composite_views/perch'
 ], (
   _
   Backbone
   Handlebars
   tmpl
-  chartColors
-  Chart
+  DoughnutChart
+  perch
 ) ->
 
   _canvasSel = 'canvas'
@@ -21,37 +21,32 @@ define [
 
   View = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
-    className: 'holder personalityChart'
+    className: 'holder'
     tagName: 'section'
-    initialize: ->
+    events:
+      click: 'onClick'
 
     render: ->
-      data = @_prepareData()
-      @$el.html @tmpl data
-      $canvas = @$(_canvasSel)
-      @_renderChartOnCanvas $canvas, data.chartValues
+      @$el.html @tmpl name: _chartName
+      @chart = new DoughnutChart
+        data:
+          name: _chartName
+          chartValues: @model.attributes
+      @$(_widgetSel).append @chart.render().el
       @
 
 
-  # ---------------------------------------------------------------------------- Private
-    _prepareData: ->
-      data = {}
-      chartValues = []
-      colors = _.clone chartColors
-      for label, value of @model.attributes
-        chartValues.push
-          label: label
-          color: colors.pop()
-          value: value
-      data.chartValues = chartValues
-      data.name = _chartName
-      data
+    onClick: ->
+      perch.show
+        title: _chartName
+        large: true
+        content: new DoughnutChart
+          data:
+            name: _chartName
+            chartValues: @model.attributes
+            width: 450
+            height: 300
 
-    _renderChartOnCanvas: ($canvas, data) ->
-      options =
-        percentageInnerCutout: 33
-      ctx = $canvas[0].getContext("2d")
-      barChart = new Chart(ctx).Doughnut(data, options)
 
 
   View

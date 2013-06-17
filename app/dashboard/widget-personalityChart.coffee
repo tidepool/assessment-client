@@ -4,15 +4,15 @@ define [
   'backbone'
   'Handlebars'
   'text!./widget-chart.hbs'
-  './chartColors'
-  'chart'
+  'composite_views/perch'
+  'charts/polar_area'
 ], (
   _
   Backbone
   Handlebars
   tmpl
-  chartColors
-  Chart
+  perch
+  PolarAreaChart
 ) ->
 
   _canvasSel = 'canvas'
@@ -21,49 +21,32 @@ define [
 
   View = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
-    className: 'holder personalityChart'
+    className: 'holder'
     tagName: 'section'
-    initialize: ->
+    events:
+      click: 'onClick'
 
     render: ->
-      data = @_prepareData()
-      @$el.html @tmpl data
-      $canvas = @$(_canvasSel)
-      @_renderChartOnCanvas $canvas, data.chartValues
+      @$el.html @tmpl name: _chartName
+      @chart = new PolarAreaChart
+        data:
+          name: _chartName
+          chartValues: @model.attributes
+      @$(_widgetSel).append @chart.render().el
       @
 
+    onClick: ->
+      perch.show
+        title: _chartName
+        large: true
+        content: new PolarAreaChart
+          data:
+            name: _chartName
+            chartValues: @model.attributes
+            width: 450
+            height: 300
 
-    # ---------------------------------------------------------------------------- Private
-    _prepareData: ->
-      data = {}
-      chartValues = []
-      colors = _.clone chartColors
-      for label, value of @model.attributes
-        chartValues.push
-          label: label
-          color: colors.pop()
-          value: value
-      data.chartValues = chartValues
-      data.name = _chartName
-      data
 
-    _renderChartOnCanvas: ($canvas, chartData) ->
-      # Compute the upward bound of the chart
-      max = _.max chartData, (d) -> d.value
-      max = Math.ceil max.value
-
-      options =
-        scaleShowLine: false
-        scaleShowLabels: false
-        scaleOverride: true
-        scaleSteps: max
-        scaleStepWidth: 1
-        scaleStartValue: 0
-
-      ctx = $canvas[0].getContext("2d")
-      barChart = new Chart(ctx).PolarArea(chartData, options)
-
-    _drawKey: (data) ->
 
 
   View

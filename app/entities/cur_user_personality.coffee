@@ -31,9 +31,9 @@ define [
       resp
 
     onSync: (model) ->
+      #console.log model.attributes
       # Consider an empty model an error
       # TODO: have server return 404 if the personality is empty
-      console.log model.attributes
     onErr: -> console.error "#{_me}: Trouble getting the User Personality Model"
 
   Model

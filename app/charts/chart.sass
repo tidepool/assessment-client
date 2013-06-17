@@ -1,0 +1,29 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+@import '../styles/helpers'
+
+
+.chart
+
+  canvas
+    margin-bottom: $spaceLil
+
+  ul.key
+    display: inline-block
+    list-style: none
+    margin: 0 auto
+    margin-bottom: $space
+    text-align: left
+  ul.key li
+    font-size: $fontSizeSmall
+    color: $colorForeground
+    margin: 0
+    line-height: 1.3
+  ul.key .swatch
+    display: inline-block
+    width: $spaceLil
+    height: $spaceLil
+    margin-bottom: $spaceTiny
+    box-shadow: 0 1px 1px 0 $shadeLight
+    border-radius: $radiusTiny
+    vertical-align: middle
