@@ -21,6 +21,7 @@ define [
       height: 150
       chartValues: []
       colors: _.clone chartColors
+      options: {}
 
     _prepareData: (data) ->
       preppedData = []

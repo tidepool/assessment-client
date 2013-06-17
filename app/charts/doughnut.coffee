@@ -33,8 +33,9 @@ define [
       $canvas = @$(_canvasSel)
       return unless $canvas
 
-      options =
+      options = _.extend @model.attributes.options, {
         percentageInnerCutout: 33
+      }
       ctx = $canvas[0].getContext("2d")
       barChart = new Chart(ctx).Doughnut(chartData, options)
 

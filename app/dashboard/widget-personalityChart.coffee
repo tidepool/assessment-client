@@ -32,6 +32,7 @@ define [
         data:
           name: _chartName
           chartValues: @model.attributes
+          options: animation: false
       @$(_widgetSel).append @chart.render().el
       @
 

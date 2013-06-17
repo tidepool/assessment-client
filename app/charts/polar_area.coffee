@@ -35,13 +35,14 @@ define [
       max = _.max chartData, (d) -> d.value
       max = Math.ceil max.value
 
-      options =
+      options = _.extend @model.attributes.options, {
         scaleShowLine: false
         scaleShowLabels: false
         scaleOverride: true
         scaleSteps: max
         scaleStepWidth: 1
         scaleStartValue: 0
+      }
 
       ctx = $canvas[0].getContext("2d")
       barChart = new Chart(ctx).PolarArea(chartData, options)

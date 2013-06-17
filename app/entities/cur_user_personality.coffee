@@ -10,9 +10,6 @@ define [
 ) ->
 
   _me = 'entities/cur_user_personality'
-  _markdown = (text) ->
-    markdown.toHTML text
-
 
   Model = Backbone.Model.extend
 
@@ -24,9 +21,13 @@ define [
 
     parse: (resp) ->
       htmlBullets = []
+      # Parse markdown in the one_liner
+      if resp?.one_lineer?
+        resp.one_liner = markdown.toHTML resp.one_liner
       # Parse markdown in html bullets
       if resp?.profile_description?.bullet_description?
-        htmlBullets.push _markdown bullet for bullet in resp.profile_description.bullet_description
+        for bullet in resp.profile_description.bullet_description
+          htmlBullets.push markdown.toHTML bullet
         resp.profile_description.bullet_description = htmlBullets
       resp
 
