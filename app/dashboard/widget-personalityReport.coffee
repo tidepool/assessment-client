@@ -14,9 +14,10 @@ define [
 ) ->
 
   _widgetSel = '.widget'
+  _className = 'personalityReport'
 
   View = Backbone.View.extend
-    className: 'holder personlityReport'
+    className: "holder #{_className}"
     tagName: 'section'
     events:
       click: 'onClick'
@@ -31,11 +32,10 @@ define [
         msg = "Thanks for your interest, we'll notify you at <strong>#{app.user.attributes.email}</strong> when your report is available"
       else
         msg = "Thanks for your interest, we'll notify you when your report is available"
-
       perchPsst.show
         msg: msg
         icon: 'icon-ok'
-        btn1Text: null
+      app.analytics.track _className, 'Teaser Pressed'
 
   View
 

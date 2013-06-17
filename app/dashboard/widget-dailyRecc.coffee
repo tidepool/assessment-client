@@ -23,7 +23,7 @@ define [
 
   View = Backbone.View.extend
     tmplDetails: Handlebars.compile tmplDetails
-    className: 'holder dailyRecc'
+    className: "holder #{_className}"
     tagName: 'section'
     events:
       click: 'onClick'
@@ -58,11 +58,11 @@ define [
         btn1Text: null
         supressTracking: true
         large: true
-      app.analytics.track _className, 'Recommendation Shown'
+      app.analytics.track _className, 'Shown'
       $(_recLinkSel).one 'click', @onReccClick
 
     onReccClick: ->
-      app.analytics.track _className, 'Recommendation Clicked'
+      app.analytics.track _className, 'External Link Clicked'
 
 
 

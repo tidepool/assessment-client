@@ -113,6 +113,11 @@ define [],() ->
 
     track: (category, action, label, value) ->
       return unless category? and action?
+#      console.log
+#        category: category
+#        action: action
+#        label: label
+#        value: value
       _trackGoogleEvent(category, action, label, value)
       if label and value
         _trackKiss("#{category}:#{action}", { label:label, value:value})

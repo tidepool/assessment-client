@@ -25,6 +25,7 @@ define [
   Me = perch.Klass.extend
 
     _showOptionsObject: (options) ->
+      options.btn1Text = null
       options.content = ''
       if options.icon
         options.content += _iconTmpl options
