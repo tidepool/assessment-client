@@ -34,7 +34,7 @@ define [
 
       perchPsst.show
         msg: msg
-        icon: 'icon-check'
+        icon: 'icon-ok'
         btn1Text: null
 
   View
