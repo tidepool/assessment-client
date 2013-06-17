@@ -30,8 +30,7 @@ define [
 
     initialize: ->
       @model = new Recommedations()
-      @listenTo @model, 'sync', @render
-
+      @listenTo @model, 'sync', @onSync
       @model.latest()
 
     render: ->
@@ -39,14 +38,19 @@ define [
       data = @model.attributes
       # Convert server link types to icons I can use
       switch data.link_type
-        when 'Book' then data.style = 'book'
-        when 'App' then data.style = 'cloud-download'
-        when 'Video' then data.style = 'youtube-play'
+        when 'Book'    then data.icon = 'icon-book'
+        when 'App'     then data.icon = 'icon-cloud-download'
+        when 'Video'   then data.icon = 'icon-youtube-play'
+        when 'Comic'   then data.icon = 'icon-smile'
+        when 'Lecture' then data.icon = 'icon-bullhorn'
       @_detailsMarkup = @tmplDetails data
       @
 
 
     # -------------------------------------------------------------- Event Handlers
+    onSync: (model) ->
+      @render() if model.attributes.sentence # only render if there is model content
+
     onClick: ->
       return unless @_detailsMarkup
       perch.show
