@@ -4,7 +4,7 @@ define [
   'core'
   'composite_views/perch'
   'entities/levels'
-  'entities/results'
+  'entities/results_calculator'
   'ui_widgets/steps_remaining'
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'

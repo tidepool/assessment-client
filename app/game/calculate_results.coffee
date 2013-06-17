@@ -13,16 +13,15 @@ define [
 ) ->
 
   _me = 'game/calculate_results'
+  _statusMsgSel = '#StatusMessage'
 
-  Me = Backbone.View.extend
+  View = Backbone.View.extend
     className: 'calculateResults'
-
     initialize: ->
-      _.bindAll @, '_gotGameResults', '_errGameResults'
-      #@listenTo @model, 'change', @onChange
-      @listenTo @model, 'all', (e,model) -> console.log( e:e, model:model )
-      #@_getGameResults()
-      app.analytics.track @className, 'Get game results'
+#      @listenTo @model, 'all', (e,model) -> console.log( e:e, model:model )
+      @listenTo @model, 'change', @onChange
+      @listenTo @model, 'error', @onError
+      app.analytics.track @className, 'Starting game results calculation'
 
     render: ->
       @$el.html tmpl
@@ -30,6 +29,10 @@ define [
 
 
     # ------------------------------------------------------------- Helper Methods
+    _updateStatusMsg: (model) ->
+      if model.attributes.status.message
+        @$(_statusMsgSel).text model.attributes.status.message
+
     _showResults: ->
       if app.user.isGuest()
         app.router.navigate 'guestSignup',
@@ -40,15 +43,13 @@ define [
 
 
     # ------------------------------------------------------------- Callbacks
-    _gotGameResults: (msg) ->
-      console.log "#{_me}._gotGameResults()"
-      console.log
-        model: @model
-        msg: msg
-      app.analytics.track @className, 'Successfully got game results'
-      @_showResults
+    _gotGameResults: ->
+      #console.log "#{_me}._gotGameResults()"
+      #console.log model: @model
+      app.analytics.track @className, 'Successfully calculated game results'
+      @_showResults()
 
-    _errGameResults: (msg) ->
+    onError: (model, msg) ->
       app.analytics.track @className, 'Error Getting game results'
       #TODO: try again a few times before going asplodey
       perch.show
@@ -59,9 +60,12 @@ define [
         mustUseButton: true
 
     onChange: (model) ->
-      console.log "#{_me}.model.result changed"
-      console.log
-        model: model.attributes
+      #console.log "#{_me}.model.result changed"
+      #console.log model: model.attributes
+      @_updateStatusMsg model
+      @_gotGameResults() if model.attributes.status.state is model.STATES.done
 
-  Me
+
+
+  View
 
