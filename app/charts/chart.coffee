@@ -24,12 +24,13 @@ define [
 
     _prepareData: (data) ->
       preppedData = []
-      colors = _.clone chartColors
+      i = 0
       for label, value of data
         preppedData.push
           label: label
-          color: colors.pop()
+          color: chartColors[i]
           value: value
+        i++
       preppedData
 
     parse: (resp) ->
