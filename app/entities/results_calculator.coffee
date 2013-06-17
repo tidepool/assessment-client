@@ -47,6 +47,7 @@ define [
               , 500
           when @STATES.done
             console.log("Done with results")
+            #TODO: use the status that the back end is returning with the fetch on the result object instead
             @set 'status', data.status
           when @STATES.error
             @trigger 'error', @, textStatus

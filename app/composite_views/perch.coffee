@@ -88,13 +88,14 @@ define [
       @$el.on 'hidden', _.bind(@_onModalHidden, @)
 
     _trackLightbox: (opts) ->
+      return if opts.supressTracking
       return unless @options.app?
       if typeof opts is 'string'
         name = opts
       else if opts.title
         name = opts.title
       else
-        name = ''
+        return null # No point tracking without a title for the lightbox
       @options.app.analytics.track(
         @options.app.analytics.CATEGORIES.viewLightbox, name, '', opts
       )
@@ -114,11 +115,14 @@ define [
         @_showBackboneView options
       else
         @_showOptionsObject options
-      @_trackLightbox options unless options.supressTracking
+      @_trackLightbox options
       return this
 
     hide: ->
       @$el.modal('hide')
 
 
-  new Me()
+  # Return a singleton
+  perch = new Me()
+  perch.Klass = Me # allows others to extend this class while leaving the object as a singleton
+  return perch

@@ -8,9 +8,8 @@
 
 
 .widgetMaster .dailyRecc .widget
-
-
-
+  p
+    font-size: $fontSizeBody
 
 
 .dailyReccDetails
@@ -18,7 +17,6 @@
     margin-bottom: $space
     .pull-left
       margin-right: $spaceLil
-
 
   .title
     text-transform: uppercase
@@ -40,21 +38,29 @@
     border-top: 1px solid $colorBackgroundWarm
     text-align: left
     min-height: $spaceBig
+    line-height: 1.2
     +box-sizing(border-box)
   a.footer:hover
     background: transparentize( $colorBrand1, .9 )
-  a.footer:hover .icon-stack
-    text-decoration: none
+
+  .footer .linkType
+    width: $space
+    height: $space
+    line-height: $space
+    font-size: $space
+    float: left
+    margin-right: $spaceLil
+
 
   .footer .icon-stack
     position: absolute
-    top: 50%
+    top: $spaceTiny
     right: 0
     width: $spaceBig
-    height: $spaceBig
-    line-height: $spaceBig
-    margin-top: -($spaceBig / 2)
+    height: $spaceBig - $spaceLil
+    line-height: $spaceBig - $spaceLil
     .icon-stack-base
       font-size: $space + $spaceLil
+
 
 

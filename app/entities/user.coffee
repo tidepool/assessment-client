@@ -142,6 +142,8 @@ define [
     isLoggedIn: -> @hasCurrentToken()
 
     # Set the client version of the model back to as if it were new
-    reset: -> @clear().set @defaults()
+    reset: ->
+      @clear().set @defaults()
+      return this
 
   User

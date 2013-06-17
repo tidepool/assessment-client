@@ -4,11 +4,13 @@ define [
   'Handlebars'
   'text!./widget-coreResults.hbs'
   'composite_views/perch'
+  'markdown'
 ], (
   Backbone
   Handlebars
   tmpl
   perch
+  markdown
 ) ->
 
   _widgetSel = '.widget'
@@ -27,11 +29,11 @@ define [
       @
 
     onClick: ->
-      fullDescription = @model.attributes.description.join '<br/><br/>'
+      descHtml = markdown.toHTML @model.attributes.description
       perch.show
         large: true
         title: @model.attributes.name
-        msg: fullDescription
+        msg: descHtml
         btn1Text: 'Ok'
 
   View

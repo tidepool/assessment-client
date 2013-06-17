@@ -11,7 +11,7 @@ define [
   'dashboard/widget-personalityChart'
   'dashboard/widget-interestsChart'
   'dashboard/widget-dailyRecc'
-  'text!dashboard/widget-premiumTeaser.hbs'
+  'dashboard/widget-personalityReport'
 ], (
   Backbone
   Handlebars
@@ -23,7 +23,7 @@ define [
   WidgetPersonalityChart
   WidgetInterestsChart
   WidgetDailyRecc
-  tmplPremiumTeaser
+  WidgetPersonalityReport
 ) ->
 
   _widgetMasterSel = '#WidgetMaster'
@@ -69,8 +69,8 @@ define [
         model: new Backbone.Model @model.attributes.big5_score
       $mastahBlastah.append personalityChart.render().el
 
-      $mastahBlastah.append tmplPremiumTeaser
-      #$mastahBlastah.append tmplEmptyHappiness
+      personalityReport = new WidgetPersonalityReport()
+      $mastahBlastah.append personalityReport.render().el
 
       interestsChart = new WidgetInterestsChart
         model: new Backbone.Model @model.attributes.holland6_score
@@ -78,7 +78,6 @@ define [
 
       dailyRecc = new WidgetDailyRecc()
       $mastahBlastah.append dailyRecc.el
-      #$mastahBlastah.append tmplEmptyCareer
 
 
     # ---------------------------------------------------------------- Event Callbacks

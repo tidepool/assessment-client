@@ -106,7 +106,10 @@ define [
       holdPlease.show _submitSel
       formData = Syphon.serialize e.target
       formData.passwordConfirm = '' unless formData.loginType == 'register'
-      @options.app.session.logOut() # Clear any existing user data
+
+      # Blow away the current user during registration unless it's a guest.
+      @options.app.session.logOut() unless @options.app.user.isGuest()
+
       if formData.loginType is 'register'
         console.log "#{_me}.saving register form of user model..."
         @model.set formData

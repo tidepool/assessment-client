@@ -18,6 +18,8 @@ define [
 ) ->
 
   _widgetSel = '.widget'
+  _className = 'dailyRecc'
+  _recLinkSel = '#ActionRecommendationLink'
 
   View = Backbone.View.extend
     tmplDetails: Handlebars.compile tmplDetails
@@ -25,16 +27,26 @@ define [
     tagName: 'section'
     events:
       click: 'onClick'
+
     initialize: ->
       @model = new Recommedations()
       @listenTo @model, 'sync', @render
+
       @model.latest()
 
     render: ->
       @$el.html tmpl
-      @_detailsMarkup = @tmplDetails @model.attributes
+      data = @model.attributes
+      # Convert server link types to icons I can use
+      switch data.link_type
+        when 'Book' then data.style = 'book'
+        when 'App' then data.style = 'cloud-download'
+        when 'Video' then data.style = 'youtube-play'
+      @_detailsMarkup = @tmplDetails data
       @
 
+
+    # -------------------------------------------------------------- Event Handlers
     onClick: ->
       return unless @_detailsMarkup
       perch.show
@@ -42,7 +54,13 @@ define [
         btn1Text: null
         supressTracking: true
         large: true
-      #TODO: track
+      app.analytics.track _className, 'Recommendation Shown'
+      $(_recLinkSel).one 'click', @onReccClick
+
+    onReccClick: ->
+      app.analytics.track _className, 'Recommendation Clicked'
+
+
 
   View
 

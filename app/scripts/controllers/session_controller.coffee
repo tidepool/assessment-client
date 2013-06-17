@@ -60,9 +60,10 @@ define [
             client_id: @cfg.appId
             client_secret: @cfg.appSecret
         .done (data, textStatus, jqXHR) =>
-          @user.set 'accessToken', data.access_token
+          console.log
+            token: data.access_token
           @_persistLocally data
-          @user.fetch()
+          @user.reset().fetch()
           .done (data, textStatus, jqXHR) =>
             @options.app.analytics.track 'session', 'Successful Sign In'
             deferred.resolve("Success")
@@ -73,7 +74,6 @@ define [
           #console.log "#{_me}.signIn().ajax().fail()"
           @user.trigger 'error', @user, jqXHR
           deferred.reject(textStatus)
-
       deferred.promise()
 
     register: ->
@@ -88,7 +88,6 @@ define [
         .fail =>
           @options.app.analytics.track 'session', 'Failed Registration'
           deferred.reject("Fail")
-
       deferred.promise()
 
 

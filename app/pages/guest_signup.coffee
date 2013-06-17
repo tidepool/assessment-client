@@ -52,6 +52,7 @@ define [
     # ------------------------------------------------------------------------- Event Callbacks
     onSync: (model) ->
       profile = model.get 'profile_description'
+      return unless profile?
       personalityBrief = new UserPersonalitySkinny
         name: profile.name
         one_liner: profile.one_liner
