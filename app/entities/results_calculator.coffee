@@ -9,6 +9,7 @@ define [
 ) ->
 
   _me = 'entities/results_calculator'
+  _maxAttempts = 10
 
   Model = Backbone.Model.extend
 
@@ -38,7 +39,7 @@ define [
           when @STATES.pending
             # Look for progress updates every 1s
             @attempts += 1
-            if @attempts is 4
+            if @attempts >= _maxAttempts
               @trigger 'error', @, 'Timed out waiting for results.'
             else
               setTimeout =>
