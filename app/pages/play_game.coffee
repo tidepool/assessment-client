@@ -25,7 +25,7 @@ define [
 ) ->
 
   _me = 'pages/playGame'
-  _defaultGame = 1
+  _defaultGameDefinition = 'baseline' # TODO: get this from a url param
   _stepsRemainingContainer = '#HeaderRegion'
   _views =
     'ReactionTime': 'ReactionTime'
@@ -36,7 +36,7 @@ define [
     className: 'playGamePage'
 
     initialize: ->
-      @curGame = app.user.createGame()
+      @curGame = app.user.createGame _defaultGameDefinition
       @_register_events()
 
 

@@ -112,14 +112,14 @@ define [
     # ----------------------------------------------------------- Public API
     isNew: -> ! @get('accessToken')
 
-    createGame: (gameId)->
+    createGame: (gameDefId) ->
       curGame = new Game()
       if @isLoggedIn()
-        curGame.create(gameId)
+        curGame.create(gameDefId)
       else
         @session.logInAsGuest()
         .done =>
-          curGame.create(gameId)
+          curGame.create(gameDefId)
         .fail =>
           @trigger 'error:createGame'
           console.log "#{_me}.createGame.fail()"

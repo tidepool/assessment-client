@@ -14,7 +14,7 @@ define [
     # ------------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
 
-    initialize:  ->
+    initialize: ()  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       #@on 'reset', (model) -> console.log model.attributes
       #@on 'sync', (model) -> console.log model.attributes
@@ -84,8 +84,8 @@ define [
 
 
     # ------------------------------------------------------------- Public API
-    create: (gameId) ->
-      @save( definition_id: gameId )
+    create: (gameDefinitionId) ->
+      @save( definition_id: gameDefinitionId )
       @
 
     nextStage: ->
