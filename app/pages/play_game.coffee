@@ -82,13 +82,19 @@ define [
         collection: @levels
       $(_stepsRemainingContainer).append @stepsRemaining.render().el
 
+    _finishPreviousLevel: (levelView) ->
+      if levelView and levelView instanceof Backbone.View
+        levelView.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
+        levelStringId = levelView.model.get 'view_name'
+        app.analytics.track @className, "#{levelStringId} Finished"
+
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @curGame.get('stages')[stageId]
       viewClassString = _views[curStage.view_name]
       app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', viewClassString
       ViewClass = eval(viewClassString)
-      @curLevel?.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
+      @_finishPreviousLevel @curLevel
       @curLevel = new ViewClass
         model: new Backbone.Model(curStage)
         assessment: @curGame
@@ -96,7 +102,7 @@ define [
         showInstructions: @curGame.isFirstTimeSeeingLevel viewClassString
       @$el.html @curLevel.render().el
       @curGame.setLevelSeen viewClassString
-
+      app.analytics.track @className, "#{viewClassString} Started"
 
 
     # ------------------------------------------------------------- Results
