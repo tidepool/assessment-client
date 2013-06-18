@@ -36,6 +36,13 @@ define [
         msg: msg
         icon: 'icon-ok'
       app.analytics.track _className, 'Teaser Pressed'
+      $.ajax
+        url: "#{window.apiServerUrl}/api/v1/users/-/preorders"
+        type: 'POST'
+      .done (data, textStatus, jqXHR) =>
+        console.log("sent message to preorders")
+      .fail (jqXHR, textStatus, errorThrown) =>
+        console.log("failed to send the preorder")
 
   View
 
