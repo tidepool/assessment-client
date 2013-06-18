@@ -2,12 +2,12 @@
 
 <div class="widget">
 
-    <p class="hero">
+    <div class="hero">
         {{#if logo_url}}
             <img class="personalityBadge" src="/images/badges/{{logo_url}}" alt="{{name}}">
         {{/if}}
-        {{one_liner}}
-    </p>
+        {{{one_liner}}}
+    </div>
     <ul>
         {{#each bullet_description}}
             <li>
