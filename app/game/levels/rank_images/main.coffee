@@ -21,7 +21,7 @@ define [
   _rankingSel= '#RankingArea'
   _unrankedSel = '#UnrankedArea'
   _sortableSel = '.connectedSortable'
-  _msgHtml = '<li class="message">Rank from best to worst by clicking or dragging images.</li>'
+  _msgHtml = '<li class="message">Rank from favorite to least favorite by clicking or dragging images.</li>'
   _researchModuleName = 'image_rank'
   _USEREVENTS =
     started: "test_started"

@@ -31,7 +31,7 @@ define [
     'ReactionTime': 'ReactionTime'
     'ImageRank': 'ImageRank'
     'CirclesTest': 'CirclesTest'
-  _gameStartMsg = 'Play this fun and interactive game. We will assess your personality with our patented technology.'
+  _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
   Me = Backbone.View.extend
     className: 'playGamePage'
@@ -52,7 +52,7 @@ define [
       perch.show
         title: 'Welcome'
         msg: _gameStartMsg #assessmentModel.attributes.definition.instructions
-        btn1Text: 'Start'
+        btn1Text: 'Let\'s Go'
         onClose: _.bind(@curGame.nextStage, @curGame)
         mustUseButton: true
 
