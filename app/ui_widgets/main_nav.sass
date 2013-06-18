@@ -17,7 +17,7 @@
     text-transform: uppercase
     color: $colorBrandContrastNeutral + 50
     font-weight: bold
-    padding: 0 $spaceLil
+    padding: 0 $spaceTiny
   a:hover
     background: $colorBrand
     color: white
@@ -36,6 +36,19 @@
     background: $colorBrand
     border-bottom-right-radius: $radiusSmall
     border-bottom-left-radius: $radiusSmall
+
+
+  // Sizing changes based on screen width
+  @media all and (min-width: 321px)
+    a
+      padding: 0 $spaceLil
+  @media all and (min-width: 1001px)
+    a
+      padding: 0 $space
+
+
+
+
 
 .mainNav.navbar // The Bootstrap nav used in spec and library
   a
