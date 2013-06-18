@@ -20,6 +20,11 @@ define [
 ) ->
 
   _me = 'core/view'
+  _navSel = '.mainNav'
+#  _TYPES =
+#    site: 'SiteLayout'
+#    game: 'GameLayout'
+#    dash: 'DashLayout'
 
   Me = Backbone.View.extend
 
@@ -60,17 +65,18 @@ define [
       #console.log "#{_me}.asSite(#{viewModuleString})"
       @_curLayout = new SiteLayout
         app: @options.app
-      @_loadView(viewModuleString)
+      $('body').addClass viewModuleString.split('/').join('-')
+      @_loadView viewModuleString
 
     asGame: (viewModuleString) ->
       #console.log "#{_me}.asGame(#{viewModuleString})"
       @_curLayout = new GameLayout
         app: @options.app
-      @_loadView(viewModuleString)
+      @_loadView viewModuleString
 
     asDash: (viewModuleString) ->
       @_curLayout = new DashLayout
         app: @options.app
-      @_loadView(viewModuleString)
+      @_loadView viewModuleString
 
   Me

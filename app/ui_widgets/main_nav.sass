@@ -1,6 +1,8 @@
 @import '../styles/appVars'
 @import '../styles/colorVars'
 
+
+
 .mainNav
   display: inline-block
   ul
@@ -18,26 +20,6 @@
     color: $colorBrandContrastNeutral + 50
     font-weight: bold
     padding: 0 $spaceTiny
-  a:hover
-    background: $colorBrand
-    color: white
-    text-decoration: none
-    text-shadow: none
-  // Put a red rounded shape underneath each nav item
-  a:hover:after
-    position: absolute
-    box-sizing: border-box
-    width: 100%
-    height: $spaceLil
-    left: 0
-    top: 100%
-    margin-top: - $spaceLil / 2
-    content: ''
-    background: $colorBrand
-    border-bottom-right-radius: $radiusSmall
-    border-bottom-left-radius: $radiusSmall
-
-
   // Sizing changes based on screen width
   @media all and (min-width: 321px)
     a
@@ -47,6 +29,39 @@
       padding: 0 $space
 
 
+// --------------------------------------------------- Hover states
+.pages-about .mainNav a.pages-about,
+.pages-team .mainNav a.pages-team,
+.mainNav.active a,
+.mainNav a:hover
+  background: $colorBrand
+  color: white
+  text-decoration: none
+  text-shadow: none
+// Put a red rounded shape underneath each nav item
+.pages-about .mainNav a.pages-about:after,
+.pages-team .mainNav a.pages-team:after,
+.mainNav .active a:after,
+.mainNav a:hover:after
+  position: absolute
+  box-sizing: border-box
+  width: 100%
+  height: $spaceLil
+  left: 0
+  top: 100%
+  margin-top: - $spaceLil / 2
+  content: ''
+  background: $colorBrand
+  border-bottom-right-radius: $radiusSmall
+  border-bottom-left-radius: $radiusSmall
+
+// --------------------------------------------------- Current Page State
+//.pages-about .mainNav a.pages-about,
+//.pages-team .mainNav a.pages-team,
+//.pages-about .mainNav a.pages-about:after,
+//.pages-team .mainNav a.pages-team:after
+//  cursor: default
+//  background: $colorForegroundMild
 
 
 
