@@ -45,6 +45,7 @@ define [
       @curView = new CircleSize
         collection: @circlesCollection
         runner: @
+        showInstructions: @options.showInstructions
       @$el.html @curView.el
       @track event_desc: _USEREVENTS.startedSizing
       @circlesCollection = @curView.collection
@@ -54,7 +55,9 @@ define [
       @curView = new CircleProximity
         collection: @circlesCollection
         runner: @
+        showInstructions: @options.showInstructions
       @$el.html @curView.el
+      @curView.render() # Render after putting in the dom since it needs to compute locations
       @track
         event_desc: _USEREVENTS.startedProximity
         circles: @circlesCollection.toJSON()

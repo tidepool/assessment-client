@@ -25,7 +25,6 @@ define [
 ) ->
 
   _me = 'pages/playGame'
-  _defaultGameDefinition = 'baseline' # TODO: get this from a url param
   _stepsRemainingContainer = '#HeaderRegion'
   _views =
     'ReactionTime': 'ReactionTime'
@@ -37,7 +36,7 @@ define [
     className: 'playGamePage'
 
     initialize: ->
-      @curGame = app.user.createGame _defaultGameDefinition
+      @curGame = app.user.createGame()
       @_register_events()
 
 
@@ -64,7 +63,6 @@ define [
       #console.log "#{_me}._onStageChanged(model, #{stage})"
       curStage = model.attributes.stage_completed #+ 6 # TODO: remove increment. It's for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
-      # Mark the changed level complete
       @levels?.setComplete curStage
       # Show the next stage
       if curStage is -1 then @_showWelcome model
@@ -95,7 +93,10 @@ define [
         model: new Backbone.Model(curStage)
         assessment: @curGame
         stageNo: stageId
+        showInstructions: @curGame.isFirstTimeSeeingLevel viewClassString
       @$el.html @curLevel.render().el
+      @curGame.setLevelSeen viewClassString
+
 
 
     # ------------------------------------------------------------- Results

@@ -32,12 +32,16 @@ define [
       @listenTo @collection, 'change:size', @onChangeSize
       @listenToOnce proceed, 'click', @_close
       _.bindAll @, 'render'
-      perch.show
-        content: instructions
-        btn1Text: "I'm Ready"
-        btn1Callback: @render
-        mustUseButton: true
-        supressTracking: true
+
+      if @options.showInstructions
+        perch.show
+          content: instructions
+          btn1Text: "I'm Ready"
+          btn1Callback: @render
+          mustUseButton: true
+          supressTracking: true
+      else
+        @render()
 
     render: ->
       # For each circle, make it a new sizey view that has a reference to the circle

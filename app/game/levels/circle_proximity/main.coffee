@@ -35,15 +35,22 @@ define [
     initialize: ->
       @listenTo @collection, 'change:userChangedPos', @onChangeUserChangedPos
       @listenToOnce proceed, 'click', @_close
-      perch.show
-        content: instructions
-        btn1Text: "I'm Ready"
-        btn1Callback: _.bind @render, @
-        mustUseButton: true
-        supressTracking: true
 
     render: ->
       #console.log "#{_me}.render()"
+      if @options.showInstructions
+        perch.show
+          content: instructions
+          btn1Text: "I'm Ready"
+          btn1Callback: _.bind @_renderLevel, @
+          mustUseButton: true
+          supressTracking: true
+      else
+        @_renderLevel()
+
+
+    # ----------------------------------------------------- Private Methods
+    _renderLevel: ->
       # Self
       @selfView = new SelfView
       @$el.html @selfView.render().el
@@ -67,7 +74,6 @@ define [
       @
 
 
-    # ----------------------------------------------------- Private Methods
     _positionCirclesAround: (center) ->
       count = @collection.length
       increment = 360 / count

@@ -11,6 +11,15 @@ define [
 
   Model = Backbone.Model.extend
 
+    LEVELS:
+      rank_images: 'ImageRank'
+      circle_size_and_proximity: 'CirclesTest'
+      reaction_time_disc: 'ReactionTime'
+
+    defaults:
+      definition_id: 'baseline'
+
+
     # ------------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
 
@@ -19,6 +28,7 @@ define [
       #@on 'reset', (model) -> console.log model.attributes
       #@on 'sync', (model) -> console.log model.attributes
       #@on 'change', (model) -> console.log model.attributes
+      @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @
 
     # Server -> Front End. Translates data we receive from the server
@@ -85,7 +95,10 @@ define [
 
     # ------------------------------------------------------------- Public API
     create: (gameDefinitionId) ->
-      @save( definition_id: gameDefinitionId )
+      if gameDefinitionId
+        @save( definition_id: gameDefinitionId )
+      else
+        @save() # Uses the default definition id
       @
 
     nextStage: ->
@@ -93,7 +106,17 @@ define [
       i = @get('stage_completed')
       @save( stage_completed: i + 1 )
 
+    # See if this is the first time the user has seen this level
+    # levelStringId should be a unique string key defining the level type
+    setLevelSeen: (levelStringId) ->
+      @_levelsSeen.push levelStringId
+      @_levelsSeen = _.uniq @_levelsSeen
+      @
 
+    isFirstTimeSeeingLevel: (levelStringId) ->
+      return null unless levelStringId
+      return false if _.contains @_levelsSeen, levelStringId
+      return true
 
 
   Model
