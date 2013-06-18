@@ -5,19 +5,22 @@ define [
   'text!./widget-coreResults.hbs'
   'composite_views/perch'
   'markdown'
+  'core'
 ], (
   Backbone
   Handlebars
   tmpl
   perch
   markdown
+  app
 ) ->
 
   _widgetSel = '.widget'
+  _className = 'coreResults '
 
   View = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
-    className: 'holder coreResults doubleWide tall'
+    className: "holder doubleWide tall #{_className}"
     tagName: 'section'
     events:
       click: 'onClick'
@@ -35,6 +38,7 @@ define [
         title: @model.attributes.name
         msg: descHtml
         btn1Text: 'Ok'
+      app.analytics.track _className, 'Detailed Core Personality Results Viewed'
 
   View
 
