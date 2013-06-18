@@ -171,7 +171,6 @@ module.exports = (grunt) ->
             'pages/about'
             'pages/guest_signup'
             'pages/home'
-            'pages/investors'
             'pages/play_game'
             'pages/team'
             'pages/dashboard/personality'

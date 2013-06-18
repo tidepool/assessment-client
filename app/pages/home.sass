@@ -1,0 +1,35 @@
+@import '../styles/_appVars'
+@import '../styles/_colorVars'
+@import '../styles/_helpers'
+
+
+
+
+.homePage
+  $gap: $space * 3
+  h1, h2
+    text-transform: uppercase
+    color: white
+    text-shadow: 3px 1px $spaceLil $shade, -3px 1px $spaceLil $shade
+    letter-spacing: .02em
+    line-height: 1.3
+  h1
+    font-size: $fontSizeMegaLarge
+  h2
+    font-size: $fontSizeMegaLarge
+    margin-bottom: $gap
+
+  .hero
+    text-align: center
+    margin: $gap 0
+
+
+
+
+
+body.background-siteLayout
+  background-color: $colorForeground
+  background: url('../images/home_page/homepage_bg.jpg') no-repeat top center fixed
+  background-size: cover
+  //filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.myBackground.jpg', sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/dashboard/dashboard_bg.jpg', sizingMethod='scale')"
