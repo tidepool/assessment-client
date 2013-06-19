@@ -7,11 +7,13 @@ define [
   Handlebars
   tmpl
 ) ->
+
   Me = Backbone.View.extend
     className: 'aboutPage'
     initialize: ->
     render: ->
       @$el.html tmpl
       @
+
   Me
 
