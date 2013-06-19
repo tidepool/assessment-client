@@ -22,6 +22,7 @@ module.exports = (grunt) ->
     dist: "dist"
     dev: ".devServer"
     temp: ".tmp"
+    research: "../OAuthProvider/public/"
 
   tidepoolConfig =
     sassSourceGlob: [
@@ -309,6 +310,13 @@ module.exports = (grunt) ->
             "<%= tidepool.horseAndBuggyJsGlob %>"
           ]
         ]
+      distToPublic:
+        files: [
+          expand: true
+          cwd: "<%= yeoman.dist %>"
+          src: "**/*.*"
+          dest: "<%= yeoman.research %>"
+        ]
 
 
     exec:
@@ -377,6 +385,11 @@ module.exports = (grunt) ->
     "copy:distImages"
     "htmlmin"
     "clean:temp"
+  ]
+
+  grunt.registerTask "research", [
+    "dist"
+    "copy:distToPublic"
   ]
 
   grunt.registerTask "default", ["test", "open", "watch"]
