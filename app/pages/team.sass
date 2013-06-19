@@ -1,0 +1,63 @@
+@import '../styles/_appVars'
+@import '../styles/_colorVars'
+@import '../styles/_helpers'
+
+
+
+
+.teamPage
+  text-align: center
+
+  h1, h2, h3
+    text-transform: uppercase
+    color: white
+    text-shadow: $spaceTiny 1px $spaceLil $shade, -$spaceTiny 1px $spaceLil $shade, 0 $spaceTiny $spaceLil $shade
+    letter-spacing: .02em
+    line-height: 1.2
+  h1
+    font-size: $fontSizeMegaLarge
+  h2
+    font-size: $fontSizeMegaLarge
+  h3
+    font-size: $fontSizeVeryLarge
+
+  .coolPerson,
+  .supercoolPerson
+    display: inline-block
+    margin: 0 $space $spaceLil $space
+    min-width: 120px
+    color: white
+  .coolPerson p,
+  .supercoolPerson p
+    color: white
+    text-transform: uppercase
+    line-height: 1.2
+    margin-top: $spaceLil
+  .coolPerson .avatar,
+  .supercoolPerson .avatar
+    border: $spaceTiny solid $colorBrand1
+    margin-top: $space
+    +box-sizing(border-box)
+  .supercoolPerson.caps
+    text-transform: uppercase
+  .supercoolPerson .muted
+    text-transform: none
+
+  hr
+    height: 1px
+    background-color: $highlight
+    border: none
+    margin: $space auto
+    width: 90%
+
+
+
+
+
+
+body.pages-team
+  background-color: $colorForeground
+  background: url('../images/home_page/homepageblur_bg.jpg') no-repeat top center fixed
+  background-size: cover
+  //filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.myBackground.jpg', sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/dashboard/dashboard_bg.jpg', sizingMethod='scale')"
