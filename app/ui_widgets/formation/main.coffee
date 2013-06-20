@@ -6,7 +6,7 @@ define [
   './select_by_icon'
   'text!./standard_field.hbs'
   'text!./select_field.hbs'
-  'text!./dob_field.hbs'
+  'text!./date_field.hbs'
 ], (
   Backbone
   Handlebars
@@ -15,12 +15,12 @@ define [
   SelectByIcon
   tmplStandardField
   tmplSelectField
-  tmplDOB
+  tmplDate
 ) ->
 
   _tmplStandardField = Handlebars.compile tmplStandardField
   _tmplSelectField = Handlebars.compile tmplSelectField
-  _tmplDOB = Handlebars.compile tmplDOB
+  _tmplDate = Handlebars.compile tmplDate
 
   Me = Backbone.View.extend
     tagName: 'form'
@@ -46,8 +46,8 @@ define [
         when types.selectByIcon
           view = new SelectByIcon model:prop
           view.render().el
-        when types.dob
-          _tmplDOB prop.attributes
+        when types.date
+          _tmplDate prop.attributes
         else
           _tmplStandardField prop.attributes
 

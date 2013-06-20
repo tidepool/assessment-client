@@ -2,9 +2,8 @@ define [],() ->
   [
     {
       string_id: 'dob'
-      type: 'dob'
+      type: 'date'
       label: 'Birthdate'
-      placeholder: '01012013'
     }
     {
       string_id: 'education'

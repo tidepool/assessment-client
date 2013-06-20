@@ -8,17 +8,11 @@ define [
   _me = 'entities/properities'
   _TYPES =
     selectByIcon: 'select_by_icon'
-    dob: 'dob'
     email: 'email'
     password: 'password'
-    search: 'search'
     url: 'url'
     tel: 'tel'
-    number: 'number'
-    range: 'range'
     date: 'date'
-    time: 'time'
-    color: 'color'
     text: 'text'
     select: 'select'
   _capFirstLetter = (string) ->

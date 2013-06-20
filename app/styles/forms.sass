@@ -10,7 +10,7 @@ form.form-inline input
   &[type=password],
   &[type=number],
   &[type=search],
-  &[type=dob]
+  &[type=date]
     margin-bottom: $spaceLil
 form.form-inline .btn
   margin-bottom: $spaceLil
@@ -23,13 +23,14 @@ input
   &[type=password],
   &[type=number],
   &[type=search],
-  &[type=dob]
+  &[type=date]
     box-shadow: inset 1px 2px 3px 0 $shadeLight
     background: $colorBackground
     font-size: $fontSizeBody
     height: $space + $spaceLil
     line-height: $space
     padding: $spaceLil / 2 $spaceLil
+    min-width: 220px
     +transitionable
     +box-sizing(border-box)
 
@@ -39,7 +40,7 @@ input.large
   &[type=password],
   &[type=number],
   &[type=search],
-  &[type=dob]
+  &[type=date]
     font-size: $fontSizeBody
     box-sizing: border-box
     height: $spaceBig
@@ -51,7 +52,7 @@ input:hover
   &[type=password],
   &[type=number],
   &[type=search],
-  &[type=dob]
+  &[type=date]
     background-color: mix($colorBackground, white)
 
 input:focus
@@ -60,7 +61,7 @@ input:focus
   &[type=password],
   &[type=number],
   &[type=search],
-  &[type=dob]
+  &[type=date]
     background-color: white
 
 label
@@ -68,7 +69,11 @@ label
   text-transform: uppercase
 
 
+input[type=date]
+  padding-right: $spaceLil
 
+select, input[type=date]
+  +box-sizing(border-box)
 
 select
   box-shadow: inset 1px 2px 3px 0 $shadeLight
@@ -78,7 +83,6 @@ select
   line-height: $space
   padding: $spaceLil / 2 $spaceLil
   //+appearance(none)
-  +box-sizing(border-box)
 
 select:after
   display: block
