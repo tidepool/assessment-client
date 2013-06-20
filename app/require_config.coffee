@@ -3,6 +3,7 @@ define [], () ->
   require.config
     packages: [
       'core'
+      'ui_widgets/formation'
       'game/levels/reaction_time_disc'
       'game/levels/rank_images'
       'game/levels/circle_size'

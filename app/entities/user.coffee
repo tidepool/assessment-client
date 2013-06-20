@@ -29,19 +29,18 @@ define [
       @on 'change:email', @_calculateNickname
       @on 'change:guest', @_calculateNickname
       @on 'error', @_onModelError
+      @on 'invalid', @_onModelInvalid
 
     validate: (attrs, options) ->
       return null if attrs.guest is true
-      return 'The email address cannot be blank.' unless attrs.email 
-      # Let's use default browser email validation for now
-      #emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ # From http://stackoverflow.com/a/46181/11236
-      #return 'That doesn\'t look like a valid email address.' unless emailRegex.test attrs.email
+
+      if options.validateLogin
+        return 'The email address cannot be blank.' unless attrs.email
+        return 'The password cannot be blank.' unless attrs.password
+        return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
 
       if options.validateProfile
         return 'The name must be filled in.' unless attrs.name
-      else
-        return 'The password cannot be blank.' unless attrs.password
-        return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
 
       # Register mode
       if attrs.loginType == 'register'
@@ -76,6 +75,9 @@ define [
       # Flush the local cache whenever we get a login exception from the server
       if xhr.status is 401
         @session?.logOut()
+
+    _onModelInvalid: (error) ->
+      console.log "#{_me}._onModelInvalid(): #{error}"
 
     # ----------------------------------------------------------- URL related Methods
     parseHash: (hash) ->

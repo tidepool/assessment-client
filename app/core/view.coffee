@@ -57,6 +57,8 @@ define [
         @_curView = new ViewClass()
         # Render
         @render()
+        # Sometimes things need to happen after the dom insertion. Views can implement a method to hook into this.
+        @_curView.onDomInsert?()
         @options.app.analytics.trackPage module
 
 

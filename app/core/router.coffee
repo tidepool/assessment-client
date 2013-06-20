@@ -15,6 +15,8 @@ define [
       home:                'showHome'
       about:               'showAbout'
       team:                'showTeam'
+      startGame:           'showDemographics'
+      demographics:        'showDemographics'
       game:                'showGame'
       guestSignup:         'showGuestSignup'
       dashboard:           'showDashboard'
@@ -26,17 +28,18 @@ define [
 
 
   # ------------------------------------------------ Actual Route Responses
-    showHome: ->        @app.view.asSite 'pages/home'
-    showAbout: ->       @app.view.asSite 'pages/about'
-    showTeam: ->        @app.view.asSite 'pages/team'
-    showGame: ->        @app.view.asGame 'pages/play_game'
-    showGuestSignup: -> @app.view.asGame 'pages/guest_signup'
-    showDashboard: ->   @app.view.asDash 'pages/dashboard/personality'
+    showHome: ->         @app.view.asSite 'pages/home'
+    showAbout: ->        @app.view.asSite 'pages/about'
+    showTeam: ->         @app.view.asSite 'pages/team'
+    showDemographics: -> @app.view.asGame 'pages/demographics'
+    showGame: ->         @app.view.asGame 'pages/play_game'
+    showGuestSignup: ->  @app.view.asGame 'pages/guest_signup'
+    showDashboard: ->    @app.view.asDash 'pages/dashboard/personality'
     recordReferrer: (refId) ->
       #console.log "#{_me} referred by #{refId}"
       @app.analytics.track 'Referral', refId
       @app.user.set referrer:refId
-      @showGame()
+      @showDemographics()
       @navigate 'game', replace:true # Change, the url, but don't add to the browser's history stack
 
   MainRouter

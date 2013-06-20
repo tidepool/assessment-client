@@ -61,7 +61,7 @@ define [
         content: @
         btn1Text: null
         supressTracking: true
-      @options.app.analytics.track @className, 'show'
+      @options.app.analytics?.track @className, 'show'
 
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
@@ -79,7 +79,7 @@ define [
     _clickedSignInFacebook: (e) ->
       @options.app.session.loginUsingOauth('facebook', {width: 1006, height: 775})
       holdPlease.show $(e.target)
-      @options.app.analytics.track @className, 'Pressed Facebook Sign In'
+      @options.app.analytics?.track @className, 'Pressed Facebook Sign In'
 
     _clickedForgotPass: ->
       console.log "#{_me}._clickedForgotPass()"
@@ -89,14 +89,14 @@ define [
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
       psst.hide()
-      @options.app.analytics.track @className, 'modeSignIn'
+      @options.app.analytics?.track @className, 'modeSignIn'
 
     _modeRegister: ->
       @_isRegisterMode = true
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
       psst.hide()
-      @options.app.analytics.track @className, 'modeRegister'
+      @options.app.analytics?.track @className, 'modeRegister'
 
 
     # ----------------------------------------------------------- Callback Handlers
@@ -112,20 +112,22 @@ define [
 
       if formData.loginType is 'register'
         console.log "#{_me}.saving register form of user model..."
-        @model.set formData
+        @model.set formData,
+          validateLogin: true
         @options.app.session.register()
       else
         @model.set formData,
+          validateLogin: true
           silent: true
         @options.app.session.signIn()
-      @options.app.analytics.track @className, 'Submitted Form', formData.loginType
+      @options.app.analytics?.track @className, 'Submitted Form', formData.loginType
 
     _onSync: (model, data) -> perch.hide()
 
     _onModelInvalid: (model, msg) ->
       @_showErr msg
       holdPlease.hide _submitSel
-      @options.app.analytics.track @className, 'Validation Issue'
+      @options.app.analytics?.track @className, 'Validation Issue'
 
     _onModelError: (model, xhr, options) ->
       @_showErr "#{xhr.status}: #{xhr.statusText}"

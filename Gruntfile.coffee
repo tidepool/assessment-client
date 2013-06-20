@@ -31,6 +31,7 @@ module.exports = (grunt) ->
     ]
     cssSourceGlob: [
       "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
+      "<%= yeoman.app %>/styles/gfx.css"
       "<%= yeoman.temp %>/**/*.css"
       "!<%= yeoman.temp %>/library.css"
     ]

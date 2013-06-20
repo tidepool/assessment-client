@@ -1,0 +1,24 @@
+
+
+<label for="{{string_id}}">{{label}}</label>
+
+<select name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
+    <option value="">Select...</option>
+    {{#options}}
+        <option value="{{value}}">{{value}}</option>
+    {{/options}}
+</select>
+
+
+<span class="purdyBts noDisplay">
+    {{#options}}
+        <button value="{{value}}" class="btn btn-large btn-link btn-tall" type="button">
+            <i class="{{icon}}"></i>
+            <small>
+                {{value}}
+            </small>
+        </button>
+    {{/options}}
+</span>
+
+

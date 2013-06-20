@@ -7,31 +7,30 @@
 .aboutPage
   text-align: center
 
-  section
+  .col3rds
     padding: $spaceLil
-    +box-sizing(border-box)
+
+  section
     text-align: center
+    margin-bottom: $spaceBig
 
   section p
     color: white
-    //background: $shadeLight // Helps readbility
+    background: $shadeLight // Helps readbility
     padding: $space
-    //border-radius: $radiusSmall
+    border-radius: $radiusSmall
     text-align: left
     text-transform: uppercase
 
   @media all and (min-width: 801px)
-    section
-      float: left
-      width: 33%
-      margin-bottom: $spaceBig
     section p
       display: inline-block
       min-height: 6em // assume 4 lines
       margin-bottom: $space
       max-width: 300px // match image size
 
-
+  hr
+    margin-bottom: $spaceBig
 
 body.pages-about
   background-color: $colorForeground

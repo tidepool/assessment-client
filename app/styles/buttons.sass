@@ -49,6 +49,7 @@
 // Bootstrap Button Overrides per color
 +magicalButton( '.btn', $colorBackground, 5 )
 +magicalButton( '.btn-primary', $colorBrand )
++magicalButton( '.btn-primary.btn-alt', $colorBrand1 )
 +magicalButton( '.btn-success', $colorGood )
 +magicalButton( '.btn-inverse', $colorForeground, 25, 25 )
 +magicalButton( '.btn-primary.facebook', $colorFacebook )
@@ -75,6 +76,57 @@
   color: $highlight
 .btn-primary.facebook .muted
   color: $colorFacebook + 100
+
+// Small Labels in a button
+.btn small
+  display: block
+  font-size: $fontSizeSmall
+  text-transform: uppercase
+  color: $colorQuiet
+  line-height: 1.2
+.btn.active small
+  color: $colorForeground
+
+
+
+//---------------------------------------------------------- Tall Buttons
+.btn.btn-tall
+  min-height: $space * 5
+  line-height: $space * 4
+.btn.btn-large.btn-tall
+  min-width: $space * 4
+  border-radius: $radiusMed
+.btn.btn-large.btn-tall i
+  font-size: $space * 3
+  width: $space * 3
+  height: $space * 3
+  line-height: $space * 3
+  margin: 0
+.btn.btn-large.btn-tall.active
+  color: $colorGood
+  background: $colorBackground
+  border: 1px solid $colorVeryQuiet
+  border-bottom-color: white
+  box-shadow: inset 1px 2px 3px 0 $shadeLight
+  cursor: pointer
+.btn.btn-large.btn-tall.active small
+  color: $colorGood
+// ...with icons
+.btn.btn-large.btn-tall i
+  color: transparentize($colorForeground, .25)
+.btn.btn-large.btn-tall:hover i
+  color: $colorForeground
+.btn.btn-large.btn-tall.active i
+  color: $colorGood
+
+.btn.btn-large.btn-tall.active .gfx-female,
+.btn.btn-large.btn-tall.active .gfx-female+small
+  color: $colorFemale
+.btn.btn-large.btn-tall.active .gfx-male,
+.btn.btn-large.btn-tall.active .gfx-male+small
+  color: $colorMale
+
+
 
 
 

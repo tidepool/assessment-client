@@ -1,0 +1,20 @@
+@import '_appVars'
+@import '_colorVars'
+@import '_helpers'
+
+
+
+.col3rds
+  +box-sizing(border-box)
+@media all and (min-width: 801px)
+  .col3rds
+    float: left
+    width: 33%
+
+.col4ths
+  padding: $spaceLil
+  +box-sizing(border-box)
+@media all and (min-width: 801px)
+  .col4ths
+    float: left
+    width: 25%
