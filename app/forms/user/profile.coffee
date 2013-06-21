@@ -1,14 +1,15 @@
+
+
 define [
   'jquery'
   'underscore'
   'backbone'
   'Handlebars'
-  'text!./profile_dialog.hbs'
+  'text!./profile.hbs'
+  'ui_widgets/formation'
   'syphon'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
-  'composite_views/perch'
-  'bower_components_ext/bootstrap_buttons-radio'
 ],
 (
   $
@@ -16,19 +17,19 @@ define [
   Backbone
   Handlebars
   tmpl
+  Formation
   Syphon
   holdPlease
   psst
-  perch
 ) ->
 
-  _me = 'views/user/profile_dialog'
+  _me = 'forms/profile/user_profile'
   _submitBtnSel = '[type=submit]'
   _errorHolderSel = '#ProfileErrorHolder'
 
   ProfileDialog = Backbone.View.extend
 
-    className: 'profileDialog'
+    className: 'userProfile'
     events:
       'submit form': '_submitProfile'
       'input change': '_onInputChange'
@@ -40,7 +41,6 @@ define [
       @listenTo @model, 'error', @_onError
       @listenTo @model, 'invalid', @_onInvalid
       @listenTo @model, 'sync', @hide
-      @_show()
 
     render: ->
       @$el.html @tmpl @model.attributes
@@ -48,11 +48,6 @@ define [
 
 
     # ----------------------------------------------------------- Private Helper Methods
-    _show: ->
-      perch.show
-        title: 'Profile'
-        content: @
-        btn1Text: null
 
 
     # ----------------------------------------------------------- Event Handlers
@@ -88,10 +83,9 @@ define [
       @_showErr msg
 
 
-
-
     # ----------------------------------------------------------- Public API
-    hide: -> perch.hide()
 
 
   ProfileDialog
+
+

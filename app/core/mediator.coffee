@@ -4,14 +4,14 @@ define [
   'backbone'
   'composite_views/perch'
   'scripts/views/user/login_dialog'
-  'scripts/views/user/profile_dialog'
+  'forms/user/profile'
 ],
 (
   _
   Backbone
   perch
   LoginDialog
-  ProfileDialog
+  UserProfile
 ) ->
 
   _me = 'core/mediator'
@@ -41,8 +41,11 @@ define [
         register: true
 
     _showProfile: ->
-      profileDialog = new ProfileDialog
-        model: @options.app.user
+      perch.show
+        title: 'Profile'
+        btn1Text: null
+        content: new UserProfile
+          model: @options.app.user
 
 
     # ------------------------------------------------ Action command handlers

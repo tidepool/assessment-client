@@ -33,17 +33,16 @@ define [
       #minLength: null # set to require a certain number of chars
 
     initialize: ->
-      @_calculateLabel()
-      @on 'change:label', @_calculateLabel
 
-    _calculateLabel: ->
-      if @get 'label'
-        lbl = @get('label')
-      else
-        lbl = _capFirstLetter @get('string_id')
-      @set
-        label: lbl,
-      {silent: true}
+
+#    _calculateLabel: ->
+#      if @get 'label'
+#        lbl = @get('label')
+#      else
+#        lbl = _capFirstLetter @get('string_id')
+#      @set
+#        label: lbl,
+#      {silent: true}
 
 
   Collection = Backbone.Collection.extend

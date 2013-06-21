@@ -1,6 +1,15 @@
 define [],() ->
   [
     {
+      string_id: 'name'
+      placeholder: 'Name'
+    }
+    {
+      string_id: 'email'
+      type: 'email'
+      placeholder: 'email@address.com'
+    }
+    {
       string_id: 'dob'
       type: 'date'
       label: 'Birthdate'
@@ -8,7 +17,7 @@ define [],() ->
     {
       string_id: 'education'
       type: 'select'
-      label: 'Education'
+      multiselect: true
       options: [
         'Some Elementary School'
         'Some High School'
@@ -19,7 +28,6 @@ define [],() ->
     {
       string_id: 'handedness'
       type: 'select_by_icon'
-      label: 'Handedness'
       multiselect: true
       options: [
         'left'
@@ -30,6 +38,7 @@ define [],() ->
       string_id: 'gender'
       type: 'select_by_icon'
       label: 'Sex'
+      multiselect: false
       options: [
         'Female'
         'Male'

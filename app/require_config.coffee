@@ -3,12 +3,12 @@ define [], () ->
   require.config
     packages: [
       'core'
-      'ui_widgets/formation'
       'game/levels/reaction_time_disc'
       'game/levels/rank_images'
       'game/levels/circle_size'
       'game/levels/circle_proximity'
       'dashboard/widget-lister'
+      'ui_widgets/formation'
     ]
     paths:
       # 3rd Party Bower Libraries

@@ -27,7 +27,7 @@ define [
     className: 'formation clearfix'
 
     initialize: ->
-      return unless @options.data
+      throw new Error 'Need options.data' unless @options.data
       @collection = new Properties @options.data
 
     render: ->
