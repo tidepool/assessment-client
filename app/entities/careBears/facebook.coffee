@@ -8,7 +8,7 @@ define [
   app
 ) ->
 
-  _me = 'entities/cur_user_personality'
+  _me = 'entities/careBears/facebook'
 
   Model = CareBear.extend
     defaults:

@@ -6,7 +6,7 @@ define [
   CareBear
 ) ->
 
-  _me = 'entities/cur_user_personality'
+  _me = 'entities/careBears/twitter'
 
   Model = CareBear.extend
     defaults:

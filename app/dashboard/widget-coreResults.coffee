@@ -8,6 +8,7 @@ define [
   'core'
   'entities/careBears/facebook'
   'entities/careBears/twitter'
+  'entities/careBears/mailto'
 ], (
   Backbone
   Handlebars
@@ -17,6 +18,7 @@ define [
   app
   Facebook
   Twitter
+  Email
 ) ->
 
   _widgetSel = '.widget'
@@ -30,6 +32,7 @@ define [
       click: 'onClick'
       'click #ActionShareFacebook-Personality': 'onClickFacebook'
       'click #ActionShareTwitter-Personality': 'onClickTwitter'
+      'click #ActionShareEmail-Personality': 'onClickMailto'
 
     initialize: ->
       @listenTo @model, 'change', @render
@@ -66,7 +69,12 @@ define [
         url: 'https://alpha.tidepool.co'
       twitterShareBear.save()
 
-
+    onClickMailto: (e) ->
+      e.stopPropagation()
+      email = new Email
+        subject: "My personality is '#{@model.attributes.name}'"
+        body: "Email Body"
+      email.save()
 
 
   View
