@@ -16,6 +16,8 @@ define [
     apiServer: '@@APISERVER'
     appSecret: '@@APPSECRET'
     appId: '@@APPID'
+    fbId: '@@fbId'
+    #fbSecret: '@@fbSecret'
 
   window.apiServerUrl = config.apiServer #TODO: eeeeeew! Encapsulate config instead
 

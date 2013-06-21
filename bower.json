@@ -7,6 +7,10 @@
   "kissIdDev": "3d76e0f0-b450-0130-498f-1231381fa34d",
   "kissKeyProd": "e984c464402cf32c0c208795aeede25f8a24d221",
   "kissIdProd": "218e5da0-b438-0130-cb49-12313d23508a",
+  "fbIdDev": "470347313045508",
+  "fbSecretDev": "719ba224a77d723d56de0ec6a1039639",
+  "fbIdProd": "470347313045508",
+  "fbSecretProd": "719ba224a77d723d56de0ec6a1039639",
   "dependencies": {
     "toastr": "~1.2.2",
     "sass-bootstrap": "~2.3.0",

@@ -235,6 +235,8 @@ module.exports = (grunt) ->
             APPID: "<%= tidepoolServer.PROD_APPID %>"
             kissKey: "<%= bowerPkg.kissKeyProd %>"
             googleAnalyticsKey: "<%= bowerPkg.googleAnalyticsKeyProd %>"
+            fbId:                "<%= bowerPkg.fbIdProd %>"
+            fbSecret:            "<%= bowerPkg.fbSecretProd %>"
           prefix: '@@'
         files: [
           expand: true 
@@ -245,11 +247,13 @@ module.exports = (grunt) ->
       dev:
         options:
           variables: 
-            'APISERVER': "<%= tidepoolServer.DEV_APISERVER %>"
-            'APPSECRET' : "<%= tidepoolServer.DEV_APPSECRET %>" 
-            'APPID' : "<%= tidepoolServer.DEV_APPID %>"
-            kissKey: "<%= bowerPkg.kissKeyDev %>"
-            googleAnalyticsKey: "<%= bowerPkg.googleAnalyticsKeyDev %>"
+            APISERVER:           "<%= tidepoolServer.DEV_APISERVER %>"
+            APPSECRET:           "<%= tidepoolServer.DEV_APPSECRET %>"
+            APPID:               "<%= tidepoolServer.DEV_APPID %>"
+            kissKey:             "<%= bowerPkg.kissKeyDev %>"
+            googleAnalyticsKey:  "<%= bowerPkg.googleAnalyticsKeyDev %>"
+            fbId:                "<%= bowerPkg.fbIdDev %>"
+            fbSecret:            "<%= bowerPkg.fbSecretDev %>"
           prefix: '@@'
         files: [
           expand: true 
