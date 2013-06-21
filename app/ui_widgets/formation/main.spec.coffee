@@ -86,7 +86,44 @@ define [
 #    it 'provides values using .getVals()', ->
 
 
+    it 'Optionally creates a submit button', ->
+      formation = new Formation data:_formData
+      $('#sandbox').html formation.render().el
 
+    it 'does not add any button by default', ->
+      formation = new Formation data:_formData
+      $('#sandbox').html formation.render().el
+      expect( $('#sandbox')).not.toContain 'button[type=submit]'
+
+    it 'adds a button if passed `true`', ->
+      formation = new Formation
+        data:_formData
+        submitBtn: true
+      $('#sandbox').html formation.render().el
+      expect( $('#sandbox')).toContain 'button[type=submit]'
+
+    it 'allows you to set css classes on it', ->
+      formation = new Formation
+        data:_formData
+        submitBtn:
+          className: 'btn-large btn-inverse'
+      $('#sandbox').html formation.render().el
+      expect( $('#sandbox').find('.btn-inverse') ).toHaveLength 1
+
+    it 'defaults to `save` if no text is provided', ->
+      formation = new Formation
+        data:_formData
+        submitBtn: true
+      $('#sandbox').html formation.render().el
+      expect( $('#sandbox button[type=submit]') ).toContainText 'Save'
+
+    it 'allows you to specify the button text', ->
+      txt = 'Make Rainbows'
+      formation = new Formation
+        data:_formData
+        submitBtn: text:txt
+      $('#sandbox').html formation.render().el
+      expect( $('#sandbox button[type=submit]') ).toContainText txt
 
 
 

@@ -15,6 +15,7 @@ define [
     date: 'date'
     text: 'text'
     select: 'select'
+    rocker: 'rocker'
   _capFirstLetter = (string) ->
     string.charAt(0).toUpperCase() + string.slice(1)
 

@@ -7,6 +7,8 @@ define [
   'text!./standard_field.hbs'
   'text!./select_field.hbs'
   'text!./date_field.hbs'
+  'text!./button.hbs'
+  'text!./rocker.hbs'
 ], (
   Backbone
   Handlebars
@@ -16,11 +18,15 @@ define [
   tmplStandardField
   tmplSelectField
   tmplDate
+  tmplBtn
+  tmplRocker
 ) ->
 
   _tmplStandardField = Handlebars.compile tmplStandardField
   _tmplSelectField = Handlebars.compile tmplSelectField
   _tmplDate = Handlebars.compile tmplDate
+  _tmplBtn = Handlebars.compile tmplBtn
+  _tmplRocker = Handlebars.compile tmplRocker
 
   Me = Backbone.View.extend
     tagName: 'form'
@@ -33,6 +39,8 @@ define [
     render: ->
       @$el.empty()
       @collection.each (prop) => @$el.append @_renderProperty prop
+      if @options.submitBtn?
+        @$el.append _tmplBtn @options.submitBtn
       @
 
     _renderProperty: (prop) ->
@@ -48,6 +56,8 @@ define [
           view.render().el
         when types.date
           _tmplDate prop.attributes
+        when types.rocker
+          _tmplRocker prop.attributes
         else
           _tmplStandardField prop.attributes
 

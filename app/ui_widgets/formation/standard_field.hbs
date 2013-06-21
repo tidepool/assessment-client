@@ -1,7 +1,9 @@
 
 <div class="field {{string_id}}">
 
-    <label for="{{string_id}}">{{label}}</label>
+    {{#if label}}
+        <label for="{{string_id}}">{{label}}</label>
+    {{/if}}
 
     <input
        name="{{string_id}}"

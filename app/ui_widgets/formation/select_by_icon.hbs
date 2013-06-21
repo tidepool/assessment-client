@@ -1,6 +1,8 @@
 
 
-<label for="{{string_id}}">{{label}}</label>
+{{#if label}}
+    <label for="{{string_id}}">{{label}}</label>
+{{/if}}
 
 <select name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
     <option value="">Select...</option>

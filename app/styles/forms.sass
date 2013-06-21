@@ -34,17 +34,19 @@ input
     +transitionable
     +box-sizing(border-box)
 
-input.large
-  &[type=text],
-  &[type=email],
-  &[type=password],
-  &[type=number],
-  &[type=search],
-  &[type=date]
-    font-size: $fontSizeBody
-    box-sizing: border-box
-    height: $spaceBig
-    padding: 0 $spaceLil
+select.large,
+input.large[type=text],
+input.large[type=email],
+input.large[type=password],
+input.large[type=number],
+input.large[type=search],
+input.large[type=date]
+  font-size: $fontSizeBody
+  box-sizing: border-box
+  height: $spaceBig
+  padding: 0 $spaceLil
+select.large
+  line-height: $spaceBig
 
 input:hover
   &[type=text],
@@ -75,28 +77,13 @@ input[type=date]
 select, input[type=date]
   +box-sizing(border-box)
 
-select
-  box-shadow: inset 1px 2px 3px 0 $shadeLight
-  background: $colorBackground
-  font-size: $fontSizeBody
-  height: $space + $spaceLil
-  line-height: $space
-  padding: $spaceLil / 2 $spaceLil
+//select
+//  box-shadow: inset 1px 2px 3px 0 $shadeLight
+//  background: $colorBackground
+//  font-size: $fontSizeBody
+//  height: $space + $spaceLil
+//  line-height: $space
+//  padding: $spaceLil / 2 $spaceLil
   //+appearance(none)
 
-select:after
-  display: block
-  position: absolute
-  top: 0
-  right: 0
-  content: 'hello!'
-  width: $space
-  height: $space
-  background: red
-
-select.large
-  font-size: $fontSizeBody
-  box-sizing: border-box
-  height: $spaceBig + $spaceLil
-  padding: 0 $spaceLil
 

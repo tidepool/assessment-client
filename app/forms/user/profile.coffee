@@ -7,6 +7,7 @@ define [
   'Handlebars'
   'text!./profile.hbs'
   'ui_widgets/formation'
+  './profile-fields'
   'syphon'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
@@ -18,6 +19,7 @@ define [
   Handlebars
   tmpl
   Formation
+  profileFields
   Syphon
   holdPlease
   psst
@@ -26,6 +28,7 @@ define [
   _me = 'forms/profile/user_profile'
   _submitBtnSel = '[type=submit]'
   _errorHolderSel = '#ProfileErrorHolder'
+  _errorHolderMarkup = "<div id='ProfileErrorHolder'></div>"
 
   ProfileDialog = Backbone.View.extend
 
@@ -44,6 +47,11 @@ define [
 
     render: ->
       @$el.html @tmpl @model.attributes
+      form = new Formation
+        data: profileFields
+        submitBtn:
+          className: 'btn-large btn-block btn-inverse'
+      @$el.append form.render().el
       @
 
 

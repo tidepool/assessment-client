@@ -2,22 +2,29 @@ define [],() ->
   [
     {
       string_id: 'name'
-      placeholder: 'Name'
+      label: 'Name'
+      placeholder: 'Captain Nemo'
+      className: 'large input-block-level'
     }
     {
       string_id: 'email'
+      label: 'Email'
       type: 'email'
       placeholder: 'email@address.com'
+      className: 'large input-block-level'
     }
     {
       string_id: 'dob'
       type: 'date'
       label: 'Birthdate'
+      className: 'large input-block-level'
     }
     {
       string_id: 'education'
+      label: 'Education'
       type: 'select'
-      multiselect: true
+      className: 'large input-block-level'
+#      defaultOption: 'Select Education Level...'
       options: [
         'Some Elementary School'
         'Some High School'
@@ -26,22 +33,23 @@ define [],() ->
       ]
     }
     {
+      string_id: 'gender'
+      label: ''
+      type: 'select_by_icon'
+      label: 'Gender'
+      options: [
+        'Female'
+        'Male'
+      ]
+    }
+    {
       string_id: 'handedness'
       type: 'select_by_icon'
+      label: 'Handedness'
       multiselect: true
       options: [
         'left'
         'right'
-      ]
-    }
-    {
-      string_id: 'gender'
-      type: 'select_by_icon'
-      label: 'Sex'
-      multiselect: false
-      options: [
-        'Female'
-        'Male'
       ]
     }
   ]

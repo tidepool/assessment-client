@@ -1,0 +1,20 @@
+
+<div class="field {{string_id}}">
+
+    {{#if label}}
+        <label for="{{string_id}}">{{label}}</label>
+    {{/if}}
+
+    <div class="btn-group btn-rocker {{className}}">
+        {{#options}}
+            <button class="btn" type="button" value="{{this}}">{{this}}</button>
+        {{/options}}
+        <input
+            type="hidden"
+            name="{{string_id}}"
+            value="{{value}}"
+        />
+    </div>
+
+</div>
+

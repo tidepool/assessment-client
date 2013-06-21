@@ -1,10 +1,18 @@
 
 <div class="field {{string_id}}">
 
-    <label for="{{string_id}}">{{label}}</label>
+    {{#if label}}
+        <label for="{{string_id}}">{{label}}</label>
+    {{/if}}
 
-    <select class="{{className}}" name="{{string_id}}">
-        <option value=''>Select...</option>
+    <select class="{{className}}" name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
+        {{#if defaultOption}}
+            <option value=''>{{defaultOption}}</option>
+        {{else}}
+            <option value=''>Select...</option>
+        {{/if}}
+
+
         {{#options}}
             <option value="{{this}}">{{this}}</option>
         {{/options}}
