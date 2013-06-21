@@ -28,7 +28,7 @@
     border-top-color: $colorHighlight
     border-right-color: $colorHighlight
 
-  p
+  ul, p
     text-align: left
   &>p
     position: relative // stay above pos absolute things like the .dogear
@@ -42,7 +42,6 @@
     background: $colorGoodThin
     text-transform: uppercase
     margin-top: -$spaceLil // Make it flush with edge of widget
-    margin-bottom: $space
     margin-left: -$space
     margin-right: -$space
     padding: $spaceLil $space
@@ -143,3 +142,9 @@
     +transform( translateY(0) )
     p
       color: white
+
+
+.coolTones .widget
+  h3
+    background: $colorForegroundCool
+    color: white

@@ -1,0 +1,15 @@
+
+
+<div class="widget">
+    <h3>{{title}}</h3>
+
+    <ul {{#icon}}class="icons-ul"{{/icon}}>
+        {{#list}}
+            <li>
+                {{#../icon}}<i class="icon-li icon-ok {{../icon}}"></i>{{/../icon}}{{this}}
+            </li>
+        {{/list}}
+    </ul>
+</div>
+
+

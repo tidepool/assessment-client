@@ -12,6 +12,8 @@ define [
   'dashboard/widget-interestsChart'
   'dashboard/widget-dailyRecc'
   'dashboard/widget-personalityReport'
+  'dashboard/widget-careerRecc'
+  'dashboard/widget-lister'
 ], (
   Backbone
   Handlebars
@@ -24,6 +26,8 @@ define [
   WidgetInterestsChart
   WidgetDailyRecc
   WidgetPersonalityReport
+  WidgetCareerRecc
+  WidgetLister
 ) ->
 
   _widgetMasterSel = '#WidgetMaster'
@@ -79,8 +83,34 @@ define [
       dailyRecc = new WidgetDailyRecc()
       $mastahBlastah.append dailyRecc.el
 
+      careerRecc = new WidgetCareerRecc()
+      $mastahBlastah.append careerRecc.render().el
 
-    # ---------------------------------------------------------------- Event Callbacks
+      skillz = new WidgetLister
+        title: 'Skills to Work On'
+        className: 'coolTones'
+        icon: 'icon-ok' # optional, override the bullet icon
+        list: [
+          'Complex problem solving'
+          'Critical thinking'
+          'Managerial ability'
+          'Oral expression'
+        ]
+      $mastahBlastah.append skillz.render().el
+
+      skillz = new WidgetLister
+        title: 'Tools of the Trade'
+        className: 'coolTones'
+        list: [
+          'High end computer servers'
+          'Operating system software'
+          'Object or component oriented software development'
+        ]
+      $mastahBlastah.append skillz.render().el
+
+
+
+  # ---------------------------------------------------------------- Event Callbacks
     onUserSync: -> @_getPersonality()
     onLogOut: -> app.router.navigate 'home', trigger:true
     onModelSync: (model, data) -> @_addWidgets()

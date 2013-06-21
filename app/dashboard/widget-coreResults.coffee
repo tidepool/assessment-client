@@ -39,7 +39,6 @@ define [
 
     render: ->
       @$el.html @tmpl @model.attributes
-      console.log model: @model.attributes
       @
 
     onClick: ->

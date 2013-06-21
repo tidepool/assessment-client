@@ -8,6 +8,7 @@ define [], () ->
       'game/levels/rank_images'
       'game/levels/circle_size'
       'game/levels/circle_proximity'
+      'dashboard/widget-lister'
     ]
     paths:
       # 3rd Party Bower Libraries
