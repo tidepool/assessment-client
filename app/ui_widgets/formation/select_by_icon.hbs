@@ -5,7 +5,9 @@
 {{/if}}
 
 <select name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
-    <option value="">Select...</option>
+    {{#unless multiselect}}
+        <option value="">Select...</option>
+    {{/unless}}
     {{#options}}
         <option value="{{value}}">{{value}}</option>
     {{/options}}

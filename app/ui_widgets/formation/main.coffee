@@ -41,6 +41,8 @@ define [
       @collection.each (prop) => @$el.append @_renderProperty prop
       if @options.submitBtn?
         @$el.append _tmplBtn @options.submitBtn
+      if @options.values?
+        @setVals @options.values
       @
 
     _renderProperty: (prop) ->
@@ -61,12 +63,6 @@ define [
         else
           _tmplStandardField prop.attributes
 
-#    onChange: (model) ->
-#      formData = Syphon.serialize @el
-#      console.log
-#        collection: model.collection.toJSON()
-#        formData: formData
-
 
     # ---------------------------------------------------------------- Public API
     getVals: ->
@@ -74,11 +70,22 @@ define [
       # remove field names for blank values
       for field, val of formData
         delete formData[field] unless val
+#        if val.length is 1 and not val[0] # remove blank arrays (a quirk of unselected multiselect boxes
+#          delete formData[field]
 #      console.log formData:formData
       formData
 
-    setVals: ->
-      # TODO: set values in the form based on an input name/value pair
+    setVals: (newValues) ->
+#      console.log
+#        newValues: newValues
+#      for name, value of newValues
+#        $field = @$("[name=#{name}]")
+#        if $field?.length
+#          console.log field:$field
+#          $field.val value
+      Syphon.deserialize @el, newValues
+      @
+
 
 
 

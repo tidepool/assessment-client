@@ -8,9 +8,9 @@ define [
   'text!./profile.hbs'
   'ui_widgets/formation'
   './profile-fields'
-  'syphon'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
+  'composite_views/perch'
 ],
 (
   $
@@ -20,58 +20,43 @@ define [
   tmpl
   Formation
   profileFields
-  Syphon
   holdPlease
   psst
+  perch
 ) ->
 
   _me = 'forms/profile/user_profile'
   _submitBtnSel = '[type=submit]'
-  _errorHolderSel = '#ProfileErrorHolder'
+  _errorHolderSel = '.formation .buttonArea'
   _errorHolderMarkup = "<div id='ProfileErrorHolder'></div>"
+  _tmpl = Handlebars.compile tmpl
 
   ProfileDialog = Backbone.View.extend
 
     className: 'userProfile'
     events:
-      'submit form': '_submitProfile'
-      'input change': '_onInputChange'
+      'submit form': 'onSubmit'
+      'input change': 'onInputChange'
 
 
     # ----------------------------------------------------------- Backbone Methods
     initialize: ->
-      @tmpl = Handlebars.compile tmpl
-      @listenTo @model, 'error', @_onError
-      @listenTo @model, 'invalid', @_onInvalid
-      @listenTo @model, 'sync', @hide
+      @listenTo @model, 'error', @onError
+      @listenTo @model, 'invalid', @onInvalid
+      @listenTo @model, 'sync', @onSync
 
     render: ->
-      @$el.html @tmpl @model.attributes
-      form = new Formation
+      @$el.html _tmpl @model.attributes
+      @form = new Formation
         data: profileFields
+        values: @model.attributes
         submitBtn:
           className: 'btn-large btn-block btn-inverse'
-      @$el.append form.render().el
+      @$el.append @form.render().el
       @
 
 
     # ----------------------------------------------------------- Private Helper Methods
-
-
-    # ----------------------------------------------------------- Event Handlers
-    _onInputChange: ->
-      psst.hide()
-
-    _submitProfile: (e) ->
-      console.log "#{_me}._submitProfile()"
-      e.preventDefault()
-      psst.hide()
-      holdPlease.show @$(_submitBtnSel)
-      formData = Syphon.serialize e.target
-      @model.save formData,
-        wait: true # Don't update the client model until the server state is changed
-        validateProfile: true # Do the validation as a profile save not as a login
-
     _showErr: (msg) ->
       psst.hide()
       psst
@@ -80,18 +65,32 @@ define [
         type: 'error'
       holdPlease.hide @$(_submitBtnSel)
 
-    _onError: (model, xhr) ->
+
+
+    # ----------------------------------------------------------- Event Handlers
+    onInputChange: -> psst.hide()
+
+    onSubmit: (e) ->
+      console.log "#{_me}._submitProfile()"
+      e.preventDefault()
+      psst.hide()
+      holdPlease.show @$(_submitBtnSel)
+      formData = @form.getVals()
+      @model.save formData,
+        wait: true # Don't update the client model until the server state is changed
+        profile: true # Do the validation as a profile save not as a login
+
+    onSync: -> perch.hide()
+
+    onError: (model, xhr) ->
       if xhr.status is 0
         msg = 'Unknown Server Error'
       else
         msg = "#{xhr.status}: #{xhr.statusText}"
       @_showErr msg
 
-    _onInvalid: (model, msg) ->
+    onInvalid: (model, msg) ->
       @_showErr msg
-
-
-    # ----------------------------------------------------------- Public API
 
 
   ProfileDialog

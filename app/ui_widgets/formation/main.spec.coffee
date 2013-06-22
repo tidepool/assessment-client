@@ -41,6 +41,13 @@ define [
       'Male'
     ]
   _formData = [ _fieldSmpl, _fieldDate, _fieldSelect, _fieldSelByIcon ]
+  _values =
+    first_name: 'Jonas'
+    last_name: 'Hill'
+
+  # --------------------------------------------------------------------- Helpers
+  _valByName = (name) ->
+    $('#sandbox').find("input[name='#{name}']").val()
 
 
   # --------------------------------------------------------------------- Specs
@@ -59,71 +66,98 @@ define [
         data: [ _fieldSmpl ]
       expect(formation).toBeInstanceOf(Backbone.View)
 
-    it 'Given an array of objects, each with a `string_id` property, form fields will be created', ->
-      formation = new Formation
-        data: [ _fieldSmpl, _fieldSmpl ]
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox') ).toContain 'input'
-      expect( $('#sandbox input') ).toHaveLength 2
 
-    it 'can create select fields', ->
-      formation = new Formation
-        data: [ _fieldSelect ]
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox') ).toContain 'select'
+    # ---------------------------------------------------------------------------
+    describe 'builds a form based on data', ->
 
-    it 'Accepts a label property', ->
-      formation = new Formation
-        data: [ _fieldWithLabel ]
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox') ).toContain 'input'
-      expect( $('#sandbox') ).toContain 'label'
-      expect( $('#sandbox label') ).toHaveLength 1
-      expect( $('#sandbox label') ).toContainText _fieldWithLabel.label
+      it 'Given an array of objects, each with a `string_id` property, form fields will be created', ->
+        formation = new Formation
+          data: [ _fieldSmpl, _fieldSmpl ]
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox') ).toContain 'input'
+        expect( $('#sandbox input') ).toHaveLength 2
 
-#    it 'Accepts a placeholder property', ->
-#    it 'Accepts a type property', ->
-#    it 'provides values using .getVals()', ->
+      it 'can create select fields', ->
+        formation = new Formation
+          data: [ _fieldSelect ]
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox') ).toContain 'select'
+
+      it 'Accepts a label property', ->
+        formation = new Formation
+          data: [ _fieldWithLabel ]
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox') ).toContain 'input'
+        expect( $('#sandbox') ).toContain 'label'
+        expect( $('#sandbox label') ).toHaveLength 1
+        expect( $('#sandbox label') ).toContainText _fieldWithLabel.label
+
+  #    it 'Accepts a placeholder property', ->
+  #    it 'Accepts a type property', ->
+  #    it 'provides values using .getVals()', ->
 
 
-    it 'Optionally creates a submit button', ->
-      formation = new Formation data:_formData
-      $('#sandbox').html formation.render().el
+    # ---------------------------------------------------------------------------
+    describe 'setting values', ->
 
-    it 'does not add any button by default', ->
-      formation = new Formation data:_formData
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox')).not.toContain 'button[type=submit]'
+      it 'sets values at the beginning if provided a `values` property', ->
+        form = new Formation
+          data: _formData
+          values: _values
+        $('#sandbox').html form.render().el
+        expect( _valByName 'first_name' ).toEqual _values.first_name
 
-    it 'adds a button if passed `true`', ->
-      formation = new Formation
-        data:_formData
-        submitBtn: true
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox')).toContain 'button[type=submit]'
+      it 'allows values to change later using the .setVals method', ->
+        form = new Formation
+          data: _formData
+        $('#sandbox').html form.render().el
+        newVal =
+          first_name: 'Pickle Breath'
+        form.setVals newVal
+        expect( _valByName 'first_name' ).toEqual newVal.first_name
 
-    it 'allows you to set css classes on it', ->
-      formation = new Formation
-        data:_formData
-        submitBtn:
-          className: 'btn-large btn-inverse'
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox').find('.btn-inverse') ).toHaveLength 1
 
-    it 'defaults to `save` if no text is provided', ->
-      formation = new Formation
-        data:_formData
-        submitBtn: true
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox button[type=submit]') ).toContainText 'Save'
+    # ---------------------------------------------------------------------------
+    describe 'submit button', ->
 
-    it 'allows you to specify the button text', ->
-      txt = 'Make Rainbows'
-      formation = new Formation
-        data:_formData
-        submitBtn: text:txt
-      $('#sandbox').html formation.render().el
-      expect( $('#sandbox button[type=submit]') ).toContainText txt
+      it 'Optionally creates a submit button', ->
+        formation = new Formation data:_formData
+        $('#sandbox').html formation.render().el
+
+      it 'does not add any button by default', ->
+        formation = new Formation data:_formData
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox')).not.toContain 'button[type=submit]'
+
+      it 'adds a button if passed `true`', ->
+        formation = new Formation
+          data:_formData
+          submitBtn: true
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox')).toContain 'button[type=submit]'
+
+      it 'allows you to set css classes on it', ->
+        formation = new Formation
+          data:_formData
+          submitBtn:
+            className: 'btn-large btn-inverse'
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox').find('.btn-inverse') ).toHaveLength 1
+
+      it 'defaults to `save` if no text is provided', ->
+        formation = new Formation
+          data:_formData
+          submitBtn: true
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox button[type=submit]') ).toContainText 'Save'
+
+      it 'allows you to specify the button text', ->
+        txt = 'Make Rainbows'
+        formation = new Formation
+          data:_formData
+          submitBtn: text:txt
+        $('#sandbox').html formation.render().el
+        expect( $('#sandbox button[type=submit]') ).toContainText txt
 
 
 

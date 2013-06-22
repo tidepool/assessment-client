@@ -1,18 +1,15 @@
 define [
   'jquery'
-  'underscore'
   'backbone'
   'Handlebars'
   'syphon'
-  'text!./login_dialog.hbs'
+  'text!./login.hbs'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
   'composite_views/perch'
-  'bower_components_ext/bootstrap_buttons-radio'
 ],
 (
   $
-  _
   Backbone
   Handlebars
   Syphon
@@ -22,10 +19,11 @@ define [
   perch
 ) ->
 
-  _me = "views/user/login_dialog"
+  _me = "forms/user/login"
   _confirmPassSel = '#Login-confirm'
   _submitSel = '#Login-submit'
   _registerBtnSel = '#ActionRegister'
+  _loginTypeSel = '#LoginType'
 
   LoginDialog = Backbone.View.extend
     className: "loginDialog"
@@ -41,28 +39,20 @@ define [
     # ----------------------------------------------------------- Backbone Methods
     initialize: ->
       throw new Error('Need options.app and a model') unless @options.app? and @model?
-      @tmpl = Handlebars.compile tmpl
       @listenTo @model, 'sync', @_onSync
       @listenTo @model, 'invalid', @_onModelInvalid
       @listenTo @model, 'error', @_onModelError
-      @_show()
+
+    render: ->
+      @$el.html tmpl
+      @options.app.analytics?.track @className, 'show'
       if @options.register
         @$(_registerBtnSel).trigger 'click'
         @_modeRegister()
-
-    render: ->
-      @$el.html @tmpl()
       @
 
 
     # ----------------------------------------------------------- Helper Methods
-    _show: ->
-      perch.show
-        content: @
-        btn1Text: null
-        supressTracking: true
-      @options.app.analytics?.track @className, 'show'
-
     _jazzifySubmitBtn: ->
       @$(_submitSel).addClass('btn-inverse')
 
@@ -84,15 +74,17 @@ define [
     _clickedForgotPass: ->
       console.log "#{_me}._clickedForgotPass()"
 
-    _modeSignIn: ->
+    _modeSignIn: (e) ->
       @_isRegisterMode = false
+      @$(_loginTypeSel).val $(e.target).val()
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
       psst.hide()
       @options.app.analytics?.track @className, 'modeSignIn'
 
-    _modeRegister: ->
+    _modeRegister: (e) ->
       @_isRegisterMode = true
+      @$(_loginTypeSel).val $(e.target).val()
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
       psst.hide()
@@ -111,18 +103,18 @@ define [
       @options.app.session.logOut() unless @options.app.user.isGuest()
 
       if formData.loginType is 'register'
-        console.log "#{_me}.saving register form of user model..."
+        console.log "#{_me}._submittedForm() register mode"
         @model.set formData,
-          validateLogin: true
-        @options.app.session.register()
-      else
-        @model.set formData,
-          validateLogin: true
           silent: true
-        @options.app.session.signIn()
+        @options.app.session.register() if @model.isValid( register:true )
+      else
+        console.log "#{_me}._submittedForm() login mode"
+        @model.set formData,
+          silent: true
+        @options.app.session.signIn() if @model.isValid( login:true )
       @options.app.analytics?.track @className, 'Submitted Form', formData.loginType
 
-    _onSync: (model, data) -> perch.hide()
+    _onSync: -> perch.hide()
 
     _onModelInvalid: (model, msg) ->
       @_showErr msg
@@ -132,10 +124,6 @@ define [
     _onModelError: (model, xhr, options) ->
       @_showErr "#{xhr.status}: #{xhr.statusText}"
       holdPlease.hide _submitSel
-
-
-    # ----------------------------------------------------------- Public API
-    hide: -> perch.hide()
 
 
   LoginDialog

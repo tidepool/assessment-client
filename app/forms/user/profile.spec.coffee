@@ -25,7 +25,7 @@ define [
       country: 'United States'
 
   _valByName = (name) ->
-    $("#{_myClassName} input[name='#{name}']").val()
+    $('#sandbox').find("input[name='#{name}']").val()
 
   _factory = ->
     new Profile
@@ -34,25 +34,23 @@ define [
   beforeEach ->
     jasmine.getFixtures().set sandbox() # Set up an empty #sandbox div that gets cleaned up after every test
 
-  describe 'forms/profile/user_profile', ->
+  describe 'forms/user/profile', ->
 
     it 'exists', ->
       expect(Profile).toBeDefined()
 
     it 'instantiation creates a backbone view that can be put in the dom', ->
-      p = _factory()
-      $('#sandbox').html p.render().el
+      $('#sandbox').html _factory().render().el
       expect($('#sandbox')).toContain _myClassName
 
     it 'creates a name field that has our user\'s name in it', ->
-      p = _factory()
-      $('#sandbox').html p.render().el
+      $('#sandbox').html _factory().render().el
       expect( _valByName('name') ).toEqual _mockUser().attributes.name
 
-    it 'has fields for dob, education, handedness, and gender', ->
-      p = _factory()
-      $('#sandbox').html p.render().el
-      user = _mockUser().attributes
+
+#    it 'has fields for dob, education, handedness, and gender', ->
+#      $('#sandbox').html _factory().render().el
+#      user = _mockUser().attributes
 #      expect($(_myClassName)).toContainText user.dob
 #      expect($(_myClassName)).toContainText user.education
 #      expect($(_myClassName)).toContainText user.handedness[0]

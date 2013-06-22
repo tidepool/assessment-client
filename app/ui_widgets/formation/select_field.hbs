@@ -6,13 +6,13 @@
     {{/if}}
 
     <select class="{{className}}" name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
-        {{#if defaultOption}}
-            <option value=''>{{defaultOption}}</option>
-        {{else}}
-            <option value=''>Select...</option>
-        {{/if}}
-
-
+        {{#unless multiselect}}
+            {{#if defaultOption}}
+                <option value=''>{{defaultOption}}</option>
+            {{else}}
+                <option value=''>Select...</option>
+            {{/if}}
+        {{/unless}}
         {{#options}}
             <option value="{{this}}">{{this}}</option>
         {{/options}}

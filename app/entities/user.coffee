@@ -23,7 +23,7 @@ define [
       }
 
     initialize: ->
-      #@on 'all', (e) -> console.log "#{_me} event: #{e}"
+#      @on 'all', (e, model) -> console.log "#{_me} event: #{e}"
       #@on 'change', (model, val) -> console.log model.attributes
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
@@ -41,9 +41,9 @@ define [
       if options.register
         return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
         return 'The passwords should match' unless attrs.password is attrs.passwordConfirm
-
-      if options.validateProfile
-        return 'The name must be filled in.' unless attrs.name
+      if options.profile
+#        return 'The name must be filled in.' unless attrs.name
+        return 'The email address cannot be blank.' unless attrs.email
 
       return null # no validation errors
 

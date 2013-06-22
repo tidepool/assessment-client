@@ -3,14 +3,14 @@ define [
   'underscore'
   'backbone'
   'composite_views/perch'
-  'scripts/views/user/login_dialog'
+  'forms/user/login'
   'forms/user/profile'
 ],
 (
   _
   Backbone
   perch
-  LoginDialog
+  UserLogin
   UserProfile
 ) ->
 
@@ -30,15 +30,21 @@ define [
 
     # ------------------------------------------------ Display command handlers
     _showLogin: ->
-      loginDialog = new LoginDialog
-        model: @options.app.user
-        app: @options.app
+      perch.show
+        btn1Text: null
+        supressTracking: true
+        content: new UserLogin
+          model: @options.app.user
+          app: @options.app
 
     _showRegister: ->
-      loginDialog = new LoginDialog
-        model: @options.app.user
-        app: @options.app
+      perch.show
+        btn1Text: null
+        supressTracking: true
         register: true
+        content: new UserLogin
+          model: @options.app.user
+          app: @options.app
 
     _showProfile: ->
       perch.show

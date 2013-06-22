@@ -60,8 +60,7 @@ define [
             client_id: @cfg.appId
             client_secret: @cfg.appSecret
         .done (data, textStatus, jqXHR) =>
-          console.log
-            token: data.access_token
+#          console.log token: data.access_token
           @_persistLocally data
           @user.reset().fetch()
           .done (data, textStatus, jqXHR) =>

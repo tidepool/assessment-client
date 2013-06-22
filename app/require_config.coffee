@@ -29,12 +29,9 @@ define [], () ->
 
       # Convenience Folder Mapping
       results: "scripts/views/results"
-      routers: "scripts/routers"
-      models: "scripts/models"
       controllers: "scripts/controllers"
-      collections: "scripts/collections"
       helpers: "scripts/helpers"
-      messages: "scripts/views/messages"
+
     shim:
       bootstrap:
         deps: ["jquery"]
