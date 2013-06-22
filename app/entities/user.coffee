@@ -34,18 +34,16 @@ define [
     validate: (attrs, options) ->
       return null if attrs.guest is true
 
-      if options.validateLogin
+      if options.login or options.register
         return 'The email address cannot be blank.' unless attrs.email
         return 'The password cannot be blank.' unless attrs.password
         return 'The password should be 8 or more characters.' unless attrs.password.length >= 8
+      if options.register
+        return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
+        return 'The passwords should match' unless attrs.password is attrs.passwordConfirm
 
       if options.validateProfile
         return 'The name must be filled in.' unless attrs.name
-
-      # Register mode
-      if attrs.loginType == 'register'
-        return 'The confirm password field cannot be blank' unless attrs.passwordConfirm
-        return 'The passwords should match' unless attrs.password is attrs.passwordConfirm
 
       return null # no validation errors
 
@@ -76,7 +74,7 @@ define [
       if xhr.status is 401
         @session?.logOut()
 
-    _onModelInvalid: (error) ->
+    _onModelInvalid: (model, error) ->
       console.log "#{_me}._onModelInvalid(): #{error}"
 
     # ----------------------------------------------------------- URL related Methods
