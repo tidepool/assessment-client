@@ -10,6 +10,7 @@ define [
   tmplSelectByIcon
 ) ->
 
+  _me = 'ui_widgets/formation/select_by_icon'
   _tmplSelectByIcon = Handlebars.compile tmplSelectByIcon
   _valueToIcon =
     left: 'gfx-lefthand'
@@ -23,6 +24,7 @@ define [
     className: 'field selectByIcon'
     events:
       'click .btn': 'onBtnClick'
+      'change select': 'onSelectChange'
 
     initialize: ->
       @_mapValuesToIcons()
@@ -43,7 +45,7 @@ define [
           icon: icon || "icon-#{value}"
       @model.set 'options', options
 
-    _syncVal: ->
+    _syncSelectByBtn: ->
       selectedVals = []
       @$('button').each ->
         if $(this).hasClass _selectedClass
@@ -52,6 +54,21 @@ define [
       @model.set 'value', @$('select').val()
       @$('select').trigger 'change'
 
+    _syncBtnBySelect: ->
+      selectedVal = @$('select').val()
+#      console.log "#{_me}._syncBtnBySelect()"
+#      console.log
+#        selectedVal: selectedVal
+      # Highlight the button if the values match, or if the button is one of multiple selected values
+      @$('button').each ->
+        $(this).removeClass _selectedClass
+        if _.isArray(selectedVal)
+          if _.contains selectedVal, $(this).val()
+            $(this).addClass _selectedClass
+        else
+          if $(this).val() is selectedVal
+            $(this).addClass _selectedClass
+
     onBtnClick: (e) ->
       $targ = $(e.currentTarget)
       clickedVal = $targ.val()
@@ -59,8 +76,9 @@ define [
       if $targ.hasClass _selectedClass
         unless @model.attributes.multiselect
           $targ.siblings(".#{_selectedClass}").removeClass _selectedClass
-      @_syncVal()
+      @_syncSelectByBtn()
 
+    onSelectChange: (e) -> @_syncBtnBySelect()
 
 
   Me

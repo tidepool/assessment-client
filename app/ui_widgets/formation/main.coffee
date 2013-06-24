@@ -84,6 +84,7 @@ define [
 #          console.log field:$field
 #          $field.val value
       Syphon.deserialize @el, newValues
+      @$('select').trigger 'change' # Otherwise setting values doesn't trigger this event
       @
 
 

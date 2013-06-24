@@ -66,12 +66,10 @@ define [
       holdPlease.hide @$(_submitBtnSel)
 
 
-
     # ----------------------------------------------------------- Event Handlers
     onInputChange: -> psst.hide()
 
     onSubmit: (e) ->
-      console.log "#{_me}._submitProfile()"
       e.preventDefault()
       psst.hide()
       holdPlease.show @$(_submitBtnSel)

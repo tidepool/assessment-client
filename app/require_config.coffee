@@ -17,7 +17,7 @@ define [], () ->
       jquery: "bower_components/jquery/jquery"
       jqueryui: "bower_components/jquery-ui/jqueryui"
       backbone: "bower_components/backbone-amd/backbone"
-      syphon: 'bower_components/backbone.syphon/lib/amd/backbone.syphon'
+      syphon: 'bower_components/tidepool-backbone.syphon/lib/amd/backbone.syphon'
       text: "bower_components/requirejs-text/text"
       toastr: "bower_components/toastr"
       chart: "bower_components/Chart.js/Chart.min"
