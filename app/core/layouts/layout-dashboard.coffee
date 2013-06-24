@@ -5,6 +5,7 @@ define [
   'Handlebars'
   './layout'
   'ui_widgets/user_menu'
+  'text!dashboard/dash_picker.hbs'
 ],
 (
   _
@@ -12,6 +13,7 @@ define [
   Handlebars
   Layout
   userMenu
+  tmplDashPicker
 ) ->
 
   _me = 'core/layouts/layout-dashboard'
@@ -30,6 +32,7 @@ define [
       @$('#HeaderRegion')
         .append(userMenu.el)
       @
+      @$('.content').before tmplDashPicker
 
   Me
 

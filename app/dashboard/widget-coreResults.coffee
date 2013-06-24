@@ -25,7 +25,7 @@ define [
     className: "holder doubleWide tall #{_className}"
     tagName: 'section'
     events:
-      click: 'onClick'
+      'click .widget': 'onClick'
       'click #ActionShareFacebook-Personality': 'onClickFacebook'
       'click #ActionShareTwitter-Personality': 'onClickTwitter'
       'click #ActionShareEmail-Personality': 'onClickMailto'

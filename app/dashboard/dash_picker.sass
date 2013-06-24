@@ -1,0 +1,51 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+@import '../styles/helpers'
+
+
+
+.dashPicker
+  background: $shadeLight
+  margin: $spaceLil 0
+
+  ul
+    max-width: $maxSiteWidth
+    margin: 0 auto
+
+  ul, li
+    list-style: none
+    padding: 0
+
+  li
+    display: inline-block
+
+  a
+    display: block
+    text-align: center
+    padding: $space
+    min-width: $spaceBig * 2
+    color: white
+  a:hover
+    text-decoration: none
+    background: $highlightThin
+
+  a i
+    display: inline-block
+    font-size: $space
+    width: $space
+    margin-bottom: $spaceLil
+
+  a label
+    text-transform: uppercase
+    margin: 0
+    margin-bottom: -$spaceLil
+
+
+
+.route-dashboard .all,
+.route-dashboard-career .career
+  color: $colorBrand1
+  background: $highlightThin
+  cursor: default
+
+

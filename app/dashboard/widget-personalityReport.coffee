@@ -20,7 +20,7 @@ define [
     className: "holder #{_className}"
     tagName: 'section'
     events:
-      click: 'onClick'
+      'click .widget': 'onClick'
     initialize: ->
 
     render: ->

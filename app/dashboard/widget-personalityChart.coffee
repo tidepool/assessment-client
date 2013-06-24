@@ -24,7 +24,7 @@ define [
     className: 'holder'
     tagName: 'section'
     events:
-      click: 'onClick'
+      'click .widget': 'onClick'
 
     render: ->
       @$el.html @tmpl name: _chartName

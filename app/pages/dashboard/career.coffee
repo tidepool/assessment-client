@@ -3,16 +3,10 @@ define [
   'backbone'
   'Handlebars'
   'entities/cur_user_personality'
-  'text!./personality.hbs'
+  'text!./all.hbs'
   'core'
   'composite_views/perch'
   # Dashboard Widgets
-  'dashboard/widget-coreResults'
-  'dashboard/widget-personalityChart'
-  'dashboard/widget-interestsChart'
-  'dashboard/widget-dailyRecc'
-  'dashboard/widget-personalityReport'
-  'dashboard/widget-careerRecc'
   'dashboard/widget-lister'
 ], (
   Backbone
@@ -21,12 +15,6 @@ define [
   tmpl
   app
   perch
-  WidgetCoreResults
-  WidgetPersonalityChart
-  WidgetInterestsChart
-  WidgetDailyRecc
-  WidgetPersonalityReport
-  WidgetCareerRecc
   WidgetLister
 ) ->
 
@@ -34,7 +22,7 @@ define [
 
   View = Backbone.View.extend
 
-    className: 'dashboardPage'
+    className: 'dashboardPage career'
 
     initialize: ->
       @model = new UserPersonality()
@@ -51,7 +39,7 @@ define [
       @
 
 
-    # ---------------------------------------------------------------- Private
+  # ---------------------------------------------------------------- Private
     _getPersonality: ->
       if app.user.isLoggedIn()
         @model.fetch()
@@ -64,27 +52,6 @@ define [
     _addWidgets: ->
       @_emptyWidgets()
       $mastahBlastah = @$(_widgetMasterSel)
-
-      coreResults = new WidgetCoreResults
-        model: new Backbone.Model @model.attributes.profile_description
-      $mastahBlastah.append coreResults.render().el
-
-      personalityChart = new WidgetPersonalityChart
-        model: new Backbone.Model @model.attributes.big5_score
-      $mastahBlastah.append personalityChart.render().el
-
-      personalityReport = new WidgetPersonalityReport()
-      $mastahBlastah.append personalityReport.render().el
-
-      interestsChart = new WidgetInterestsChart
-        model: new Backbone.Model @model.attributes.holland6_score
-      $mastahBlastah.append interestsChart.render().el
-
-      dailyRecc = new WidgetDailyRecc()
-      $mastahBlastah.append dailyRecc.el
-
-      careerRecc = new WidgetCareerRecc()
-      $mastahBlastah.append careerRecc.render().el
 
       skillz = new WidgetLister
         title: 'Skills to Work On'
@@ -122,7 +89,7 @@ define [
         title: 'You Must Be Veeery Special...'
         msg: 'So Sorry, we\'re having trouble getting your personality data.'
         btn1Text: 'Darn'
-        #onClose: -> app.router.navigate('dashboard', trigger: true)
+  #onClose: -> app.router.navigate('dashboard', trigger: true)
 
 
   View

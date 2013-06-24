@@ -20,6 +20,7 @@ define [
       game:                'showGame'
       guestSignup:         'showGuestSignup'
       dashboard:           'showDashboard'
+      'dashboard-career':  'showDashCareer'
       'referrer/:refId':   'recordReferrer'
 
     initialize: (appCoreSingleton) ->
@@ -34,7 +35,8 @@ define [
     showDemographics: -> @app.view.asGame 'pages/demographics'
     showGame: ->         @app.view.asGame 'pages/play_game'
     showGuestSignup: ->  @app.view.asGame 'pages/guest_signup'
-    showDashboard: ->    @app.view.asDash 'pages/dashboard/personality'
+    showDashboard: ->    @app.view.asDash 'pages/dashboard/all'
+    showDashCareer: ->   @app.view.asDash 'pages/dashboard/career'
     recordReferrer: (refId) ->
       #console.log "#{_me} referred by #{refId}"
       @app.analytics.track 'Referral', refId

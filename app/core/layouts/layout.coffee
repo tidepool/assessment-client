@@ -22,7 +22,7 @@ define [
     tmpl: Handlebars.compile tmpl
 
     initialize: ->
-      $('body').prop 'class', "background-#{@className}"
+      $('body').prop 'class', "background-#{@className} route-#{location.hash.split('#').join('')}"
 
     # Private
     _cleanupChildren: ->
