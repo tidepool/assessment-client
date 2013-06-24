@@ -46,10 +46,10 @@ define [],() ->
       string_id: 'handedness'
       type: 'select_by_icon'
       label: 'Handedness'
-      multiselect: true
       options: [
         'left'
         'right'
+        'other'
       ]
     }
   ]

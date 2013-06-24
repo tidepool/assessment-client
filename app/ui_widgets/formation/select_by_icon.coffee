@@ -15,6 +15,7 @@ define [
   _valueToIcon =
     left: 'gfx-lefthand'
     right: 'gfx-righthand'
+    other: 'gfx-otherhand'
     male: 'gfx-male'
     female: 'gfx-female'
   _selectedClass = 'active'

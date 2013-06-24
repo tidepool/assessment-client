@@ -87,31 +87,9 @@
     font-size: $fontSizeTiny
 
 
-  .sharingIsCaring
-    position: absolute
-    top: 0
-    right: 0
-    padding: $spaceTiny
-    font-size: 0
-    i
-      font-size: $fontSizeBody
-      width: $fontSizeBody
-      height: $fontSizeBody
-      line-height: $fontSizeBody
-      background: $colorQuiet
-      color: white
-      border-radius: $radiusTiny
-      padding: $spaceTiny
-      margin-left: $spaceTiny
-    .icon-facebook
-      background: $colorFacebook
-    .icon-twitter
-      background: $colorTwitter
-
-
 
   &:hover
-    box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight, 0 0 0 $spaceTiny $shadeLight
+    box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight, 0 0 0 $spaceTiny $highlight, 0 0 0 1px $shade
     //+transform( translateY(-$spaceTiny) ) // If this is in place chrome has a bizarre flicker during the transition
     z-index: 1
 
@@ -146,5 +124,4 @@
 
 .coolTones .widget
   h3
-    background: $colorForegroundCool
-    color: white
+    background: $colorBackgroundCool
