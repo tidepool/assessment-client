@@ -63,27 +63,27 @@ define [
       e.stopPropagation()
       @_hide()
       facebookShareBear = new Facebook
-        picture: "https://alpha.tidepool.co/images/badges/#{@model.attributes.logo_url}"
-        link: 'https://alpha.tidepool.co'
-        name: "My personality is '#{@model.attributes.name}'"
-        caption: 'Link Caption'
-        description: 'Link Description'
+        picture: @options.data.image
+        link: @options.data.link
+        name: @options.data.title
+        caption: @options.data.text
+#        description: @options.data.text
       facebookShareBear.save()
 
     onClickTwitter: (e) ->
       e.stopPropagation()
       @_hide()
       twitterShareBear = new Twitter
-        text: "My personality is '#{@model.attributes.name}' -- "
-        url: 'https://alpha.tidepool.co'
+        text: "#{@options.data.title} -- "
+        url: @options.data.link
       twitterShareBear.save()
 
     onClickMailto: (e) ->
       e.stopPropagation()
       @_hide()
       email = new Email
-        subject: "My personality is '#{@model.attributes.name}'"
-        body: "Email Body"
+        subject: @options.data.title
+        body: @options.data.text
       email.save()
 
 

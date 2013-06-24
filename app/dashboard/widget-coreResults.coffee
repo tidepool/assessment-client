@@ -32,8 +32,11 @@ define [
 
     render: ->
       @$el.html @tmpl @model.attributes
-      share = new ShareView
-        model: @model
+      share = new ShareView data:
+        title: "My personality is '#{@model.attributes.name}'"
+        text: 'You can find out your personality, too, at https://alpha.tidepool.co'
+        link: 'https://alpha.tidepool.co'
+        image: "https://alpha.tidepool.co/images/badges/#{@model.attributes.logo_url}"
       @$el.append share.render().el
       @
 
