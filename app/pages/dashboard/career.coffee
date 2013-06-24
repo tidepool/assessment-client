@@ -8,6 +8,7 @@ define [
   'composite_views/perch'
   # Dashboard Widgets
   'dashboard/widget-lister'
+  'dashboard/widget-careerRecc'
 ], (
   Backbone
   Handlebars
@@ -16,6 +17,7 @@ define [
   app
   perch
   WidgetLister
+  WidgetCareerRecc
 ) ->
 
   _widgetMasterSel = '#WidgetMaster'
@@ -52,6 +54,10 @@ define [
     _addWidgets: ->
       @_emptyWidgets()
       $mastahBlastah = @$(_widgetMasterSel)
+
+
+      careerRecc = new WidgetCareerRecc()
+      $mastahBlastah.append careerRecc.render().el
 
       skillz = new WidgetLister
         title: 'Skills to Work On'

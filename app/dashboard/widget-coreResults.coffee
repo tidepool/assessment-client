@@ -26,9 +26,6 @@ define [
     tagName: 'section'
     events:
       'click .widget': 'onClick'
-      'click #ActionShareFacebook-Personality': 'onClickFacebook'
-      'click #ActionShareTwitter-Personality': 'onClickTwitter'
-      'click #ActionShareEmail-Personality': 'onClickMailto'
 
     initialize: ->
       @listenTo @model, 'change', @render

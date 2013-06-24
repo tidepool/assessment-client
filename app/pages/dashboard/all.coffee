@@ -8,12 +8,11 @@ define [
   'composite_views/perch'
   # Dashboard Widgets
   'dashboard/widget-coreResults'
+  'text!dashboard/widget-careerGameTeaser.hbs'
   'dashboard/widget-personalityChart'
   'dashboard/widget-interestsChart'
   'dashboard/widget-dailyRecc'
   'dashboard/widget-personalityReport'
-  'dashboard/widget-careerRecc'
-  'dashboard/widget-lister'
 ], (
   Backbone
   Handlebars
@@ -22,12 +21,11 @@ define [
   app
   perch
   WidgetCoreResults
+  tmplCareerGameTeaser
   WidgetPersonalityChart
   WidgetInterestsChart
   WidgetDailyRecc
   WidgetPersonalityReport
-  WidgetCareerRecc
-  WidgetLister
 ) ->
 
   _widgetMasterSel = '#WidgetMaster'
@@ -69,12 +67,14 @@ define [
         model: new Backbone.Model @model.attributes.profile_description
       $mastahBlastah.append coreResults.render().el
 
-      personalityChart = new WidgetPersonalityChart
-        model: new Backbone.Model @model.attributes.big5_score
-      $mastahBlastah.append personalityChart.render().el
+      $mastahBlastah.append tmplCareerGameTeaser
 
       personalityReport = new WidgetPersonalityReport()
       $mastahBlastah.append personalityReport.render().el
+
+      personalityChart = new WidgetPersonalityChart
+        model: new Backbone.Model @model.attributes.big5_score
+      $mastahBlastah.append personalityChart.render().el
 
       interestsChart = new WidgetInterestsChart
         model: new Backbone.Model @model.attributes.holland6_score
@@ -83,30 +83,8 @@ define [
       dailyRecc = new WidgetDailyRecc()
       $mastahBlastah.append dailyRecc.el
 
-      careerRecc = new WidgetCareerRecc()
-      $mastahBlastah.append careerRecc.render().el
 
-      skillz = new WidgetLister
-        title: 'Skills to Work On'
-        className: 'coolTones'
-        icon: 'icon-ok' # optional, override the bullet icon
-        list: [
-          'Complex problem solving'
-          'Critical thinking'
-          'Managerial ability'
-          'Oral expression'
-        ]
-      $mastahBlastah.append skillz.render().el
 
-      skillz = new WidgetLister
-        title: 'Tools of the Trade'
-        className: 'coolTones'
-        list: [
-          'High end computer servers'
-          'Operating system software'
-          'Object or component oriented software development'
-        ]
-      $mastahBlastah.append skillz.render().el
 
 
 
