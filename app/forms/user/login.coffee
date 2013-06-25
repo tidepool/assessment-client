@@ -48,7 +48,8 @@ define [
       @options.app.analytics?.track @className, 'show'
       if @options.register
         @$(_registerBtnSel).trigger 'click'
-        @_modeRegister()
+        @$(_registerBtnSel).siblings().removeClass 'active'
+        @$(_registerBtnSel).addClass 'active'
       @
 
 
@@ -74,17 +75,17 @@ define [
     _clickedForgotPass: ->
       console.log "#{_me}._clickedForgotPass()"
 
-    _modeSignIn: (e) ->
+    _modeSignIn: ->
       @_isRegisterMode = false
-      @$(_loginTypeSel).val $(e.target).val()
+      @$(_loginTypeSel).val 'signIn'
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
       psst.hide()
       @options.app.analytics?.track @className, 'modeSignIn'
 
-    _modeRegister: (e) ->
+    _modeRegister: ->
       @_isRegisterMode = true
-      @$(_loginTypeSel).val $(e.target).val()
+      @$(_loginTypeSel).val 'register'
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
       psst.hide()

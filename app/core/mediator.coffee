@@ -41,10 +41,10 @@ define [
       perch.show
         btn1Text: null
         supressTracking: true
-        register: true
         content: new UserLogin
           model: @options.app.user
           app: @options.app
+          register: true
 
     _showProfile: ->
       perch.show
