@@ -13,7 +13,7 @@ define [
   Model = CareBear.extend
     defaults:
       app_id: app.cfg.fbId
-      redirect_uri: "https://tidepool.co/#{window.location.hash}"
+      redirect_uri: "https://alpha.tidepool.co/#{window.location.hash}"
 
     url: 'https://www.facebook.com/dialog/feed/'
 
