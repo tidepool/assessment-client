@@ -32,7 +32,7 @@ define [
       @$('#HeaderRegion')
         .append(userMenu.el)
       @
-      @$('.content').before tmplDashPicker
+#      @$('.content').before tmplDashPicker
 
   Me
 

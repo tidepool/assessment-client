@@ -57,9 +57,11 @@ define [
       demographics = @formation.getVals()
 #      console.log demographics:demographics
       # Save the demographics if the user set any, but not if the user is `new`. New demographics are recorded on create
-      if not _.isEmpty(demographics) and not app.user.isNew()
-        jxhr = app.user.save demographics,
-          wait: true
+
+      unless _.isEmpty demographics
+        app.user.set demographics
+        unless app.user.isNew()
+          jxhr = app.user.save
 #        jxhr.done -> console.log 'save done'
 #        jxhr.fail -> console.log 'save fail'
 
