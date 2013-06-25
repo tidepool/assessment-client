@@ -38,11 +38,11 @@ define [
     showDashboard: ->    @app.view.asDash 'pages/dashboard/all'
     showDashCareer: ->   @app.view.asDash 'pages/dashboard/career'
     recordReferrer: (refId) ->
-      #console.log "#{_me} referred by #{refId}"
+#      console.log "#{_me} referred by #{refId}"
       @app.analytics.track 'Referral', refId
-      @app.user.set referrer:refId
+      @app.user.set referred_by: refId
       @showDemographics()
-      @navigate 'game', replace:true # Change, the url, but don't add to the browser's history stack
+      @navigate 'startGame', replace:true # Change, the url, but don't add to the browser's history stack
 
   MainRouter
 

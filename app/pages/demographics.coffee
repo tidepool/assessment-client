@@ -56,8 +56,8 @@ define [
     onClickContinue: ->
       demographics = @formation.getVals()
 #      console.log demographics:demographics
-      # Save the demographics if the user set any
-      unless _.isEmpty demographics
+      # Save the demographics if the user set any, but not if the user is `new`. New demographics are recorded on create
+      if not _.isEmpty(demographics) and not app.user.isNew()
         jxhr = app.user.save demographics,
           wait: true
 #        jxhr.done -> console.log 'save done'
