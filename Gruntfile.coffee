@@ -171,11 +171,13 @@ module.exports = (grunt) ->
           name: 'core'
           include: [
             'pages/about'
+            'pages/demographics'
             'pages/guest_signup'
             'pages/home'
             'pages/play_game'
             'pages/team'
-            'pages/dashboard/personality'
+            'pages/dashboard/all'
+            'pages/dashboard/career'
           ]
           out: '<%= yeoman.dist %>/core/main.js'
           optimize: "uglify2"
