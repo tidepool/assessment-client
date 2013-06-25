@@ -34,7 +34,9 @@ define [
       'click #ActionStartGame': 'onClickContinue'
 
     initialize: ->
-      @formation = new Formation data:demographicsFields
+      @formation = new Formation
+        data:demographicsFields
+        values: app.user.attributes
 
     render: ->
       @$el.html tmpl
@@ -56,7 +58,8 @@ define [
 #      console.log demographics:demographics
       # Save the demographics if the user set any
       unless _.isEmpty demographics
-        jxhr = app.user.save demographics, {patch:true}
+        jxhr = app.user.save demographics,
+          wait: true
 #        jxhr.done -> console.log 'save done'
 #        jxhr.fail -> console.log 'save fail'
 
