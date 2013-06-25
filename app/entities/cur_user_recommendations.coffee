@@ -7,7 +7,7 @@ define [
   app
 ) ->
 
-  _me = 'entities/recommendations'
+  _me = 'entities/cur_user_recommendations'
 
   # A Single Game Level
   Model = Backbone.Model.extend

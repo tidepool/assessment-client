@@ -2,20 +2,20 @@
 define [
   'backbone'
   'Handlebars'
-  'entities/cur_user_personality'
   'text!./all.hbs'
   'core'
   'composite_views/perch'
+  'entities/cur_user_career'
   # Dashboard Widgets
   'dashboard/widget-lister'
   'dashboard/widget-careerRecc'
 ], (
   Backbone
   Handlebars
-  UserPersonality
   tmpl
   app
   perch
+  CareerRecommendations
   WidgetLister
   WidgetCareerRecc
 ) ->
@@ -27,9 +27,9 @@ define [
     className: 'dashboardPage career'
 
     initialize: ->
-      @model = new UserPersonality()
-      _.bindAll @, '_getPersonality'
-      @_getPersonality()
+      @model = new CareerRecommendations()
+      _.bindAll @, '_getRecommendations'
+      @_getRecommendations()
       @listenTo @model, 'sync', @onModelSync
       @listenTo @model, 'error', @onModelErr
       @listenTo app.user, 'sync', @onUserSync
@@ -37,12 +37,11 @@ define [
 
     render: ->
       @$el.html tmpl
-      #@_addWidgets()
-      @
+      return this
 
 
   # ---------------------------------------------------------------- Private
-    _getPersonality: ->
+    _getRecommendations: ->
       if app.user.isLoggedIn()
         @model.fetch()
       else
@@ -55,31 +54,24 @@ define [
       @_emptyWidgets()
       $mastahBlastah = @$(_widgetMasterSel)
 
-
-      careerRecc = new WidgetCareerRecc()
+      careerRecc = new WidgetCareerRecc
+        model: @model
       $mastahBlastah.append careerRecc.render().el
 
       skillz = new WidgetLister
         title: 'Skills to Work On'
         className: 'coolTones'
         icon: 'icon-ok' # optional, override the bullet icon
-        list: [
-          'Complex problem solving'
-          'Critical thinking'
-          'Managerial ability'
-          'Oral expression'
-        ]
+        list: @model.attributes.skills
       $mastahBlastah.append skillz.render().el
 
-      skillz = new WidgetLister
+      toolz = new WidgetLister
         title: 'Tools of the Trade'
         className: 'coolTones'
-        list: [
-          'High end computer servers'
-          'Operating system software'
-          'Object or component oriented software development'
-        ]
-      $mastahBlastah.append skillz.render().el
+        list: @model.attributes.tools
+      $mastahBlastah.append toolz.render().el
+
+      return this
 
 
 
@@ -88,14 +80,11 @@ define [
     onLogOut: -> app.router.navigate 'home', trigger:true
     onModelSync: (model, data) -> @_addWidgets()
     onModelErr: (model, xhr) ->
-#      console.log
-#        model: model
-#        xhr: xhr
       perch.show
-        title: 'You Must Be Veeery Special...'
-        msg: 'So Sorry, we\'re having trouble getting your personality data.'
+        title: 'Oops...'
+        msg: 'So Sorry, we\'re having trouble getting your career data.'
         btn1Text: 'Darn'
-  #onClose: -> app.router.navigate('dashboard', trigger: true)
+
 
 
   View

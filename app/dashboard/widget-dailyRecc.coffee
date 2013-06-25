@@ -4,7 +4,7 @@ define [
   'Handlebars'
   'text!./widget-dailyRecc.hbs'
   'text!./widget-dailyReccDetails.hbs'
-  'entities/recommendations'
+  'entities/cur_user_recommendations'
   'composite_views/perch'
   'core'
 ], (
