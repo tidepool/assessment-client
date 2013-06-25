@@ -1,0 +1,32 @@
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.widget.empty
+  text-align: center
+  background: $shade
+  color: white
+  border: $spaceTiny dashed $highlightThick
+  background-clip: padding-box
+  box-shadow: none
+  p
+    color: $highlightThick
+    font-size: $fontSizeSmall
+    margin: $space $spaceLil 0
+    text-shadow: 0 0 $spaceLil $shade
+    text-transform: uppercase
+  .icon-stack
+    color: $highlightThick
+    width: 2em
+    height: 2em
+    line-height: 2em
+    font-size: $space
+  //vertical-align: -33%
+  &.empty:hover
+    background: $shadeDark
+    background-clip: padding-box
+    border-color: white
+    +transform( translateY(0) )
+    p
+      color: white

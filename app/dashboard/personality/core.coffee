@@ -2,7 +2,8 @@
 define [
   'backbone'
   'Handlebars'
-  'text!./widget-coreResults.hbs'
+  'text!./core.hbs'
+  'dashboard/widgets/base'
   'composite_views/perch'
   'markdown'
   'core'
@@ -11,6 +12,7 @@ define [
   Backbone
   Handlebars
   tmpl
+  Widget
   perch
   markdown
   app
@@ -18,20 +20,17 @@ define [
 ) ->
 
   _widgetSel = '.widget'
-  _className = 'coreResults '
+  _className = 'core'
+  _tmpl = Handlebars.compile tmpl
 
-  View = Backbone.View.extend
-    tmpl: Handlebars.compile tmpl
-    className: "holder doubleWide tall #{_className}"
-    tagName: 'section'
+  View = Widget.extend
+    className: "doubleWide tall #{_className}"
     events:
       'click .widget': 'onClick'
 
-    initialize: ->
-      @listenTo @model, 'change', @render
-
     render: ->
-      @$el.html @tmpl @model.attributes
+      debugger
+      @$el.html _tmpl @model.attributes
       share = new ShareView data:
         title: "My personality is '#{@model.attributes.name}'"
         text: 'You can find out your personality, too, at https://alpha.tidepool.co'
@@ -50,8 +49,7 @@ define [
       app.analytics.track _className, 'Detailed Core Personality Results Viewed'
 
 
-
-
+  View.dependsOn = 'entities/cur_user_personality'
   View
 
 

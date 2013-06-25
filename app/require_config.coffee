@@ -7,7 +7,8 @@ define [], () ->
       'game/levels/rank_images'
       'game/levels/circle_size'
       'game/levels/circle_proximity'
-      'dashboard/widget-lister'
+      'dashboard/widgets/base'
+      'dashboard/widgets/lister'
       'ui_widgets/formation'
     ]
     paths:

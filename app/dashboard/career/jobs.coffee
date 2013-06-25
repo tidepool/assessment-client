@@ -2,35 +2,32 @@
 define [
   'backbone'
   'Handlebars'
-  'text!./widget-careerRecc.hbs'
-  'core'
+  'text!./jobs.hbs'
+  'dashboard/widgets/base'
 ], (
   Backbone
   Handlebars
   tmpl
-  app
+  Widget
 ) ->
 
-  _widgetSel = '.widget'
-  _className = 'careerRecc'
 
   Handlebars.registerHelper 'commaList', (array) ->
     prettyList = ''
     prettyList += "#{item}, " for item in array
     return prettyList.slice(0, -2)
+
   _tmpl = Handlebars.compile tmpl
 
-  View = Backbone.View.extend
-    className: "holder doubleWide coolTones #{_className}"
-    tagName: 'section'
 
-    initialize: ->
 
+  View = Widget.extend
+    className: 'holder doubleWide coolTones career-jobs'
     render: ->
       @$el.html _tmpl @model.attributes
       @
 
-
+  View.dependsOn = 'entities/cur_user_career'
   View
 
 

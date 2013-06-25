@@ -1,0 +1,19 @@
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.widget.loading
+  background: none
+  box-shadow: 0 $spaceTiny 0 0 $shadeLight, 0 0 0 0 transparent
+  cursor: default
+
+  .holdPlease
+    background: $highlightThin
+    border-radius: $radiusSmall
+  .holdPlease i
+    color: $shade
+
+
+  &:hover
+    box-shadow: 0 $spaceTiny 0 0 $shadeLight, 0 0 0 0 transparent

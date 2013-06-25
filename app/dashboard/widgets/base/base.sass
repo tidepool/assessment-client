@@ -1,6 +1,6 @@
-@import '../../styles/appVars'
-@import '../../styles/colorVars'
-@import '../../styles/helpers'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
 
 
 .widget
@@ -72,6 +72,7 @@
 
 
 
+
   // widgets that contain charts
   canvas
     float: left
@@ -95,34 +96,6 @@
     box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight, 0 0 0 $spaceTiny $highlight, 0 0 0 1px $shade
     //+transform( translateY(-$spaceTiny) ) // If this is in place chrome has a bizarre flicker during the transition
     z-index: 1
-
-  &.empty
-    text-align: center
-    background: $shade
-    color: white
-    border: $spaceTiny dashed $highlightThick
-    background-clip: padding-box
-    box-shadow: none
-    p
-      color: $highlightThick
-      font-size: $fontSizeSmall
-      margin: $space $spaceLil 0
-      text-shadow: 0 0 $spaceLil $shade
-      text-transform: uppercase
-    .icon-stack
-      color: $highlightThick
-      width: 2em
-      height: 2em
-      line-height: 2em
-      font-size: $space
-      //vertical-align: -33%
-  &.empty:hover
-    background: $shadeDark
-    background-clip: padding-box
-    border-color: white
-    +transform( translateY(0) )
-    p
-      color: white
 
 
   // The round dividing icon between the sections
