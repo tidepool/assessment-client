@@ -401,5 +401,6 @@ module.exports = (grunt) ->
 
   grunt.registerTask "default", ["test", "open", "watch"]
   grunt.registerTask "s", "server"
+  grunt.registerTask "ds", ['dist', 'distServer']
   grunt.registerTask "t", "test"
 
