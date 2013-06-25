@@ -26,10 +26,16 @@ define [],() ->
       className: 'large input-block-level'
 #      defaultOption: 'Select Education Level...'
       options: [
-        'Some Elementary School'
-        'Some High School'
-        'Some College'
-        'PhilzDoctor'
+        'High School - Freshman (9)'
+        'High School - Sophmore (10)'
+        'High School - Junior (11)'
+        'High School - Senior (12)'
+        'College - Less than 2 yrs'
+        'College - Associates'
+        'College - Bachelor\'s'
+        'College - Master\'s'
+        'College - Ph.D.'
+        'Prefer not to answer'
       ]
     }
     {
@@ -47,9 +53,9 @@ define [],() ->
       type: 'select_by_icon'
       label: 'Handedness'
       options: [
-        'left'
-        'right'
-        'other'
+        'Left'
+        'Right'
+        'Mixed'
       ]
     }
   ]
