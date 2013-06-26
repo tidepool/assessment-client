@@ -19,7 +19,7 @@ define [
     defaults: ->
       return {
         id: '-' # Convention to refer to the current user
-        accessToken: localStorage['access_token']
+        accessToken: sessionStorage['access_token']
       }
 
     initialize: ->
@@ -57,12 +57,12 @@ define [
         nickname: nick,
         {silent: true}
 
-    _clearOutLocalStorage: ->
-      delete localStorage['access_token']
-      delete localStorage['expires_in']
-      delete localStorage['token_received']
-      delete localStorage['refresh_token']
-      delete localStorage['guest']
+    _nuke: ->
+      delete sessionStorage['access_token']
+      delete sessionStorage['expires_in']
+      delete sessionStorage['token_received']
+      delete sessionStorage['refresh_token']
+      delete sessionStorage['guest']
 
 
     # ----------------------------------------------------------- Callbacks
@@ -131,12 +131,12 @@ define [
       curToken = false
       if @get('accessToken')?.length
         currentTime = new Date().getTime()
-        expires_in = parseInt(localStorage['expires_in'])
-        token_received = parseInt(localStorage['token_received'])
+        expires_in = parseInt(sessionStorage['expires_in'])
+        token_received = parseInt(sessionStorage['token_received'])
         if expires_in? and token_received? and currentTime < token_received + expires_in
           curToken = true
         else
-          @_clearOutLocalStorage()
+          @_nuke()
       #console.log "#{_me}.hasCurrentToken(): #{curToken}"
       curToken
     isLoggedIn: -> @hasCurrentToken()

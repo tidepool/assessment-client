@@ -111,12 +111,12 @@ define [
 
 
     # ---------------------------------------------- Private Utility Methods
-    _clearOutLocalStorage: ->
-      delete localStorage['access_token']
-      delete localStorage['expires_in']
-      delete localStorage['token_received']
-      delete localStorage['refresh_token']
-      delete localStorage['guest']
+    _nuke: ->
+      delete sessionStorage['access_token']
+      delete sessionStorage['expires_in']
+      delete sessionStorage['token_received']
+      delete sessionStorage['refresh_token']
+      delete sessionStorage['guest']
 
     # authorizeThrough: facebook, twitter or fitbit
     _buildExternalServiceUrl: (authorizeThrough) ->
@@ -139,10 +139,10 @@ define [
       params
 
     _persistLocally: (data) ->
-      localStorage['access_token'] = data['access_token']
-      localStorage['expires_in'] = data['expires_in'] * 1000 # Store in ms
-      localStorage['token_received'] = new Date().getTime()
-      localStorage['refresh_token'] = data['refresh_token']
+      sessionStorage['access_token'] = data['access_token']
+      sessionStorage['expires_in'] = data['expires_in'] * 1000 # Store in ms
+      sessionStorage['token_received'] = new Date().getTime()
+      sessionStorage['refresh_token'] = data['refresh_token']
 
 
     # ------------------------------------------------ Public API
@@ -168,7 +168,7 @@ define [
       window.open(@_buildExternalServiceUrl(provider), "Login", "width=#{width}, height=#{height}, left=#{left}, top=#{top}, menubar=no")
 
     logOut: ->
-      @_clearOutLocalStorage()
+      @_nuke()
       @user.reset()
 
     # Called as a global object by the opened window
