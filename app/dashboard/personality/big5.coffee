@@ -1,55 +1,46 @@
 
 define [
-  'underscore'
   'backbone'
-  'Handlebars'
-  'text!./widget-chart.hbs'
-  'charts/doughnut'
+  'dashboard/widgets/base'
   'composite_views/perch'
+  'charts/polar_area'
 ], (
-  _
   Backbone
-  Handlebars
-  tmpl
-  DoughnutChart
+  Widget
   perch
+  PolarAreaChart
 ) ->
 
-  _canvasSel = 'canvas'
   _widgetSel = '.widget'
-  _chartName = 'Interests'
+  _chartName = 'Personality'
 
-  View = Backbone.View.extend
-    tmpl: Handlebars.compile tmpl
-    className: 'holder'
-    tagName: 'section'
+  View = Widget.extend
     events:
       'click .widget': 'onClick'
 
     render: ->
-      @$el.html @tmpl name: _chartName
-      @chart = new DoughnutChart
+      @$el.html @tmplBase title: _chartName
+      @chart = new PolarAreaChart
         data:
           name: _chartName
-          chartValues: @model.attributes
+          chartValues: @model.attributes.big5_score
           options: animation: false
       @$(_widgetSel).append @chart.render().el
       @
-
 
     onClick: ->
       perch.show
         title: _chartName
         large: true
-        content: new DoughnutChart
+        content: new PolarAreaChart
           data:
             name: _chartName
-            chartValues: @model.attributes
+            chartValues: @model.attributes.big5_score
             width: 450
             height: 300
 
 
-
+  View.dependsOn = 'entities/cur_user_personality'
   View
 
 

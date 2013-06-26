@@ -4,6 +4,10 @@ define [
   'backbone'
   # Available Widgets - Personality
   'dashboard/personality/core'
+  'dashboard/personality/big5'
+  'dashboard/personality/holland6'
+  'dashboard/personality/detailed_report'
+  'dashboard/personality/recommendation'
   # Available Widgets - Career
   'dashboard/career/jobs'
   'dashboard/career/skills'
@@ -16,6 +20,10 @@ define [
   _
   Backbone
   WidgetPersonalityCore
+  WidgetPersonalityBig5
+  WidgetPersonalityHolland6
+  WidgetPersonalityDetailedReport
+  WidgetPersonalityRecommendation
   WidgetCareerJobs
   WidgetCareerSkills
   WidgetCareerTools
@@ -29,10 +37,10 @@ define [
     'dashboard/career/skills': WidgetCareerSkills
     'dashboard/career/tools': WidgetCareerTools
     'dashboard/personality/core': WidgetPersonalityCore
-    'dashboard/personality/big5': null
-    'dashboard/personality/holland6': null
-    'dashboard/personality/detailed_report': null
-    'dashboard/personality/recommendation': null
+    'dashboard/personality/big5': WidgetPersonalityBig5
+    'dashboard/personality/holland6': WidgetPersonalityHolland6
+    'dashboard/personality/detailed_report': WidgetPersonalityDetailedReport
+    'dashboard/personality/recommendation': WidgetPersonalityRecommendation
   _models =
     'entities/cur_user_career': CurUserCareer
     'entities/cur_user_recommendations': CurUserRecommendations
@@ -45,7 +53,7 @@ define [
     id: 'Widgetmaster'
 
     initialize: ->
-      return unless @options.widgets
+      throw new Error "Need @options.widgets" unless @options.widgets
       # Intantiate one of each model class that our widgets need
       @models = @_makeModelsFromWidgets @options.widgets
       # Instantiate each widget view and give it a reference to the model it needs
@@ -54,10 +62,11 @@ define [
       model.fetch() for key, model of @models
 
     render: ->
-#      console.log
-#        widgets: @widgets
-#        _widgets: _widgets
-#        _models: _models
+      console.log
+        widgetsViewInstances: @widgets
+        modelInstances: @models
+        availWidgets: _widgets
+        availModels: _models
       @$el.empty()
       @$el.append widget.el for widget in @widgets
       return this
@@ -71,7 +80,7 @@ define [
         if _widgets[name] # Is this one of the views we've loaded?
           Widget = _widgets[name]
           if not Widget.dependsOn
-            console.log "#{_me}: #{name} does not depend on a model and that's ok."
+#            console.log "#{_me}: #{name} does not depend on a model and that's ok."
           else if _models[Widget.dependsOn]
             modelClassesByKey[Widget.dependsOn] = _models[Widget.dependsOn]
           else

@@ -27,13 +27,18 @@ define [
           'dashboard/personality/big5'
           'dashboard/personality/detailed_report'
           'dashboard/personality/holland6'
-          'dashboard/personality/recommmendation'
+          'dashboard/personality/recommendation'
           'dashboard/career/jobs'
           'dashboard/career/skills'
           'dashboard/career/tools'
         ]
       @$el.html @widgetmaster.render().el
       return this
+
+
+#        model: new Backbone.Model @model.attributes.big5_score
+#        model: new Backbone.Model @model.attributes.holland6_score
+
 
 
     # ---------------------------------------------------------------- Private

@@ -1,27 +1,24 @@
 
 define [
   'backbone'
-  'Handlebars'
-  'text!./widget-personalityReport.hbs'
+  'dashboard/widgets/base'
+  'text!./detailed_report.hbs'
   'composite_views/perch-psst'
   'core'
 ], (
   Backbone
-  Handlebars
+  Widget
   tmpl
   perchPsst
   app
 ) ->
 
-  _widgetSel = '.widget'
-  _className = 'personalityReport'
+  _className = 'detailedReport'
 
-  View = Backbone.View.extend
-    className: "holder #{_className}"
-    tagName: 'section'
+  View = Widget.extend
+    className: _className
     events:
       'click .widget': 'onClick'
-    initialize: ->
 
     render: ->
       @$el.html tmpl
@@ -37,12 +34,10 @@ define [
         icon: 'icon-ok'
       app.analytics.track _className, 'Teaser Pressed'
       $.ajax
-        url: "#{window.apiServerUrl}/api/v1/users/-/preorders"
+        url: "#{app.cfg.apiServer}/api/v1/users/-/preorders"
         type: 'POST'
-      .done (data, textStatus, jqXHR) =>
-        console.log("sent message to preorders")
       .fail (jqXHR, textStatus, errorThrown) =>
-        console.log("failed to send the preorder")
+        throw new Error "Failed to send preorder for #{app.user.attributes.email}"
 
   View
 

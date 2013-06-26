@@ -29,21 +29,20 @@ define [
       'click .widget': 'onClick'
 
     render: ->
-      debugger
-      @$el.html _tmpl @model.attributes
+      @$el.html _tmpl @model.attributes.profile_description
       share = new ShareView data:
-        title: "My personality is '#{@model.attributes.name}'"
+        title: "My personality is '#{@model.attributes.profile_description.name}'"
         text: 'You can find out your personality, too, at https://alpha.tidepool.co'
         link: 'https://alpha.tidepool.co'
-        image: "https://alpha.tidepool.co/images/badges/#{@model.attributes.logo_url}"
+        image: "https://alpha.tidepool.co/images/badges/#{@model.attributes.profile_description.logo_url}"
       @$el.append share.render().el
       @
 
     onClick: ->
-      descHtml = markdown.toHTML @model.attributes.description
+      descHtml = markdown.toHTML @model.attributes.profile_description.description
       perch.show
         large: true
-        title: @model.attributes.name
+        title: @model.attributes.profile_description.name
         msg: descHtml
         btn1Text: 'Ok'
       app.analytics.track _className, 'Detailed Core Personality Results Viewed'

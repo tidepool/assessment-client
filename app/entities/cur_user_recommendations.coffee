@@ -12,9 +12,7 @@ define [
   # A Single Game Level
   Model = Backbone.Model.extend
     urlRoot: "#{app.cfg.apiServer}/api/v1/users/-/recommendations"
-    latest: ->
-      @id = 'latest'
-      @fetch()
+    id: 'latest'
 
   Model
 

@@ -2,36 +2,29 @@
 define [
   'backbone'
   'Handlebars'
-  'text!./widget-dailyRecc.hbs'
-  'text!./widget-dailyReccDetails.hbs'
-  'entities/cur_user_recommendations'
+  'dashboard/widgets/base'
+  'text!./recommendation.hbs'
+  'text!./recommendation-details.hbs'
   'composite_views/perch'
   'core'
 ], (
   Backbone
   Handlebars
+  Widget
   tmpl
   tmplDetails
-  Recommedations
   perch
   app
 ) ->
 
-  _widgetSel = '.widget'
-  _className = 'dailyRecc'
+  _className = 'recommendation'
   _recLinkSel = '#ActionRecommendationLink'
+  _tmplDetails = Handlebars.compile tmplDetails
 
-  View = Backbone.View.extend
-    tmplDetails: Handlebars.compile tmplDetails
-    className: "holder #{_className}"
-    tagName: 'section'
+  View = Widget.extend
+    className: _className
     events:
       'click .widget': 'onClick'
-
-    initialize: ->
-      @model = new Recommedations()
-      @listenTo @model, 'sync', @onSync
-      @model.latest()
 
     render: ->
       @$el.html tmpl
@@ -43,7 +36,7 @@ define [
         when 'Video'   then data.icon = 'icon-youtube-play'
         when 'Comic'   then data.icon = 'icon-smile'
         when 'Lecture' then data.icon = 'icon-bullhorn'
-      @_detailsMarkup = @tmplDetails data
+      @_detailsMarkup = _tmplDetails data
       @
 
 
@@ -65,7 +58,7 @@ define [
       app.analytics.track _className, 'External Link Clicked'
 
 
-
+  View.dependsOn = 'entities/cur_user_recommendations'
   View
 
 
