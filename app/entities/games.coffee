@@ -18,9 +18,6 @@ define [
       circle_size_and_proximity: 'CirclesTest'
       reaction_time_disc: 'ReactionTime'
 
-    defaults:
-      definition_id: 'baseline'
-
 
     # ------------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
@@ -100,7 +97,7 @@ define [
     create: (gameDefinitionId) ->
 #      $.post "#{@urlRoot}/#{@attributes.definition_id}"
       if gameDefinitionId
-        @save( definition_id: gameDefinitionId )
+        @save( def_id: gameDefinitionId )
       else
         @save() # Uses the default definition id
       @

@@ -12,6 +12,8 @@ define [
   'dashboard/career/jobs'
   'dashboard/career/skills'
   'dashboard/career/tools'
+  # Available Widgets - Teasers
+  'dashboard/teasers/reaction_time'
   # Available Models
   'entities/cur_user_career'
   'entities/cur_user_recommendations'
@@ -27,11 +29,13 @@ define [
   WidgetCareerJobs
   WidgetCareerSkills
   WidgetCareerTools
+  WidgetTeasersReactionTime
   CurUserCareer
   CurUserRecommendations
   CurUserPersonality
 ) ->
 
+  # keeping a key to these is a way to have widgetmaster preload all of them instead of dynamically requiring each one
   _widgets =
     'dashboard/career/jobs': WidgetCareerJobs
     'dashboard/career/skills': WidgetCareerSkills
@@ -41,6 +45,7 @@ define [
     'dashboard/personality/holland6': WidgetPersonalityHolland6
     'dashboard/personality/detailed_report': WidgetPersonalityDetailedReport
     'dashboard/personality/recommendation': WidgetPersonalityRecommendation
+    'dashboard/teasers/reaction_time': WidgetTeasersReactionTime
   _models =
     'entities/cur_user_career': CurUserCareer
     'entities/cur_user_recommendations': CurUserRecommendations
@@ -62,11 +67,6 @@ define [
       model.fetch() for key, model of @models
 
     render: ->
-      console.log
-        widgetsViewInstances: @widgets
-        modelInstances: @models
-        availWidgets: _widgets
-        availModels: _models
       @$el.empty()
       @$el.append widget.el for widget in @widgets
       return this
@@ -74,7 +74,6 @@ define [
 
     # -------------------------------------------------------- Private Methods
     _makeModelsFromWidgets: (widgetNames) ->
-#      @widgets = [] # an array of all widgets and their options in the order of display
       modelClassesByKey = {}
       for name in widgetNames
         if _widgets[name] # Is this one of the views we've loaded?

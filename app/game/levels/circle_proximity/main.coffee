@@ -42,6 +42,7 @@ define [
         perch.show
           content: instructions
           btn1Text: "I'm Ready"
+          large: true
           btn1Callback: _.bind @_renderLevel, @
           mustUseButton: true
           supressTracking: true

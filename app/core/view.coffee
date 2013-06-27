@@ -44,7 +44,7 @@ define [
       @_curView?.close?()
       @_curView?.remove()
 
-    _loadView: (module) ->
+    _loadView: (module, data) ->
       #console.log "#{_me}._loadView(#{module})"
       require [
         module
@@ -54,7 +54,13 @@ define [
       ) =>
         #console.log "#{_me}.require().loaded new page"
         @_cleanupOldView()
-        @_curView = new ViewClass()
+        # Start the view with a model if one was provided
+        if data?.model
+          @_curView = new ViewClass
+            model: data.model
+        else
+          @_curView = new ViewClass
+            params: data
         # Render
         @render()
         # Sometimes things need to happen after the dom insertion. Views can implement a method to hook into this.
@@ -63,22 +69,22 @@ define [
 
 
     # ------------------------------------------------------------- Public API
-    asSite: (viewModuleString) ->
+    asSite: (viewModuleString, data) ->
       #console.log "#{_me}.asSite(#{viewModuleString})"
       @_curLayout = new SiteLayout
         app: @options.app
       $('body').addClass viewModuleString.split('/').join('-')
-      @_loadView viewModuleString
+      @_loadView viewModuleString, data
 
-    asGame: (viewModuleString) ->
+    asGame: (viewModuleString, data) ->
       #console.log "#{_me}.asGame(#{viewModuleString})"
       @_curLayout = new GameLayout
         app: @options.app
-      @_loadView viewModuleString
+      @_loadView viewModuleString, data
 
-    asDash: (viewModuleString) ->
+    asDash: (viewModuleString, data) ->
       @_curLayout = new DashLayout
         app: @options.app
-      @_loadView viewModuleString
+      @_loadView viewModuleString, data
 
   Me

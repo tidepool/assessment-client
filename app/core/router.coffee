@@ -17,7 +17,8 @@ define [
       team:                'showTeam'
       startGame:           'showDemographics'
       demographics:        'showDemographics'
-      game:                'showGame'
+      'game/:def_id':      'createGame'
+      game:                'createDefaultGame'
       guestSignup:         'showGuestSignup'
       dashboard:           'showDashboard'
       'dashboard-career':  'showDashCareer'
@@ -25,20 +26,23 @@ define [
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
-  #@on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
+#      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
 
 
-  # ------------------------------------------------ Actual Route Responses
+    # ------------------------------------------------ Actual Route Responses
     showHome: ->         @app.view.asSite 'pages/home'
     showAbout: ->        @app.view.asSite 'pages/about'
     showTeam: ->         @app.view.asSite 'pages/team'
     showDemographics: -> @app.view.asGame 'pages/demographics'
-    showGame: ->         @app.view.asGame 'pages/play_game'
+    createDefaultGame: ->
+      @createGame 'baseline'
+    createGame: (def_id) ->
+      @app.view.asGame 'pages/play_game', def_id:def_id
+#    showGame: ->         @app.view.asGame 'pages/play_game'
     showGuestSignup: ->  @app.view.asGame 'pages/guest_signup'
     showDashboard: ->    @app.view.asDash 'pages/dashboard/all'
     showDashCareer: ->   @app.view.asDash 'pages/dashboard/career'
     recordReferrer: (refId) ->
-#      console.log "#{_me} referred by #{refId}"
       @app.analytics.track 'Referral', refId
       @app.user.set referred_by: refId
       @showDemographics()

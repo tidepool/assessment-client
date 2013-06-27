@@ -31,8 +31,10 @@ define [
       #      console.log "#{_me}.initialize()"
       if @model.attributes.data?
         @collection = new Backbone.Collection @model.attributes.data
-      @start?() # Call the mixed-in level's start method, if it has impelemented one
-      @track _EVENTS.start
+      if typeof @start is "function"
+        @start() # Call the mixed-in level's start method, if it has impelemented one
+      else
+        @track _EVENTS.start
 
 
     # ----------------------------------------------------- Private Methods

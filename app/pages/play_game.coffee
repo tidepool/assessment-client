@@ -3,7 +3,6 @@ define [
   'Handlebars'
   'core'
   'composite_views/perch'
-  'entities/levels'
   'entities/results_calculator'
   'ui_widgets/steps_remaining'
   'game/levels/reaction_time_disc'
@@ -16,7 +15,6 @@ define [
   Handlebars
   app
   perch
-  LevelsCollection
   Results
   StepsRemainingView
   ReactionTime
@@ -39,36 +37,35 @@ define [
     className: 'playGamePage'
 
     initialize: ->
-      @curGame = app.user.createGame()
-      @_register_events()
+      throw new Error "Need params" unless @options.params
+      @model = app.user.createGame @options.params.def_id
+      @curGame = @model
+      @listenTo @model, 'error', @_curGameErr
+      @listenTo @model, 'change:stage_completed', @_onStageChanged
+#      @listenToOnce @model, 'sync', @_showWelcome
+
+#    onDomInsert: -> @_showWelcome()
 
 
     # ------------------------------------------------------------- Helper Methods
-    _register_events: ->
-      @listenTo @curGame, 'error', @_curGameErr
-      @listenTo @curGame, 'sync', @_onGameSync
-      @listenTo @curGame, 'change:stage_completed', @_onStageChanged
-
-    _showWelcome: (assessmentModel) ->
+    _showWelcome: ->
       @_trackLevels()
       perch.show
         title: 'Welcome'
-        msg: _gameStartMsg
+        msg: @model.attributes.definition.instructions
         btn1Text: 'Let\'s Go'
-        onClose: _.bind(@curGame.nextStage, @curGame)
+        onClose: _.bind @model.nextStage, @model
         mustUseButton: true
 
 
     # ------------------------------------------------------------- Event Handlers
-    _onGameSync: -> #console.log "#{_me}._onGameSync()"
-
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
       curStage = model.attributes.stage_completed #+ 6 # TODO: remove increment. It's for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
-      @levels?.setComplete curStage
+      @stepsRemaining?.setComplete curStage
       # Show the next stage
-      if curStage is -1 then @_showWelcome model
+      if curStage is -1 then @_showWelcome()
       else if curStage < stageCount then @_showLevel curStage
       else if curStage is stageCount then @_calculateResults model
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
@@ -79,10 +76,10 @@ define [
 
     # ------------------------------------------------------------- Game and Level Management
     _trackLevels: ->
-      @levels = new LevelsCollection @curGame.get('stages')
       @stepsRemaining = new StepsRemainingView
-        collection: @levels
+        collection: new Backbone.Collection @model.attributes.stages
       $(_stepsRemainingContainer).append @stepsRemaining.render().el
+      window.steps = @stepsRemaining
 
     _finishPreviousLevel: (levelView) ->
       if levelView and levelView instanceof Backbone.View
@@ -111,6 +108,7 @@ define [
     # ------------------------------------------------------------- Results
     _calculateResults: (gameModel) ->
       @curLevel = new CalculateResultsView
+        game: @curGame
         model: new Results
           game_id: gameModel.get 'id'
       @$el.html @curLevel.render().el

@@ -32,7 +32,7 @@ define [
       @on 'invalid', @_onModelInvalid
 
     validate: (attrs, options) ->
-      return null if attrs.guest is true
+      return null if attrs.guest is true # skip validation
 
       if options.login or options.register
         return 'The email address cannot be blank.' unless attrs.email
@@ -76,6 +76,7 @@ define [
 
     _onModelInvalid: (model, error) ->
       console.log "#{_me}._onModelInvalid(): #{error}"
+
 
     # ----------------------------------------------------------- URL related Methods
     parseHash: (hash) ->

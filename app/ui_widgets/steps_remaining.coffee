@@ -1,34 +1,33 @@
-
-
 define [
-  'jquery'
   'backbone'
   'Handlebars'
   "text!./steps_remaining.hbs"
 ],
 (
-  $
   Backbone
   Handlebars
   tmpl
 ) ->
 
+  _tmpl = Handlebars.compile tmpl
+
   View = Backbone.View.extend
     className: 'stepsRemaining'
     initialize: ->
-      throw new Error 'Need a collection to build a stepsRemaining view' unless @collection
-      @tmpl = Handlebars.compile(tmpl)
-      @listenTo @collection, 'change', @_onChange
+      @
+      @listenTo @collection, 'change:isComplete', @render
 
     render: ->
-      @$el.html @tmpl
-        steps: @collection.toJSON()
-      @
+#      console.log "#{@className} render"
+#      console.log
+#        stages: @collection.toJSON()
+      @$el.html _tmpl
+        levels: @collection.toJSON()
+      return this
 
-    _onChange: ->
-      #console.log 'Steps remaining change event fired'
-      @render()
-
+    setComplete: (LevelId) ->
+      level = @collection.at LevelId
+      level.set('isComplete', true) if level?
 
   View
 

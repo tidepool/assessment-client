@@ -30,6 +30,7 @@ define [
 
     start: (options) ->
       @circlesCollection = new Circles @model.get 'circles'
+      @track Level.EVENTS.start
 
     render: ->
       @_showCircleSize()

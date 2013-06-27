@@ -23,9 +23,15 @@ define [
 
   View = Widget.extend
     className: 'holder doubleWide coolTones career-jobs'
+    events:
+      'click .icon-briefcase': 'onClickBriefcase'
     render: ->
       @$el.html _tmpl @model.attributes
       @
+
+    onClickBriefcase: ->
+      console.log "Magical briefcase clicked"
+
 
   View.dependsOn = 'entities/cur_user_career'
   View

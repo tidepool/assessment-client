@@ -1,18 +1,20 @@
 define [
-  'jquery'
   'underscore'
   'backbone'
   'Handlebars'
-  'entities/user_event'
-  "text!./main.hbs"
+  'game/levels/_base'
+  'text!./main.hbs'
+  'text!./instructions-simple.hbs'
+  'text!./instructions-complex.hbs'
   'composite_views/perch'
 ], (
-  $
   _
   Backbone
   Handlebars
-  UserEvent
+  Level
   tmpl
+  instructionsSimple
+  instructionsComplex
   perch
 ) ->
 
@@ -26,39 +28,33 @@ define [
   _TYPES =
     simple: 'simple'
     complex: 'complex'
-  _USEREVENTS =
-    started: "test_started"
+  _EVENTS =
     shown: "circle_shown"
     correct: "correct_circle_clicked"
     incorrect: "wrong_circle_clicked"
-    completed: "test_completed"
 
-
-  ReactionTime = Backbone.View.extend
-
+  ReactionTime = Level.extend
     className: 'reactionTimeDisc'
-    tmpl: Handlebars.compile(tmpl)
     events:
       "click #ReactionTimeTarget": "_onCircleClicked"
       "click .target #ReactionTimeTarget": "_onCorrectClick"
 
-
     # ------------------------------------------------------------- Backbone Methods
-    initialize: (options) ->
-      @stageNo = options.stageNo
-      @assessment = options.assessment
+    start: ->
+      @stageNo = @options.stageNo
+      @assessment = @options.assessment
       # @colors = @model.get('colors')
       @sequenceType = @model.get('sequence_type')
       @colorSequence = @model.get('sequence')
-#      console.log step.color for step in @colorSequence
       @sequenceNo = -1
       @numOfSequences = @colorSequence.length
 
     render: ->
-      @$el.html @tmpl()
+      instructions = if @sequenceType is _TYPES.simple then instructionsSimple else instructionsComplex
+      @$el.html tmpl
       perch.show
-        msg: @model.get('instructions')
-        #onClose: => @_start()
+        content: instructions
+        large: true
         btn1Text: "I'm Ready"
         btn1Callback: _.bind(@_start, @)
         mustUseButton: true
@@ -69,8 +65,7 @@ define [
     # ------------------------------------------------------------- Running the Game Level / Stage
     _start: ->
       colorSequenceInString = (color.color + ":" + color.interval for color in @colorSequence)[..]
-      @_createUserEvent
-        event_desc: _USEREVENTS.started
+      @track Level.EVENTS.start,
         color_sequence: colorSequenceInString
       $("#infobox").css("visibility", "hidden")
       @_waitAndShow()
@@ -80,8 +75,7 @@ define [
       if @sequenceNo < @numOfSequences
         curStep = @colorSequence[@sequenceNo]
         prevStep = @colorSequence[@sequenceNo - 1]
-        @_createUserEvent
-          event_desc: _USEREVENTS.shown
+        @track _EVENTS.shown,
           circle_color: curStep.color
           sequence_no: @sequenceNo
           time_interval: curStep.interval
@@ -102,7 +96,6 @@ define [
       setTimeout _.bind(@_showCircle, @), delay
 
 
-
     # ------------------------------------------------------------- Event Handlers
     _onCircleClicked: (e) ->
       e.preventDefault()
@@ -121,8 +114,7 @@ define [
       $(_colorizerSel).addClass _hitClass
       # Exit the test if that was the last circle
       if (@sequenceNo is @numOfSequences - 1)
-        @_createUserEvent
-          event_desc: _USEREVENTS.completed
+        @track Level.EVENTS.end,
           sequence_no: @sequenceNo
         setTimeout _.bind(@assessment.nextStage, @assessment), _animationTime
 
@@ -131,31 +123,15 @@ define [
     _trackCorrect: ->
       curStep = @colorSequence[@sequenceNo]
       return if curStep.alreadyTracked
-      #console.log("#{_me}._trackCorrect()")
-      @_createUserEvent
-        event_desc: _USEREVENTS.correct
+      @track _EVENTS.correct,
         circle_color: curStep.color
         sequence_no: @sequenceNo
       curStep.alreadyTracked = true
 
     _trackIncorrect: ->
-      #console.log("#{_me}._trackIncorrect()")
-      @_createUserEvent
-        event_desc: _USEREVENTS.incorrect
+      @track _EVENTS.incorrect,
         circle_color: @colorSequence[@sequenceNo]?.color
         sequence_no: @sequenceNo
-
-    _createUserEvent: (newEvent) ->
-      eventInfo = 
-        game_id: @assessment.get('id')
-        module: "reaction_time"
-        stage: @stageNo
-        sequence_type: @sequenceType
-      fullInfo = _.extend({}, eventInfo, newEvent)
-      userEvent = new UserEvent()
-      userEvent.send(fullInfo)
-
-
 
 
   ReactionTime

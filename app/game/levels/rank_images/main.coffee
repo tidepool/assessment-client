@@ -41,6 +41,7 @@ define [
       _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
+      @track Level.EVENTS.start
 
     render: ->
       @$el.html tmpl
