@@ -42,7 +42,6 @@ a.widget:hover
     position: relative // stay above pos absolute things like the .dogear
     text-align: center
     font-weight: bold
-    font-size: $fontSizeSmall
 
   h3
     text-align: left
@@ -53,9 +52,6 @@ a.widget:hover
     margin-left: -$space
     margin-right: -$space
     padding: $spaceLil $space
-  &.premium h3
-    background-color: $colorHighlight
-    color: $shadeDark
   &.featured h3
     background-color: $colorGood
     color: white
@@ -68,10 +64,11 @@ a.widget:hover
     left: 0
     width: 100%
     padding: $spaceTiny 0
-    border-top: 1px solid $colorBackgroundWarm
-    background: $colorBackground
     font-size: $fontSizeLarge
-    color: $colorHighlight - 25
+    background: $colorBrand1
+    color: white
+
+
 
 
 
@@ -118,8 +115,21 @@ a.widget:hover
     border-radius: 50%
     text-align: center
 
+  // Center aligned multi-paragraph text
+  .fancyTitle
+    margin: $space 0 $spaceLil
+    p
+      font-size: $fontSizeLarge
+      line-height: 0.9
+      text-transform: uppercase
+      margin: 0
+      padding: 0
+      text-align: center
+    strong
+      font-size: 30px
 
-
+  img
+    margin-bottom: $spaceLil
 
 .coolTones .widget
   h3
