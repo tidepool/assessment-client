@@ -32,6 +32,7 @@ define [
       perch.show
         title: _chartName
         large: true
+        btn1Text: null
         content: new PolarAreaChart
           data:
             name: _chartName
