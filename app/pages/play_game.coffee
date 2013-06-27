@@ -115,6 +115,14 @@ define [
           game_id: gameModel.get 'id'
       @$el.html @curLevel.render().el
 
+    # ------------------------------------------------------------- Consumable API
+    # Called by the parent view.
+    # Allows for cleaning up events, and external views like lightboxes and proceed controls
+    close: ->
+      @curLevel?.close?()
+      @curLevel?.remove()
+
+
 
   Me
 

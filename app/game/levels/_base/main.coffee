@@ -73,6 +73,13 @@ define [
       userEvent = new UserEvent _.extend(baseData, event)
       userEvent.save()
 
+    remove: ->
+      proceed.hide()
+      @$el.remove()
+      @stopListening()
+      return this
+
+
   View.EVENTS = _EVENTS
   View
 
