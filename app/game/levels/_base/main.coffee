@@ -19,7 +19,7 @@ define [
     interact: 'interacted'
     change: 'changed'
     readyToProceed: 'ready_to_proceed'
-    notReadyToProceed: 'not_ready_to_proceed'
+    notReadyToProceed: 'not_ready_to_'
     end: 'test_completed'
 
   View = Backbone.View.extend
@@ -32,7 +32,6 @@ define [
       if @model.attributes.data?
         @collection = new Backbone.Collection @model.attributes.data
       @start?() # Call the mixed-in level's start method, if it has impelemented one
-      @listenToOnce proceed, 'click', @_close
       @track _EVENTS.start
 
 
@@ -56,6 +55,7 @@ define [
       return if @alreadyReady
       @alreadyReady = true
       proceed.show()
+      @listenToOnce proceed, 'click', @_close
       @track _EVENTS.readyToProceed
 
     notReadyToProceed: ->

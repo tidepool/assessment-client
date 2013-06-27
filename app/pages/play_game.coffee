@@ -30,7 +30,7 @@ define [
   _stepsRemainingContainer = '#HeaderRegion'
   _views =
     ReactionTime: ReactionTime
-    image_rank: ImageRank
+    ImageRank: ImageRank
     CirclesTest: CirclesTest
     survey: AlexTrebek
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'

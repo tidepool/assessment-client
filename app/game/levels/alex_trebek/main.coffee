@@ -31,16 +31,6 @@ define [
       return this
 
 
-    # ----------------------------------------------------- Private Methods
-    _checkDone: ->
-      console.log
-        collection: @collection.toJSON()
-#      if changedCircles.length is @collection.length
-#        isDone = true
-#        @readyToProceed()
-      return isDone
-
-
     # ----------------------------------------------------- Event Handlers
     onSlide: (data) ->
       @track Level.EVENTS.interact,
@@ -56,10 +46,6 @@ define [
         item_value: data.value
       @readyToProceed() if @checkAllInteracted @collection
 
-
-    # ----------------------------------------------------- Consumable API
-    close: ->
-      @stopListening()
 
 
   View
