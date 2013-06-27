@@ -29,7 +29,7 @@ define [
 
     # ----------------------------------------------------------------------------------- Private Methods
     pollForProgress: (url) ->
-      console.log "#{_me}.pollForProgress(#{url})"
+#      console.log "#{_me}.pollForProgress(#{url})"
       $.ajax
         type: 'GET'
         url: url
@@ -46,7 +46,7 @@ define [
                 @pollForProgress data.status.link
               , 500
           when @STATES.done
-            console.log("Done with results")
+#            console.log("Done with results")
             #TODO: use the status that the back end is returning with the fetch on the result object instead
             @set 'status', data.status
           when @STATES.error

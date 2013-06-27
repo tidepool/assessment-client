@@ -67,7 +67,7 @@ define [
           model: circle
           $line: @$line
           selfView: @selfView
-          track: @options.runner?.track
+          track: _.bind @options.runner.track, @options.runner
         @$el.append circle.view.render().el
       # Calculate initial positions for each circle
       @_positionCirclesAround @selfView.getSelfCenter()
@@ -100,6 +100,11 @@ define [
     # ----------------------------------------------------- Event Handlers
     onChangeUserChangedPos: ->
       proceed.show() if @_checkDone()
+
+
+    # ----------------------------------------------------- Consumable API
+
+
 
   View
 

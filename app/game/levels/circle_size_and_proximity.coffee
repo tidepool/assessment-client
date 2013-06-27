@@ -3,7 +3,7 @@ define [
   'underscore'
   'backbone'
   'Handlebars'
-  'entities/user_event'
+  'game/levels/_base'
   'entities/circles'
   'game/levels/circle_size'
   'game/levels/circle_proximity'
@@ -12,28 +12,24 @@ define [
   _
   Backbone
   Handlebars
-  UserEvent
+  Level
   Circles
   CircleSize
   CircleProximity
 ) ->
 
   _me = 'game/levels/circle_size_and_proximity'
-  _researchModuleName = 'circles_test'
-  _USEREVENTS =
-    started: 'test_started'
+  _EVENTS =
     startedSizing: 'size_circles_started'
     startedProximity: 'move_circles_started'
-    completed: 'test_completed'
 
-  View = Backbone.View.extend
+  View = Level.extend
 
     # ------------------------------------------------------------- Backbone Methods
     className: 'circleSizeAndProximity'
-    initialize: (options) ->
-      @track event_desc: _USEREVENTS.started
+
+    start: (options) ->
       @circlesCollection = new Circles @model.get 'circles'
-      _.bindAll @, 'track'
 
     render: ->
       @_showCircleSize()
@@ -47,7 +43,7 @@ define [
         runner: @
         showInstructions: @options.showInstructions
       @$el.html @curView.el
-      @track event_desc: _USEREVENTS.startedSizing
+      @track _EVENTS.startedSizing
       @circlesCollection = @curView.collection
       @listenToOnce @curView, 'done', @_showCircleProximity
 
@@ -58,8 +54,7 @@ define [
         showInstructions: @options.showInstructions
       @$el.html @curView.el
       @curView.render() # Render after putting in the dom since it needs to compute locations
-      @track
-        event_desc: _USEREVENTS.startedProximity
+      @track _EVENTS.startedProximity,
         circles: @circlesCollection.toJSON()
       @listenToOnce @curView, 'done', @onTestDone
 
@@ -67,8 +62,7 @@ define [
     # ------------------------------------------------------------- Event Handlers
     onTestDone: ->
       @remove()
-      @track
-        event_desc: _USEREVENTS.completed
+      @track Level.EVENTS.end,
         circles: @circlesCollection.toJSON()
         self_coord:
           top: @curView.selfView.getSelfCenter().y - @curView.selfView.getSelfRadius()
@@ -78,13 +72,8 @@ define [
 
 
     # ------------------------------------------------------------- Consumable API
-    track: (newEvent) ->
-      eventInfo =
-        game_id: @options.assessment.get('id')
-        module: _researchModuleName
-        stage: @options.stageNo
-      userEvent = new UserEvent()
-      userEvent.send _.extend(eventInfo, newEvent)
+    close: ->
+
 
 
   View

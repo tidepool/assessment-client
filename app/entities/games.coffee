@@ -1,10 +1,12 @@
 define [
   'jquery'
   'backbone'
+  'core'
 ],
 (
   $
   Backbone
+  app
 ) ->
 
   _me = 'entities/games'
@@ -22,6 +24,7 @@ define [
 
     # ------------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
+#    url: '/_data/users/-/games/reaction_time.json'
 
     initialize: ()  ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
@@ -95,6 +98,7 @@ define [
 
     # ------------------------------------------------------------- Public API
     create: (gameDefinitionId) ->
+#      $.post "#{@urlRoot}/#{@attributes.definition_id}"
       if gameDefinitionId
         @save( definition_id: gameDefinitionId )
       else

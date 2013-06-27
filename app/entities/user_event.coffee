@@ -1,32 +1,42 @@
 define [
   'underscore'
   'backbone'
+  'core'
 ], (
   _
   Backbone
+  app
 ) ->
 
   _me = 'entities/user_event'
 
 
   UserEvent = Backbone.Model.extend
-    urlRoot: "/api/v1/user_events"
+    urlRoot: "#{app.cfg.apiServer}/api/v1/user_events"
+
+    defaults: ->
+      {
+        game_id: null # The game instance id
+#        event_type: null
+        module: null # The string id of the level type (eg: 'rank_images')
+        stage: null # The index of the level instance (eg: 0 is the first level in the game)
+        record_time: new Date().getTime()
+        event_desc: 'Default Event Description'
+      }
 
     initialize: ->
-      @url = window.apiServerUrl + @urlRoot
+      @on 'sync', @onSync
+      @on 'error', @onErr
 
-    send: (attribs) ->
-      timestamp = new Date().getTime()
-      defaultInfo = 
-        "record_time": timestamp
+    send: ->
+      console.warn ".send is depreciated. Use standard backbone model .save() instead"
+      @save()
+      return this
 
-      eventInfo = _.extend({}, defaultInfo, attribs)
-      @save eventInfo,
-        error: ->
-          console.log "#{_me}.save().error()"
-        success: (model) ->
-          #console.log "#{_me}.save().success()"
-          #console.log model.attributes
-
+    onSync: (model) ->
+      console.log "#{_me}.save().success()"
+      console.log model.attributes
+    onErr: ->
+      console.error "#{_me}.save().error()"
 
   UserEvent

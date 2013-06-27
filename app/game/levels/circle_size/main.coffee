@@ -66,11 +66,10 @@ define [
 
     # ----------------------------------------------------- Event Handlers
     onChangeSize: (model, size) ->
-      @options.runner?.track?(
-        event_desc: _USEREVENTS.resized
+      @options.runner.track _USEREVENTS.resized,
         circle_no: model.collection.indexOf model
         new_size: size
-      )
+
     onChangeUserChangedSize: ->
       #console.log "#{_me}.onChangeUserChangedSize()"
       proceed.show() if @_checkDone()

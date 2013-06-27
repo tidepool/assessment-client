@@ -137,11 +137,9 @@ define [
     onDragStart: (e, ui) ->
       @$el.removeClass(_showLabelClass)
       @_showLine()
-      @options.track?(
-        event_desc: _USEREVENTS.dragStart
+      @options.track _USEREVENTS.dragStart,
         circle_no: @model.collection.indexOf @model
         circle: @model.toJSON()
-      )
 
     onDrag: (e, ui) ->
       @_maintainLine(e, ui)
@@ -150,11 +148,9 @@ define [
       @_shimmerSelf()
       @_hideLine()
       @_updateModelPosition ui.position
-      @options.track?(
-        event_desc: _USEREVENTS.dragStop
+      @options.track _USEREVENTS.dragStop,
         circle_no: @model.collection.indexOf @model
         circle: @model.toJSON()
-      )
 
 
     # ----------------------------------------------------- Public API

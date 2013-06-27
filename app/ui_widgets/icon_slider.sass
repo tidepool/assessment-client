@@ -1,0 +1,108 @@
+@import '../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../styles/appVars'
+@import '../styles/colorVars'
+
+
+.iconSlider
+  $size: $space * 2 + ($spaceTiny*2)
+  $innerSize: $space * 2
+  position: relative
+  margin: 0 $size / 2
+  margin-bottom: $size
+
+  // The Question
+  p
+    margin-left: -($size / 2) // Cancel out the parent margin
+    margin-right: -($size / 2)
+    margin-bottom: $size / 2
+    padding: 0 $spaceLil
+
+  // Yaaaay! The Slide
+  .ui-slider
+    background: $colorBackground
+    border: $colorVeryQuiet
+    border-radius: $radiusSmall
+    box-shadow: inset 0 1px 2px $shadeLight
+    height: $spaceLil
+
+  .ui-slider-range
+    //background: $colorGoodLight
+    +background( linear-gradient(90deg, $colorBrand1Light, $colorMixBrand1GoodLight) )
+    box-shadow: inset -15px 0 10px -5px white // Shade in the right side of the range with white so it doesn't end abruptly behind transparent icons
+
+  .ui-slider-handle
+    border-radius: 50%
+    width: $size
+    height: $size
+    top: -($size/2) + ($spaceLil/2)
+    margin-left: -($size/2) + ($spaceLil/2)
+    background: $colorBrand1Light
+    border: $spaceTiny solid $colorBrand1Light
+    +box-sizing(border-box)
+    cursor: pointer
+    text-align: center
+  .ui-slider-handle:hover,
+  .ui-slider-handle:focus
+    border: $spaceTiny solid $colorBrand1
+    background: mix($colorBrand1Light, $colorBrand1)
+    outline: none
+    text-decoration: none
+  .ui-slider-handle.ui-state-active
+    //box-shadow: 0 0 $spaceLil 0 $shade
+    +transform( scale(1.05) )
+    //box-shadow: inset 0 0 0 $spaceTiny transparentize( $colorGood, .5 )
+
+
+  // The Icon
+  .ui-slider-handle i
+    width: $innerSize
+    height: $innerSize
+    line-height: $innerSize
+    font-size: $innerSize * .8
+    color: white
+    text-align: center
+  .ui-slider-handle i.gfx-clock
+    font-size: $innerSize * 1.1
+    margin-top: -2px
+  .ui-slider-handle i.icon-rocket
+    margin-left: -3px
+  .ui-slider-handle:hover i,
+  .ui-slider-handle:focus i,
+  .ui-slider-handle.ui-state-active i
+    text-shadow: 1px 0 0 $colorBrand1, -1px 0 0 $colorBrand1, 0 1px 0 $colorBrand1, 0 -1px 0 $colorBrand1
+
+  // The Labels of Legend
+  legend
+    display: block
+    position: relative
+    min-height: $size / 2 // Hold open space for the pos:abs labels
+  legend label
+    $lblSize: 100px
+    position: absolute
+    top: $size / 2
+    width: $lblSize
+    margin-left: -($lblSize/2)
+    padding-left: $spaceTiny // no idea why this hack is needed to center it. The margin-left math should work
+    text-align: center
+    font-size: $fontSizeBody
+    color: $colorQuiet
+
+
+
+
+  // The Animation
+  .ui-slider-handle.yay
+    +animation( dropItLikeItsHot .7s )
+
++keyframes(dropItLikeItsHot)
+  0%, 100%
+    //+transform( scale(1) )
+    box-shadow: 0 1px 0 0 $shadeLight, 0 0 0 0 transparent
+  10%, 80%
+    box-shadow: 0 1px 0 0 $shadeLight, 0 0 0 $spaceLil * 2 transparentize($colorBrand1Light,.95), 0 0 0 $spaceLil * 2 transparent
+  20%, 60%
+    box-shadow: 0 1px 0 0 $shadeLight, 0 0 0 $spaceLil * 2 transparentize($colorBrand1Light,.9), 0 0 0 $spaceLil * 2 * 2 transparentize($colorBrand1Light,.95), 0 0 0 $spaceLil * 2 * 2 transparent
+  30%
+    //+transform( scale(1.05) )
+    box-shadow: 0 1px 0 0 $shadeLight, 0 0 0 $spaceLil * 2 transparentize($colorBrand1Light,.8), 0 0 0 $spaceLil * 2 * 2 transparentize($colorBrand1Light,.9), 0 0 0 $spaceLil * 2 * 3 transparentize($colorBrand1Light,.95)
+
