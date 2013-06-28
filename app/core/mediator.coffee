@@ -57,6 +57,7 @@ define [
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->
       @options.app.analytics.track 'session', 'Pressed Log Out'
+      @options.app.router.navigate 'home', trigger:true
       @options.app.session.logOut()
 
 

@@ -17,7 +17,6 @@ define [
 
     initialize: ->
       @listenTo app.user, 'sync', @render
-      @listenTo app, 'session:logOut', @onLogOut
       app.trigger 'session:showLogin' unless app.user.isLoggedIn()
 
     render: ->
@@ -46,8 +45,6 @@ define [
 
 
     # ---------------------------------------------------------------- Event Callbacks
-    onLogOut: -> app.router.navigate 'home', trigger:true
-
 
   View
 
