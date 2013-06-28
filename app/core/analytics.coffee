@@ -36,6 +36,27 @@ define [],() ->
     _kms "//i.kissmetrics.com/i.js"
     _kms "//doug1izaerwt3.cloudfront.net/" + _kmk + ".1.js"
 
+  _setUpUserVoice = ->
+    window.UserVoice = window.UserVoice or []
+    #http://feedback.uservoice.com/knowledgebase/articles/171685-classic-widget-developer-documentation
+    window.UserVoice.push ["showTab", "classic_widget",
+      mode: "full"
+      primary_color: "#eae8e5"
+      link_color: "#188ff4"
+      default_mode: "feedback"
+      forum_id: 212724
+      tab_label: "Feedback"
+      tab_color: "#e43e45"
+      tab_position: "bottom-left"
+      tab_inverted: false
+    ]
+    uv = document.createElement("script")
+    uv.type = "text/javascript"
+    uv.async = true
+    uv.src = "//widget.uservoice.com/heZnlXOU7JHatuDLyXHqw.js"
+    s = document.getElementsByTagName("script")[0]
+    s.parentNode.insertBefore uv, s
+
 
   # --------------------------------------------------------------------------- Private Static Methods
   _trackKiss = (eventName, props) ->
@@ -75,37 +96,6 @@ define [],() ->
       ]
     else
       setTimeout (-> _setUser(humanreadableUserKey)), 250
-
-
-
-  _setUpUserVoice = -> 
-  
-    window.UserVoice = window.UserVoice or []
-    window.UserVoice.push ["showTab", "classic_widget",
-      mode: "full"
-      primary_color: "#324f59"
-      link_color: "#e54043"
-      default_mode: "feedback"
-      forum_id: 212724
-      tab_label: "Feedback"
-      tab_color: "#e54043"
-      tab_position: "middle-left"
-      tab_inverted: false
-    ]
-  
-  
-    uv = document.createElement("script")
-    uv.type = "text/javascript"
-    uv.async = true
-    uv.src = "//widget.uservoice.com/heZnlXOU7JHatuDLyXHqw.js"
-    s = document.getElementsByTagName("script")[0]
-    s.parentNode.insertBefore uv, s
- 
-
-
-
-
-
 
 
   # Constructor
