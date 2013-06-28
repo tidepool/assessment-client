@@ -38,7 +38,6 @@ define [
         app.router.navigate 'guestSignup',
           trigger: true
       else
-        debugger
         app.router.navigate 'dashboard',
           trigger: true
 
