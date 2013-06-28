@@ -75,8 +75,29 @@ define [],() ->
 
 
 
-
-
+  _setUpUserVoice = -> 
+  
+    window.UserVoice = window.UserVoice or []
+    window.UserVoice.push ["showTab", "classic_widget",
+      mode: "full"
+      primary_color: "#324f59"
+      link_color: "#e54043"
+      default_mode: "feedback"
+      forum_id: 212724
+      tab_label: "Feedback"
+      tab_color: "#e54043"
+      tab_position: "middle-left"
+      tab_inverted: false
+    ]
+  
+  
+    uv = document.createElement("script")
+    uv.type = "text/javascript"
+    uv.async = true
+    uv.src = "//widget.uservoice.com/heZnlXOU7JHatuDLyXHqw.js"
+    s = document.getElementsByTagName("script")[0]
+    s.parentNode.insertBefore uv, s
+ 
 
 
 
@@ -89,7 +110,7 @@ define [],() ->
     #cfg.debug && console.log "Created #{_me}"
     _setUpGoogle(cfg.googleAnalyticsKey) if cfg.googleAnalyticsKey
     _setUpGeneSimmons(cfg.kissKey) if cfg.kissKey
-
+    _setUpUserVoice()
     # Track all javascript errors
     window.onerror = (msg, url, lineNumber) =>
       @track @CATEGORIES.jsErr, msg, url, lineNumber
