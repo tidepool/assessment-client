@@ -7,7 +7,9 @@ define [
   $
   Backbone
 ) ->
+
   _me = 'routers/main_router'
+  _welcomePageUrlPrefix = '/welcome/'
 
   MainRouter = Backbone.Router.extend
     routes:
@@ -30,7 +32,11 @@ define [
 
 
     # ------------------------------------------------ Actual Route Responses
-    showHome: ->         @app.view.asSite 'pages/home'
+    showHome: ->
+      if @app.user.attributes.referred_by?
+        window.location.href = _welcomePageUrlPrefix + @app.user.attributes.referred_by
+      else
+        @app.view.asSite 'pages/home'
     showAbout: ->        @app.view.asSite 'pages/about'
     showTeam: ->         @app.view.asSite 'pages/team'
     showDemographics: -> @app.view.asGame 'pages/demographics'

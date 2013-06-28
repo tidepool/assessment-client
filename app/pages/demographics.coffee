@@ -34,6 +34,7 @@ define [
       'click #ActionStartGame': 'onClickContinue'
 
     initialize: ->
+#      console.log "#{@className}.initialize()"
       @formation = new Formation
         data:demographicsFields
         values: app.user.attributes

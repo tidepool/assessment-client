@@ -24,7 +24,7 @@ define [
 
     initialize: ->
 #      @on 'all', (e, model) -> console.log "#{_me} event: #{e}"
-      #@on 'change', (model, val) -> console.log model.attributes
+#      @on 'change', (model, val) -> console.log model.attributes
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'change:guest', @_calculateNickname
@@ -138,12 +138,13 @@ define [
           curToken = true
         else
           @_nuke()
-      #console.log "#{_me}.hasCurrentToken(): #{curToken}"
+#      console.log "#{_me}.hasCurrentToken(): #{curToken}"
       curToken
     isLoggedIn: -> @hasCurrentToken()
 
     # Set the client version of the model back to as if it were new
     reset: ->
+#      console.log "#{_me}.reset()"
       @clear().set @defaults()
       return this
 

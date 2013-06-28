@@ -39,16 +39,6 @@ define [],() ->
       ]
     }
     {
-      string_id: 'gender'
-      label: ''
-      type: 'select_by_icon'
-      label: 'Gender'
-      options: [
-        'Female'
-        'Male'
-      ]
-    }
-    {
       string_id: 'handedness'
       type: 'select_by_icon'
       label: 'Handedness'
@@ -58,4 +48,15 @@ define [],() ->
         'Mixed'
       ]
     }
+    {
+      string_id: 'gender'
+      label: ''
+      type: 'select_by_icon'
+      label: 'Gender'
+      options: [
+        'Female'
+        'Male'
+      ]
+    }
+
   ]

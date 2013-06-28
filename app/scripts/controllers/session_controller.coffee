@@ -92,6 +92,7 @@ define [
 
     # ---------------------------------------------- Callbacks
     onUserSync: (model) ->
+#      console.log "#{_me}.onUserSync()"
       readableUserId = if model.isGuest() then model.attributes.id else model.attributes.email
       @options.app.analytics.setUserIdentity readableUserId
 
@@ -147,7 +148,6 @@ define [
 
     # ------------------------------------------------ Public API
     logInAsGuest: ->
-      # @user.set( email: 'guest' )
       deferred = $.Deferred()
       @user.set( guest: true )
       @register()

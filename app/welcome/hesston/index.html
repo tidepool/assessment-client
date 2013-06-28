@@ -37,7 +37,7 @@
 <body class="hesston pages-home homePage siteLayout">
     <header class="header">
         <div class="inner" id="HeaderRegion">
-            <a class="siteLogo" href="/#referrer/hesston">
+            <a class="siteLogo" href="#">
                 <h1>TidePool</h1>
             </a>
             <div class="userMenu">
@@ -76,7 +76,8 @@
 
 
 <script>
-
+    sessionStorage.removeItem('access_token') // If you're recording a referrer, log out whatever the current user is. Related to #52548785
+    localStorage.removeItem('access_token')
 </script>
 </body>
 </html>
