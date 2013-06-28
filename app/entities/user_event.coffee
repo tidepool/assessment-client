@@ -28,15 +28,13 @@ define [
       @on 'sync', @onSync
       @on 'error', @onErr
 
-    send: ->
-      console.warn ".send is depreciated. Use standard backbone model .save() instead"
-      @save()
-      return this
-
     onSync: (model) ->
 #      console.log "#{_me}.save().success()"
-#      console.log model.attributes # Uncomment this to view real-time details of every saved user event
+      console.log model.attributes # Uncomment this to view real-time details of every saved user event
+
     onErr: ->
-      console.error "#{_me}.save().error()"
+      console.error "#{_me} error event"
 
   UserEvent
+
+

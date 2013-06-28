@@ -37,7 +37,7 @@ define [
         perch.show
           content: instructions
           btn1Text: "I'm Ready"
-          btn1Callback: @render
+          onClose: @render
           mustUseButton: true
           supressTracking: true
       else
@@ -58,7 +58,7 @@ define [
       return true if changedCircles.length >= @collection.length - _userMaySkipThisMany
 
     _close: ->
-      @collection.each (circle) -> circle.view.close() #Close them down properly. Lets them assign widths and remove events.
+      @collection.each (circle) -> circle.view?.close?() #Close them down properly. Lets them assign widths and remove events.
       proceed.hide()
       @trigger 'done'
       @remove()

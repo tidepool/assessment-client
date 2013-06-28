@@ -35,6 +35,7 @@ define [
     initialize: ->
       @listenTo @collection, 'change:userChangedPos', @onChangeUserChangedPos
       @listenToOnce proceed, 'click', @_close
+      _.bindAll @, '_renderLevel'
 
     render: ->
       #console.log "#{_me}.render()"
@@ -43,7 +44,7 @@ define [
           content: instructions
           btn1Text: "I'm Ready"
           large: true
-          btn1Callback: _.bind @_renderLevel, @
+          onClose: @_renderLevel
           mustUseButton: true
           supressTracking: true
       else

@@ -19,8 +19,14 @@ define [
     interact: 'interacted'
     change: 'changed'
     readyToProceed: 'ready_to_proceed'
-    notReadyToProceed: 'not_ready_to_'
+    notReadyToProceed: 'not_ready_to_proceed'
     end: 'test_completed'
+  _viewNameToModuleName =
+    ImageRank: 'image_rank'
+    CirclesTest: 'circles_test'
+    ReactionTime: 'reaction_time'
+    Survey: 'survey'
+
 
   View = Backbone.View.extend
 
@@ -40,7 +46,10 @@ define [
     # ----------------------------------------------------- Private Methods
     _close: ->
       proceed.hide()
-      @track _EVENTS.end
+      if @finalEventData? # Track the end of the level. The level may optionally provide @finalEventData to be tracked along with it
+        @track _EVENTS.end, @finalEventData
+      else
+        @track _EVENTS.end
       @trigger 'done'
       @close?() # Call the mixed-in level's close method, if it has implemented one
       @remove()
@@ -64,13 +73,14 @@ define [
       return if not @alreadyReady
       @alreadyReady = false
       proceed.hide()
+      @stopListening proceed
       @track _EVENTS.notReadyToProceed
 
     track: (eventName, event) ->
       baseData =
         event_desc: eventName
         game_id: @options.assessment.attributes.id # The game instance
-        module: @model.attributes.view_name # The string id of the level type (eg: 'rank_images')
+        module: _viewNameToModuleName[@model.attributes.view_name] # The string id of the level type (eg: 'ImageRank')
         stage: @options.stageNo # The index of the level instance (eg: 0 is the first level in the game)
       userEvent = new UserEvent _.extend(baseData, event)
       userEvent.save()

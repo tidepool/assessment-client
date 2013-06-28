@@ -68,10 +68,13 @@ define [],() ->
 
   _setUser = (humanreadableUserKey) ->
     if _kmq?
+#      console.log "_setUser(#{humanreadableUserKey})"
       _kmq.push [
         'identity'
         humanreadableUserKey
       ]
+    else
+      setTimeout (-> _setUser(humanreadableUserKey)), 250
 
 
 

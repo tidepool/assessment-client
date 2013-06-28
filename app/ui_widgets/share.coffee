@@ -5,6 +5,7 @@ define [
   'entities/careBears/facebook'
   'entities/careBears/twitter'
   'entities/careBears/mailto'
+  'core'
 ],
 (
   Backbone
@@ -13,6 +14,7 @@ define [
   Facebook
   Twitter
   Email
+  app
 ) ->
 
   _me = 'ui_widgets/share'
@@ -69,6 +71,7 @@ define [
         caption: @options.data.text
 #        description: @options.data.text
       facebookShareBear.save()
+      app.analytics.track @className, 'clicked facebook'
 
     onClickTwitter: (e) ->
       e.stopPropagation()
@@ -77,6 +80,7 @@ define [
         text: "#{@options.data.title} -- "
         url: @options.data.link
       twitterShareBear.save()
+      app.analytics.track @className, 'clicked twitter'
 
     onClickMailto: (e) ->
       e.stopPropagation()
@@ -85,6 +89,7 @@ define [
         subject: @options.data.title
         body: @options.data.text
       email.save()
+      app.analytics.track @className, 'clicked mailto'
 
 
     # ---------------------------------------------------------------- Public API

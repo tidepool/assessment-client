@@ -40,13 +40,16 @@ define [
   Core.prototype =
     start: ->
       #@cfg.debug && console.log "#{_me} started"
+
+      # Analytics is fired up
+      @analytics = new Analytics @cfg
+
       # In the beginning the session was created
       @session = new SessionController
         app: @
 
       @user.session = @session
-      # Analytics is fired up
-      @analytics = new Analytics @cfg
+
       # The application manages all of its views starting with this one
       @view = new View
         app: @

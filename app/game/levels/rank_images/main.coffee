@@ -6,7 +6,6 @@ define [
   './rankable_images'
   'entities/user_event'
   'jqueryui/sortable'
-  'ui_widgets/proceed'
 ],
 (
   Backbone
@@ -16,7 +15,6 @@ define [
   RankableImages
   UserEvent
   Sortable
-  proceed
 ) ->
 
   _me = 'game/levels/rank_images'
@@ -41,7 +39,7 @@ define [
       _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
-      @track Level.EVENTS.start
+      @track Level.EVENTS.start, image_sequence:@collection.toJSON()
 
     render: ->
       @$el.html tmpl
@@ -75,23 +73,30 @@ define [
         @_hideMsg()
       else
         @_showMsg()
+
     _showMsg: ->
       @$(_rankingSel).append @$msg
+
     _hideMsg: ->
       @$msg.remove()
+
     _checkOnRanks: ->
       # For each collection, check if it's ranked or not, and use its index to set the ranking on the data model
       @collection.each (model) ->
         if model.view.$el.parent(_rankingSel).length
-          model.set rank: model.view.$el.index() + 1
+          model.set rank: model.view.$el.index()
         else
           model.set rank: model.defaults.rank
+      @_buildRankArrayForServer()
       rankedImages = @collection.filter (image) ->
-        image.get('rank')
+        rank = image.attributes.rank
+        return true if rank or rank is 0
       if rankedImages.length is @collection.length
         @readyToProceed()
       else
         @notReadyToProceed()
+
+    _buildRankArrayForServer: -> @finalEventData = final_rank: @collection.pluck 'rank'
 
 
     # ----------------------------------------------------- Event Handlers
