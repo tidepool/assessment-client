@@ -25,6 +25,7 @@ define [
   _correctTargetClass = 'target'
   _hitClass = 'hit'
   _animationTime = 750
+  _maxDelay = 1500
   _TYPES =
     simple: 'simple'
     complex: 'complex'
@@ -43,11 +44,12 @@ define [
     start: ->
       @stageNo = @options.stageNo
       @assessment = @options.assessment
-      # @colors = @model.get('colors')
       @sequenceType = @model.get('sequence_type')
       @colorSequence = @model.get('sequence')
+#      console.log seq:@colorSequence
       @sequenceNo = -1
       @numOfSequences = @colorSequence.length
+      _.bindAll @, '_showCircle', '_end'
 
     render: ->
       instructions = if @sequenceType is _TYPES.simple then instructionsSimple else instructionsComplex
@@ -88,12 +90,22 @@ define [
           $(_colorizerSel).addClass _correctTargetClass
 
         next_seq = @sequenceNo + 1
-        if next_seq < @numOfSequences
+        if next_seq < @numOfSequences # Still have more circles to show
           @_waitAndShow()
+        else if next_seq is @numOfSequences # Currently displaying the last circle
+          @_waitAndEnd()
+
 
     _waitAndShow: ->
       delay = @colorSequence[@sequenceNo + 1].interval
-      setTimeout _.bind(@_showCircle, @), delay
+      console.log delay:delay
+      setTimeout @_showCircle, delay
+
+    _waitAndEnd: -> setTimeout @_end, _maxDelay
+
+    _end: ->
+      @track Level.EVENTS.end, sequence_no: @sequenceNo
+      @assessment.nextStage()
 
 
     # ------------------------------------------------------------- Event Handlers
@@ -110,13 +122,7 @@ define [
       else
         @_trackIncorrect()
 
-    _onCorrectClick: ->
-      $(_colorizerSel).addClass _hitClass
-      # Exit the test if that was the last circle
-      if (@sequenceNo is @numOfSequences - 1)
-        @track Level.EVENTS.end,
-          sequence_no: @sequenceNo
-        setTimeout _.bind(@assessment.nextStage, @assessment), _animationTime
+    _onCorrectClick: -> $(_colorizerSel).addClass _hitClass
 
 
     # ------------------------------------------------------------- User Activity Tracking
