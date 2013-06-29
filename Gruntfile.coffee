@@ -232,11 +232,11 @@ module.exports = (grunt) ->
       dist:
         options:
           variables: 
-            APISERVER: "<%= tidepoolServer.PROD_APISERVER %>"
-            APPSECRET: "<%= tidepoolServer.PROD_APPSECRET %>"
-            APPID: "<%= tidepoolServer.PROD_APPID %>"
-            kissKey: "<%= bowerPkg.kissKeyProd %>"
-            googleAnalyticsKey: "<%= bowerPkg.googleAnalyticsKeyProd %>"
+            APISERVER:           "<%= tidepoolServer.PROD_APISERVER %>"
+            APPSECRET:           "<%= tidepoolServer.PROD_APPSECRET %>"
+            APPID:               "<%= tidepoolServer.PROD_APPID %>"
+            kissKey:             "<%= bowerPkg.kissKeyProd %>"
+            googleAnalyticsKey:  "<%= bowerPkg.googleAnalyticsKeyProd %>"
             fbId:                "<%= bowerPkg.fbIdProd %>"
             fbSecret:            "<%= bowerPkg.fbSecretProd %>"
           prefix: '@@'
@@ -288,6 +288,7 @@ module.exports = (grunt) ->
           cwd: "<%= yeoman.app %>"
           dest: "<%= yeoman.dist %>"
           src: [
+            "welcome/**"
             ".htaccess"
             "*.html"
             "!spec.html"
