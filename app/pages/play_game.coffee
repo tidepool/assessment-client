@@ -31,6 +31,7 @@ define [
     ImageRank: ImageRank
     CirclesTest: CirclesTest
     survey: AlexTrebek
+  _animationTime = 1
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
   Me = Backbone.View.extend
@@ -54,7 +55,9 @@ define [
         title: 'Welcome'
         msg: @model.attributes.definition.instructions
         btn1Text: 'Let\'s Go'
-        onClose: _.bind @model.nextStage, @model
+        onClose: => setTimeout _.bind(@model.nextStage, @model), _animationTime
+          # This delay is needed because bootstrap's modal does not handle 2 dialogs in quick succession well.
+          # Without it, the onClose event is not separately fired and the callbacks cannot behave as expected.
         mustUseButton: true
 
 

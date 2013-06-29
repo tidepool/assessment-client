@@ -49,7 +49,7 @@ define [
 #      console.log seq:@colorSequence
       @sequenceNo = -1
       @numOfSequences = @colorSequence.length
-      _.bindAll @, '_showCircle', '_end'
+      _.bindAll @, '_showCircle', '_end', '_start'
 
     render: ->
       instructions = if @sequenceType is _TYPES.simple then instructionsSimple else instructionsComplex
@@ -58,8 +58,7 @@ define [
         content: instructions
         large: true
         btn1Text: "I'm Ready"
-        btn1Callback: _.bind(@_start, @)
-        mustUseButton: true
+        onClose: @_start
         supressTracking: true
       @
 
@@ -95,13 +94,13 @@ define [
         else if next_seq is @numOfSequences # Currently displaying the last circle
           @_waitAndEnd()
 
-
     _waitAndShow: ->
       delay = @colorSequence[@sequenceNo + 1].interval
-      console.log delay:delay
-      setTimeout @_showCircle, delay
+#      console.log delay:delay
+      @step = setTimeout @_showCircle, delay
 
-    _waitAndEnd: -> setTimeout @_end, _maxDelay
+    _waitAndEnd: ->
+      @step = setTimeout @_end, _maxDelay
 
     _end: ->
       @track Level.EVENTS.end, sequence_no: @sequenceNo
@@ -138,6 +137,11 @@ define [
       @track _EVENTS.incorrect,
         circle_color: @colorSequence[@sequenceNo]?.color
         sequence_no: @sequenceNo
+
+    # ------------------------------------------------------------- Consumable API
+    close: ->
+      clearTimeout @step if @step # Prevents the sequence from running if someone navigates away from the game
+
 
 
   ReactionTime
