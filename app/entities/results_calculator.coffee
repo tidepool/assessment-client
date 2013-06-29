@@ -9,7 +9,7 @@ define [
 ) ->
 
   _me = 'entities/results_calculator'
-  _maxAttempts = 10
+  _maxPollCount = 20
 
   Model = Backbone.Model.extend
 
@@ -37,9 +37,9 @@ define [
         console.log("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 200
         switch data.status.state
           when @STATES.pending
-            # Look for progress updates every 1s
+            # Look for progress updates at intervals
             @attempts += 1
-            if @attempts >= _maxAttempts
+            if @attempts >= _maxPollCount
               @trigger 'error', @, 'Timed out waiting for results.'
             else
               setTimeout =>
