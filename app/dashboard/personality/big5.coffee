@@ -19,7 +19,9 @@ define [
       'click .widget': 'onClick'
 
     render: ->
-      @$el.html @tmplBase title: _chartName
+      @$el.html @tmplBase
+        title: _chartName
+        className: 'pressable'
       @chart = new PolarAreaChart
         data:
           name: _chartName

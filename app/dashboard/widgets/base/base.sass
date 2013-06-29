@@ -12,14 +12,10 @@
   background: white
   border-radius: $radiusSmall
   box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 0 0 transparent
-  cursor: pointer
-  overflow: scroll
+  overflow: auto
   text-align: center
   +box-sizing(border-box)
-  +transitionable
 
-a.widget:hover
-  text-decoration: none
 
 .widget
   h3
@@ -92,10 +88,7 @@ a.widget:hover
 
 
 
-  &:hover
-    box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 $space * 8 $spaceTiny $highlight, 0 0 0 $spaceTiny $highlight, 0 0 0 1px $shade
-    //+transform( translateY(-$spaceTiny) ) // If this is in place chrome has a bizarre flicker during the transition
-    z-index: 1
+
 
 
   // The round dividing icon between the sections

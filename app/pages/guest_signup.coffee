@@ -72,7 +72,6 @@ define [
       app.trigger 'session:showRegister'
 
     onUserSync: (userModel) ->
-      console.log 'user registered or signed in'
       unless userModel.isGuest()
         app.router.navigate( 'dashboard', trigger: true )
 
