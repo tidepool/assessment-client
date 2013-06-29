@@ -4,11 +4,13 @@ define [
   'Handlebars'
   'text!./jobs.hbs'
   'dashboard/widgets/base'
+  'ui_widgets/share'
 ], (
   Backbone
   Handlebars
   tmpl
   Widget
+  ShareView
 ) ->
 
 
@@ -27,6 +29,11 @@ define [
       'click .icon-briefcase': 'onClickBriefcase'
     render: ->
       @$el.html _tmpl @model.attributes
+      share = new ShareView data:
+        title: "My recommended careers are: '#{Handlebars.helpers.commaList(@model.attributes.careers)}'"
+        text: 'You can find out your recommended careers, too, at https://alpha.tidepool.co'
+        link: 'https://alpha.tidepool.co'
+      @$el.append share.render().el
       @
 
     onClickBriefcase: ->

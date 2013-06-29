@@ -22,7 +22,9 @@ define [
       return "Need a caption" unless attrs.caption
 #      return "Need a description" unless attrs.description
       return "Need a link" unless attrs.link
-      return "need a picture" unless attrs.picture
+      console.warn "Facebook is better with .pictures" unless attrs.picture
+
+      return null # Everything's cool, no errors
 
 
 
