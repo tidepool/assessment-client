@@ -39,7 +39,8 @@ define [
     render: ->
       @$el.html @tmpl @model.attributes
       @$(_circleSel).addClass @model.sizeToClass[@model.attributes.size]
-      @_makeDraggable()
+      require ['jquiTouchPunch'], => # This kludge is to support touch on the jqui draggable element. TODO: drag lib with native touch support
+        @_makeDraggable()
       @
 
 

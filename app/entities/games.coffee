@@ -31,6 +31,10 @@ define [
       @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @
 
+    # Front End -> Server. This transform is done before PUTing to the server
+    toJSON: (options) ->
+      _.pick @attributes, 'stage_completed' # The only thing we need to tell the server as we work on the game is the stage completed.
+
     # Server -> Front End. Translates data we receive from the server
 #    parse: (resp) ->
 #      # Mix in a result model
@@ -105,7 +109,8 @@ define [
     nextStage: ->
       #console.log "#{_me}.nextStage()"
       i = @get('stage_completed')
-      @save( stage_completed: i + 1 )
+#      @save( {stage_completed: i + 1}, { wait:true } ) # Wait to change the client until the server confirms
+      @save stage_completed: i + 1
 
     # See if this is the first time the user has seen this level
     # levelStringId should be a unique string key defining the level type

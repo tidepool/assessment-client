@@ -44,26 +44,25 @@ define [
     render: ->
       @$el.html tmpl
 
-      # Add the draggable images
-      @collection.each (imageModel) =>
-        @$(_unrankedSel).append imageModel.view.render().el
-
-      # Add the blank state message
-      @$msg = $(_msgHtml)
-      @_checkOnMsg()
-
-      # Initialize the sortable and bind needed events
-      @$(_sortableSel).sortable
-        #containment: ".#{@.className}"
-        placeholder: 'rankableImage placeholder'
-        connectWith: _sortableSel
-        cancel:  ".#{@$msg.prop('class')}"
-        over: @onOver
-        start: @onSortStart
-        stop: @onSortEnd
-      @$(_sortableSel).disableSelection()
-      @$(_unrankedSel).on('click', '.rankableImage', @onUnrankedImageClick)
-      @$(_rankingSel).on('click', '.rankableImage', @onRankedImageClick)
+      require ['jquiTouchPunch'], => # This kludge is to support touch on the jqui draggable element. TODO: drag lib with native touch support
+        # Add the draggable images
+        @collection.each (imageModel) =>
+          @$(_unrankedSel).append imageModel.view.render().el
+        # Add the blank state message
+        @$msg = $(_msgHtml)
+        @_checkOnMsg()
+        # Initialize the sortable and bind needed events
+        @$(_sortableSel).sortable
+          containment: ".#{@className}"
+          placeholder: 'rankableImage placeholder'
+          connectWith: _sortableSel
+          cancel:  ".#{@$msg.prop('class')}"
+          over: @onOver
+          start: @onSortStart
+          stop: @onSortEnd
+        @$(_sortableSel).disableSelection()
+        @$(_unrankedSel).on('click', '.rankableImage', @onUnrankedImageClick)
+        @$(_rankingSel).on('click', '.rankableImage', @onRankedImageClick)
       @
 
 
@@ -115,7 +114,7 @@ define [
       id = $(e.currentTarget).find('img').data('id')
       @_trackDragged id
       # Remove the helper from the original location. This way css labels on :first-child and :last-child will work beautifully
-      ui.helper.appendTo('body') # The appendTo option on the jquery sortable seems broken, but manually removing the helper like this seems to work well
+#      ui.helper.appendTo('body') # The appendTo option on the jquery sortable seems broken, but manually removing the helper like this seems to work well
     onSortEnd: (e, ui) ->
       #console.log "#{_me}.onSortEnd"
       @_checkOnRanks()

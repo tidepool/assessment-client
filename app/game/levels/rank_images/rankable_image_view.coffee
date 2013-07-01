@@ -18,6 +18,7 @@ define [
     # ----------------------------------------------------- Backbone Extensions
     tmpl: Handlebars.compile tmpl
     className: 'rankableImage'
+    tagName: 'li'
     initialize: ->
     render: ->
       @$el.html @tmpl @model.attributes
