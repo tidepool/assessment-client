@@ -23,7 +23,7 @@ define [
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
 #    url: '/_data/users/-/games/reaction_time.json'
 
-    initialize: ()  ->
+    initialize: ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       #@on 'reset', (model) -> console.log model.attributes
       #@on 'sync', (model) -> console.log model.attributes
@@ -33,7 +33,7 @@ define [
 
     # Front End -> Server. This transform is done before PUTing to the server
     toJSON: (options) ->
-      _.pick @attributes, 'stage_completed' # The only thing we need to tell the server as we work on the game is the stage completed.
+      _.pick @attributes, 'stage_completed', 'def_id' # The only thing we need to tell the server as we work on the game is the stage completed, and when we create the game, the def_id
 
     # Server -> Front End. Translates data we receive from the server
 #    parse: (resp) ->
