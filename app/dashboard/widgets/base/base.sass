@@ -7,7 +7,7 @@
   //$size: $space * 8
   position: relative
   display: block
-  padding: $spaceLil $space
+  padding: $spaceLil
   margin: $spaceLil
   background: white
   border-radius: $radiusSmall
@@ -15,22 +15,20 @@
   overflow: auto
   text-align: center
   +box-sizing(border-box)
+  @media all and (min-width: 1050px)
+    padding: $spaceLil $space
 
 
 .widget
-  h3
-    color: $colorForeground
-    font-weight: bold
-
-  .dogEar
-    position: absolute
-    top: 0
-    right: 0
-    width: 0
-    height: 0
-    border: $space solid transparent
-    border-top-color: $colorHighlight
-    border-right-color: $colorHighlight
+  //.dogEar
+  //  position: absolute
+  //  top: 0
+  //  right: 0
+  //  width: 0
+  //  height: 0
+  //  border: $space solid transparent
+  //  border-top-color: $colorHighlight
+  //  border-right-color: $colorHighlight
 
   ul, p
     text-align: left
@@ -39,18 +37,35 @@
     text-align: center
     font-weight: bold
 
+  h3, .subTitle
+    margin-top: -$spaceLil // Make it flush with edge of widget
+    margin-left: -$spaceLil
+    margin-right: -$spaceLil
+    padding: $spaceLil
+    line-height: 1.1
+    @media all and (min-width: 1050px)
+      padding: $spaceLil $space
+      padding-right: $spaceTiny
+      margin-left: -$space
+      margin-right: -$space
+
   h3
+    color: $colorForeground
+    font-weight: bold
     text-align: left
     font-size: $fontSizeBody
     background: $colorGoodThin
     text-transform: uppercase
-    margin-top: -$spaceLil // Make it flush with edge of widget
-    margin-left: -$space
-    margin-right: -$space
-    padding: $spaceLil $space
   &.featured h3
     background-color: $colorGood
     color: white
+  .subTitle // Shows up right below the title
+    color: $colorForegroundMild
+    background: $colorBackgroundWarm
+    text-transform: uppercase
+    //box-shadow: inset 0 -3px 0 0 lighten($colorForegroundMild, 20%)
+    border-bottom: 1px solid $colorForegroundMild
+    margin-bottom: 0
 
   &.hasFooter
     padding-bottom: $space
@@ -89,8 +104,6 @@
 
 
 
-
-
   // The round dividing icon between the sections
   .bottomIcon
     $size: $space + $spaceLil
@@ -124,18 +137,6 @@
   img
     margin-bottom: $spaceLil
 
-.coolTones .widget
-  h3
-    background: $colorBackgroundCool
 
-  .intro
-    color: lighten($colorForegroundCool, 20%)
-    text-align: left
-    background: white
-    margin: -$space
-    margin-top: -$spaceLil
-    //margin-bottom: 0
-    padding: $spaceLil $space
-    padding-bottom: $space // extra room for the icon divider
-    font-size: $fontSizeBody
-    border-bottom: 1px solid $colorQuiet
+
+

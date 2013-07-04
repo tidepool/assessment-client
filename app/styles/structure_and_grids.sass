@@ -10,17 +10,23 @@ html
 body
   min-height: 100%
 
-.col3rds
+.colHalves,
+.col3rds,
+.col4ths
   +box-sizing(border-box)
-@media all and (min-width: 801px)
-  .col3rds
+
+.colHalves
+  @media all and (min-width: 801px)
+    float: left
+    width: 50%
+
+.col3rds
+  @media all and (min-width: 801px)
     float: left
     width: 33%
 
 .col4ths
   padding: $spaceLil
-  +box-sizing(border-box)
-@media all and (min-width: 801px)
-  .col4ths
+  @media all and (min-width: 801px)
     float: left
     width: 25%

@@ -26,4 +26,12 @@
 @mixin floating($distance: $spaceLil, $shadowColor: $shadeLight)
   box-shadow: $distance / 2 $distance 0 0 $shadowColor
 
-
+@mixin arrowLeft($color: $colorBrand, $size: $spaceLil)
+  content: ''
+  position: absolute
+  left: -$size
+  top: 50%
+  margin-top: -$size
+  border: $size solid transparent
+  border-left: none
+  border-right-color: $color

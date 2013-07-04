@@ -3,9 +3,11 @@
 define [
   'jquery'
   'backbone'
+  'entities/results/result'
 ], (
   $
   Backbone
+  Result
 ) ->
 
   _me = 'entities/results_calculator'
@@ -13,27 +15,28 @@ define [
 
   Model = Backbone.Model.extend
 
+    #TODO: Remove and replace with enum on the result model
     STATES:
       pending: 'pending'
       error: 'error'
       done: 'done'
 
-    urlRoot: ->
-      gameId = @get('game_id')
-      "#{window.apiServerUrl}/api/v1/users/-/games/#{gameId}/result"
+    urlRoot: -> "#{window.apiServerUrl}/api/v1/users/-/games/#{@get('game_id')}/results"
 
     initialize: ->
-      @startCalculation()
+      @attempts = 0
+      @fetch()
       @on 'sync', @onSync
 
 
     # ----------------------------------------------------------------------------------- Private Methods
     pollForProgress: (url) ->
 #      console.log "#{_me}.pollForProgress(#{url})"
-      $.ajax
+      promise = $.ajax
         type: 'GET'
         url: url
-      .done (data, textStatus, jqXHR) =>
+
+      promise.done (data, textStatus, jqXHR) =>
         console.log("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 200
         switch data.status.state
           when @STATES.pending
@@ -45,27 +48,17 @@ define [
               setTimeout =>
                 @pollForProgress data.status.link
               , 500
-          when @STATES.done
-#            console.log("Done with results")
-            #TODO: use the status that the back end is returning with the fetch on the result object instead
-            @set 'status', data.status
-          when @STATES.error
-            @trigger 'error', @, textStatus
-          else
-            @trigger 'error', @, "Unexpected status #{data.status.state}"
-      .fail (jqXHR, textStatus, errorThrown) ->
+          when @STATES.done then @set 'status', data.status
+          when @STATES.error then @trigger 'error', @, data.status.message
+          else @trigger 'error', @, "Unexpected status #{data.status.state}"
+
+      promise.fail (jqXHR, textStatus, errorThrown) ->
         @trigger 'error', @, textStatus, { jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown }
 
 
     # ------------------------------------------------------------------------------ Callbacks
     onSync: (model) ->
       @pollForProgress model.attributes.status.link
-
-
-    # ----------------------------------------------------------------------------------- Public API
-    startCalculation: ->
-      @attempts = 0
-      @save()
 
 
   Model

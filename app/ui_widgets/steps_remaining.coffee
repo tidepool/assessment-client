@@ -14,7 +14,7 @@ define [
   View = Backbone.View.extend
     className: 'stepsRemaining'
     initialize: ->
-      @
+      throw new Error 'Need a collection' unless @collection
       @listenTo @collection, 'change:isComplete', @render
 
     render: ->

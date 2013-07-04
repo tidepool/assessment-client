@@ -33,11 +33,9 @@ define [
       expect($('#sandbox')).toHaveLength(1)
 
     it 'Requires a collection in order to be created', ->
-      expect(
-        -> new StepsRemaining() # An anonymous function wrapper is required when asserting .toThrow: http://stackoverflow.com/questions/4144686/how-to-write-a-test-which-expects-an-error-to-be-thrown
-      ).toThrow('Need a collection to build a stepsRemaining view')
+      expect( -> new StepsRemaining() ).toThrow()
       steps = new StepsRemaining
-        collection: new Backbone.Collection
+        collection: new Backbone.Collection _steps
       expect(steps).toBeInstanceOf(StepsRemaining)
 
     it 'Can create markup with both complete and incomplete steps', ->

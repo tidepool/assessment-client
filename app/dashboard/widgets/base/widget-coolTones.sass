@@ -1,0 +1,23 @@
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.coolTones .widget
+  h3
+    background: $colorBackgroundCool
+
+  .intro
+    color: lighten($colorForegroundCool, 20%)
+    text-align: left
+    background: white
+    margin: -$space
+    margin-top: -$spaceLil
+    //margin-bottom: 0
+    padding: $spaceLil $space
+    padding-bottom: $space // extra room for the icon divider
+    font-size: $fontSizeBody
+    border-bottom: 1px solid $colorQuiet
+
+  .footer
+    background: $colorBrand2

@@ -28,7 +28,7 @@ define [
       @$(_sliderSel).slider
         min: 1
         max: @model.attributes.steps
-        value: 0
+#        value: null
         range: 'min'
         slide: @onSlide
         stop: @onStop
@@ -44,8 +44,8 @@ define [
 
     # ----------------------------------------------------- Event Callbacks
     onSlide: (e, ui) ->
-      console.log
-        val: ui.value
+#      console.log
+#        val: ui.value
       @trigger 'slide',
         model: @model
         value: ui.value

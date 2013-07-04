@@ -1,0 +1,29 @@
+
+
+<p class="subTitle">
+    {{prettyTime time_played}}
+    {{prettyDate time_played}}
+</p>
+
+<div class="metricHolder">
+    <div class="colHalves">
+        <div class="metric good up" title="Fastest: {{score.fastest_time}}ms">
+            <label>
+                {{score.fastest_time}}
+            </label>
+            <small>Milliseconds</small>
+        </div>
+    </div>
+    <div class="colHalves">
+        <div class="metric bad down" title="Slowest: {{score.slowest_time}}ms">
+            <label>
+                {{score.slowest_time}}
+            </label>
+            <small>Milliseconds</small>
+        </div>
+    </div>
+
+</div>
+
+
+

@@ -25,6 +25,8 @@ define [
           'dashboard/career/jobs'
           'dashboard/career/skills'
           'dashboard/career/tools'
+          'dashboard/career/reaction_results'
+          'dashboard/career/reaction_history'
         ]
       @$el.html @widgetmaster.render().el
       return this

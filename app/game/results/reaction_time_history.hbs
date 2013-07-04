@@ -1,0 +1,23 @@
+
+<div class="range">
+    <label class="upper">{{max}}ms</label>
+    <!--<label class="lower">{{min}}ms</label>-->
+</div>
+
+<div class="chartHolder">
+    <ul class="results barChart">
+        {{#results}}
+            <li class="bar slowest"
+                style="height: {{normalizeReactionTime score.slowest_time}}%"
+                title="<span class='score'>{{score.slowest_time}}ms</span>
+                        <span class='date'>{{prettyTime time_played}}<br/>{{prettyDate time_played}}</span>">
+            </li>
+            <li class="bar fastest"
+                style="height: {{normalizeReactionTime score.fastest_time}}%"
+                title="<span class='score'>{{score.fastest_time}}ms</span>
+                        <span class='date'>{{prettyTime time_played}}<br/>{{prettyDate time_played}}</span>">
+            </li>
+        {{/results}}
+    </ul>
+
+</div>

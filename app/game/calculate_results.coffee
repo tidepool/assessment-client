@@ -35,11 +35,9 @@ define [
 
     _showResults: ->
       if app.user.isGuest()
-        app.router.navigate 'guestSignup',
-          trigger: true
+        app.router.navigate 'guestSignup', trigger: true
       else
-        app.router.navigate 'dashboard',
-          trigger: true
+        app.router.navigate "gameResults/#{@model.attributes.game_id}", trigger: true
 
 
     # ------------------------------------------------------------- Callbacks

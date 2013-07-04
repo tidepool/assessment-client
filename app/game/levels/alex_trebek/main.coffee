@@ -20,7 +20,6 @@ define [
     className: 'alexTrebek'
 
     render: ->
-      console.log "#{_me}.render()"
       @$el.empty()
       if @collection?
         @collection.each (question) =>
@@ -30,21 +29,27 @@ define [
           @listenTo slippy, 'stop', @onStop
       return this
 
+    _setDataForServer: ->
+      @finalEventData =
+        questions: @collection.toJSON()
+
 
     # ----------------------------------------------------- Event Handlers
     onSlide: (data) ->
       @track Level.EVENTS.interact,
-        item_id: data.model.attributes.item_id
-        item_topic: data.model.attributes.item_topic
-        item_value: data.value
+        question_id: data.model.attributes.question_id
+        question_topic: data.model.attributes.question_topic
+        answer: data.value
 
     onStop: (data) ->
       data.model.set 'interacted': true
+      data.model.set 'answer', data.value
       @track Level.EVENTS.change,
-        item_id: data.model.attributes.item_id
-        item_topic: data.model.attributes.item_topic
-        item_value: data.value
+        question_id:     data.model.attributes.question_id
+        question_topic:  data.model.attributes.question_topic
+        answer:          data.model.attributes.answer
       @readyToProceed() if @checkAllInteracted @collection
+      @_setDataForServer()
 
 
 

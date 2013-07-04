@@ -30,7 +30,7 @@ define [
     ReactionTime: ReactionTime
     ImageRank: ImageRank
     CirclesTest: CirclesTest
-    survey: AlexTrebek
+    Survey: AlexTrebek
   _animationTime = 1
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
@@ -51,20 +51,23 @@ define [
     # ------------------------------------------------------------- Helper Methods
     _showWelcome: ->
       @_trackLevels()
-      perch.show
-        title: 'Welcome'
-        msg: @model.attributes.definition.instructions
-        btn1Text: 'Let\'s Go'
-        onClose: => setTimeout _.bind(@model.nextStage, @model), _animationTime
-          # This delay is needed because bootstrap's modal does not handle 2 dialogs in quick succession well.
-          # Without it, the onClose event is not separately fired and the callbacks cannot behave as expected.
-        mustUseButton: true
+      if @model.attributes.definition.instructions
+        perch.show
+          title: 'Welcome'
+          msg: @model.attributes.definition.instructions
+          btn1Text: 'Let\'s Go'
+          onClose: => setTimeout _.bind(@model.nextStage, @model), _animationTime
+            # This delay is needed because bootstrap's modal does not handle 2 dialogs in quick succession well.
+            # Without it, the onClose event is not separately fired and the callbacks cannot behave as expected.
+          mustUseButton: true
+      else
+        @model.nextStage()
 
 
     # ------------------------------------------------------------- Event Handlers
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed #+ 2 # Increment is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed #+ 7 # Increment is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       @stepsRemaining?.setComplete curStage
       # Show the next stage

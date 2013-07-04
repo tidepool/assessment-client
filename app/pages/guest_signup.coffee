@@ -52,20 +52,23 @@ define [
     # ------------------------------------------------------------------------- Event Callbacks
     onSync: (model) ->
       profile = model.get 'profile_description'
-      return unless profile?
-      personalityBrief = new UserPersonalitySkinny
-        name: profile.name
-        one_liner: profile.one_liner
-        logo_url: profile.logo_url
-      @_renderPersonalityBrief(personalityBrief)
+      if profile?
+        personalityBrief = new UserPersonalitySkinny
+          name: profile.name
+          one_liner: profile.one_liner
+          logo_url: profile.logo_url
+        @_renderPersonalityBrief(personalityBrief)
+      else
+        model.trigger 'error', model,
+          status: 'Error'
+          statusText: 'Personality returned does not have a profile_description'
 
     onError: (model, xhr) ->
-      psst({
-        sel: _resultsSel,
-        title: "Doh.",
-        msg: "Trouble getting a read on your personality. #{xhr.status}: #{xhr.statusText}",
+      psst
+        sel: _resultsSel
+        title: "Doh."
+        msg: "Trouble getting a read on your personality. #{xhr.status}: #{xhr.statusText}"
         type: psst.TYPES.error
-      })
 
     onClickedSignUp: ->
       app.analytics.track @className, 'Pressed Sign Up'

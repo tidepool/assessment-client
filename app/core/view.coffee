@@ -77,7 +77,10 @@ define [
       @_loadView viewModuleString, data
 
     asGame: (viewModuleString, data) ->
-      #console.log "#{_me}.asGame(#{viewModuleString})"
+#      console.log "#{_me}.asGame(#{viewModuleString})"
+#      console.log
+#        viewModuleString: viewModuleString
+#        data: data
       @_curLayout = new GameLayout
         app: @options.app
       @_loadView viewModuleString, data

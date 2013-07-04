@@ -1,0 +1,33 @@
+@import '../styles/_appVars'
+@import '../styles/_colorVars'
+@import '../styles/_helpers'
+
+
+
+
+
+.gameResultsPage
+  max-width: $space * 20
+  margin: $spaceBig auto
+
+  h2
+    color: $colorBrand1
+    margin: $spaceBig 0 $space
+
+  .result
+    position: relative
+    min-height: 250px
+    background: white
+    border-radius: $radiusSmall
+    padding: $spaceLil
+    margin: $spaceBig 0 $space
+    box-shadow: 0 0 0 1px darken($colorBackgroundWarm, 10%), 0 0 0 $spaceLil darken($colorBackgroundWarm, 5%)
+  .result h3
+    margin-top: 0
+  .result .subTitle
+    color: $colorQuiet
+  .result.reactionTime .metricHolder
+    border-top: 1px solid $colorBackgroundWarm
+
+
+

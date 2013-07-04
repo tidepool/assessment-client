@@ -1,0 +1,153 @@
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/helpers'
+
+
+
+.reaction-history .widget
+  $widgetHeight: 250
+  $h3Height: 37
+  $contentHeight: $widgetHeight - $h3Height - $space
+  $barWidth: $spaceLil
+  padding-bottom: 0
+
+  h3
+    margin-bottom: 0
+
+  // The legend for the Y scale
+  .range
+    position: absolute
+    top: $h3Height
+    left: 0
+    height: $contentHeight
+    width: $spaceBig
+    z-index: 1
+    .upper,
+    .lower
+      position: absolute
+      right: 0
+      font-size: $fontSizeTiny
+      padding: $spaceTiny
+      border-radius: $radiusSmall
+      background: $highlight
+      color: $colorQuiet
+      margin: 0
+      cursor: default
+    .upper
+      top: 0
+    .lower
+      bottom: 0
+
+  // The scrollable container for the bar chart
+  .chartHolder
+    position: relative
+    height: $contentHeight
+    line-height: $contentHeight
+    background: $colorBackground
+    overflow: visible
+    overflow-x: auto
+    margin-left: $space
+    padding-bottom: $space // leave room for the scroll bar
+    box-shadow: inset 0 (-$space) 0 0 white // but don't show the background there
+
+
+  // ---------------------------------------------- The bar chart
+  .barChart
+    list-style: none
+    margin: 0
+    padding: 0
+    text-align: right
+    font-size: 0
+    height: 100%
+    vertical-align: bottom
+    white-space: nowrap
+
+    .bar
+      display: inline-block
+      vertical-align: bottom
+      width: $barWidth
+      min-height: $spaceTiny
+      background: $colorQuiet
+      border-top-left-radius: $radiusTiny
+      border-top-right-radius: $radiusTiny
+    .bar.fastest
+      background: lighten($colorFastest, 10%)
+    .bar.slowest
+      background: lighten($colorSlowest, 10%)
+    .bar.fastest:hover
+      background: $colorFastest
+    .bar.slowest:hover
+      background: $colorSlowest
+
+    // Spacing and Grouping
+    .bar
+      //margin-right: $spaceTiny
+    // Group same-test scores
+    .bar.fastest
+      margin-left: -$barWidth
+      margin-right: $spaceTiny
+      box-shadow: 0 -2px 0 1px $colorBackground
+    .bar.slowest
+      margin-left: $spaceTiny
+
+
+
+
+// ---------------------------------------------------------- Tooltip
+.reaction-history
+
+  // Default Color
+  .tooltip-inner
+    background: $colorBrand2
+  .tooltip-arrow
+    border-right-color: $colorBrand2
+  .tooltip-inner
+    box-shadow: 0 $spaceTiny 0 0 darken($colorBrand2, 10%), 0 0 $space 0 $shade
+  // Fastest Color
+  .tooltip.fastest
+    .tooltip-inner
+      background: darken($colorFastest, 10%)
+    .tooltip-arrow
+      border-right-color: darken($colorFastest, 10%)
+    .tooltip-inner
+      box-shadow: 0 $spaceTiny 0 0 darken($colorFastest, 20%), 0 0 $space 0 $shade
+  // Slowest Color
+  .tooltip.slowest
+    .tooltip-inner
+      background: desaturate( darken($colorSlowest, 10%), 25% )
+    .tooltip-arrow
+      border-right-color: desaturate( darken($colorSlowest, 10%), 25% )
+    .tooltip-inner
+      box-shadow: 0 $spaceTiny 0 0 desaturate( darken($colorSlowest, 20%), 25% ), 0 0 $space 0 $shade
+
+  .tooltip.in
+    opacity: .99
+
+  .tooltip .score,
+  .tooltip .date
+    margin: 0
+    padding: 0
+    line-height: 1.1
+    vertical-align: middle
+  .tooltip .score
+    display: inline-block
+    font-size: $fontSizeLarge
+    height: $space
+    font-size: $space
+    margin-right: $spaceTiny
+  .tooltip .date
+    display: inline-block
+    text-align: left
+    font-size: $fontSizeSmall
+    //.bar:hover label
+    //  display: block
+    //  z-index: 1
+
+
+
+
+
+
+
+
+

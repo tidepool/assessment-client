@@ -23,15 +23,27 @@ define [
       # If there's a model, we should render once it syncs. Otherwise, render right away
       if @model
         @renderLoading()
-        @listenTo @model, 'sync', @render
+        @listenTo @model, 'sync', @onSync
+      else if @collection
+        @renderLoading()
+        @listenTo @collection, 'sync', @onSync
       else
         @render()
       @$el.addClass _className # if someone overrode the backbone default, we still need to add this component's classes
+      @start?()
+
+    onSync: ->
+      if @collection and @collection.length is 0
+        @remove()
+      else
+        @render()
+
 
     # ---------------------------------------------------------------------------- Public API
     renderLoading: ->
       @$el.html tmplLoading
       @
+
 
 
 

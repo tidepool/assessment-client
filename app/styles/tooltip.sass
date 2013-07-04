@@ -1,0 +1,53 @@
+@import '_colorVars'
+@import '_appVars'
+@import '_helpers'
+
+
+.tooltip
+
+  // Default Color
+  .tooltip-inner
+    background: $colorBrand2
+  .tooltip-arrow
+    border-right-color: $colorBrand2
+  .tooltip-inner
+    box-shadow: 0 $spaceTiny 0 0 darken($colorBrand2, 10%), 0 0 $space 0 $shade
+  // Fastest Color
+  &.fastest
+    .tooltip-inner
+      background: darken($colorFastest, 10%)
+    .tooltip-arrow
+      border-right-color: darken($colorFastest, 10%)
+    .tooltip-inner
+      box-shadow: 0 $spaceTiny 0 0 darken($colorFastest, 20%), 0 0 $space 0 $shade
+  // Slowest Color
+  &.slowest
+    .tooltip-inner
+      background: desaturate( darken($colorSlowest, 10%), 25% )
+    .tooltip-arrow
+      border-right-color: desaturate( darken($colorSlowest, 10%), 25% )
+    .tooltip-inner
+      box-shadow: 0 $spaceTiny 0 0 desaturate( darken($colorSlowest, 20%), 25% ), 0 0 $space 0 $shade
+
+  &.in
+    opacity: .99
+
+  .score,
+  .date
+    margin: 0
+    padding: 0
+    line-height: 1.1
+    vertical-align: middle
+  .score
+    display: inline-block
+    font-size: $fontSizeLarge
+    height: $space
+    font-size: $space
+    margin-right: $spaceTiny
+  .date
+    display: inline-block
+    text-align: left
+    font-size: $fontSizeSmall
+      //.bar:hover label
+      //  display: block
+      //  z-index: 1

@@ -175,6 +175,7 @@ module.exports = (grunt) ->
             'pages/guest_signup'
             'pages/home'
             'pages/play_game'
+            'pages/game_results'
             'pages/team'
             'pages/dashboard/all'
             'pages/dashboard/career'

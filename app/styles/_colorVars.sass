@@ -21,6 +21,7 @@ $colorForegroundMild: #8b8b8b
 // Semantic Colors
 $colorGood: #35a589 //alt version: rgb(28,170,176)
 $colorGoodLight: lighten( $colorGood, 20% )
+$colorGoodMild: lighten($colorGood, 45%)
 $colorGoodThin: transparentize( $colorGood, .88 )
 $colorInfo: #73829d
 $colorInfoLight: #99acd0
@@ -29,10 +30,15 @@ $colorQuestion: #73829d
 $colorWarn: #d79d51
 $colorWarnBright: $colorBrand2
 $colorBad: #e96267
+$colorBadThin: transparentize( $colorBad, .88 )
+$colorBadMild: lighten($colorBad, 28%)
 $colorQuiet: #b7b7b7
 $colorVeryQuiet: #dadada
 $colorLink: $colorBrand1
 $colorHighlight: $colorWarnBright
+$colorFastest: rgb(119,126,142) //$colorGood
+$colorSlowest: $colorBad //lighten($colorGood, 25%)
+
 
 // Blend Colors
 $colorMixBrand1Good: mix( $colorBrand1, $colorGood, 20% )
