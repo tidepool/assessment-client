@@ -6,47 +6,29 @@
 .share
   position: absolute
   z-index: 2
-  bottom: $spaceLil + $spaceTiny
-  right: $spaceLil + $spaceTiny
+  bottom: $spaceTiny
+  right: $spaceTiny
 
-  .btn i
-    margin-right: 0
 
-  nav
-    position: absolute
-    background: $colorBackground
-    box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 0 1px $shadeLight
-    border-radius: $radiusSmall
-    top: -( ($space * 3) + ($spaceTiny * 11) ) - $spaceLil
-    left: 50%
-    margin-left: -( ($space + $spaceTiny * 4) / 2)
-    //right: 0
-    width: $space + $spaceTiny * 4
-    height: ($space * 3) + ($spaceTiny * 11)
+
+  i
+    font-size: $space
+    width: $space
+    height: $space
+    line-height: $space
+    background: $colorQuiet
+    text-align: center
+    color: white
+    border-radius: $radiusTiny
     padding: $spaceTiny
-    +box-sizing(border-box)
+    cursor: pointer
 
-    i
-      font-size: $space
-      width: $space
-      height: $space
-      line-height: $space
-      background: $colorQuiet
-      text-align: center
-      color: white
-      border-radius: $radiusTiny
-      padding: $spaceTiny
-      cursor: pointer
-    .icon-facebook
-      background: $colorFacebook
-    .icon-twitter
-      background: $colorTwitter
-
-    .fluff.arrowBottom
-      position: absolute
-      bottom: -$spaceLil - $spaceTiny
-      left: 50%
-      margin-left: -$spaceLil/2
-      border: $spaceLil/2 solid transparent
-      border-top-color: $shade
-
+  i:hover,
+  i:active
+    background: $colorForegroundMild
+  .icon-facebook:hover,
+  .icon-facebook:active
+    background: $colorFacebook
+  .icon-twitter:hover,
+  .icon-twitter:active
+    background: $colorTwitter
