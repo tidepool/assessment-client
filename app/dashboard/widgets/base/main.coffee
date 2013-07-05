@@ -32,6 +32,13 @@ define [
       @$el.addClass _className # if someone overrode the backbone default, we still need to add this component's classes
       @start?()
 
+    render: ->
+      if @tmpl
+        @$el.html @tmpl
+      else
+        @$el.html tmplBase
+      return this
+
     onSync: ->
       if @collection and @collection.length is 0
         @remove()

@@ -124,7 +124,9 @@
 
   // Center aligned multi-paragraph text
   .fancyTitle
-    margin: $space 0 $spaceLil
+    position: relative
+    margin: $spaceLil 0 $spaceLil
+    text-shadow: 0 $spaceTiny 5px $highlight, $spaceTiny 0 5px $highlight, -$spaceTiny 0 5px $highlight
     p
       font-size: $fontSizeLarge
       line-height: 0.9
@@ -137,7 +139,4 @@
 
   img
     margin-bottom: $spaceLil
-
-
-
 

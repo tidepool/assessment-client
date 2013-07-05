@@ -16,6 +16,7 @@ define [
   'dashboard/career/reaction_history'
   # Available Widgets - Teasers
   'dashboard/teasers/reaction_time'
+  'dashboard/teasers/emotions'
   # Available Models
   'entities/cur_user_career'
   'entities/cur_user_recommendations'
@@ -34,7 +35,8 @@ define [
   WidgetCareerTools
   WidgetCareerReactionResults
   WidgetCareerReactionHistory
-  WidgetTeasersReactionTime
+  WidgetTeaserReactionTime
+  WidgetTeaserEmotions
   CurUserCareer
   CurUserRecommendations
   CurUserPersonality
@@ -53,7 +55,8 @@ define [
     'dashboard/personality/holland6': WidgetPersonalityHolland6
     'dashboard/personality/detailed_report': WidgetPersonalityDetailedReport
     'dashboard/personality/recommendation': WidgetPersonalityRecommendation
-    'dashboard/teasers/reaction_time': WidgetTeasersReactionTime
+    'dashboard/teasers/reaction_time': WidgetTeaserReactionTime
+    'dashboard/teasers/emotions': WidgetTeaserEmotions
   _models =
     'entities/cur_user_career': CurUserCareer
     'entities/cur_user_recommendations': CurUserRecommendations

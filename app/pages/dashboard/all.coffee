@@ -24,13 +24,14 @@ define [
         widgets: [
           'dashboard/personality/core'
           'dashboard/personality/big5'
-          'dashboard/teasers/reaction_time'
-          'dashboard/personality/holland6'
           'dashboard/personality/detailed_report'
+          'dashboard/personality/holland6'
+          'dashboard/personality/recommendation'
           'dashboard/career/jobs'
+          'dashboard/teasers/reaction_time'
+          'dashboard/teasers/emotions'
           'dashboard/career/skills'
           'dashboard/career/tools'
-          'dashboard/personality/recommendation'
         ]
       @$el.html @widgetmaster.render().el
       return this

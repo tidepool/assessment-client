@@ -1,7 +1,7 @@
 define [
   'backbone'
   'Handlebars'
-  'text!./reaction_time.hbs'
+  'text!./emotions.hbs'
   'dashboard/widgets/base'
 ], (
   Backbone
@@ -10,5 +10,7 @@ define [
   Widget
 ) ->
 
-  Widget.extend tmpl: tmpl
+  Widget.extend
+    tmpl: tmpl
+    className: 'emotions'
 
