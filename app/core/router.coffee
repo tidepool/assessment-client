@@ -23,7 +23,6 @@ define [
       'game/:def_id':      'createGame'
       game:                'createDefaultGame'
       'gameResults/:id':   'showGameResults'
-      guestSignup:         'showGuestSignup'
       dashboard:           'showDashboard'
       'dashboard-career':  'showDashCareer'
       'referrer/:refId':   'recordReferrer'
@@ -53,7 +52,6 @@ define [
     # Game
     createDefaultGame: ->      @createGame 'baseline'
     createGame: (def_id) ->    @app.view.asGame 'pages/play_game', def_id:def_id
-    showGuestSignup: ->        @app.view.asGame 'pages/guest_signup'
     showGameResults: (id) ->   @app.view.asGame 'pages/game_results', game_id:id
     # Dashboard
     showDashboard: ->          @app.view.asDash 'pages/dashboard/all'

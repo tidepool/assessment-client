@@ -21,7 +21,7 @@ define [
 
       @$el.html _tmpl
       # put the chart in the widget
-      latestResult = @collection.pop()
+      latestResult = @collection.at @collection.length - 1
       resultView = new ReactionResultView model:latestResult
       @$(_contentSel).html resultView.render().el
       @

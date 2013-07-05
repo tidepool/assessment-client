@@ -10,10 +10,20 @@
   max-width: $space * 20
   margin: $spaceBig auto
 
+  // Loading...
+  .results
+    .holdPlease
+      min-height: $spaceBig
+    .holdPlease i
+      color: $colorQuiet
+    p.muted
+      margin-bottom: $spaceBig
+
   h2
     color: $colorBrand1
     margin: $spaceBig 0 $space
 
+  // Each result
   .result
     position: relative
     min-height: 250px

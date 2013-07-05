@@ -4,20 +4,22 @@ define [
   'entities/results/result'
   'core'
   'game/results/reaction_time'
+  'game/results/personality'
 ], (
   Backbone
   Result
   app
   ReactionTimeResultView
+  PersonalityResultView
 ) ->
 
   _me = 'entities/results/game'
   # Key map of server provided result types with the view that should display it
   _resultViews =
     ReactionTimeResult: ReactionTimeResultView
-    PersonalityResult: null
-    Holland6Result: null
-    Big5Result: null
+    PersonalityResult: PersonalityResultView
+    Holland6Result: null # null means intentionally don't show a view of this result type
+    Big5Result: null # null means intentionally don't show a view of this result type
 
 
   Collection = Backbone.Collection.extend
@@ -40,14 +42,16 @@ define [
         Klass = _resultViews[model.attributes.type]
         if Klass?
           model.view = new Klass model:model
+        else if Klass is null
+#          console.log "`#{model.attributes.type}` configured to not show results, and that's ok."
         else
           console.error "No view class configured for result type `#{model.attributes.type}`"
 
 
     # ------------------------------------------------------------- Callbacks
     onSync: (collection, rawData) ->
-      console.log "#{_me}.onSync()"
-      console.log collection:collection.toJSON()
+#      console.log "#{_me}.onSync()"
+#      console.log collection:collection.toJSON()
       @_makeViewsForModels()
 
 

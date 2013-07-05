@@ -6,6 +6,8 @@ define [
   'entities/results/results'
   'game/results/reaction_time_history'
   'ui_widgets/psst'
+  'core'
+  'ui_widgets/guest_signup'
 ], (
   Backbone
   Handlebars
@@ -14,9 +16,12 @@ define [
   Results
   ReactionTimeHistoryView
   psst
+  app
+  GuestSignup
 ) ->
 
   _contentSel = '#ResultsDisplay'
+  _ctaSel = '#CallToAction'
   _rtType = 'ReactionTimeResult'
 
   Me = Backbone.View.extend
@@ -28,13 +33,19 @@ define [
       @collection = new GameResults
         game_id: @options.params.game_id
       @listenTo @collection, 'sync', @onSync
+      @listenTo @collection, 'error', @onError
       @collection.fetch()
 
     render: ->
       @$el.html tmpl
+      # If they're a guest, show the guest conversion widget
+      if app.user.isGuest()
+        guestSignup = new GuestSignup()
+        @$(_ctaSel).html guestSignup.render().el
       return this
 
     _renderResults: ->
+      @$(_contentSel).empty()
       @collection.each (model) ->
         @$(_contentSel).append model.view?.render().el
       @_appendReactionTimeHistory() if @collection.find (result) -> result.attributes.type is _rtType
@@ -45,7 +56,6 @@ define [
       history = new ReactionTimeHistoryView
         collection: rtResults
       history.collection.fetch data: type:_rtType
-      window.coll = history.collection
       @$(_contentSel).append history.render().el
 
     onSync: (collection, data) ->
@@ -57,6 +67,13 @@ define [
           title: "No Results Found"
           msg: "Sorry, but we didn't find any results for game #{collection.game_id}"
           type: psst.TYPES.error
+
+    onError: (collection, xhr) ->
+      psst
+        sel: _contentSel
+        title: "Error Getting Results"
+        msg: "Sorry, but we coudln't get any results for game #{collection.game_id}"
+        type: psst.TYPES.error
 
 
   Me

@@ -13,6 +13,7 @@ define [
   _holderSel = '.chartHolder'
   _barSel = '.bar'
   _scrollFixDelay = 50
+  _me = 'game/results/reaction_time_history'
 
 
   View = ResultView.extend
@@ -24,6 +25,7 @@ define [
       return this
 
     renderChart: ->
+#      console.log "#{_me}.renderChart()"
       unless @collection.length # If there's no collection data, don't show the chart. Abort, ABORT!
         @remove()
         return
@@ -52,7 +54,6 @@ define [
     _compileTemplateForData: ->
       maxVal = @collection.max (model) -> model.attributes.score.slowest_time
       maxVal = maxVal.attributes.score.slowest_time
-      console.log maxVal:maxVal
       @collection.max = maxVal
       @collection.min = 0
       Handlebars.registerHelper 'normalizeReactionTime', (score) ->

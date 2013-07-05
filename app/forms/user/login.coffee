@@ -73,7 +73,7 @@ define [
       @options.app.analytics?.track @className, 'Pressed Facebook Sign In'
 
     _clickedForgotPass: ->
-      console.log "#{_me}._clickedForgotPass()"
+#      console.log "#{_me}._clickedForgotPass()"
 
     _modeSignIn: ->
       @_isRegisterMode = false
@@ -104,12 +104,12 @@ define [
       @options.app.session.logOut() unless @options.app.user.isGuest()
 
       if formData.loginType is 'register'
-        console.log "#{_me}._submittedForm() register mode"
+#        console.log "#{_me}._submittedForm() register mode"
         @model.set formData,
           silent: true
         @options.app.session.register() if @model.isValid( register:true )
       else
-        console.log "#{_me}._submittedForm() login mode"
+#        console.log "#{_me}._submittedForm() login mode"
         @model.set formData,
           silent: true
         @options.app.session.signIn() if @model.isValid( login:true )

@@ -23,6 +23,7 @@ define [
 
     initialize: ->
       @$el.addClass _className # if someone overrode the backbone default, we still need to add this component's classes
+      @start?() # Call the extending class's start method, if they have one
 
     render: ->
       return this unless @model?

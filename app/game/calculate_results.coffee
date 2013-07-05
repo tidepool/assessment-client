@@ -34,10 +34,7 @@ define [
         @$(_statusMsgSel).text model.attributes.status.message
 
     _showResults: ->
-      if app.user.isGuest()
-        app.router.navigate 'guestSignup', trigger: true
-      else
-        app.router.navigate "gameResults/#{@model.attributes.game_id}", trigger: true
+      app.router.navigate "gameResults/#{@model.attributes.game_id}", trigger: true
 
 
     # ------------------------------------------------------------- Callbacks
