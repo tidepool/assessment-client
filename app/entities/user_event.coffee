@@ -30,7 +30,9 @@ define [
 
     onSync: (model) ->
 #      console.log "#{_me}.save().success()"
-#      console.log model.attributes # Uncomment this to view real-time details of every saved user event
+      # ------------------------------------------------------ v Line of Awesome
+      console.log model.attributes # Uncomment this to view real-time details of every saved user event
+      # ------------------------------------------------------ ^ Line of Awesome
 
     onErr: ->
       console.error "#{_me} error event"

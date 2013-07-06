@@ -9,6 +9,7 @@ define [
   'game/levels/rank_images'
   'game/levels/circle_size_and_proximity'
   'game/levels/alex_trebek'
+  'game/levels/emotions_circles'
   'game/calculate_results'
 ], (
   Backbone
@@ -21,6 +22,7 @@ define [
   ImageRank
   CirclesTest
   AlexTrebek
+  EmotionsCircles
   CalculateResultsView
 ) ->
 
@@ -31,27 +33,35 @@ define [
     ImageRank: ImageRank
     CirclesTest: CirclesTest
     Survey: AlexTrebek
+    emotions_circles: EmotionsCircles
+  _titleByGameType =
+    baseline: 'Core Personality Game'
+    emotions: 'The Emotions Game'
+    reaction_time: 'The Reaction Time Game'
+  _defaultTitle = 'Play a Game'
   _animationTime = 1
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
   Me = Backbone.View.extend
+    title: _defaultTitle
     className: 'playGamePage'
 
     initialize: ->
       throw new Error "Need params" unless @options.params
       @model = app.user.createGame @options.params.def_id
-      @curGame = @model
+#      @_setTitle @options.params.def_id
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'change:stage_completed', @_onStageChanged
-#      @listenToOnce @model, 'sync', @_showWelcome
-
-#    onDomInsert: -> @_showWelcome()
 
 
     # ------------------------------------------------------------- Helper Methods
+#    _setTitle: ->
+#      title = _titleByGameType[@options.params.def_id]
+#      document.title = if title then title else _defaultTitle
+
     _showWelcome: ->
       @_trackLevels()
-      if @model.attributes.definition.instructions
+      if @model.attributes.definition?.instructions
         perch.show
           title: 'Welcome'
           msg: @model.attributes.definition.instructions
@@ -95,18 +105,18 @@ define [
 
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
-      curStage = @curGame.get('stages')[stageId]
+      curStage = @model.get('stages')[stageId]
       Level = _views[curStage.view_name]
       unless Level
         throw new Error "View Class not found for game level of type #{curStage.view_name}"
       @_finishPreviousLevel @curLevel
       @curLevel = new Level
         model: new Backbone.Model(curStage)
-        assessment: @curGame
+        assessment: @model
         stageNo: stageId
-        showInstructions: @curGame.isFirstTimeSeeingLevel curStage.view_name
+        showInstructions: @model.isFirstTimeSeeingLevel curStage.view_name
       @$el.html @curLevel.render().el
-      @curGame.setLevelSeen curStage.view_name
+      @model.setLevelSeen curStage.view_name
       app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', curStage.view_name
       app.analytics.track @className, "#{curStage.view_name} Started"
 
@@ -114,7 +124,7 @@ define [
     # ------------------------------------------------------------- Results
     _calculateResults: (gameModel) ->
       @curLevel = new CalculateResultsView
-        game: @curGame
+        game: @model
         model: new Results
           game_id: gameModel.get 'id'
       @$el.html @curLevel.render().el

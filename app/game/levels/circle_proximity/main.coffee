@@ -88,7 +88,7 @@ define [
         deg += increment
 
     _checkDone: ->
-      # Ready to proceed if the user changed all the circle sizes
+      # Ready to proceed if the user moved all the circles
       changedCircles = @collection.filter (circle) -> circle.get('userChangedPos')
       return true if changedCircles.length is @collection.length
 

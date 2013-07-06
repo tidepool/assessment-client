@@ -1,0 +1,53 @@
+{
+    "id": 42424242, "date_taken": "2013-06-26T17:22:23.681-07:00", "stage_completed": -1, "stages":
+    [
+        {
+            "friendly_name": "Emotions 1",
+            "view_name": "emotions_circles",
+            "data": [
+                {
+                    "image_id": "E1a"
+                },
+                {
+                    "image_id": "E1b"
+                },
+                {
+                    "image_id": "E1c"
+                },
+                {
+                    "image_id": "E1d"
+                },
+                {
+                    "image_id": "E1e"
+                },
+                {
+                    "image_id": "E1f"
+                }
+            ]
+        },
+        {
+            "friendly_name": "Emotions 2",
+            "view_name": "emotions_circles",
+            "data": [
+                {
+                    "image_id": "E1g"
+                },
+                {
+                    "image_id": "E1h"
+                },
+                {
+                    "image_id": "E1i"
+                },
+                {
+                    "image_id": "E1j"
+                },
+                {
+                    "image_id": "E1k"
+                },
+                {
+                    "image_id": "E1l"
+                }
+            ]
+        }
+    ]
+}

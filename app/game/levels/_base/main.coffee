@@ -26,6 +26,8 @@ define [
     CirclesTest: 'circles_test'
     ReactionTime: 'reaction_time'
     Survey: 'survey'
+    emotions_circles: 'emotions_circles'
+
 
 
   View = Backbone.View.extend

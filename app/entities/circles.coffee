@@ -7,7 +7,7 @@ define [
 
 
   # --------------------------------------------------------------------- Model
-  _meModel = 'game/levels/circle_proximity/circles Model'
+  _me = 'game/levels/circle_proximity/circles'
   Model = Backbone.Model.extend
     maxSize: 4
     sizeToScale: [
@@ -25,10 +25,6 @@ define [
       'size5'
     ]
     defaults:
-      trait1: ''
-      trait2: ''
-      abbreviation: ''
-      size: 2
       selfProximityPx: null
       selfProximityRank: null
       selfOverlapPx: null
@@ -46,15 +42,24 @@ define [
 
     initialize: ->
       @_calcAbbreviation()
+      @_calcImageUrl()
       @set 'size', 2 #@get('size') - 1 #TODO: remove this. temp kludge because the data is sending sizes with '5', but the scale is 0-4
       @on 'change:size', @onChangeSize
       @on 'change:pos', @onChangePos
 
     _calcAbbreviation: ->
-      t1 = @get('trait1').charAt 0
-      t2 = @get('trait2').charAt 0
+      t1 = @get('trait1')
+      t2 = @get('trait2')
+      return unless t1 and t2
+      t1 = t1.charAt 0
+      t2 = t2.charAt 0
       abbr = "#{t1}<em>/</em>#{t2}"
       @set 'abbreviation', abbr
+
+    _calcImageUrl: ->
+      imgName = @get('image_id')
+      return unless imgName
+      @set 'image_url', "/images/game/emotions/#{imgName}.png"
 
 
     # ------------------------------------------------------------------- Event Handlers
@@ -68,7 +73,6 @@ define [
 
 
   # --------------------------------------------------------------------- Collection
-  _meCollection = 'game/levels/circle_proximity/circles Collection'
   Collection = Backbone.Collection.extend
     model: Model
 

@@ -25,7 +25,7 @@ define [
   _rtType = 'ReactionTimeResult'
 
   Me = Backbone.View.extend
-
+    title: 'Results'
     className: 'gameResultsPage'
 
     initialize: ->

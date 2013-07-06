@@ -8,6 +8,7 @@ define [
   tmpl
 ) ->
   Me = Backbone.View.extend
+    title: 'Our Team'
     className: 'teamPage'
     render: ->
       @$el.html tmpl

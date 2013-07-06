@@ -12,7 +12,7 @@ define [
 ) ->
 
   View = Backbone.View.extend
-
+    title: 'Career Dashboard'
     className: 'dashboard-career'
 
     initialize: ->

@@ -31,7 +31,7 @@ define [
       @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @
 
-    # Front End -> Server. This transform is done before PUTing to the server
+    # Front End -> Server. This transform is done before PUT or POST to the server
     toJSON: (options) ->
       _.pick @attributes, 'stage_completed', 'def_id' # The only thing we need to tell the server as we work on the game is the stage completed, and when we create the game, the def_id
 
@@ -100,7 +100,12 @@ define [
     # ------------------------------------------------------------- Public API
     create: (gameDefinitionId) ->
 #      $.post "#{@urlRoot}/#{@attributes.definition_id}"
-      if gameDefinitionId
+      if gameDefinitionId is 'emotions'
+        promise = $.get '_data/users/-/games/emotions.json'
+        promise.done (data) =>
+          console.log data:data
+          @set data
+      else if gameDefinitionId
         @save( def_id: gameDefinitionId )
       else
         @save() # Uses the default definition id

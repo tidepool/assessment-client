@@ -20,6 +20,7 @@ define [
 ) ->
 
   _me = 'core/view'
+  _companyName = 'TidePool'
   _navSel = '.mainNav'
 #  _TYPES =
 #    site: 'SiteLayout'
@@ -65,6 +66,11 @@ define [
         @render()
         # Sometimes things need to happen after the dom insertion. Views can implement a method to hook into this.
         @_curView.onDomInsert?()
+        # Let's keep the window title matching the current page
+        if @_curView.title
+          document.title = "#{_.result(@_curView, 'title')} - #{_companyName}"
+        else
+          document.title = _companyName
         @options.app.analytics.trackPage module
 
 

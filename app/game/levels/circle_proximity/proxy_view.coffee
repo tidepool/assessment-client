@@ -16,7 +16,7 @@ define [
   _me = 'game/levels/circle_proximity/proxy_view'
   _circleSel = '.circle'
   _animationTriggerClass = 'yay'
-  _showLabelClass = 'showLabel'
+  _freshClass = 'fresh'
   _draggableStackSel = '.ui-draggable'
   _USEREVENTS =
     dragStart: 'circle_start_move'
@@ -32,7 +32,7 @@ define [
   View = Backbone.View.extend
 
     # ----------------------------------------------------- Backbone Extensions
-    className: "proxy #{_showLabelClass}"
+    className: "proxy #{_freshClass}"
     tmpl: Handlebars.compile tmpl
     initialize: ->
       _.bindAll @, 'onDragStart', 'onDrag', 'onDragStop'
@@ -136,7 +136,7 @@ define [
     onChangePos: (model, pos) ->
 
     onDragStart: (e, ui) ->
-      @$el.removeClass(_showLabelClass)
+      @$el.removeClass(_freshClass)
       @_showLine()
       @options.track _USEREVENTS.dragStart,
         circle_no: @model.collection.indexOf @model

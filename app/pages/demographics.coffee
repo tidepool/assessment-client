@@ -27,6 +27,7 @@ define [
   ]
 
   Me = Backbone.View.extend
+    title: 'Demographics'
     className: 'demographicsPage'
     events:
       'change input': 'onChangeInput'

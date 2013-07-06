@@ -1,0 +1,41 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+
+.circleProximity .proxy
+
+  .circle.hasImage,
+  .circle.hasImage:hover
+    background: white
+  .circle.hasImage
+    margin: 0
+    overflow: hidden
+    font-size: 0 // To remove blank space at the top of the circle
+    box-shadow: 0 0 0 $spaceTiny $colorBackgroundWarm
+    +box-sizing(border-box)
+
+  img
+    font-size: $fontSizeBody
+    vertical-align: top
+
+  &.fresh .circle.hasImage
+    border: 3px solid $colorBrand1
+
+  &.ui-draggable-dragging .circle.hasImage
+    +transform( scale(1.05) )
+
+  &.ui-draggable-dragging .circle.hasImage
+    box-shadow: 0 0 0 $spaceTiny $colorBackgroundWarm, 0 $spaceTiny $spaceLil $spaceTiny $shade
+
+
+  &.fresh .circle.hasImage:hover
+    border-color: $colorBrand1 + 25
+
+
+
+
+

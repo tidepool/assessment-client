@@ -9,6 +9,7 @@ define [
 ) ->
 
   Me = Backbone.View.extend
+    title: 'About Us'
     className: 'aboutPage'
     initialize: ->
     render: ->

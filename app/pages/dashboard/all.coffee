@@ -12,7 +12,7 @@ define [
 ) ->
 
   View = Backbone.View.extend
-
+    title: 'Dashboard'
     className: 'dashboard-all'
 
     initialize: ->

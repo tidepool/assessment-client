@@ -1,14 +1,22 @@
 
 
-<div class="circle">
-    {{{abbreviation}}}
-</div>
+{{#if image_url}}
 
-<label>
-    <span class="inner">
-        <b class="fluff arrowTop"></b>
-        {{trait1}}<br/>
-        {{trait2}}
-    </span>
-</label>
+    <div class="circle hasImage">
+        {{#if image_url}}
+            <img src="{{image_url}}" alt="Image representing emotion(s)"/>
+        {{/if}}
+    </div>
 
+{{else}}
+
+    <div class="circle">{{{abbreviation}}}</div>
+    <label>
+        <span class="inner">
+            <b class="fluff arrowTop"></b>
+            {{trait1}}<br/>
+            {{trait2}}
+        </span>
+    </label>
+
+{{/if}}

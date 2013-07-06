@@ -8,6 +8,7 @@ define [
   tmpl
 ) ->
   Me = Backbone.View.extend
+    title: 'Home'
     className: 'homePage'
     tmpl: Handlebars.compile tmpl
     render: ->
