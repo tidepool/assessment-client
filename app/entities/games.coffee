@@ -99,13 +99,7 @@ define [
 
     # ------------------------------------------------------------- Public API
     create: (gameDefinitionId) ->
-#      $.post "#{@urlRoot}/#{@attributes.definition_id}"
-      if gameDefinitionId is 'emotions'
-        promise = $.get '_data/users/-/games/emotions.json'
-        promise.done (data) =>
-          console.log data:data
-          @set data
-      else if gameDefinitionId
+      if gameDefinitionId
         @save( def_id: gameDefinitionId )
       else
         @save() # Uses the default definition id
