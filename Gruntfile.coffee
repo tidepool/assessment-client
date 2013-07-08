@@ -270,20 +270,6 @@ module.exports = (grunt) ->
         ]
 
     copy:
-      devImages: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
-        files: [
-          expand: true
-          cwd: "<%= yeoman.app %>/images/fake_glyphicons"
-          src: "glyphicons*.png"
-          dest: "<%= yeoman.dev %>/img"
-        ]
-      distImages: #TODO: temporary, use custom builds of bootstrap/jqueryUI instead of copying in a fake image to stop the error message
-        files: [
-          expand: true
-          cwd: "<%= yeoman.app %>/images/fake_glyphicons"
-          src: "glyphicons*.png"
-          dest: "<%= yeoman.dist %>/img"
-        ]
       libraryCss:
         src: "<%= yeoman.temp %>/library.css"
         dest: "<%= yeoman.app %>/library.css"
@@ -349,7 +335,6 @@ module.exports = (grunt) ->
     "clean:dev"
     "clean:temp"
     "exec:convert_jqueryui_amd"
-    "copy:devImages"
     "coffee:dev"
     "replace:dev"
     "coffee:spec"
@@ -395,7 +380,6 @@ module.exports = (grunt) ->
     "requirejs"
     "copy:requireJsPost"
     "copy:dist"
-    "copy:distImages"
     "htmlmin"
     "clean:temp"
   ]
