@@ -30,7 +30,7 @@ module.exports = (grunt) ->
       "!<%= yeoman.app %>/bower_components/*"
     ]
     cssSourceGlob: [
-      "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
+#      "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
       "<%= yeoman.app %>/styles/gfx.css"
       "<%= yeoman.temp %>/**/*.css"
       "!<%= yeoman.temp %>/library.css"
@@ -163,6 +163,7 @@ module.exports = (grunt) ->
           outputStyle: "compact"
           noLineComments: true
 
+    # https://github.com/jrburke/r.js/blob/master/build/example.build.js
     requirejs:
       dist:
         options:
@@ -179,11 +180,15 @@ module.exports = (grunt) ->
             'pages/play_game'
             'pages/team'
           ]
+          paths:
+            jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
+            bootstrap: 'empty:'
           out: '<%= yeoman.dist %>/core/main.js'
           optimize: "uglify2"
           #optimize: "none"
           generateSourceMaps: true
           preserveLicenseComments: false
+          skipPragmas: true # we don't use them, and they may slow the build
 
     useminPrepare:
       html: "<%= yeoman.app %>/spec.html"
