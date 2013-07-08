@@ -22,5 +22,6 @@ define [
     # ------------------------------------------------------------- Callbacks
     onErr: -> console.error "#{_me}: error"
 
+  Collection.STATES = Result.STATES
   Collection
 

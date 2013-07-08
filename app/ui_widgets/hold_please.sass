@@ -11,22 +11,19 @@
   background: $highlightThick
   cursor: default
 
-  [class^="icon-"]
+  i
     color: black
     @include animation(spin 1.2s ease-in-out infinite)
     @include transform-origin(50% 50%)
     text-shadow: 0 0 $space white
-  [class^="icon-"].muted
+  i.muted
     color: $colorQuiet
 
-  .icon-large
-    @include transform-origin(70% 50%)
-
   .icon-4x
-    @include transform-origin(200% 150%)
+    //@include transform-origin(200% 150%)
     margin-left: -25px
 
-  [class^="icon-"]
+  i
     position: absolute
     top: 50%
     left: 50%
@@ -39,10 +36,11 @@
     width: auto
     height: auto
     top: auto
-    left: auto
     background: none
-  &.inline [class^="icon-"]
-    margin-left: -25px
+  &.inline i
+    //margin: 0
+    top: auto
+
 
 
 
@@ -56,3 +54,6 @@
 // .onHold helper class is applied to the parent container to change any visuals we'd like to adjust there
 .btn.onHold
   border-color: $highlight
+
+
+

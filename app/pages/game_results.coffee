@@ -59,9 +59,17 @@ define [
       @$(_contentSel).append history.render().el
 
     onSync: (collection, data) ->
-      if collection.length
+      if data?.status?.state is Results.STATES.pending
+        @$(_contentSel).empty()
+        psst
+          sel: _contentSel
+          title: "Results Not Calculated"
+          msg: "Sorry, but for some reason results haven't been calculated for game #{collection.game_id}"
+          type: psst.TYPES.error
+      else if collection.length
         @_renderResults()
       else
+        @$(_contentSel).empty()
         psst
           sel: _contentSel
           title: "No Results Found"
@@ -69,6 +77,7 @@ define [
           type: psst.TYPES.error
 
     onError: (collection, xhr) ->
+      @$(_contentSel).empty()
       psst
         sel: _contentSel
         title: "Error Getting Results"
