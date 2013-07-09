@@ -1,9 +1,21 @@
 
-<h3>Emotional History</h3>
+<h3>Your Emotional Timeline</h3>
 
+<legend>
+    <i class="gfx-sun" title="Early Morning"></i>
+    <i class="gfx-moon" title="Late Night"></i>
+</legend>
 <div class="chartHolder">
-
+    <div class="chart">
+        {{#results}}
+            {{#if score.display_emotion_name }}
+                <div class="slice">
+                    <i class="emoticon small {{ score.display_emotion_name }} {{ timeClass }}"
+                       title="<div class='emotionsHistory'><strong>{{ timeString }}</strong><br/>{{prettyDate time_played}} {{prettyTime time_played}} <h3 class='emoName'>{{ score.display_emotion_friendly }}</h3></div>">
+                    </i>
+                </div>
+            {{/if}}
+        {{/results}}
+    </div>
 </div>
-
-
 

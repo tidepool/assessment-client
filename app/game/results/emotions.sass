@@ -5,8 +5,9 @@
 
 .emotions.result
   $imageSize: 125px
-  i
+  .emoticon
     float: left
+    +transitionable(background-position, 1s)
   h3
     text-align: center
     margin-left: $imageSize
@@ -23,5 +24,8 @@
     line-height: 0.9
   .description
     clear: both
+
+
+
 
 

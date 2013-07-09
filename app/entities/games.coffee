@@ -25,7 +25,7 @@ define [
     initialize: ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       #@on 'reset', (model) -> console.log model.attributes
-      @on 'sync', (model) -> console.log model:model.attributes
+#      @on 'sync', (model) -> console.log model:model.attributes
       #@on 'change', (model) -> console.log model.attributes
       @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @

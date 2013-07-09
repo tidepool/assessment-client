@@ -61,13 +61,14 @@ define [
 
     _appendReactionTimeHistory: ->
       rtResults = new Results()
-      history = new ReactionTimeHistoryView
-        collection: rtResults
+      history = new ReactionTimeHistoryView collection: rtResults
       history.collection.fetch data: type:TYPES.rt
       @$(_contentSel).append history.render().el
 
     _appendEmotionHistory: ->
-      history = new EmotionsHistoryView()
+      emoResults = new Results()
+      history = new EmotionsHistoryView collection: emoResults
+      history.collection.fetch data: type:TYPES.emo
       @$(_contentSel).append history.render().el
 
     onSync: (collection, data) ->
@@ -75,8 +76,8 @@ define [
         @_renderResults()
         psst
           sel: _contentSel
-          title: "Results Not Calculated"
-          msg: "Sorry, but for some reason results haven't been calculated for game #{collection.game_id}"
+          title: "Results Are Pending"
+          msg: "Sorry, but for some reason results haven't yet been calculated for game #{collection.game_id}"
           type: psst.TYPES.error
       else if collection.length
         @_renderResults()

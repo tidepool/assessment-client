@@ -1,0 +1,94 @@
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/_helpers'
+
+
+.emotionsHistory.result
+  $widgetHeight: 250
+  $h3Height: 37
+  $contentHeight: $widgetHeight - $h3Height - $space
+  $width: 56px
+  $origImageSize: 125px
+  $smallImgScaler: 0.448
+  $availSpace: $contentHeight - $origImageSize * $smallImgScaler
+  $legendSize: 40px
+
+  legend
+    position: relative
+    float: left
+    margin: 0
+    padding: 0
+    border: none
+    width: $legendSize
+    height: $contentHeight
+    i
+      position: absolute
+      left: 0
+      font-size: $legendSize
+    .gfx-sun
+      top: 0
+      color: $colorGood
+    .gfx-moon
+      bottom: 0
+      color: $colorBrand1
+
+
+  .chartHolder
+    height: $contentHeight
+    margin-left: $legendSize
+    overflow: visible
+    overflow-x: auto
+    +background( linear-gradient(0deg, $colorBrand1Light, $colorMixBrand1GoodLight) )
+    //box-shadow: inset 0 -100px 50px -50px transparentize($colorBrand1,.7) //, inset 0 100px 50px -50px transparentize(mix($colorBrand,$colorBrand3),.7)
+  .chartHolder .chart
+    text-align: right
+    font-size: 0
+    height: 100%
+    white-space: nowrap
+
+  .slice
+    font-size: $fontSizeBody
+    display: inline-block
+    position: relative
+    height: 100%
+    width: $width/2 - 1 // 1 for the border
+    margin-left: $width/2
+    border-left: 1px solid $colorBackground
+    border-left: 1px dashed $highlight
+    //background: $highlightThin
+  .slice .emoticon
+    position: absolute
+    left: 0
+    top: 0
+    margin-left: (-$origImageSize/2 - 1) // extra 1 for the border
+    margin-top: (-$origImageSize/2 + $origImageSize*$smallImgScaler/2) // Heh. Oh yeah.
+    +transform( scale($smallImgScaler) )
+  .emoticon
+    cursor: pointer
+  .emoticon:hover
+    +transform( scale($smallImgScaler * 1.25) )
+
+  .emoticon.time1-morning
+    top: $availSpace * 0
+  .emoticon.time2-earlyDay
+    top: $availSpace * .2
+  .emoticon.time3-lateDay
+    top: $availSpace * .4
+  .emoticon.time4-evening
+    top: $availSpace * .6
+  .emoticon.time5-night
+    top: $availSpace * .8
+  .emoticon.time6-lateNight
+    top: $availSpace * 1
+
+.tooltip .emotionsHistory
+  text-align: left
+  font-size: $fontSizeSmall
+  h3
+    text-transform: uppercase
+    color: $colorBrand1
+    margin: 0
+    text-align: left
+    margin-bottom: -$spaceTiny
+
+

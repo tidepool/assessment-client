@@ -7,11 +7,11 @@
 
   // Default Color
   .tooltip-inner
-    background: $colorBrand2
-  .tooltip-arrow
-    border-right-color: $colorBrand2
+    background: $colorForeground
+  &.right .tooltip-arrow
+    border-right-color: $colorForeground
   .tooltip-inner
-    box-shadow: 0 $spaceTiny 0 0 darken($colorBrand2, 10%), 0 0 $space 0 $shade
+    box-shadow: 0 $spaceTiny 0 0 darken($colorForeground, 10%), 0 0 $space 0 $shade
   // Fastest Color
   &.fastest
     .tooltip-inner

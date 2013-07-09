@@ -1,5 +1,6 @@
-@import '_colorVars.sass'
-@import '_appVars.sass'
+@import '../bower_components/bourbon/app/assets/stylesheets/_bourbon'
+@import '_colorVars'
+@import '_appVars'
 
 
 .emoticon
@@ -7,10 +8,7 @@
   display: inline-block
   width: $size
   height: $size
-  background: url('/images/results/emotionsavatars125.png') 0 0 no-repeat
-  &.small
-    width: $size * 0.4
-    height: $size * 0.4
+  background: url('/images/results/emotionsavatars125.png') 0 125px no-repeat
 
   &.amused
     background-position: 0 ( -$size * 0 )
@@ -44,6 +42,7 @@
     background-position: 0 ( -$size * 13 )
   &.pain
     background-position: 0 ( -$size * 14 )
+
   &.pride
     background-position: 0 ( -$size * 15 )
   &.relief
@@ -61,4 +60,6 @@
     background-position: 0 ( -$size * 21 )
   &.flagged_result1
     background-position: 0 ( -$size/2  )
+
+
 
