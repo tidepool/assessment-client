@@ -67,6 +67,7 @@ define [
     _start: ->
       colorSequenceInString = (color.color + ":" + color.interval for color in @colorSequence)[..]
       @track Level.EVENTS.start,
+        sequence_type: @sequenceType
         color_sequence: colorSequenceInString
       $("#infobox").css("visibility", "hidden")
       @_waitAndShow()
