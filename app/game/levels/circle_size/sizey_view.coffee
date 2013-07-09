@@ -38,27 +38,8 @@ define [
       @
 
 
-    # ----------------------------------------------------- Private Methods
-    _setWidthBySize: (size) ->
-      @model.set
-        width: @model.sizeToScale[size] * @$(_circleSel).width()
-
     # ----------------------------------------------------- Event Callbacks
-    onSlide: (e, ui) ->
-      @model.set size: ui.value
-      @_setWidthBySize ui.value
-
-
-
-    # ----------------------------------------------------- Public
-    close: ->
-      unless @model.get 'width'
-        @_setWidthBySize @model.get 'size'
-      @remove()
-      @
-
-
-
+    onSlide: (e, ui) -> @model.set size: ui.value
 
 
   View

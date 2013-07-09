@@ -10,6 +10,7 @@ define [
   _me = 'game/levels/circle_proximity/circles'
   Model = Backbone.Model.extend
     maxSize: 4
+    baseSizePx: 75
     sizeToScale: [
       0.4
       0.7
@@ -47,6 +48,8 @@ define [
       @on 'change:size', @onChangeSize
       @on 'change:pos', @onChangePos
 
+
+    # ------------------------------------------------------------------- Private Methods
     _calcAbbreviation: ->
       t1 = @get('trait1')
       t2 = @get('trait2')
@@ -61,9 +64,15 @@ define [
       return unless imgName
       @set 'image_url', "/images/game/emotions/#{imgName}.png"
 
+    _setWidthBySize: (size) ->
+      @set width: @sizeToScale[size] * @baseSizePx
+
 
     # ------------------------------------------------------------------- Event Handlers
-    onChangeSize: (model, sz) -> @set 'userChangedSize', true
+    onChangeSize: (model, sz) ->
+      @set 'userChangedSize', true
+      @_setWidthBySize sz
+
     onChangePos: (model, pos) -> @set 'userChangedPos', true
 
 

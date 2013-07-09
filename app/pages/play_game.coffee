@@ -34,10 +34,10 @@ define [
     CirclesTest: CirclesTest
     Survey: AlexTrebek
     emotions_circles: EmotionsCircles
-  _titleByGameType =
-    baseline: 'Core Personality Game'
-    emotions: 'The Emotions Game'
-    reaction_time: 'The Reaction Time Game'
+#  _titleByGameType =
+#    baseline: 'Core Personality Game'
+#    emotions: 'The Emotions Game'
+#    reaction_time: 'The Reaction Time Game'
   _defaultTitle = 'Play a Game'
   _animationTime = 1
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'

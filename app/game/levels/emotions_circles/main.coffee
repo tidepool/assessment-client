@@ -22,7 +22,7 @@ define [
     className: 'emotionsCircles'
 
     start: ->
-#      console.log model:@model.attributes
+      console.log model:@model.attributes
       @collection = new Circles @model.attributes.circles
       @collection.each (model) -> model.set 'size', 4 # Emotions circles all start at the largest size
 #      console.log collection:@collection.toJSON()

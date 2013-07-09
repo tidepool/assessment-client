@@ -5,6 +5,7 @@ define [
   'entities/results/game'
   'entities/results/results'
   'game/results/reaction_time_history'
+  'game/results/emotions_history'
   'ui_widgets/psst'
   'core'
   'ui_widgets/guest_signup'
@@ -15,6 +16,7 @@ define [
   GameResults
   Results
   ReactionTimeHistoryView
+  EmotionsHistoryView
   psst
   app
   GuestSignup
@@ -22,7 +24,9 @@ define [
 
   _contentSel = '#ResultsDisplay'
   _ctaSel = '#CallToAction'
-  _rtType = 'ReactionTimeResult'
+  TYPES =
+    rt: 'ReactionTimeResult'
+    emo: 'EmoResult'
 
   Me = Backbone.View.extend
     title: 'Results'
@@ -48,19 +52,27 @@ define [
       @$(_contentSel).empty()
       @collection.each (model) ->
         @$(_contentSel).append model.view?.render().el
-      @_appendReactionTimeHistory() if @collection.find (result) -> result.attributes.type is _rtType
+      @_appendReactionTimeHistory() if @_hasType @collection, TYPES.rt
+      @_appendEmotionHistory() if @_hasType @collection, TYPES.emo
       return this
+
+    _hasType: (collection, type) ->
+      collection.find (item) -> item.attributes.type is type
 
     _appendReactionTimeHistory: ->
       rtResults = new Results()
       history = new ReactionTimeHistoryView
         collection: rtResults
-      history.collection.fetch data: type:_rtType
+      history.collection.fetch data: type:TYPES.rt
+      @$(_contentSel).append history.render().el
+
+    _appendEmotionHistory: ->
+      history = new EmotionsHistoryView()
       @$(_contentSel).append history.render().el
 
     onSync: (collection, data) ->
       if data?.status?.state is Results.STATES.pending
-        @$(_contentSel).empty()
+        @_renderResults()
         psst
           sel: _contentSel
           title: "Results Not Calculated"

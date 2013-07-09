@@ -58,7 +58,7 @@ define [
       return true if changedCircles.length >= @collection.length - _userMaySkipThisMany
 
     _close: ->
-      @collection.each (circle) -> circle.view?.close?() #Close them down properly. Lets them assign widths and remove events.
+      @collection.each (circle) -> circle.view?.remove?() #Close them down properly. Lets them assign widths and remove events.
       proceed.hide()
       @trigger 'done'
       @remove()

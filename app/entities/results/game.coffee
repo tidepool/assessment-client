@@ -5,12 +5,14 @@ define [
   'core'
   'game/results/reaction_time'
   'game/results/personality'
+  'game/results/emotions'
 ], (
   Backbone
   Result
   app
   ReactionTimeResultView
   PersonalityResultView
+  EmotionsResultView
 ) ->
 
   _me = 'entities/results/game'
@@ -20,6 +22,7 @@ define [
     PersonalityResult: PersonalityResultView
     Holland6Result: null # null means intentionally don't show a view of this result type
     Big5Result: null # null means intentionally don't show a view of this result type
+    EmoResult: EmotionsResultView
 
 
   Collection = Backbone.Collection.extend
@@ -45,14 +48,19 @@ define [
         else if Klass is null
 #          console.log "`#{model.attributes.type}` configured to not show results, and that's ok."
         else
-          console.error "No view class configured for result type `#{model.attributes.type}`"
+          console.error "No view class has been built and configured for result type `#{model.attributes.type}`"
 
 
     # ------------------------------------------------------------- Callbacks
     onSync: (collection, rawData) ->
 #      console.log "#{_me}.onSync()"
-#      console.log collection:collection.toJSON()
-      @_makeViewsForModels()
+#      console.log
+#        collection:collection.toJSON()
+#        rawData: rawData
+      if rawData.status?.state is Result.STATES.pending
+        console.error "Data synced but it doesn't look like a result set"
+      else
+        @_makeViewsForModels()
 
 
     onErr: -> console.error "#{_me}: error"

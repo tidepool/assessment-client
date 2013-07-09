@@ -13,20 +13,19 @@ define [
 
   Model = Backbone.Model.extend
 
-    LEVELS:
-      rank_images: 'ImageRank'
-      circle_size_and_proximity: 'CirclesTest'
-      reaction_time_disc: 'ReactionTime'
-
+#    LEVELS:
+#      rank_images: 'ImageRank'
+#      circle_size_and_proximity: 'CirclesTest'
+#      reaction_time_disc: 'ReactionTime'
+#      emotions_circles: 'EmotionsCircles'
 
     # ------------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
-#    url: '/_data/users/-/games/reaction_time.json'
 
     initialize: ->
       #@on 'all', (e) -> console.log "#{_me} event: #{e}"
       #@on 'reset', (model) -> console.log model.attributes
-      #@on 'sync', (model) -> console.log model.attributes
+      @on 'sync', (model) -> console.log model:model.attributes
       #@on 'change', (model) -> console.log model.attributes
       @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @
