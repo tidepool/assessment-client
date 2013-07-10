@@ -126,7 +126,8 @@
   .fancyTitle
     position: relative
     margin: $spaceLil 0 $spaceLil
-    text-shadow: 0 $spaceTiny 5px $highlight, $spaceTiny 0 5px $highlight, -$spaceTiny 0 5px $highlight
+    //text-shadow: 0 5px 10px $highlightThick, 5px 0 10px $highlightThick, -5px 0 10px $highlightThick
+    box-shadow: inset 0 (-$space) $spaceLil $highlightThick, 0 $spaceTiny $spaceLil $highlightThick //blurs out things under the bottom of the title
     p
       font-size: $fontSizeLarge
       line-height: 0.9
