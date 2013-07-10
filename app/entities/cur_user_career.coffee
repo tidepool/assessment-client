@@ -9,7 +9,7 @@ define [
   markdown
 ) ->
 
-  _me = 'entities/cur_user_pcareer'
+  _me = 'entities/cur_user_career'
 
   Model = Backbone.Model.extend
 

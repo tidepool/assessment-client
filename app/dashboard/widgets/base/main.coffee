@@ -24,9 +24,11 @@ define [
       if @model
         @renderLoading()
         @listenTo @model, 'sync', @onSync
+        @listenTo @model, 'error', @onErr
       else if @collection
         @renderLoading()
         @listenTo @collection, 'sync', @onSync
+        @listenTo @collection, 'error', @onErr
       else
         @render()
       @$el.addClass _className # if someone overrode the backbone default, we still need to add this component's classes
@@ -42,8 +44,14 @@ define [
     onSync: ->
       if @collection and @collection.length is 0
         @remove()
+      else if @model and _.isEmpty @model.attributes
+        @remove()
       else
         @render()
+
+    onErr: ->
+      console.warn "#{_me} Error with the widget's model, hiding the widget."
+      @remove()
 
 
     # ---------------------------------------------------------------------------- Public API
