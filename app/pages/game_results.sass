@@ -7,6 +7,12 @@
 .gameResultsPage
   margin: 0 auto
 
+  // Limit widths
+  .explanation,
+  .psst.error
+    margin: $space auto
+    max-width: $spaceBig * 15
+
   // Loading...
   .results
     .holdPlease
@@ -18,15 +24,10 @@
       margin-bottom: $spaceBig
 
   // Badge
-  .badge
+  .gfx-badge,
+  .img-badge
     display: block
-    width: 100px
-    height: 125px
-    line-height: 125px
-    background: white
-    vertical-align: middle
-    box-shadow: 0 0 0 $spaceTiny $shade
-    margin: -$space auto $space
+    margin: -$space auto $spaceLil
 
   // Title
   .mainHeading
@@ -64,21 +65,33 @@
   .result.reactionTime .metricHolder
     border-top: 1px solid $colorBackgroundWarm
 
-  // Text at bottom
-  .explanation
-    margin: $space auto
-    max-width: $spaceBig * 15
+  //Text
+  .explanation,
+  .explanation p
+    text-align: left
+    font-size: $fontSizeLarge
 
   // Call to action
   .btn-primary.btn-large
     min-width: 0
     margin: 0 $spaceTiny
 
+  // Personality Result
+  .personality.result
+    display: block
+    padding: 0
+    margin: 0 auto
+    width: auto
+    max-width: 600px
+    background: none
+    box-shadow: none
+
 body.background-gameLayout
   &.gameResultsPage-ReactionTimeResult
     +bigassBackground( '/images/results/reaction_resultsbg.jpg' )
   &.gameResultsPage-EmoResult
     +bigassBackground( '/images/results/emotions_resultsbg.jpg' )
+
 
 
 

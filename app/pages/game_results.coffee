@@ -29,6 +29,7 @@ define [
   _contentSel = '#ResultsDisplay'
   _ctaSel = '#CallToAction'
   TYPES =
+    pers: 'PersonalityResult'
     rt: 'ReactionTimeResult'
     emo: 'EmoResult'
   TMPLS =
@@ -63,6 +64,8 @@ define [
         @_renderAsType TYPES.rt
       else if @_hasType @collection, TYPES.emo
         @_renderAsType TYPES.emo
+      else if @_hasType @collection, TYPES.pers
+        @_renderAsType TYPES.pers
       else
         @_renderGeneric()
       @
@@ -76,6 +79,7 @@ define [
       @collection.each (model) ->
         @$(_contentSel).append model.view?.render().el
 
+    # Render special additions and other changes based on differences between the result types
     _renderAsType: (type) ->
       $('body').addClass "#{@className}-#{type}"
       @$el.html TMPLS[type] if TMPLS[type]?
@@ -91,6 +95,16 @@ define [
           @_appendReactionTimeHistory()
         when TYPES.emo
           @_appendEmotionHistory()
+        when TYPES.pers
+          # TODO: customize background per badge
+          personalityModel = @collection.find (m) -> m.attributes.type is TYPES.pers
+          stringId = personality.attributes.score.name.split(' ').join('-')
+          console.log
+            coll: @collection.toJSON()
+            pers: personalityModel
+            stringId: stringId
+          personalityStringId = 'theRainbow'
+          $('body').addClass "#{@className}-#{stringId}"
         else
           console.warn "Unknown type: #{type}"
 

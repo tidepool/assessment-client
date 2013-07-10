@@ -1,16 +1,19 @@
 
-<p class="textAlignCenter">
-    <img
-        src="/images/badges/{{score.logo_url}}"
-        alt="Badge representing the personalty type of: {{score.name}}"
-        title="Personality game played on {{prettyDate time_played}} at {{prettyTime time_played}} ">
-</p>
+<img
+    class="img-badge"
+    src="/images/badges/{{score.logo_url}}"
+    alt="Badge representing the personalty type of: {{score.name}}"
+    title="Personality game played on {{prettyDate time_played}} at {{prettyTime time_played}} "
+/>
 
-<h2 class="textAlignCenter">
-    <span class="muted">You are </span>
-    {{score.name}}
-</h2>
 
-<div class='large'>
+<hgroup class="mainHeading">
+    <h3>You are</h3>
+    <h1>{{score.name}}</h1>
+</hgroup>
+
+<div class="explanation">
     {{{score.one_liner}}}
 </div>
+
+
