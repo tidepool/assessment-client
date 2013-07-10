@@ -32,6 +32,8 @@ define [
           'dashboard/teasers/emotions'
           'dashboard/career/skills'
           'dashboard/career/tools'
+          'dashboard/emotions/historical_highest'
+          'dashboard/emotions/highest_emotion'
         ]
       @$el.html @widgetmaster.render().el
       return this

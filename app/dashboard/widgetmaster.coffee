@@ -14,6 +14,9 @@ define [
   'dashboard/career/tools'
   'dashboard/career/reaction_results'
   'dashboard/career/reaction_history'
+  # Widgets - Emotions
+  'dashboard/emotions/highest_emotion'
+  'dashboard/emotions/historical_highest'
   # Available Widgets - Teasers
   'dashboard/teasers/reaction_time'
   'dashboard/teasers/emotions'
@@ -35,6 +38,8 @@ define [
   WidgetCareerTools
   WidgetCareerReactionResults
   WidgetCareerReactionHistory
+  WidgetEmotionsHighest
+  WidgetEmotionsHighestHistory
   WidgetTeaserReactionTime
   WidgetTeaserEmotions
   CurUserCareer
@@ -55,6 +60,8 @@ define [
     'dashboard/personality/holland6': WidgetPersonalityHolland6
     'dashboard/personality/detailed_report': WidgetPersonalityDetailedReport
     'dashboard/personality/recommendation': WidgetPersonalityRecommendation
+    'dashboard/emotions/highest_emotion': WidgetEmotionsHighest
+    'dashboard/emotions/historical_highest': WidgetEmotionsHighestHistory
     'dashboard/teasers/reaction_time': WidgetTeaserReactionTime
     'dashboard/teasers/emotions': WidgetTeaserEmotions
   _models =
