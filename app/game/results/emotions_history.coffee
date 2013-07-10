@@ -3,11 +3,15 @@ define [
   'Handlebars'
   'game/results/base'
   'text!./emotions_history.hbs'
+  'composite_views/perch'
+  'game/results/emotions'
 ], (
   Backbone
   Handlebars
   ResultView
   tmpl
+  perch
+  EmotionsResultsView
 ) ->
 
   _holderSel = '.chartHolder'
@@ -74,8 +78,19 @@ define [
         animation: false
 #        trigger: 'click'
 
-    onClickEmoticon: ->
-      console.log 'emoticon clicked'
+    onClickEmoticon: (e) ->
+      id = $(e.target).data('id')
+      console.log
+        dataId: id
+        model: @collection.get(id)
+        attrs: @collection.get(id).attributes
+        json: @collection.get(id).toJSON()
+
+      perch.show
+        title: 'Emotion Details'
+        btn1Text: null
+        content: new EmotionsResultsView
+          model: new Backbone.Model @collection.get(id).attributes
 
 
   View

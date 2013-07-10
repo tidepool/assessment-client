@@ -11,6 +11,7 @@
             {{#if score.display_emotion_name }}
                 <div class="slice">
                     <i class="emoticon small {{ score.display_emotion_name }} {{ timeClass }}"
+                       data-id="{{id}}"
                        title="<div class='emotionsHistory'><strong>{{ timeString }}</strong><br/>{{prettyDate time_played}} {{prettyTime time_played}} <h3 class='emoName'>{{ score.display_emotion_friendly }}</h3></div>">
                     </i>
                 </div>
