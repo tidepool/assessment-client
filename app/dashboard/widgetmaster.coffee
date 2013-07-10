@@ -17,6 +17,7 @@ define [
   # Widgets - Emotions
   'dashboard/emotions/highest_emotion'
   'dashboard/emotions/historical_highest'
+  'dashboard/emotions/strongest_emotions'
   # Available Widgets - Teasers
   'dashboard/teasers/reaction_time'
   'dashboard/teasers/emotions'
@@ -40,6 +41,7 @@ define [
   WidgetCareerReactionHistory
   WidgetEmotionsHighest
   WidgetEmotionsHighestHistory
+  WidgetEmotionsStrongest
   WidgetTeaserReactionTime
   WidgetTeaserEmotions
   CurUserCareer
@@ -62,6 +64,7 @@ define [
     'dashboard/personality/recommendation': WidgetPersonalityRecommendation
     'dashboard/emotions/highest_emotion': WidgetEmotionsHighest
     'dashboard/emotions/historical_highest': WidgetEmotionsHighestHistory
+    'dashboard/emotions/strongest_emotions': WidgetEmotionsStrongest
     'dashboard/teasers/reaction_time': WidgetTeaserReactionTime
     'dashboard/teasers/emotions': WidgetTeaserEmotions
   _models =
