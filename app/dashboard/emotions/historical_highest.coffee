@@ -27,3 +27,4 @@ define [
   View.dependsOn = 'entities/results/results'
   View.fetchOptions = data: type: 'EmoResult'
   View
+

@@ -46,7 +46,7 @@ define [
       when 17,18,19,20 then return array[3]
       when 21,22,23,24 then return array[4]
       when 1,2,3,4     then return array[5]
-      else                  return array[5]
+      else                  return null
 
 
   View = ResultView.extend
@@ -80,12 +80,11 @@ define [
 
     onClickEmoticon: (e) ->
       id = $(e.target).data('id')
-      console.log
-        dataId: id
-        model: @collection.get(id)
-        attrs: @collection.get(id).attributes
-        json: @collection.get(id).toJSON()
-
+#      console.log
+#        dataId: id
+#        model: @collection.get(id)
+#        attrs: @collection.get(id).attributes
+#        json: @collection.get(id).toJSON()
       perch.show
         title: 'Emotion Details'
         btn1Text: null
