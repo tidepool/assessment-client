@@ -2,6 +2,8 @@ define [
   'backbone'
   'Handlebars'
   'text!./game_results.hbs'
+  'text!./game_results-rt.hbs'
+  'text!./game_results-emo.hbs'
   'entities/results/game'
   'entities/results/results'
   'game/results/reaction_time_history'
@@ -13,6 +15,8 @@ define [
   Backbone
   Handlebars
   tmpl
+  rtTmpl
+  emoTmpl
   GameResults
   Results
   ReactionTimeHistoryView
@@ -27,6 +31,9 @@ define [
   TYPES =
     rt: 'ReactionTimeResult'
     emo: 'EmoResult'
+  TMPLS =
+    ReactionTimeResult: rtTmpl
+    EmoResult: emoTmpl
 
   Me = Backbone.View.extend
     title: 'Results'
@@ -46,18 +53,46 @@ define [
       if app.user.isGuest()
         guestSignup = new GuestSignup()
         @$(_ctaSel).html guestSignup.render().el
-      return this
+      @
 
+
+    # -------------------------------------------------------------------- Private Methods
     _renderResults: ->
       @$(_contentSel).empty()
-      @collection.each (model) ->
-        @$(_contentSel).append model.view?.render().el
-      @_appendReactionTimeHistory() if @_hasType @collection, TYPES.rt
-      @_appendEmotionHistory() if @_hasType @collection, TYPES.emo
-      return this
+      if @_hasType @collection, TYPES.rt
+        @_renderAsType TYPES.rt
+      else if @_hasType @collection, TYPES.emo
+        @_renderAsType TYPES.emo
+      else
+        @_renderGeneric()
+      @
 
     _hasType: (collection, type) ->
       collection.find (item) -> item.attributes.type is type
+
+
+    # -------------------------------------------------------------------- Special Behavior for Specific Results pages
+    _renderGeneric: ->
+      @collection.each (model) ->
+        @$(_contentSel).append model.view?.render().el
+
+    _renderAsType: (type) ->
+      $('body').addClass "#{@className}-#{type}"
+      @$el.html TMPLS[type] if TMPLS[type]?
+#      console.log
+#        type: type
+#        tmpl: TMPLS[type]
+      # Add all the result views we've recieved
+      @collection.each (model) ->
+        @$(_contentSel).append model.view?.render().el
+      # Add special behaviors based on the type
+      switch type
+        when TYPES.rt
+          @_appendReactionTimeHistory()
+        when TYPES.emo
+          @_appendEmotionHistory()
+        else
+          console.warn "Unknown type: #{type}"
 
     _appendReactionTimeHistory: ->
       rtResults = new Results()
@@ -71,6 +106,8 @@ define [
       history.collection.fetch data: type:TYPES.emo
       @$(_contentSel).append history.render().el
 
+
+    # -------------------------------------------------------------------- Event Callbacks
     onSync: (collection, data) ->
       if data?.status?.state is Results.STATES.pending
         @_renderResults()

@@ -3,8 +3,6 @@
 @import '../../styles/_helpers'
 
 
-.gameResultsPage .result.reactionTime
-  min-height: 250px
 
 .result.reactionTime
   $colorFastestMild: lighten($colorFastest, 35%)
@@ -19,8 +17,10 @@
     position: absolute
     left: 0
     right: 0
-    top: 75px
+    top: 0
     bottom: 0
+  .metricHolder.showingTimeAndTitle
+    top: 75px
 
   .metric
     position: relative

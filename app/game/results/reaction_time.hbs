@@ -1,11 +1,12 @@
 
+{{#if showTime}}
+    <p class="subTitle">
+        {{prettyTime time_played}}
+        {{prettyDate time_played}}
+    </p>
+{{/if}}
 
-<p class="subTitle">
-    {{prettyTime time_played}}
-    {{prettyDate time_played}}
-</p>
-
-<div class="metricHolder">
+<div class="metricHolder {{#if showTime}}showingTimeAndTitle{{/if}}">
     <div class="colHalves">
         <div class="metric good up" title="Fastest: {{score.fastest_time}}ms">
             <label>

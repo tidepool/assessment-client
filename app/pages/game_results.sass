@@ -4,11 +4,8 @@
 
 
 
-
-
 .gameResultsPage
-  max-width: $space * 20
-  margin: $spaceBig auto
+  margin: 0 auto
 
   // Loading...
   .results
@@ -20,24 +17,68 @@
     p.muted
       margin-bottom: $spaceBig
 
-  h2
-    color: $colorBrand1
-    margin: $spaceBig 0 $space
+  // Badge
+  .badge
+    display: block
+    width: 100px
+    height: 125px
+    line-height: 125px
+    background: white
+    vertical-align: middle
+    box-shadow: 0 0 0 $spaceTiny $shade
+    margin: -$space auto $space
 
-  // Each result
+  // Title
+  .mainHeading
+    text-align: center
+    text-transform: uppercase
+    h3, h1
+      font-weight: bold
+      line-height: .9
+      margin: 0
+    h1
+      font-size: $fontSizeMegaLarge
+      color: white
+      letter-spacing: .05em
+
+  // Results
+  .results
+    text-align: center
+    vertical-align: top
   .result
+    display: inline-block
+    vertical-align: top
+    width: $space * 4 * 4
+    min-height: $space * 9
     position: relative
     background: white
     border-radius: $radiusSmall
     padding: $spaceLil
-    margin: $spaceBig 0 $space
-    box-shadow: 0 0 0 1px darken($colorBackgroundWarm, 10%), 0 0 0 $spaceLil darken($colorBackgroundWarm, 5%)
+    margin: $space
+    box-shadow: 0 0 0 1px $shadeLight, 0 0 0 $spaceLil $highlightThin
+    +box-sizing(border-box)
   .result h3
     margin-top: 0
   .result .subTitle
     color: $colorQuiet
   .result.reactionTime .metricHolder
     border-top: 1px solid $colorBackgroundWarm
+
+  // Text at bottom
+  .explanation
+    margin: $space auto
+    max-width: $spaceBig * 15
+
+  // Call to action
+  .btn-primary.btn-large
+    min-width: 0
+    margin: 0 $spaceTiny
+
+body.background-gameLayout
+  &.gameResultsPage-ReactionTimeResult
+    +bigassBackground( '/images/results/reaction_resultsbg.jpg' )
+  &.gameResultsPage-EmoResult
+    +bigassBackground( '/images/results/emotions_resultsbg.jpg' )
 
 
 
