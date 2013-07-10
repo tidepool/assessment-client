@@ -91,7 +91,7 @@ define [],() ->
     if _kmq?
 #      console.log "_setUser(#{humanreadableUserKey})"
       _kmq.push [
-        'identity'
+        'identify'
         humanreadableUserKey
       ]
     else
