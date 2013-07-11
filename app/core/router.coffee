@@ -13,23 +13,24 @@ define [
 
   MainRouter = Backbone.Router.extend
     routes:
-      '':                  'showHome'
-      home:                'showHome'
-      about:               'showAbout'
-      team:                'showTeam'
-      getStarted:          'getStarted'
-      startGame:           'getStarted'
-      demographics:        'showDemographics'
-      'game/:def_id':      'createGame'
-      game:                'createDefaultGame'
-      'gameResults/:id':   'showGameResults'
-      dashboard:           'showDashboard'
-      'dashboard-career':  'showDashCareer'
-      'referrer/:refId':   'recordReferrer'
+      '':                       'showHome'
+      home:                     'showHome'
+      about:                    'showAbout'
+      team:                     'showTeam'
+      getStarted:               'getStarted'
+      startGame:                'getStarted'
+      demographics:             'showDemographics'
+      'game/:def_id':           'createGame'
+      game:                     'createDefaultGame'
+      'gameResults/:id':        'showGameResults'
+      dashboard:                'showDashboard'
+      'dashboard-mood':         'showDashMood'
+      'dashboard-productivity': 'showDashProductivity'
+      'referrer/:refId':        'recordReferrer'
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
-#      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..."
+#      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..." # Uncomment to show all the routes the app responds to
 
 
     # ------------------------------------------------ Route Handlers
@@ -54,8 +55,9 @@ define [
     createGame: (def_id) ->    @app.view.asGame 'pages/play_game', def_id:def_id
     showGameResults: (id) ->   @app.view.asGame 'pages/game_results', game_id:id
     # Dashboard
-    showDashboard: ->          @app.view.asDash 'pages/dashboard/all'
-    showDashCareer: ->         @app.view.asDash 'pages/dashboard/career'
+    showDashboard: ->          @app.view.asDash 'pages/dashboard/summary'
+    showDashProductivity: ->   @app.view.asDash 'pages/dashboard/productivity'
+    showDashMood: ->           @app.view.asDash 'pages/dashboard/mood'
     # Other
     recordReferrer: (refId) ->
       @app.analytics.track 'Referral', refId

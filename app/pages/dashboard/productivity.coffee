@@ -12,8 +12,8 @@ define [
 ) ->
 
   View = Backbone.View.extend
-    title: 'Career Dashboard'
-    className: 'dashboard-career'
+    title: 'Productivity Dashboard'
+    className: 'dashboard-productivity'
 
     initialize: ->
       @listenTo app.user, 'sync', @render
@@ -22,14 +22,15 @@ define [
     render: ->
       @widgetmaster = new Widgetmaster
         widgets: [
+          'dashboard/career/reaction_history'
+          'dashboard/career/reaction_results'
+          'dashboard/teasers/emotions'
           'dashboard/career/jobs'
           'dashboard/career/skills'
           'dashboard/career/tools'
-          'dashboard/career/reaction_results'
-          'dashboard/career/reaction_history'
         ]
       @$el.html @widgetmaster.render().el
-      return this
+      @
 
 
   View
