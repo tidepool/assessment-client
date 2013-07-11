@@ -291,9 +291,10 @@
                             string_id: 'handedness',
                             type: 'select_by_icon',
                             multiselect: true,
+                            label: 'Rockets or Bugs?',
                             'options': [
-                                'left',
-                                'right'
+                                { value:'rockets', icon:'icon-rocket' },
+                                { value:'bugs', icon:'icon-bug' }
                             ]
                         })
                     })
@@ -301,11 +302,13 @@
                         model: new Backbone.Model({
                             string_id: 'socialz',
                             type: 'select_by_icon',
+                            label: 'How Ya Feelin\'?',
                             'options': [
-                                'smile',
-                                'meh',
-                                'frown',
-                                'other'
+                                { value:'smile', icon:'icon-smile' },
+                                { value:'meh', icon:'icon-meh' },
+                                { value:'frown', icon:'icon-frown' },
+                                { value:'lovey', icon:'icon-heart' },
+                                { value:'other', icon:'gfx-dottedcircle' }
                             ]
                         })
                     })

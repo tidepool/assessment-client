@@ -17,9 +17,19 @@
 <span class="purdyBts noDisplay">
     {{#options}}
         <button value="{{value}}" class="btn btn-large btn-link btn-tall" type="button">
-            <i class="{{icon}}"></i>
+            <i class="
+                {{#if icon}}
+                    {{icon}}
+                {{else}}
+                    gfx-{{value}}
+                {{/if}}">
+            </i>
             <small>
-                {{value}}
+                {{#if label}}
+                    {{label}}
+                {{else}}
+                    {{value}}
+                {{/if}}
             </small>
         </button>
     {{/options}}
