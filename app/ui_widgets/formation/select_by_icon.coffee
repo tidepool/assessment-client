@@ -22,12 +22,11 @@ define [
       'change select': 'onSelectChange'
 
     initialize: ->
-#      @_mapValuesToIcons()
       @$el.addClass @model.attributes.string_id
 
     render: ->
       @$el.html _tmpl @model.attributes
-      @$(_btnHolderSel).show()
+      @$(_btnHolderSel).css('display': 'inline-block') #.show() uses inline, which is no good
       @$('select').hide()
       @
 
@@ -62,7 +61,12 @@ define [
           $targ.siblings(".#{_selectedClass}").removeClass _selectedClass
       @_syncSelectByBtn()
 
-    onSelectChange: (e) -> @_syncBtnBySelect()
+    onSelectChange: (e) ->
+      @_syncBtnBySelect()
+      @trigger 'change',
+        model: @model
+        value: @$('select').val()
 
 
   Me
+

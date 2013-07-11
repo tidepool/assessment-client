@@ -2,7 +2,12 @@
 
 {{#if label}}
     <label for="{{string_id}}">{{label}}</label>
+{{else}}
+    {{#if question}}
+        <label for="{{string_id}}">{{question}}</label>
+    {{/if}}
 {{/if}}
+
 
 <select name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
     {{#unless multiselect}}
