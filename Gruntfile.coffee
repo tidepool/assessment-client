@@ -171,8 +171,9 @@ module.exports = (grunt) ->
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
           include: [
-            'pages/dashboard/all'
-            'pages/dashboard/career'
+            'pages/dashboard/mood'
+            'pages/dashboard/productivity'
+            'pages/dashboard/summary'
             'pages/about'
             'pages/demographics'
             'pages/game_results'
