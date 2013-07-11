@@ -4,6 +4,7 @@
 
 
 .playGamePage .alexTrebek
+  $size: 100px
   max-width: $maxSiteWidth * .75
   margin: 0 auto
   padding: $spaceBig $spaceLil 0
@@ -12,6 +13,11 @@
     font-size: 0 // No space between inline-block elements
     text-align: center
   .selectByIcon button
+    &.btn.btn-large.btn-tall i
+      font-size: $size
+      width: $size
+      height: $size
+
     // Sizing changes based on screen width
     @media all and (min-width: 321px)
       min-width: 33.333%
@@ -21,3 +27,6 @@
       min-width: 20%
     @media all and (min-width: 1001px)
       min-width: 16.666%
+
+
+
