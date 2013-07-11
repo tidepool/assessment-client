@@ -5,6 +5,7 @@ define [
   'Handlebars'
   './layout'
   'ui_widgets/user_menu'
+  'dashboard/action_items'
   'text!dashboard/dash_picker.hbs'
 ],
 (
@@ -13,6 +14,7 @@ define [
   Handlebars
   Layout
   userMenu
+  ActionItems
   tmplDashPicker
 ) ->
 
@@ -32,6 +34,10 @@ define [
       @$('#HeaderRegion')
         .append(userMenu.el)
       @
+
+      # Add dashboard-specific content
+      ai = new ActionItems()
+      @$('.content').before ai.el
       @$('.content').before tmplDashPicker
 
   Me

@@ -39,16 +39,5 @@ define [
       @$el.html @widgetmaster.render().el
       return this
 
-
-#        model: new Backbone.Model @model.attributes.big5_score
-#        model: new Backbone.Model @model.attributes.holland6_score
-
-
-
-    # ---------------------------------------------------------------- Private
-
-
-    # ---------------------------------------------------------------- Event Callbacks
-
   View
 
