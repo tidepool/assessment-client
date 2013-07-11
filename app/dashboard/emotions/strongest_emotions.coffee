@@ -13,7 +13,7 @@ define [
 
   _widgetSel = '.widget'
   _chartName = 'Emotions'
-  _min = .1
+  _min = .2
   _max = 5
 
   View = Widget.extend
@@ -53,10 +53,10 @@ define [
         normalized = _max - value
         normalized = if normalized < _min then _min else normalized + _min
         chartData[key] = normalized
-      console.log
-        tuples: tuples
-        emotions: emotions
-        chartData: chartData
+#      console.log
+#        tuples: tuples
+#        emotions: emotions
+#        chartData: chartData
       chartData
 
     onClick: ->

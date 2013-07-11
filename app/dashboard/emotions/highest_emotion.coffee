@@ -12,6 +12,10 @@ define [
 ) ->
 
   _widgetSel = '.widget'
+  _playAgainHtml = '
+    <p>
+      <a class="btn btn-link" href="#game/emotions">Play Again</a>
+    </p>'
 
   View = Widget.extend
     className: 'doubleWide tall highestEmotion'
@@ -21,6 +25,7 @@ define [
       latestResult = @collection.at @collection.length - 1
       view = new EmotionsResultView model:latestResult
       @$(_widgetSel).append view.render().el
+      @$(_widgetSel).append _playAgainHtml
       @
 
   View.dependsOn = 'entities/results/results'
