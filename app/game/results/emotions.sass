@@ -9,14 +9,14 @@
     float: left
     +transitionable(background-position, 1s)
   h3
-    text-align: center
     margin-left: $imageSize
     font-size: $fontSizeLarge
     text-transform: uppercase
     color: $colorForegroundMild
     padding-top: $space
-  h3 p
+  h3 p // Because markdown can wrap it in a `p` sometimes
     line-height: 1.1
+    text-align: center
   h3 em
     display: block
     font-size: $fontSizeVeryLarge

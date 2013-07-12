@@ -5,11 +5,70 @@
 
 
 .actionItems
-  background: $highlight
-  padding: $spaceLil $spaceBig
-  min-height: $spaceBig
-  +box-sizing(border-box)
+  $size: 65px
+  $innerSize: $size - $spaceLil * 2
+  background: $shadeDark
+  color: white
 
-  p
+  .inner
+    max-width: $maxSiteWidth
+    margin: 0 auto
+    font-size: 0 // no space between inline-block elements
+
+  .welcome
+    float: left
+    height: 100%
+    padding: $spaceLil $spaceLil $spaceLil 0
+    //box-shadow: $spaceTiny*2 0 $spaceTiny (-$spaceTiny) $shadeLight
+  .welcome h2,
+  .welcome h5
+    display: inline-block
     margin: 0
+  .welcome h2
+    font-size: $fontSizeVeryLarge
+    text-transform: uppercase
+    color: $colorBrand2
+    margin-right: $spaceLil
+  .welcome h5
+    line-height: 1.4
+    //white-space: nowrap
+
+
+
+  ul.items
+    display: inline-block
+    vertical-align: top
+    list-style: none
+    margin: 0
+    padding: 0
+    border-left: 1px solid $shadeLight
+    box-shadow: inset $spaceTiny+2 0 $spaceTiny (-$spaceTiny) $shadeLight
+  ul.items .item
+    line-height: inherit
+  ul.items p
+    color: white
+    margin: 0
+
+  .item a
+    display: block
+    color: white
+    cursor: pointer
+    padding: $spaceLil
+    min-height: $innerSize
+  .item a:hover
+    text-decoration: none
+    background: $shadeLight
+
+  .item i // The Icon
+    float: left
+    margin-right: $spaceTiny
+    height: $innerSize
+    line-height: $innerSize
+    font-size: $innerSize
+
+
+
+
+
+
 

@@ -5,8 +5,9 @@
 
 
 .dashPicker
-  background: $shadeLight
+  background: $shade
   margin: $spaceLil 0
+  line-height: 1
 
   ul
     max-width: $maxSiteWidth
@@ -22,7 +23,7 @@
   a
     display: block
     text-align: center
-    padding: $space
+    padding: $spaceLil*2 $space
     min-width: $spaceBig * 2
     color: white
   a:hover
@@ -33,12 +34,13 @@
     display: inline-block
     font-size: $space
     width: $space
-    margin-bottom: $spaceLil
+    margin-bottom: $spaceTiny
 
   a label
+    font-size: $fontSizeBody
     text-transform: uppercase
     margin: 0
-    margin-bottom: -$spaceLil
+    margin-bottom: -$spaceTiny
 
 
 

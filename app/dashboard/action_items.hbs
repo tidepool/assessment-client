@@ -1,19 +1,27 @@
 
+<div class="inner">
+    <hgroup class="welcome">
+        <h2>
+            {{pickOne greetings }}!
+        </h2>
+        <h5>
+            Wow, there's lots to do here. <br/>
+            Here's something to get you started.
+        </h5>
+    </hgroup>
 
-<i class="icon icon-bulb-circle pull-left"></i>
-<p class="strong">
-    Based on your personality, TidePool recommends this <em>{{link_type}}</em>.
-</p>
-<p>{{sentence}}</p>
 
-{{#if link}}
-    <a href="{{link}}" id="ActionRecommendationLink" class="footer" target="_blank">
-        <i class="linkType {{icon}}"></i>
-            <span class="icon-stack pull-right">
-                <i class="icon-circle-blank icon-stack-base"></i>
-                <i class="icon-arrow-right"></i>
-            </span>
-        {{link_title}}
-    </a>
-{{/if}}
+    <ul class="items">
+        <li class="item {{link_type}}"><a href="{{link}}">
+            <i class="icon-rocket {{icon}}"></i>
+            <p>
+                <strong>{{title}}</strong><br/>
+                {{sentence}}
+            </p>
+            <!--<p>-->
+            <!--Based on your personality, TidePool recommends this <em>{{link_type}}</em>.-->
+            <!--</p>-->
+        </a></li>
+    </ul>
 
+</div>

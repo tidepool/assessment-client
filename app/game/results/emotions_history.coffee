@@ -88,6 +88,7 @@ define [
       perch.show
         title: 'Emotion Details'
         btn1Text: null
+        large: true
         content: new EmotionsResultsView
           model: new Backbone.Model @collection.get(id).attributes
 

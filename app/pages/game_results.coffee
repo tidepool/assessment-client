@@ -121,7 +121,7 @@ define [
       overview = new EmotionsOverview collection: emoResults
       history.collection.fetch data: type:TYPES.emo
       @$(_contentSel).append history.render().el
-      @$(_contentSel).append overview.render().el
+      @$(_contentSel).prepend overview.render().el
 
 
     # -------------------------------------------------------------------- Event Callbacks
