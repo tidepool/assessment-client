@@ -29,7 +29,7 @@ define [
       @
 
     onSync: (model) ->
-      console.log model:model
+#      console.log model:model
       @render()
 
 

@@ -136,7 +136,7 @@ define [
 
     _trackIncorrect: ->
       @track _EVENTS.incorrect,
-        circle_color: @colorSequence[@sequenceNo]?.color
+        circle_color: @colorSequence[@sequenceNo]?.color or 'blank'
         sequence_no: @sequenceNo
 
     # ------------------------------------------------------------- Consumable API

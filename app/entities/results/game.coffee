@@ -22,6 +22,7 @@ define [
     PersonalityResult: PersonalityResultView
     Holland6Result: null # null means intentionally don't show a view of this result type
     Big5Result: null # null means intentionally don't show a view of this result type
+    SurveyResult: null
     EmoResult: EmotionsResultView
 
 

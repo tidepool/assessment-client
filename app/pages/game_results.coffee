@@ -8,6 +8,7 @@ define [
   'entities/results/results'
   'game/results/reaction_time_history'
   'game/results/emotions_history'
+  'game/results/emotions_overview'
   'ui_widgets/psst'
   'core'
   'ui_widgets/guest_signup'
@@ -21,6 +22,7 @@ define [
   Results
   ReactionTimeHistoryView
   EmotionsHistoryView
+  EmotionsOverview
   psst
   app
   GuestSignup
@@ -94,7 +96,7 @@ define [
         when TYPES.rt
           @_appendReactionTimeHistory()
         when TYPES.emo
-          @_appendEmotionHistory()
+          @_appendEmotionCharts()
         when TYPES.pers
           # TODO: customize background per badge
           personalityModel = @collection.find (m) -> m.attributes.type is TYPES.pers
@@ -113,11 +115,13 @@ define [
       history.collection.fetch data: type:TYPES.rt
       @$(_contentSel).append history.render().el
 
-    _appendEmotionHistory: ->
+    _appendEmotionCharts: ->
       emoResults = new Results()
       history = new EmotionsHistoryView collection: emoResults
+      overview = new EmotionsOverview collection: emoResults
       history.collection.fetch data: type:TYPES.emo
       @$(_contentSel).append history.render().el
+      @$(_contentSel).append overview.render().el
 
 
     # -------------------------------------------------------------------- Event Callbacks
