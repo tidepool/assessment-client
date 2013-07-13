@@ -21,6 +21,7 @@ define [
   # Available Widgets - Teasers
   'dashboard/teasers/reaction_time'
   'dashboard/teasers/emotions'
+  'dashboard/teasers/personalizations'
   # Available Models
   'entities/cur_user_career'
   'entities/cur_user_recommendations'
@@ -44,6 +45,7 @@ define [
   WidgetEmotionsStrongest
   WidgetTeaserReactionTime
   WidgetTeaserEmotions
+  WidgetTeaserPersonalizations
   CurUserCareer
   CurUserRecommendations
   CurUserPersonality
@@ -67,6 +69,7 @@ define [
     'dashboard/emotions/strongest_emotions': WidgetEmotionsStrongest
     'dashboard/teasers/reaction_time': WidgetTeaserReactionTime
     'dashboard/teasers/emotions': WidgetTeaserEmotions
+    'dashboard/teasers/personalizations': WidgetTeaserPersonalizations
   _models =
     'entities/cur_user_career': CurUserCareer
     'entities/cur_user_recommendations': CurUserRecommendations

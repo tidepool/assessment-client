@@ -71,19 +71,29 @@ form label
   text-transform: uppercase
 
 
+// Checkboxes
+input[type=checkbox]
+  margin-top: 0
+  margin-right: $spaceTiny
+form label.forCheckbox
+  display: inline
+  cursor: pointer
+  text-transform: none
+form label.forCheckbox:hover
+  color: $colorBrandLight
+
+
 input[type=date]
   padding-right: $spaceLil
 
 select, input[type=date]
   +box-sizing(border-box)
 
-//select
-//  box-shadow: inset 1px 2px 3px 0 $shadeLight
-//  background: $colorBackground
-//  font-size: $fontSizeBody
-//  height: $space + $spaceLil
-//  line-height: $space
-//  padding: $spaceLil / 2 $spaceLil
-  //+appearance(none)
+
+
+
+
+
+
 
 

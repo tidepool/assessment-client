@@ -5,6 +5,7 @@ define [
   'composite_views/perch'
   'forms/user/login'
   'forms/user/profile'
+  'preferences/personalization'
 ],
 (
   _
@@ -12,6 +13,7 @@ define [
   perch
   UserLogin
   UserProfile
+  PersonalizationView
 ) ->
 
   _me = 'core/mediator'
@@ -26,6 +28,7 @@ define [
       @listenTo @options.app, 'session:showRegister', @_showRegister
       @listenTo @options.app, 'session:showProfile', @_showProfile
       @listenTo @options.app, 'session:logOut', @_actionLogOut
+      @listenTo @options.app, 'action:showPersonalizations', @_showPersonalizations
 
 
     # ------------------------------------------------ Display command handlers
@@ -53,6 +56,13 @@ define [
         content: new UserProfile
           model: @options.app.user
 
+    _showPersonalizations: ->
+      perch.show
+        title: '<i class="icon-cog"></i> Your Preferences'
+        className: 'brandHappy'
+        btn1Text: null
+        huge: true
+        content: new PersonalizationView()
 
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->

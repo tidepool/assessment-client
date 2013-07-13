@@ -19,6 +19,7 @@ define [
     defaults:
       title: ''
       content: 'This is the default message.'
+      className: null
       onClose: -> #console.log "#{_me}.onClose"
       btn1Text: "Ok"
       btn1ClassName: "btn-large btn-primary"
@@ -100,14 +101,29 @@ define [
         @options.app.analytics.CATEGORIES.viewLightbox, name, '', opts
       )
 
+    _makeSmall: ->
+      @$el.addClass 'small'
+      @$el.removeClass 'huge'
+    _makeLarge: ->
+      @$el.removeClass 'small'
+      @$el.removeClass 'huge'
+    _makeHuge: ->
+      @$el.addClass 'huge'
+      @$el.removeClass 'small'
+
 
     # ---------------------------------------------------------------------- Public API
     show: (options) ->
       @model = new PerchModel()
+      # Allow Different Sizes
       if options.large
-        @$el.removeClass 'small'
+        @_makeLarge()
+      else if options.huge
+        @_makeHuge()
       else
-        @$el.addClass 'small'
+        @_makeSmall()
+      # Let folks add a class
+      @$el.addClass options.className if options.className?
       @listenTo @model, 'change', @render
       if typeof options == 'string'
         @_showSimpleMsg options

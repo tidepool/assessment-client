@@ -1,0 +1,25 @@
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.widget
+  &.hasFooter
+    padding-bottom: $space
+  .footer
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+    padding: $spaceTiny 0
+    font-size: $fontSizeLarge
+    background: $colorBrand1
+    color: white
+    vertical-align: middle
+  .footer i //icons
+    font-size: $fontSizeLarge + 6px
+    vertical-align: middle
+  .footer.muted
+    background: $colorBackgroundWarm
+    color: $colorForegroundMild
+

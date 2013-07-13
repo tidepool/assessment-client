@@ -9,6 +9,7 @@ define [
   'text!./date_field.hbs'
   'text!./button.hbs'
   'text!./rocker.hbs'
+  'text!./checkbox.hbs'
 ], (
   Backbone
   Handlebars
@@ -20,6 +21,7 @@ define [
   tmplDate
   tmplBtn
   tmplRocker
+  tmplCheckbox
 ) ->
 
   _tmplStandardField = Handlebars.compile tmplStandardField
@@ -27,6 +29,7 @@ define [
   _tmplDate = Handlebars.compile tmplDate
   _tmplBtn = Handlebars.compile tmplBtn
   _tmplRocker = Handlebars.compile tmplRocker
+  _tmplCheckbox = Handlebars.compile tmplCheckbox
 
   Me = Backbone.View.extend
     tagName: 'form'
@@ -60,7 +63,10 @@ define [
           _tmplDate prop.attributes
         when types.rocker
           _tmplRocker prop.attributes
+        when types.checkbox
+          _tmplCheckbox prop.attributes
         else
+          console.log "Building a standard form field for type #{prop.get 'type'}"
           _tmplStandardField prop.attributes
 
 

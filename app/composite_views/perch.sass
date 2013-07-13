@@ -26,25 +26,37 @@
   +softShadow( transparentize($colorBackground, .3) )
   text-align: center
 
+
+  // ---------------------------------------------- Header
+  .modal-header
+    border: none
+    padding: $space
+    padding-bottom: 0
   .modal-header .close
     position: absolute
     top: $space
     right: $space
 
-  .modal-header
-    border: none
-    padding: $space
-    padding-bottom: 0
+
+  // ---------------------------------------------- Body
   .modal-body
     padding: $space
     max-height: none
   .modal-header+.modal-body
     padding-top: $spaceLil
+
+
+  // ---------------------------------------------- Footer
   .modal-footer
     padding: 0
     background: none
     border: none
     text-align: center
+
+
+
+
+
 
 .perch
   // Buttons as children of modal
@@ -81,8 +93,26 @@
     color: white
 
 
+
+// ---------------------------------------------- Brand Happy Version
+.perch.brandHappy
+  h2
+    color: $colorBrandLight
+
+
+
+
+
+
+
+
+
+
+
+
 // Screen Size Adjustments
-.perch.modal.small
+.perch.modal.small,
+.perch.modal.huge
   width: 300px
   margin-left: -150px
 
@@ -90,3 +120,6 @@
   .perch.modal.small
     width: 400px
     margin-left: -200px
+  .perch.modal.huge
+    width: 800px
+    margin-left: -400px

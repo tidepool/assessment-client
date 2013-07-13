@@ -27,6 +27,7 @@ define [
       'dashboard-mood':         'showDashMood'
       'dashboard-productivity': 'showDashProductivity'
       'referrer/:refId':        'recordReferrer'
+      'preferences-training':   'showTrainingPreferences'
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
@@ -64,6 +65,9 @@ define [
       @app.user.set referred_by: refId
       @showDemographics()
       @navigate 'startGame', replace:true # Change, the url, but don't add to the browser's history stack
+    showTrainingPreferences: ->
+      console.log 'TODO: show training preferences'
+
 
   MainRouter
 

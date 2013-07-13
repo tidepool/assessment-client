@@ -20,9 +20,10 @@ define [
     className: "userMenu"
     tmpl: Handlebars.compile tmpl
     events:
-      "click #ActionShowLogin": "_clickedLogIn"
-      "click #ActionLogOut": "_clickedLogOut"
-      "click #ActionShowProfile": "_clickedProfile"
+      "click #ActionShowLogin":            "_clickedLogIn"
+      "click #ActionLogOut":               "_clickedLogOut"
+      "click #ActionShowProfile":          "_clickedProfile"
+      "click #ActionShowPersonalizations": "_clickedPersonalizations"
 
     start: (appCoreSingleton) ->
       throw new Error('Need an options.user to start') unless appCoreSingleton.user
@@ -47,9 +48,10 @@ define [
     _parseModel: (model) ->
       _.pick model.attributes, 'nickname', 'email', 'name', 'city', 'image', 'guest'
 
-    _clickedLogIn: -> @app?.trigger 'session:showLogin'
-    _clickedLogOut: -> @app?.trigger 'session:logOut'
-    _clickedProfile: -> @app?.trigger 'session:showProfile'
+    _clickedLogIn: ->            @app?.trigger 'session:showLogin'
+    _clickedLogOut: ->           @app?.trigger 'session:logOut'
+    _clickedProfile: ->          @app?.trigger 'session:showProfile'
+    _clickedPersonalizations: -> @app?.trigger 'action:showPersonalizations'
 
 
   new Me()

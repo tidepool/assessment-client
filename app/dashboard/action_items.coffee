@@ -49,7 +49,7 @@ define [
         @collection.fetch()
 
     render: ->
-      console.log collection:@collection.toJSON()
+#      console.log collection:@collection.toJSON()
       first = @collection.at 0
       data = _.extend first.attributes, greetings:_greetings
       data.icon = TYPETOICON[data.link_type]

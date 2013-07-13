@@ -1,0 +1,110 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+@import '../styles/helpers'
+
+
+.personalization
+  $height: 40px
+  $colorBrandSuperLight: transparentize( $colorBrandLight, .8 )
+
+  // ------------------------------------------------------------- Steps Remaining
+  .stepsRemainingWizard
+    display: block
+    text-transform: uppercase
+
+  ol.stepsRemainingWizard
+    list-style: none
+    margin: 0
+    padding: 0
+    margin-bottom: $space
+
+  .stepsRemainingWizard li
+    position: relative
+    background: $colorBrandSuperLight
+    color: $colorQuiet
+    display: block
+    padding: 0 $spaceLil
+    float: left
+    height: $height
+    line-height: $height
+    +box-sizing(border-box)
+  // The arrow shape
+  .stepsRemainingWizard li:after,
+  .stepsRemainingWizard li:before
+    content: ''
+    position: absolute
+    top: 0
+    right: -15px
+    border: $height/2 solid $colorBrandSuperLight
+    border-left-width: 15px
+    border-top-color: transparent
+    border-bottom-color: transparent
+    border-right: none
+    z-index: 2
+  .stepsRemainingWizard li.complete:after
+    border-left-color: $colorBrandLight
+  .stepsRemainingWizard li:before
+    border-left-color: white
+    right: -20px
+    box-shadow: -5px 0 0 0 white
+  .stepsRemainingWizard li:last-child:after,
+  .stepsRemainingWizard li:last-child:before
+    border: none
+
+  .stepsRemainingWizard .active,
+  .stepsRemainingWizard .complete
+    background: $colorBrandLight
+    color: white
+
+
+  .stepsRemainingWizard.steps-3 li
+    width: 33.33%
+  .stepsRemainingWizard.steps-4 li
+    width: 25%
+  .stepsRemainingWizard.steps-5 li
+    width: 20%
+
+
+  // ------------------------------------------------------------- Section Heading
+  h3
+    margin: 0
+    text-transform: uppercase
+    font-weight: bold
+    line-height: .9
+    min-height: 0
+
+  .explanation
+    margin-bottom: $spaceLil
+
+
+  // ------------------------------------------------------------- Content
+  .bling
+    color: $colorBrandLight
+  .content
+    text-align: left
+  .games .btn-link
+    text-transform: uppercase
+    color: $colorForeground
+    font-size: $fontSizeLarge
+
+
+  // ------------------------------------------------------------- Proceed Button
+  .actionZone
+    margin-bottom: $spaceTiny
+    min-height: $spaceBig
+  .actionZone button
+    text-transform: uppercase
+    font-size: $fontSizeBody
+
+
+
+// Override width when in a modal that has padding
+.perch.modal .stepsRemainingWizard
+  margin-left: -$space
+  margin-right: -$space
+
+
+
+
+
+
