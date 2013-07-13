@@ -29,13 +29,16 @@ define [
   _tmpl = Handlebars.compile tmpl
 
   TYPETOICON =
-    Website:  'gfx-recommend_website'
-    Video:    'gfx-recommend_video'
-    Course:   'gfx-recommend_course'
-    Comic:    'gfx-recommend_comic'
-    Book:     'gfx-recommend_book'
-    App:      'gfx-recommend_app'
-    Activity: 'gfx-recommend_activity'
+    Website:       'gfx-recommend_website'
+    Video:         'gfx-recommend_video'
+    Course:        'gfx-recommend_course'
+    Comic:         'gfx-recommend_comic'
+    Book:          'gfx-recommend_book'
+    App:           'gfx-recommend_app'
+    Activity:      'gfx-recommend_activity'
+    ReactionTime:  'gfx-reactiontime'
+    Emotions:      'gfx-emotiongame'
+    Preferences:   'icon-cog'
 
   View = Backbone.View.extend
     className: 'actionItems'
@@ -49,7 +52,7 @@ define [
         @collection.fetch()
 
     render: ->
-#      console.log collection:@collection.toJSON()
+      console.log collection:@collection.toJSON()
       first = @collection.at 0
       data = _.extend first.attributes, greetings:_greetings
       data.icon = TYPETOICON[data.link_type]

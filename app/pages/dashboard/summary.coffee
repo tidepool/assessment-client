@@ -23,11 +23,11 @@ define [
       @widgetmaster = new Widgetmaster
         widgets: [
           'dashboard/personality/core'
-          'dashboard/teasers/personalizations'
           'dashboard/career/reaction_history'
           'dashboard/emotions/historical_highest'
           'dashboard/personality/big5'
           'dashboard/personality/holland6'
+          'dashboard/teasers/personalizations'
           'dashboard/teasers/reaction_time'
           'dashboard/personality/detailed_report'
         ]

@@ -13,6 +13,7 @@ define [
   'ui_widgets/hold_please'
   'ui_widgets/psst'
   'composite_views/perch'
+  'core'
 ],
 (
   $
@@ -27,6 +28,7 @@ define [
   holdPlease
   psst
   perch
+  app
 ) ->
 
   _btnSel = '.actionZone .btn'
@@ -69,6 +71,7 @@ define [
 #      @listenTo @model, 'error', @onError
 #      @listenTo @model, 'invalid', @onInvalid
 #      @listenTo @model, 'sync', @onSync
+      @_createInitialData() # Makes the user preferences thing, just in case they don't have them yet
       @curPage = 0
 
     render: ->
@@ -94,9 +97,9 @@ define [
       formData = @form.getVals()
       @data = @data || {}
       @data = _.extend @data, formData
-#      console.log
-#        formData:formData
-#        allData:@data
+      console.log
+        formData:formData
+        allData:@data
       @
 
     _indexActions: (idx) ->
@@ -112,6 +115,28 @@ define [
       @$(_btnSel).remove()
       @
 
+    #TODO: Fix this it sucks
+    _createInitialData: ->
+      $.ajax
+        type: 'POST'
+        contentType: 'application/json'
+        data: JSON.stringify
+          type: 'TrainingPreference'
+          data: { seed: 42 }
+        url: "#{window.apiServerUrl}/api/v1/users/-/preferences" #TODO: remove window reference, use app.cfg instead
+      @
+
+    _sendData: ->
+      return unless @data?
+      $.ajax
+        type: 'PUT'
+        contentType: 'application/json'
+        data: JSON.stringify
+          type: 'TrainingPreference'
+          data: @data
+        url: "#{window.apiServerUrl}/api/v1/users/-/preferences" #TODO: remove window reference, use app.cfg instead
+      @
+
     _showErr: (msg) ->
       psst.hide()
       psst
@@ -122,34 +147,35 @@ define [
 
 
     # ----------------------------------------------------------- Event Handlers
-    onInputChange: -> psst.hide()
-
-    onSubmit: (e) ->
-      e.preventDefault()
-      psst.hide()
-      holdPlease.show @$(_submitBtnSel)
-      formData = @form.getVals()
-      @model.save formData,
-        wait: true # Don't update the client model until the server state is changed
-
-    onSync: -> perch.hide()
-
-    onError: (model, xhr) ->
-      if xhr.status is 0
-        msg = 'Unknown Server Error'
-      else
-        msg = "#{xhr.status}: #{xhr.statusText}"
-      @_showErr msg
-
-    onInvalid: (model, msg) ->
-      @_showErr msg
+# TODO: Bind to server
+#    onInputChange: -> psst.hide()
+#
+#    onSubmit: (e) ->
+#      e.preventDefault()
+#      psst.hide()
+#      holdPlease.show @$(_submitBtnSel)
+#      formData = @form.getVals()
+#      @model.save formData,
+#        wait: true # Don't update the client model until the server state is changed
+#
+#    onSync: -> perch.hide()
+#
+#    onError: (model, xhr) ->
+#      if xhr.status is 0
+#        msg = 'Unknown Server Error'
+#      else
+#        msg = "#{xhr.status}: #{xhr.statusText}"
+#      @_showErr msg
+#
+#    onInvalid: (model, msg) ->
+#      @_showErr msg
 
     onClickNext: ->
       @curPage++
       @form?.remove()
       # Check to see if it's the last page
       if @curPage is _fields.length
-        @_getData()._showComplete @curPage
+        @_getData()._sendData()._showComplete @curPage
       else
         @_getData()._showFields @curPage
 
