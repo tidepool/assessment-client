@@ -4,11 +4,13 @@ define [
   'backbone'
   'Handlebars'
   'text!./action_items.hbs'
+  'entities/cur_user_actions'
 ], (
   _
   Backbone
   Handlebars
   tmpl
+  NextAction
 ) ->
 
   _greetings = [
@@ -45,11 +47,9 @@ define [
 
     # -------------------------------------------------------- Backbone Methods
     initialize: ->
-      # A new dependency chain. Since the recommendation needs app.cfg, this is otherwise circular
-      require ['entities/cur_user_actions'], (NextAction) =>
-        @collection = new NextAction()
-        @listenTo @collection, 'sync', @onSync
-        @collection.fetch()
+      @collection = new NextAction()
+      @listenTo @collection, 'sync', @onSync
+      @collection.fetch()
 
     render: ->
       console.log collection:@collection.toJSON()

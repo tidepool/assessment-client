@@ -8,7 +8,7 @@ define [
 ) ->
 
   Collection = Backbone.Collection.extend
-    url: "#{app.cfg.apiServer}/api/v1/users/-/recommendations/actions"
-
+    #TODO: resolve the circular dependency issue and remove window reference, use app.cfg instead
+    url: "#{window.apiServerUrl}/api/v1/users/-/recommendations/actions"
   Collection
 
