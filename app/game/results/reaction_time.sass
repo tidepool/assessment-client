@@ -3,10 +3,14 @@
 @import '../../styles/_helpers'
 
 
+.gameResultsPage .result.reactionTime .metric .holder label
+  font-size: 80px // Bigger, but only on the results page. Dashboard doesn't have that much room
+
 
 .result.reactionTime
   $colorFastestMild: lighten($colorFastest, 35%)
   $colorSlowestMild: lighten($colorSlowest, 27%)
+  $fontSize: 50px
 
   .colHalves
     float: left
@@ -43,29 +47,37 @@
     background: $colorSlowestMild
     margin: 0 $spaceLil 0 $spaceLil/2
 
-  .metric label
-    display: inline-block
+
+  .metric .holder
     position: absolute
-    font-size: $spaceBig
-    font-weight: bold
-    height: $spaceBig
-    line-height: $spaceBig
-    top: 45%
-    width: 100%
-    margin-top: -($spaceBig/2)
+    height: $fontSize
+    line-height: $fontSize
+    font-size: $fontSize
+    top: 40%
     left: 0
-    cursor: default
-  .metric small
-    display: inline-block
-    position: relative
-    font-size: $fontSizeTiny
-    font-weight: bold
-    text-transform: uppercase
-    top: 45%
-    font-size: 1.1
-    margin-top: 20px
     width: 100%
+    margin-top: -($fontSize/2)
     z-index: 1 // Above the :after arrow shape
+    small
+      display: block
+      font-size: $fontSizeTiny
+      font-weight: bold
+      text-transform: uppercase
+      line-height: 1
+      //z-index: 1 // Above the :after arrow shape
+    small:first-child
+      margin-bottom: -$spaceTiny
+      font-size: $fontSizeBody
+    label
+      display: inline-block
+      margin: 0
+      font-size: $fontSize
+      font-weight: bold
+      line-height: 0.9
+      cursor: default
+    small:last-child
+      margin-top: -$spaceTiny
+
   .metric.good label,
   .metric.good small
     color: $colorFastest
@@ -93,4 +105,5 @@
     bottom: 0
     border-bottom: $spaceTiny*2 solid white
     border-top: $space + $spaceLil solid $colorSlowestMild
+
 

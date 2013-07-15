@@ -39,7 +39,7 @@
     list-style: none
     margin: 0
     padding: 0
-    text-align: left
+    text-align: center
     font-size: 0
     height: 100%
     vertical-align: bottom
@@ -55,20 +55,11 @@
       border-top-right-radius: $radiusTiny
     .bar.fastest
       background: lighten($colorFastest, 10%)
-    .bar.slowest
-      background: lighten($colorSlowest, 10%)
     .bar.fastest:hover
       background: $colorFastest
-    .bar.slowest:hover
-      background: $colorSlowest
 
-    // Spacing and Grouping
     .bar.fastest
-      margin-left: -$barWidth
       margin-right: $spaceTiny
-      box-shadow: 0 -2px 0 1px $colorBackground
-    .bar.slowest
-      margin-left: $spaceTiny
 
 
 

@@ -9,18 +9,24 @@
 <div class="metricHolder {{#if showTime}}showingTimeAndTitle{{/if}}">
     <div class="colHalves">
         <div class="metric good up" title="Fastest: {{score.fastest_time}}ms">
-            <label>
-                {{score.fastest_time}}
-            </label>
-            <small>Milliseconds</small>
+            <div class="holder">
+                <small>Fastest</small>
+                <label>
+                    {{score.fastest_time}}
+                </label>
+                <small>Milliseconds</small>
+            </div>
         </div>
     </div>
     <div class="colHalves">
         <div class="metric bad down" title="Slowest: {{score.slowest_time}}ms">
-            <label>
-                {{score.slowest_time}}
-            </label>
-            <small>Milliseconds</small>
+            <div class="holder">
+                <small>Slowest</small>
+                <label>
+                    {{score.slowest_time}}
+                </label>
+                <small>Milliseconds</small>
+            </div>
         </div>
     </div>
 

@@ -14,6 +14,7 @@ define [
   _barSel = '.bar'
   _scrollFixDelay = 50
   _me = 'game/results/reaction_time_history'
+  _minSpeed = 190 # Start drawing the graph at this point. No human besides Luke Skywalker can be faster than this.
 
 
   View = ResultView.extend
@@ -52,13 +53,13 @@ define [
         @options.afterShow?(@$tip, @$element)
 
     _compileTemplateForData: ->
-      maxVal = @collection.max (model) -> model.attributes.score.slowest_time
-      maxVal = maxVal.attributes.score.slowest_time
+      maxVal = @collection.max (model) -> model.attributes.score.fastest_time
+      maxVal = maxVal.attributes.score.fastest_time
       @collection.max = maxVal
-      @collection.min = 0
+      @collection.min = _minSpeed
       Handlebars.registerHelper 'normalizeReactionTime', (score) ->
         max = maxVal
-        min = 0
+        min = _minSpeed
         normalScore = (score - min) / (max - min) * 100
         normalScore = if normalScore > 95 then 95 else normalScore
         return Math.round normalScore
