@@ -27,8 +27,8 @@ define [
     onClick: ->
       @emotionsOverviewResult.$el.trigger 'click'
 
-    remove: ->
-      @emotionsOverviewResult.remove()
+    close: ->
+      @emotionsOverviewResult?.remove()
       @remove()
 
 

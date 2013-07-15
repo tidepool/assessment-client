@@ -43,8 +43,12 @@ define [
 
     onSync: ->
       if @collection and @collection.length is 0
+#        console.log "#{_me} Server returned empty collection, hiding the widget"
+        @close?()
         @remove()
       else if @model and _.isEmpty @model.attributes
+#        console.log "#{_me} Server returned empty collection, hiding the widget"
+        @close?()
         @remove()
       else
         @render()
