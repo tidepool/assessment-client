@@ -11,7 +11,8 @@ define [
 ) ->
 
   _me = 'entities/results_calculator'
-  _maxPollCount = 20
+  _maxTryCount = 2 # Total tries, from the beginning, only happens if the server errors
+  _maxPollCount = 15 # Poll limit, normal behavior
 
   Model = Backbone.Model.extend
 
@@ -24,9 +25,13 @@ define [
     urlRoot: -> "#{window.apiServerUrl}/api/v1/users/-/games/#{@get('game_id')}/results"
 
     initialize: ->
-      @attempts = 0
-      @fetch()
+      @tries = 0
       @on 'sync', @onSync
+      @tryTryAgain()
+
+    tryTryAgain: ->
+      @polls = 0
+      @fetch()
 
 
     # ----------------------------------------------------------------------------------- Private Methods
@@ -35,28 +40,35 @@ define [
       promise = $.ajax
         type: 'GET'
         url: url
-
       promise.done (data, textStatus, jqXHR) =>
         console.log("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 200
         switch data.status.state
           when @STATES.pending
             # Look for progress updates at intervals
-            @attempts += 1
-            if @attempts >= _maxPollCount
+            @polls += 1
+            if @polls >= _maxPollCount
               @trigger 'error', @, 'Timed out waiting for results.'
             else
               setTimeout =>
                 @pollForProgress data.status.link
               , 500
           when @STATES.done then @set 'status', data.status
-          when @STATES.error then @trigger 'error', @, data.status.message
+          when @STATES.error then @_handleServerError data
           else @trigger 'error', @, "Unexpected status #{data.status.state}"
-
       promise.fail (jqXHR, textStatus, errorThrown) ->
         @trigger 'error', @, textStatus, { jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown }
 
 
-    # ------------------------------------------------------------------------------ Callbacks
+    _handleServerError: (data) ->
+      @tries++
+      console.log "Error on try #{@tries}"
+      if @tries >= _maxTryCount
+        @trigger 'error', @, data.status.message
+      else
+        @tryTryAgain()
+
+
+  # ------------------------------------------------------------------------------ Callbacks
     onSync: (model) ->
       @pollForProgress model.attributes.status.link
 
