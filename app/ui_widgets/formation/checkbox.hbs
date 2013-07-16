@@ -1,19 +1,24 @@
 
-<div class="field {{string_id}}">
+<div class="field {{name}}">
 
     <input
-        id="field-{{string_id}}"
-        name="{{string_id}}"
+        id="field-{{name}}"
+        name="{{name}}"
         class="{{className}}"
         type="checkbox"
-        value="{{value}}"
         {{#if required}}
             required
+        {{/if}}
+        {{#if value}}
+            checked
         {{/if}}
     />
 
     {{#if label}}
-        <label class="forCheckbox" for="field-{{string_id}}">{{label}}</label>
+        <label class="forCheckbox" for="field-{{name}}">{{label}}</label>
+    {{/if}}
+    {{#if description}}
+        <label class="forCheckbox" for="field-{{name}}">{{description}}</label>
     {{/if}}
 
 </div>

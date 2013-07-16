@@ -27,6 +27,7 @@ define [
   'entities/cur_user_recommendations'
   'entities/cur_user_personality'
   'entities/results/results'
+  'entities/preferences/training'
 ], (
   _
   Backbone
@@ -50,6 +51,7 @@ define [
   CurUserRecommendations
   CurUserPersonality
   Results
+  TrainingPreferences
 ) ->
 
   # keeping a key to these is a way to have widgetmaster preload all of them instead of dynamically requiring each one
@@ -75,6 +77,7 @@ define [
     'entities/cur_user_recommendations': CurUserRecommendations
     'entities/cur_user_personality': CurUserPersonality
     'entities/results/results': Results
+    'entities/preferences/training': TrainingPreferences
 
   # model instances are keyed by module id (essentially a class name) and fetch options. This way data can be shared between widgets.
   _keyBuilder = (Widgy) ->
@@ -131,6 +134,7 @@ define [
       # Instantiate each model class
       modelsByKey = {}
 #      console.log modelClassesByKey:modelClassesByKey
+
       for key, Model of modelClassesByKey
         modelsByKey[key] = new Model()
         modelsByKey[key].fetchOptions = fetchOptionsByKey[key]

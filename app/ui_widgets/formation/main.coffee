@@ -75,7 +75,7 @@ define [
       formData = Syphon.serialize @el
       # remove field names for blank values
       for field, val of formData
-        delete formData[field] unless val
+        delete formData[field] unless val? # Deletes the property if it is undefined or null. False is preserved
 #        if val.length is 1 and not val[0] # remove blank arrays (a quirk of unselected multiselect boxes
 #          delete formData[field]
 #      console.log formData:formData

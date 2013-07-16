@@ -5,11 +5,11 @@ define [
   'underscore'
   'backbone'
   'Handlebars'
+  'entities/preferences/training-descriptions'
+  'entities/preferences/training'
   'text!./personalization.hbs'
   'text!./personalization-games.hbs'
   'ui_widgets/formation'
-  './personalization-fields-productivity'
-  './personalization-fields-mood'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
   'composite_views/perch'
@@ -20,11 +20,11 @@ define [
   _
   Backbone
   Handlebars
+  TrainingPreferencesDesc
+  TrainingPreferences
   tmpl
   tmplGames
   Formation
-  fields1
-  fields2
   holdPlease
   psst
   perch
@@ -37,14 +37,9 @@ define [
   _stepsSel = '.stepsRemainingWizard li'
   _completedClass = 'complete'
   _tmpl = Handlebars.compile tmpl
-  _fields = [
-    fields1
-    fields2
-  ]
-  _titles = [
-    '1. Productivity'
-    '2. Mood'
-  ]
+  _pageCount = 2
+  _titles = [ '1. Productivity', '2. Mood' ]
+  _categories = [ 'productivity', 'mood' ]
   _infoTips = [
     'TidePool\'s patented exercises are designed by top American psychologists.'
     'Many TidePool users report positive results and also shared TidePool with friends and family.'
@@ -66,40 +61,56 @@ define [
       'click .games a': 'onGameClicked'
 
 
-  # ----------------------------------------------------------- Backbone Methods
+    # ----------------------------------------------------------- Backbone Methods
     initialize: ->
-#      @listenTo @model, 'error', @onError
-#      @listenTo @model, 'invalid', @onInvalid
-#      @listenTo @model, 'sync', @onSync
-      @_createInitialData() # Makes the user preferences thing, just in case they don't have them yet
+      @data = new TrainingPreferences()
+      @fields = new TrainingPreferencesDesc()
+      # Get content from server
+      promise = $.when @data.fetch(), @fields.fetch() # We need two different server responses to proceed
+      promise.done _.bind @onSync, @
+      promise.fail @onError
       @curPage = 0
 
     render: ->
-      @$el.html _tmpl #@model.attributes
-      @_showFields(@curPage)
+      holdPlease.show @$el
       @
 
+    renderContents: ->
+#      console.log
+#        data: @data
+#        fields: @fields
+      holdPlease.hide @$el
+      @$el.html _tmpl
+      @_showFields(@curPage)
 
-    # ----------------------------------------------------------- Private Helper Methods
+
+    # ----------------------------------------------------------- Server Event Handlers
+    onSync: (dataResp, fieldsResp) ->
+#      console.log
+#        dataRespData: dataResp[0]
+#        fieldsRespData: fieldsResp[0]
+      @fields.setValues dataResp[0].data if dataResp and dataResp[0]
+      @renderContents()
+
+    onError: (model, xhr) ->
+      if xhr.status is 0
+        msg = 'Unknown Server Error'
+      else
+        msg = "#{xhr.status}: #{xhr.statusText}"
+      perch.hide()
+
+
+    # ----------------------------------------------------------- View-Oriented Helpers
     _showFields: (idx) ->
+      app.core.analytics.track 'Personalizations', "Showing Step: #{idx}"
       @_indexActions idx
       # Form Explanation
       @$(_explanationSel).html _explanationTmpl
         title: _titles[idx]
         subtitle: 'Select all options that you are interested to improve.'
       # Form Fields
-      @form = new Formation data: _fields[idx]
+      @form = new Formation data: @fields.where( category: _categories[idx] )
       @$(_contentSel).html @form.render().el
-      @
-
-    _getData: ->
-      return unless @form?
-      formData = @form.getVals()
-      @data = @data || {}
-      @data = _.extend @data, formData
-      console.log
-        formData:formData
-        allData:@data
       @
 
     _indexActions: (idx) ->
@@ -107,6 +118,7 @@ define [
       @$(_infoSel).html _infoTmpl { text: _infoTips[idx] }
 
     _showComplete: (idx) ->
+      app.core.analytics.track 'Personalizations', "Completed"
       @_indexActions idx
       @$(_explanationSel).html _explanationTmpl
         title: 'Your Personalized Program is ready!'
@@ -115,69 +127,19 @@ define [
       @$(_btnSel).remove()
       @
 
-    #TODO: Fix this it sucks
-    _createInitialData: ->
-      $.ajax
-        type: 'POST'
-        contentType: 'application/json'
-        data: JSON.stringify
-          type: 'TrainingPreference'
-          data: { seed: 42 }
-        url: "#{window.apiServerUrl}/api/v1/users/-/preferences" #TODO: remove window reference, use app.cfg instead
-      @
 
-    _sendData: ->
-      return unless @data?
-      $.ajax
-        type: 'PUT'
-        contentType: 'application/json'
-        data: JSON.stringify
-          type: 'TrainingPreference'
-          data: @data
-        url: "#{window.apiServerUrl}/api/v1/users/-/preferences" #TODO: remove window reference, use app.cfg instead
-      @
-
-    _showErr: (msg) ->
-      psst.hide()
-      psst
-        sel: _errorHolderSel
-        msg: msg
-        type: 'error'
-      holdPlease.hide @$(_submitBtnSel)
-
-
-    # ----------------------------------------------------------- Event Handlers
-# TODO: Bind to server
-#    onInputChange: -> psst.hide()
-#
-#    onSubmit: (e) ->
-#      e.preventDefault()
-#      psst.hide()
-#      holdPlease.show @$(_submitBtnSel)
-#      formData = @form.getVals()
-#      @model.save formData,
-#        wait: true # Don't update the client model until the server state is changed
-#
-#    onSync: -> perch.hide()
-#
-#    onError: (model, xhr) ->
-#      if xhr.status is 0
-#        msg = 'Unknown Server Error'
-#      else
-#        msg = "#{xhr.status}: #{xhr.statusText}"
-#      @_showErr msg
-#
-#    onInvalid: (model, msg) ->
-#      @_showErr msg
-
+    # ------------------------------------------------------------ Event Handlers
     onClickNext: ->
       @curPage++
+      @fields.setValues @form.getVals()
+      @data.setValues @form.getVals()
       @form?.remove()
       # Check to see if it's the last page
-      if @curPage is _fields.length
-        @_getData()._sendData()._showComplete @curPage
+      if @curPage is _pageCount
+        @data.save()
+        @_showComplete @curPage
       else
-        @_getData()._showFields @curPage
+        @_showFields @curPage
 
     onGameClicked: ->
 #      console.log 'game clicked'

@@ -101,10 +101,10 @@ define [
           # TODO: customize background per badge
           personalityModel = @collection.find (m) -> m.attributes.type is TYPES.pers
           stringId = personalityModel.attributes.score.name.split(' ').join('-')
-          console.log
-            coll: @collection.toJSON()
-            pers: personalityModel
-            stringId: stringId
+#          console.log
+#            coll: @collection.toJSON()
+#            pers: personalityModel
+#            stringId: stringId
           $('body').addClass "#{@className}-#{stringId}"
         else
           console.warn "Unknown type: #{type}"
