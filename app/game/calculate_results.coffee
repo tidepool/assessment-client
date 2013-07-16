@@ -45,13 +45,14 @@ define [
       @_showResults()
 
     onError: (model, msg) ->
+      # Send the user to the results page, since some of the results could be calculated, they're just suspect
+      # If they're a guest send the user to play again since there's nothing else to do
       app.analytics.track @className, 'Error Getting game results'
-      #TODO: try again a few times before going asplodey
       perch.show
-        title: 'Doh. Pretty Srs Error.'
+        title: 'Sorry, There Is a Problem.'
         msg: msg
         btn1Text: 'Ok'
-        onClose: -> app.router.navigate('home', trigger: true)
+        onClose: => @_showResults() #-> app.router.navigate('home', trigger: true)
         mustUseButton: true
 
     onChange: (model) ->
