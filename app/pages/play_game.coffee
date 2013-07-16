@@ -40,6 +40,7 @@ define [
 #    reaction_time: 'The Reaction Time Game'
   _defaultTitle = 'Play a Game'
   _animationTime = 1
+  _raceConditionDelay = 500 #TODO: remove this. Prevents a race condition exhibited if the server starts calculating before all events are received
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
   Me = Backbone.View.extend
@@ -77,7 +78,7 @@ define [
     # ------------------------------------------------------------- Event Handlers
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed #+ 7 # Increment is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed #+ 3 # Increment is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       @stepsRemaining?.setComplete curStage
       # Show the next stage
@@ -123,11 +124,13 @@ define [
 
     # ------------------------------------------------------------- Results
     _calculateResults: (gameModel) ->
-      @curLevel = new CalculateResultsView
-        game: @model
-        model: new Results
-          game_id: gameModel.get 'id'
-      @$el.html @curLevel.render().el
+      setTimeout (=>
+        @curLevel = new CalculateResultsView
+          game: gameModel
+          model: new Results
+            game_id: gameModel.get 'id'
+        @$el.html @curLevel.render().el
+      ), _raceConditionDelay
 
     # ------------------------------------------------------------- Consumable API
     # Called by the parent view.
