@@ -19,6 +19,7 @@ define [
     tmpl: Handlebars.compile tmpl
     className: 'rankableImage'
     tagName: 'li'
+    attributes: tabindex: 2 # Makes them focusable
     initialize: ->
     render: ->
       @$el.html @tmpl @model.attributes

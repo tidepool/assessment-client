@@ -27,10 +27,10 @@ define [
     ]
     defaults:
       selfProximityPx: null
-      selfProximityRank: null
+#      selfProximityRank: null
       selfOverlapPx: null
       selfOverlapRatio: null
-      image: null # Used if there should be an image in the circle
+#      image: null # Used if there should be an image in the circle
       #iconClass: icon-user # Used if there should be an icon in the circle
       userChangedSize: false
       userChangedPos: false
@@ -45,6 +45,7 @@ define [
       @_calcAbbreviation()
       @_calcImageUrl()
       @set 'size', 2 #@get('size') - 1 #TODO: remove this. temp kludge because the data is sending sizes with '5', but the scale is 0-4
+      @_setWidthBySize @get 'size'
       @on 'change:size', @onChangeSize
       @on 'change:pos', @onChangePos
 
@@ -70,15 +71,19 @@ define [
 
     # ------------------------------------------------------------------- Event Handlers
     onChangeSize: (model, sz) ->
-      @set 'userChangedSize', true
+      @set
+        userChangedSize: true
+        interacted: true
       @_setWidthBySize sz
 
-    onChangePos: (model, pos) -> @set 'userChangedPos', true
-
+    onChangePos: (model, pos) ->
+      @set
+        userChangedPos: true
+        interacted: true
 
     # ------------------------------------------------------------------- Public API
-    getScale: ->
-      @sizeToScale[ @get('size') ]
+    getScale: -> @sizeToScale[ @get('size') ]
+
 
 
   # --------------------------------------------------------------------- Collection

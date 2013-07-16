@@ -16,6 +16,7 @@ define [
 
   _me = 'game/levels/circle_proximity/sizey_view'
   _sliderSel = '.slider'
+  _sliderHandleSel = '.ui-slider-handle'
   _circleSel = '.circle'
 
   View = Backbone.View.extend
@@ -23,8 +24,9 @@ define [
     # ----------------------------------------------------- Backbone Extensions
     className: 'sizey'
     tmpl: Handlebars.compile tmpl
+
     initialize: ->
-      _.bindAll @, 'onSlide'
+      _.bindAll @, 'onSlide', 'onClick', 'onFocus'
       @circle = new CircleView
         model: @model
 
@@ -35,12 +37,15 @@ define [
         value: @model.get('size')
         max: @model.maxSize
         slide: @onSlide
+      @$(_sliderHandleSel).on 'click', @onClick # Bind after the slider is set up so we can catch clicks on that
+      @$(_sliderHandleSel).on 'focus', @onFocus
       @
 
 
     # ----------------------------------------------------- Event Callbacks
     onSlide: (e, ui) -> @model.set size: ui.value
-
+    onClick: -> @model.set interacted:true
+    onFocus: -> @model.set interacted:true
 
   View
 

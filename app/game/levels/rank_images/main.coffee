@@ -20,6 +20,8 @@ define [
   _me = 'game/levels/rank_images'
   _rankingSel= '#RankingArea'
   _unrankedSel = '#UnrankedArea'
+  _rankableImageSel = '.rankableImage'
+  _proceedSel = '.proceed'
   _sortableSel = '.connectedSortable'
   _msgHtml = '<li class="message">Rank from favorite to least favorite by clicking or dragging images.</li>'
   _EVENTS =
@@ -36,7 +38,7 @@ define [
     start: ->
       @collection = new RankableImages @model.get('image_sequence')
       # Bind the funky callbacks we need for jQuery Sortable
-      _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick'
+      _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onUnrankedImageKeypress'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
       @track Level.EVENTS.start, image_sequence:@collection.toJSON()
@@ -61,8 +63,10 @@ define [
           start: @onSortStart
           stop: @onSortEnd
         @$(_sortableSel).disableSelection()
-        @$(_unrankedSel).on('click', '.rankableImage', @onUnrankedImageClick)
-        @$(_rankingSel).on('click', '.rankableImage', @onRankedImageClick)
+        @$(_unrankedSel).on 'click', '.rankableImage', @onUnrankedImageClick
+        @$(_rankingSel).on 'click', '.rankableImage', @onRankedImageClick
+        @$(_unrankedSel).on 'keypress', '.rankableImage', @onUnrankedImageKeypress
+        @$(_rankingSel).on 'keypress', '.rankableImage', @onRankedImageClick
       @
 
 
@@ -99,25 +103,36 @@ define [
 
 
     # ----------------------------------------------------- Event Handlers
+    onUnrankedImageKeypress: (e) ->
+      @onUnrankedImageClick e
+      $firstImg = @$(_unrankedSel).find(_rankableImageSel).first() # Optimizing for speed so that we power users and testers can complete the assessment superfast
+      if $firstImg
+        $firstImg.focus()
+
     onUnrankedImageClick: (e) ->
       #console.log "#{_me}.onUnrankedImageClick()"
       @$(_rankingSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
+
     onRankedImageClick: (e) ->
       #console.log "#{_me}.onRankedImageClick()"
       @$(_unrankedSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
+
     onOver: -> @_checkOnMsg()
+
     onSortStart: (e, ui) ->
       id = $(e.currentTarget).find('img').data('id')
       @_trackDragged id
       # Remove the helper from the original location. This way css labels on :first-child and :last-child will work beautifully
 #      ui.helper.appendTo('body') # The appendTo option on the jquery sortable seems broken, but manually removing the helper like this seems to work well
+
     onSortEnd: (e, ui) ->
       #console.log "#{_me}.onSortEnd"
       @_checkOnRanks()
+
     onRankChange: (model, value, options) ->
       #console.log "#{_me}.onRankingChange new rank for image #{model.attributes.image_id}: #{model.attributes.rank}"
       if value is -1

@@ -59,6 +59,10 @@ define [
 
 
     # ------------------------------------------------------------- Consumable API
+    # Clear `interacted` flag on each item in a collection. Useful if a collection is used in multiple levels
+    clearInteracted: (collection) ->
+      collection.each (item) -> item.set 'interacted', null
+
     # Check the whole collection for an `interacted` property. Return true if they all are.
     checkAllInteracted: (collection) ->
       interacted = collection.filter (item) -> item.get('interacted')

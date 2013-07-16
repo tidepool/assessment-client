@@ -25,6 +25,7 @@ define [
 #      console.log model:@model.attributes
       @collection = new Circles @model.attributes.circles
       @collection.each (model) -> model.set 'size', 4 # Emotions circles all start at the largest size
+      @clearInteracted @collection # Since we set the size it thinks the user interacted with them. Psych!
       @track Level.EVENTS.start,
         circles: @collection.toJSON()
 
@@ -36,7 +37,7 @@ define [
       @$el.html @circleProximity.el
       setTimeout (=> @circleProximity.render() ), 1 # Render after putting in the dom since it needs to compute locations
       @listenToOnce @circleProximity, 'done', @onTestDone
-      return this
+      @
 
 
     # ----------------------------------------------------- Event Handlers

@@ -2,6 +2,7 @@ define [
   'underscore'
   'backbone'
   'entities/circles'
+  'game/levels/_base'
   'text!./instructions.hbs'
   'composite_views/perch'
   './self_view'
@@ -12,6 +13,7 @@ define [
   _
   Backbone
   Circles
+  Level
   instructions
   perch
   SelfView
@@ -20,20 +22,19 @@ define [
 ) ->
 
   _me = 'game/levels/circle_proximity'
-  #_lineMarkup = '<div class="line"></div>'
   _USEREVENTS =
     dragStart: ''
     dragStop: ''
   _degToRad = (deg) -> deg * Math.PI / 180
 
 
-  View = Backbone.View.extend
+  View = Level.extend
 
     # ----------------------------------------------------- Backbone Extensions
     className: 'circleProximity'
 
     initialize: ->
-      @listenTo @collection, 'change:userChangedPos', @onChangeUserChangedPos
+      @listenTo @collection, 'change:interacted', @onChangeInteracted
       @listenToOnce proceed, 'click', @_close
       _.bindAll @, '_renderLevel'
 
@@ -75,7 +76,6 @@ define [
       @_positionCirclesAround @selfView.getSelfCenter()
       @
 
-
     _positionCirclesAround: (center) ->
       count = @collection.length
       increment = 360 / count
@@ -87,11 +87,6 @@ define [
           y: Math.sin( _degToRad(deg) ) * distance + center.y
         deg += increment
 
-    _checkDone: ->
-      # Ready to proceed if the user moved all the circles
-      changedCircles = @collection.filter (circle) -> circle.get('userChangedPos')
-      return true if changedCircles.length is @collection.length
-
     _close: ->
       @collection.each (circle) -> circle.view.remove() # Removing one at a time lets views clean up their events
       proceed.hide()
@@ -100,11 +95,7 @@ define [
 
 
     # ----------------------------------------------------- Event Handlers
-    onChangeUserChangedPos: ->
-      proceed.show() if @_checkDone()
-
-
-    # ----------------------------------------------------- Consumable API
+    onChangeInteracted: -> proceed.show() if @checkAllInteracted @collection
 
 
 

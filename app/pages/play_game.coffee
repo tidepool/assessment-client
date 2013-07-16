@@ -132,6 +132,7 @@ define [
         @$el.html @curLevel.render().el
       ), _raceConditionDelay
 
+
     # ------------------------------------------------------------- Consumable API
     # Called by the parent view.
     # Allows for cleaning up events, and external views like lightboxes and proceed controls

@@ -34,8 +34,13 @@ define [
     # ----------------------------------------------------- Backbone Extensions
     className: "proxy #{_freshClass}"
     tmpl: Handlebars.compile tmpl
+    events:
+      'focus .circle': 'onFocus'
+      'click .circle': 'onClick'
+
     initialize: ->
       _.bindAll @, 'onDragStart', 'onDrag', 'onDragStop'
+
     render: ->
       @$el.html @tmpl @model.attributes
       @$(_circleSel).addClass @model.sizeToClass[@model.attributes.size]
@@ -117,7 +122,9 @@ define [
         selfOverlapPx: overlapPx
         selfOverlapRatio: overLapRatio
 
-    _updateModelPosition: (coords) ->
+    _updateModelPosition: ->
+#      console.log position: @$el.position()
+      coords = @$el.position()
       center = @coordToCenter
         x: coords.left
         y: coords.top
@@ -129,12 +136,10 @@ define [
         top: coords.top
         selfProximityPx: Math.round @_calculateDistanceFromSelf center
       @_updateModelSelfOverlap()
-      #console.log @model.attributes
+      @
 
 
     # ----------------------------------------------------- Event Callbacks
-    onChangePos: (model, pos) ->
-
     onDragStart: (e, ui) ->
       @$el.removeClass(_freshClass)
       @_showLine()
@@ -148,10 +153,13 @@ define [
     onDragStop: (e, ui) ->
       @_shimmerSelf()
       @_hideLine()
-      @_updateModelPosition ui.position
+      @_updateModelPosition()
       @options.track _USEREVENTS.dragStop,
         circle_no: @model.collection.indexOf @model
         circle: @model.toJSON()
+
+    onFocus: (e) -> @_updateModelPosition()
+    onClick: -> @_updateModelPosition()
 
 
     # ----------------------------------------------------- Public API

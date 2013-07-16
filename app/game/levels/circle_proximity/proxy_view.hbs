@@ -2,7 +2,7 @@
 
 {{#if image_url}}
 
-    <div class="circle hasImage">
+    <div tabindex="2" class="circle hasImage">
         {{#if image_url}}
             <img src="{{image_url}}" alt="Image representing emotion(s)"/>
         {{/if}}
@@ -10,7 +10,7 @@
 
 {{else}}
 
-    <div class="circle">{{{abbreviation}}}</div>
+    <div tabindex="2" class="circle">{{{abbreviation}}}</div>
     <label>
         <span class="inner">
             <b class="fluff arrowTop"></b>

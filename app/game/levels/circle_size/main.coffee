@@ -2,6 +2,7 @@ define [
   'underscore'
   'backbone'
   'entities/circles'
+  'game/levels/_base'
   'text!./instructions.hbs'
   './sizey_view'
   'composite_views/perch'
@@ -11,6 +12,7 @@ define [
   _
   Backbone
   Circles
+  Level
   instructions
   Sizey
   perch
@@ -18,17 +20,18 @@ define [
 ) ->
 
   _me = 'game/levels/circle_size'
-  _userMaySkipThisMany = 0
   _USEREVENTS =
     resized: 'circle_resized'
 
-  View = Backbone.View.extend
+  View = Level.extend
 
     # ----------------------------------------------------- Backbone Extensions
     className: 'circleSize'
 
+
+
     initialize: ->
-      @listenTo @collection, 'change:userChangedSize', @onChangeUserChangedSize
+      @listenTo @collection, 'change:interacted', @onChangeInteracted
       @listenTo @collection, 'change:size', @onChangeSize
       @listenToOnce proceed, 'click', @_close
       _.bindAll @, 'render'
@@ -52,14 +55,10 @@ define [
 
 
     # ----------------------------------------------------- Private Methods
-    _checkDone: ->
-      # Ready to proceed if the user changed all the circle sizes
-      changedCircles = @collection.filter (circle) -> circle.get('userChangedSize')
-      return true if changedCircles.length >= @collection.length - _userMaySkipThisMany
-
     _close: ->
       @collection.each (circle) -> circle.view?.remove?() #Close them down properly. Lets them assign widths and remove events.
       proceed.hide()
+      @clearInteracted @collection
       @trigger 'done'
       @remove()
 
@@ -70,10 +69,7 @@ define [
         circle_no: model.collection.indexOf model
         new_size: size
 
-    onChangeUserChangedSize: ->
-      #console.log "#{_me}.onChangeUserChangedSize()"
-      proceed.show() if @_checkDone()
-
+    onChangeInteracted: -> proceed.show() if @checkAllInteracted @collection
 
 
   View
