@@ -62,7 +62,7 @@ define [
         className: 'brandHappy'
         btn1Text: null
         huge: true
-        content: new PersonalizationView()
+        content: new PersonalizationView( app: @options.app )
 
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->

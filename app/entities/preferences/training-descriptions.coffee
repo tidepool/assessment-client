@@ -1,15 +1,13 @@
 
 define [
   './preferences'
-  'core'
 ],
 (
   Preferences
-  app
 ) ->
 
   Collection = Preferences.extend
-    url: -> "#{app.core.cfg.apiServer}/api/v1/preferences/training-preference/description" # app.core uses the `exports` format of module exposure
+    url: -> "#{window.apiServerUrl}/api/v1/preferences/training-preference/description"
 
 #    parse: (resp) ->
 #      return null unless resp

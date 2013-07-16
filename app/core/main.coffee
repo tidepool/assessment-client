@@ -2,7 +2,6 @@
 # http://requirejs.org/docs/api.html#packages
 
 define [
-  'exports'
   # Global Dependencies
   'underscore'
   'backbone'
@@ -17,7 +16,6 @@ define [
   'controllers/session_controller'
 ],
 (
-  exports
   _
   Backbone
   config
@@ -66,6 +64,4 @@ define [
 
 
   # Publicize a singleton
-  core = new Core()
-  exports.core = core # publicize it this way
-  core # And also that way
+  new Core()

@@ -13,7 +13,6 @@ define [
   'ui_widgets/hold_please'
   'ui_widgets/psst'
   'composite_views/perch'
-  'core'
 ],
 (
   $
@@ -28,7 +27,6 @@ define [
   holdPlease
   psst
   perch
-  app
 ) ->
 
   _btnSel = '.actionZone .btn'
@@ -102,7 +100,7 @@ define [
 
     # ----------------------------------------------------------- View-Oriented Helpers
     _showFields: (idx) ->
-      app.core.analytics.track 'Personalizations', "Showing Step: #{idx}"
+      @options.app.analytics.track 'Personalizations', "Showing Step: #{idx}"
       @_indexActions idx
       # Form Explanation
       @$(_explanationSel).html _explanationTmpl
@@ -118,7 +116,7 @@ define [
       @$(_infoSel).html _infoTmpl { text: _infoTips[idx] }
 
     _showComplete: (idx) ->
-      app.core.analytics.track 'Personalizations', "Completed"
+      @options.app.analytics.track 'Personalizations', "Completed"
       @_indexActions idx
       @$(_explanationSel).html _explanationTmpl
         title: 'Your Personalized Program is ready!'
