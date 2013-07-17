@@ -24,6 +24,7 @@ define [
       "click #ActionLogOut":               "_clickedLogOut"
       "click #ActionShowProfile":          "_clickedProfile"
       "click #ActionShowPersonalizations": "_clickedPersonalizations"
+      "click #ActionShowConnections":      "_clickedConnections"
 
     start: (appCoreSingleton) ->
       throw new Error('Need an options.user to start') unless appCoreSingleton.user
@@ -52,6 +53,7 @@ define [
     _clickedLogOut: ->           @app?.trigger 'session:logOut'
     _clickedProfile: ->          @app?.trigger 'session:showProfile'
     _clickedPersonalizations: -> @app?.trigger 'action:showPersonalizations'
+    _clickedConnections: ->      @app?.trigger 'action:showConnections'
 
 
   new Me()

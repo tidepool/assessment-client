@@ -6,6 +6,7 @@ define [
   'forms/user/login'
   'forms/user/profile'
   'preferences/personalization'
+  'connections/index'
 ],
 (
   _
@@ -14,6 +15,7 @@ define [
   UserLogin
   UserProfile
   PersonalizationView
+  ConnectionsView
 ) ->
 
   _me = 'core/mediator'
@@ -29,6 +31,7 @@ define [
       @listenTo @options.app, 'session:showProfile', @_showProfile
       @listenTo @options.app, 'session:logOut', @_actionLogOut
       @listenTo @options.app, 'action:showPersonalizations', @_showPersonalizations
+      @listenTo @options.app, 'action:showConnections', @_showConnections
 
 
     # ------------------------------------------------ Display command handlers
@@ -63,6 +66,12 @@ define [
         btn1Text: null
         huge: true
         content: new PersonalizationView( app: @options.app )
+
+    _showConnections: ->
+      perch.show
+        title: 'Connections'
+        btn1Text: 'Ok'
+        content: new ConnectionsView( app: @options.app )
 
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->
