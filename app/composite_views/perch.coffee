@@ -13,6 +13,7 @@ define [
 
   _me = 'composite_views/perch'
   _defaultParent = 'body'
+  _defaultClassnames = 'perch modal'
   _contentSel = '#PerchBody'
 
   PerchModel = Backbone.Model.extend
@@ -101,27 +102,19 @@ define [
         @options.app.analytics.CATEGORIES.viewLightbox, name, '', opts
       )
 
-    _makeSmall: ->
-      @$el.addClass 'small'
-      @$el.removeClass 'huge'
-    _makeLarge: ->
-      @$el.removeClass 'small'
-      @$el.removeClass 'huge'
-    _makeHuge: ->
-      @$el.addClass 'huge'
-      @$el.removeClass 'small'
-
 
     # ---------------------------------------------------------------------- Public API
     show: (options) ->
       @model = new PerchModel()
+      # Start with the default classnames
+      @$el.prop 'class', _defaultClassnames
       # Allow Different Sizes
       if options.large
-        @_makeLarge()
+        # nuttin'
       else if options.huge
-        @_makeHuge()
+        @$el.addClass 'huge'
       else
-        @_makeSmall()
+        @$el.addClass 'small'
       # Let folks add a class
       @$el.addClass options.className if options.className?
       @listenTo @model, 'change', @render
@@ -135,7 +128,7 @@ define [
       return this
 
     hide: ->
-      @$el.modal('hide')
+      @$el.modal 'hide'
 
 
   # Return a singleton
