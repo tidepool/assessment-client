@@ -17,7 +17,7 @@ define [
 
   View = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
-    className: 'chart polarArea'
+    className: 'chart pie'
     initialize: -> @model = new ChartModel @options.data, { parse:true }
 
     render: ->

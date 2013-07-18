@@ -10,7 +10,7 @@ define [
 ) ->
 
   _widgetSel = '.widget'
-  _chartName = 'Emotions'
+  _chartName = 'Primary Emotions'
 
   View = Widget.extend
     events: 'click .widget': 'onClick'
