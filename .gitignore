@@ -10,3 +10,4 @@ app/bower_components
 app/scripts/app_secrets_dev.js
 *.css
 !gfx.css
+.env.json

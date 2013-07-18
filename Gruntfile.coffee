@@ -9,31 +9,22 @@ module.exports = (grunt) ->
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
 
-  # load the server configuration from .env file
-  serverConfig = {}
-  require("fs").readFileSync("./.env").toString().split('\n').forEach (line) ->
-    contents = line.split('=')
-    console.log line
-    serverConfig[contents[0]] = contents[1]
-
-  # configurable paths
-  yeomanConfig =
+  # configurable paths and globs
+  buildConfig =
     app: "app"
     dist: "dist"
     dev: ".devServer"
     temp: ".tmp"
     research: "../OAuthProvider/public/"
-
-  tidepoolConfig =
     sassSourceGlob: [
-      "<%= yeoman.app %>/**/*.sass"
-      "!<%= yeoman.app %>/bower_components/*"
+      "<%= cfg.app %>/**/*.sass"
+      "!<%= cfg.app %>/bower_components/*"
     ]
     cssSourceGlob: [
-#      "<%= yeoman.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
-      "<%= yeoman.app %>/styles/gfx.css"
-      "<%= yeoman.temp %>/**/*.css"
-      "!<%= yeoman.temp %>/library.css"
+#      "<%= cfg.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
+      "<%= cfg.app %>/styles/gfx.css"
+      "<%= cfg.temp %>/**/*.css"
+      "!<%= cfg.temp %>/library.css"
     ]
     horseAndBuggyJsGlob: [
       "bower_components/**/{*.js,*.css}"
@@ -50,11 +41,8 @@ module.exports = (grunt) ->
     specFile: "spec.html"
 
   grunt.initConfig
-    yeoman: yeomanConfig
-    tidepool: tidepoolConfig
-    tidepoolServer: serverConfig
-    bowerPkg: grunt.file.readJSON 'bower.json'
-    nodePkg: grunt.file.readJSON 'package.json'
+    cfg: buildConfig
+    env: grunt.file.readJSON '.env.json'
     connect:
       options:
         port: 7000
@@ -76,45 +64,45 @@ module.exports = (grunt) ->
 
     watch:
       hbs:
-        files: ["<%= yeoman.app %>/**/*.hbs"]
+        files: ["<%= cfg.app %>/**/*.hbs"]
         tasks: ["livereload"]
 
       coffee:
-        files: ["<%= yeoman.app %>/**/*.coffee"]
+        files: ["<%= cfg.app %>/**/*.coffee"]
         tasks: ["coffee:dev", "replace:dev"]
 
       coffeeTest:
-        files: ["<%= yeoman.app %>/**/*.spec.coffee"]
+        files: ["<%= cfg.app %>/**/*.spec.coffee"]
         tasks: ["coffee:spec"]
 
       specScribe:
-        files: ["<%= yeoman.app %>/spec.html", "<%= tidepool.specGlob %>"]
+        files: ["<%= cfg.app %>/spec.html", "<%= cfg.specGlob %>"]
         tasks: ["exec:scribeSpecs", "livereload"]
 
       compass:
-        files: "<%= tidepool.sassSourceGlob %>"
+        files: "<%= cfg.sassSourceGlob %>"
         tasks: ["compass", "cssmin:dev", "clean:temp", "livereload"]
 
       libraryCss:
-        files: "<%= yeoman.temp %>/library.css"
+        files: "<%= cfg.temp %>/library.css"
         tasks: "copy:libraryCss"
 
       livereload:
         files: [
-          "<%= yeoman.app %>/*.html"
-          "<%= yeoman.dev %>/spec.html"
-          "<%= yeoman.dev %>/**/*.css"
-          "<%= yeoman.app %>/library.css"
-          "<%= yeoman.dev %>/**/*.js"
-          "<%= yeoman.app %>/**/*.{png,jpg}"
+          "<%= cfg.app %>/*.html"
+          "<%= cfg.dev %>/spec.html"
+          "<%= cfg.dev %>/**/*.css"
+          "<%= cfg.app %>/library.css"
+          "<%= cfg.dev %>/**/*.js"
+          "<%= cfg.app %>/**/*.{png,jpg}"
         ]
         tasks: ["livereload"]
 
     clean:
-      dev: ["<%= yeoman.dev %>", "<%= yeoman.temp %>", ".grunt"]
-      temp: "<%= yeoman.temp %>"
-      dist: "<%= yeoman.dist %>"
-      hbs: "<%= yeoman.temp %>/**/*.hbs"
+      dev: ["<%= cfg.dev %>", "<%= cfg.temp %>", ".grunt"]
+      temp: "<%= cfg.temp %>"
+      dist: "<%= cfg.dist %>"
+      hbs: "<%= cfg.temp %>/**/*.hbs"
 
     coffee:
       options:
@@ -122,25 +110,25 @@ module.exports = (grunt) ->
       temp:
           files: [
             expand: true
-            cwd: "<%= yeoman.app %>"
+            cwd: "<%= cfg.app %>"
             src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-            dest: "<%= yeoman.temp %>"
+            dest: "<%= cfg.temp %>"
             ext: ".js"
           ]
       dev:
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>"
+          cwd: "<%= cfg.app %>"
           src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-          dest: "<%= yeoman.dev %>"
+          dest: "<%= cfg.dev %>"
           ext: ".js"
         ]
       spec:
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>"
+          cwd: "<%= cfg.app %>"
           src: "**/*.spec.coffee"
-          dest: "<%= yeoman.dev %>"
+          dest: "<%= cfg.dev %>"
           ext: ".spec.js"
         ]
 
@@ -152,14 +140,14 @@ module.exports = (grunt) ->
           trace: true
           style: 'compact'
         files:
-          "<%= yeoman.dev %>/all-min.css": "<%= tidepool.sassSourceGlob %>"
+          "<%= cfg.dev %>/all-min.css": "<%= cfg.sassSourceGlob %>"
 
     compass:
       sassPrep:
         options:
-          sassDir: "<%= yeoman.app %>"
-          specify: "<%= tidepool.sassSourceGlob %>"
-          cssDir: "<%= yeoman.temp %>"
+          sassDir: "<%= cfg.app %>"
+          specify: "<%= cfg.sassSourceGlob %>"
+          cssDir: "<%= cfg.temp %>"
           outputStyle: "compact"
           noLineComments: true
 
@@ -167,7 +155,7 @@ module.exports = (grunt) ->
     requirejs:
       dist:
         options:
-          mainConfigFile: "<%= yeoman.temp %>/require_config.js"
+          mainConfigFile: "<%= cfg.temp %>/require_config.js"
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
           include: [
@@ -184,7 +172,7 @@ module.exports = (grunt) ->
           paths:
             jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
             bootstrap: 'empty:'
-          out: '<%= yeoman.dist %>/core/main.js'
+          out: '<%= cfg.dist %>/core/main.js'
           optimize: "uglify2"
           #optimize: "none"
           generateSourceMaps: true
@@ -192,23 +180,23 @@ module.exports = (grunt) ->
           skipPragmas: true # we don't use them, and they may slow the build
 
     useminPrepare:
-      html: "<%= yeoman.app %>/spec.html"
+      html: "<%= cfg.app %>/spec.html"
       options:
-        dest: "<%= yeoman.dev %>"
+        dest: "<%= cfg.dev %>"
 
     usemin:
-      html: ["<%= yeoman.dist %>/{,*/}*.html"]
-      css: ["<%= yeoman.dist %>/styles/{,*/}*.css"]
+      html: ["<%= cfg.dist %>/{,*/}*.html"]
+      css: ["<%= cfg.dist %>/styles/{,*/}*.css"]
       options:
-        dirs: ["<%= yeoman.dist %>"]
+        dirs: ["<%= cfg.dist %>"]
 
     imagemin:
       dist:
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>/images"
+          cwd: "<%= cfg.app %>/images"
           src: "{,*/}*.{png,jpg,jpeg}"
-          dest: "<%= yeoman.dist %>/images"
+          dest: "<%= cfg.dist %>/images"
         ]
 
     cssmin:
@@ -216,119 +204,109 @@ module.exports = (grunt) ->
         options:
           report: 'min'
         files:
-          "<%= yeoman.dev %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
+          "<%= cfg.dev %>/all-min.css": "<%= cfg.cssSourceGlob %>"
       dist:
         options:
           #banner: '/* Copyright 2013 TidePool, Inc */'
           report: 'min'
         files:
-          "<%= yeoman.dist %>/all-min.css": "<%= tidepool.cssSourceGlob %>"
+          "<%= cfg.dist %>/all-min.css": "<%= cfg.cssSourceGlob %>"
 
     htmlmin:
       dist:
         options: {}
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>"
+          cwd: "<%= cfg.app %>"
           src: "index.html"
-          dest: "<%= yeoman.dist %>"
+          dest: "<%= cfg.dist %>"
         ]
 
-    replace: 
+    replace:
+      options:
+        variables:
+          apiServer:           "<%= env.apiServer %>"
+          appSecret:           "<%= env.appSecret %>"
+          appId:               "<%= env.appId %>"
+          kissKey:             "<%= env.kissKey %>"
+          googleAnalyticsKey:  "<%= env.googleAnalyticsKey %>"
+          fbId:                "<%= env.fbId %>"
+          #fbSecret:            "<%= env.fbSecret %>" # not used
+        prefix: '@@'
       dist:
-        options:
-          variables: 
-            APISERVER:           "<%= tidepoolServer.PROD_APISERVER %>"
-            APPSECRET:           "<%= tidepoolServer.PROD_APPSECRET %>"
-            APPID:               "<%= tidepoolServer.PROD_APPID %>"
-            kissKey:             "<%= bowerPkg.kissKeyProd %>"
-            googleAnalyticsKey:  "<%= bowerPkg.googleAnalyticsKeyProd %>"
-            fbId:                "<%= bowerPkg.fbIdProd %>"
-            fbSecret:            "<%= bowerPkg.fbSecretProd %>"
-          prefix: '@@'
         files: [
-          expand: true 
-          flatten: true 
-          src: ["<%= yeoman.temp %>/core/config.js"] 
-          dest: "<%= yeoman.temp %>/core/"
+          expand: true
+          flatten: true
+          src: ["<%= cfg.temp %>/core/config.js"]
+          dest: "<%= cfg.temp %>/core/"
         ]
       dev:
-        options:
-          variables: 
-            APISERVER:           "<%= tidepoolServer.DEV_APISERVER %>"
-            APPSECRET:           "<%= tidepoolServer.DEV_APPSECRET %>"
-            APPID:               "<%= tidepoolServer.DEV_APPID %>"
-            kissKey:             "<%= bowerPkg.kissKeyDev %>"
-            googleAnalyticsKey:  "<%= bowerPkg.googleAnalyticsKeyDev %>"
-            fbId:                "<%= bowerPkg.fbIdDev %>"
-            fbSecret:            "<%= bowerPkg.fbSecretDev %>"
-          prefix: '@@'
         files: [
-          expand: true 
-          flatten: true 
-          src: ["<%= yeoman.dev %>/core/config.js"] 
-          dest: "<%= yeoman.dev %>/core/"
+          expand: true
+          flatten: true
+          src: ["<%= cfg.dev %>/core/config.js"]
+          dest: "<%= cfg.dev %>/core/"
         ]
 
     copy:
       libraryCss:
-        src: "<%= yeoman.temp %>/library.css"
-        dest: "<%= yeoman.app %>/library.css"
+        src: "<%= cfg.temp %>/library.css"
+        dest: "<%= cfg.app %>/library.css"
       dist:
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>"
-          dest: "<%= yeoman.dist %>"
+          cwd: "<%= cfg.app %>"
+          dest: "<%= cfg.dist %>"
           src: [
             "welcome/**"
             ".htaccess"
             "*.html"
             "!spec.html"
             "*.{ico,txt}"
-            #"<%= tidepool.horseAndBuggyJsGlob %>"
-            #"<%= tidepool.handlebarsGlob %>"
-            "<%= tidepool.imagesGlob %>"
+            #"<%= cfg.horseAndBuggyJsGlob %>"
+            #"<%= cfg.handlebarsGlob %>"
+            "<%= cfg.imagesGlob %>"
           ]
         ]
       requireJsPrep:
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>"
-          dest: "<%= yeoman.temp %>"
+          cwd: "<%= cfg.app %>"
+          dest: "<%= cfg.temp %>"
           src: [
-            "<%= tidepool.horseAndBuggyJsGlob %>"
-            "<%= tidepool.handlebarsGlob %>"
+            "<%= cfg.horseAndBuggyJsGlob %>"
+            "<%= cfg.handlebarsGlob %>"
           ]
         ]
       requireJsPost:
         files: [
           expand: true
-          cwd: "<%= yeoman.temp %>"
-          dest: "<%= yeoman.dist %>"
+          cwd: "<%= cfg.temp %>"
+          dest: "<%= cfg.dist %>"
           src: [
             "require_config.js"
-            "<%= tidepool.horseAndBuggyJsGlob %>"
+            "<%= cfg.horseAndBuggyJsGlob %>"
           ]
         ]
       distToPublic:
         files: [
           expand: true
-          cwd: "<%= yeoman.dist %>"
+          cwd: "<%= cfg.dist %>"
           src: "**/*.*"
-          dest: "<%= yeoman.research %>"
+          dest: "<%= cfg.research %>"
         ]
 
 
     exec:
       convert_jqueryui_amd:
-        command: "jqueryui-amd <%= yeoman.app %>/bower_components/jquery-ui"
+        command: "jqueryui-amd <%= cfg.app %>/bower_components/jquery-ui"
         stdout: true
 
       unitTest:
-        command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= tidepool.specFile %>"
+        command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
 
       scribeSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= yeoman.dev %>/" "<%= yeoman.app %>/" "<%= tidepool.specGlob %>" "<%= tidepool.specFile %>"'
+        command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dev %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
 
   grunt.renameTask "regarde", "watch"
 

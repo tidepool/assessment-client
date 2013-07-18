@@ -13,9 +13,9 @@ define [
     debug: true
     googleAnalyticsKey: '@@googleAnalyticsKey'
     kissKey: '@@kissKey'
-    apiServer: '@@APISERVER'
-    appSecret: '@@APPSECRET'
-    appId: '@@APPID'
+    apiServer: '@@apiServer'
+    appSecret: '@@appSecret'
+    appId: '@@appId'
     fbId: '@@fbId'
     #fbSecret: '@@fbSecret'
 
