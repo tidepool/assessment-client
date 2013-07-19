@@ -76,8 +76,8 @@ module.exports = (grunt) ->
         tasks: ["coffee:spec"]
 
       specScribe:
-        files: ["<%= cfg.app %>/spec.html", "<%= cfg.specGlob %>"]
-        tasks: ["exec:scribeSpecs", "livereload"]
+        files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
+        tasks: ["exec:scribeDevSpecs", "livereload"]
 
       compass:
         files: "<%= cfg.sassSourceGlob %>"
@@ -129,6 +129,14 @@ module.exports = (grunt) ->
           cwd: "<%= cfg.app %>"
           src: "**/*.spec.coffee"
           dest: "<%= cfg.dev %>"
+          ext: ".spec.js"
+        ]
+      specToTemp:
+        files: [
+          expand: true
+          cwd: "<%= cfg.app %>"
+          src: "**/*.spec.coffee"
+          dest: "<%= cfg.temp %>"
           ext: ".spec.js"
         ]
 
@@ -305,8 +313,11 @@ module.exports = (grunt) ->
       unitTest:
         command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
 
-      scribeSpecs:
+      scribeDevSpecs:
         command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dev %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
+
+      scribeDistSpecs:
+        command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dist %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
 
   grunt.renameTask "regarde", "watch"
 
@@ -319,7 +330,7 @@ module.exports = (grunt) ->
     "coffee:spec"
     "compass"
     "cssmin:dev"
-    "exec:scribeSpecs"
+    "exec:scribeDevSpecs"
     "copy:libraryCss"
   ]
 
@@ -363,13 +374,16 @@ module.exports = (grunt) ->
     "clean:temp"
   ]
 
+  grunt.registerTask "distTest", [ 'dist', 'exec:unitTest']
+
   grunt.registerTask "research", [
     "dist"
     "copy:distToPublic"
   ]
 
-  grunt.registerTask "default", ["test", "open", "watch"]
+  grunt.registerTask 'spec', 'exec:unitTest'
   grunt.registerTask "s", "server"
   grunt.registerTask "ds", ['dist', 'distServer']
   grunt.registerTask "t", "test"
+  grunt.registerTask "default", 'server'
 

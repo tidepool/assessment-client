@@ -99,7 +99,7 @@ define [
       else
         return null # No point tracking without a title for the lightbox
       @options.app.analytics.track(
-        @options.app.analytics.CATEGORIES.viewLightbox, name, '', opts
+        @options.app.analytics.CATEGORIES.viewLightbox, name, 'options', opts
       )
 
 

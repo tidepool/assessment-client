@@ -66,7 +66,7 @@ define [
         when types.checkbox
           _tmplCheckbox prop.attributes
         else
-          console.log "Building a standard form field for type #{prop.get 'type'}"
+#          console.log "Building a standard form field for type #{prop.get 'type'}"
           _tmplStandardField prop.attributes
 
 

@@ -2,6 +2,7 @@
 define [
   'underscore'
   'backbone'
+  'core'
   # Available Widgets - Personality
   'dashboard/personality/core'
   'dashboard/personality/big5'
@@ -31,6 +32,7 @@ define [
 ], (
   _
   Backbone
+  app
   WidgetPersonalityCore
   WidgetPersonalityBig5
   WidgetPersonalityHolland6
@@ -105,8 +107,10 @@ define [
       @widgets = @_makeWidgets @options.widgets, @dataSources
       # fetch all models
 #      console.log dataSources:@dataSources
+      fetchPromises = []
       for key, dataSource of @dataSources
-        dataSource.fetch dataSource.fetchOptions
+        fetchPromises.push dataSource.fetch dataSource.fetchOptions
+      $.when.apply($, fetchPromises).done @_countResults # Do this when all results resolve
 
     render: ->
       @$el.empty()
@@ -164,10 +168,20 @@ define [
           console.error "#{_me}: no widget available called `#{name}`"
       return widgets
 
-
-
-
+    # Count the results, presuming that this is called on a .done from $.when(), which returns a particular format
+    # http://api.jquery.com/jQuery.when/
+    _countResults: ->
+      count = 0
+      if arguments[1] is 'success' #single fetch result
+        data = arguments[0]
+        count += data.length if _.isArray data
+      else # mutliple
+        for result in arguments
+          data = result[0]
+          count += data.length if _.isArray data
+#      console.log count:count
+      prevCount = app.user.get('gamesPlayed') || 0
+      app.user.set gamesPlayed: Math.max(count, prevCount)
+      count
 
   View
-
-

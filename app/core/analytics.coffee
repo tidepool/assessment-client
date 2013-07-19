@@ -125,18 +125,15 @@ define [],() ->
       _trackGooglePageView name
       _trackKiss @CATEGORIES.viewPage + name
 
-    track: (category, action, label, value) ->
-      return unless category? and action?
+    track: (category, action, data) ->
 #      console.log
 #        category: category
 #        action: action
 #        label: label
 #        value: value
-      _trackGoogleEvent(category, action, label, value)
-      if label and value
-        _trackKiss("#{category}:#{action}", { label:label, value:value})
-      else
-        _trackKiss("#{category}:#{action}")
+      return unless category? and action?
+      _trackGoogleEvent(category, action)
+      _trackKiss("#{category}:#{action}", data)
 
     # Called once we know who the user is
     setUserIdentity: (humanreadableUserKey) ->
