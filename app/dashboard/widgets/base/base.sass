@@ -18,7 +18,9 @@
   @media all and (min-width: 1050px)
     padding: $spaceLil $space
 
-
+  &.colorBrand2
+    background: $colorBrand2
+    color: white
 
 .widget
   //.dogEar
@@ -37,6 +39,9 @@
     position: relative // stay above pos absolute things like the .dogear
     text-align: center
     font-weight: bold
+
+  h1
+    font-size: $fontSizeVeryLarge
 
   h3, .subTitle
     margin-top: -$spaceLil // Make it flush with edge of widget
@@ -132,7 +137,6 @@
     position: relative
     margin: $spaceLil 0 $spaceLil
     //text-shadow: 0 5px 10px $highlightThick, 5px 0 10px $highlightThick, -5px 0 10px $highlightThick
-    box-shadow: inset 0 (-$space) $spaceLil $highlightThick, 0 $spaceTiny $spaceLil $highlightThick //blurs out things under the bottom of the title
     p
       font-size: $fontSizeLarge
       line-height: 0.9

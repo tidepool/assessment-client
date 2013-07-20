@@ -17,6 +17,7 @@ define [
 
     initialize: ->
       @listenTo app.user, 'sync', @render
+      @listenTo app.user, 'change:gamesPlayed', @onGamesPlayedChange
       app.trigger 'session:showLogin' unless app.user.isLoggedIn()
 
     render: ->
@@ -33,6 +34,11 @@ define [
         ]
       @$el.html @widgetmaster.render().el
       @
+
+    onGamesPlayedChange: (model, gamesPlayed) ->
+      if gamesPlayed > 2
+#        console.log gamesPlayed:gamesPlayed
+        app.analytics.track 'dashboard', 'Dashboard with 3 or more games', model.attributes
 
   View
 

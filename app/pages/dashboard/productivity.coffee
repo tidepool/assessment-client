@@ -28,6 +28,7 @@ define [
           'dashboard/career/jobs'
           'dashboard/career/skills'
           'dashboard/career/tools'
+          'dashboard/teasers/snoozer'
         ]
       @$el.html @widgetmaster.render().el
       @

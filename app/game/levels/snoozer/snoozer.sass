@@ -1,0 +1,147 @@
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+body.snoozerBackground
+  background-color: $colorBrand2
+
+.playGamePage .snoozer
+  padding-top: 50px
+
+.snoozer
+  $stageHeight: 550px
+  $underlineHeight: $spaceLil * .6
+
+  .stageHolder
+    position: relative
+  .stage
+    position: relative
+    width: 90%
+    margin: 0 auto
+    height: $stageHeight
+    line-height: $stageHeight
+    text-align: center
+
+
+  // ----------------------------------------------------------- Headings / Typography
+  .centered
+    margin: 0 auto
+    max-width: 600px
+  .spaceAbove
+    margin-top: 100px
+  h1, h2, h3
+    text-align: center
+  h1
+    font-size: $fontSizeMegaLarge + 70
+    margin: 0
+  h2
+    font-size: $fontSizeVeryLarge + 10
+    text-transform: none
+    font-weight: bold
+  h3
+    font-size: 30px
+  .inverse
+    color: white
+  em
+    display: inline-block
+    padding: 0 $spaceTiny
+    color: mix($colorBrand2, black)
+    border-radius: $radiusSmall
+    background: $highlightThin
+
+
+  // ----------------------------------------------------------- Results Title
+  .results,
+  .speed,
+  .summary
+    margin-bottom: $space
+  .results
+    text-align: center
+  .results h1,
+  .results h3
+    line-height: 1
+    margin: 0
+  .results h3
+    display: inline-block
+    position: relative
+  .results .fluff
+    position: absolute
+    width: $spaceBig
+    top: 50%
+  .results .fluff.left
+    right: -60px
+  .results .fluff.right
+    left: -60px
+
+
+  // ----------------------------------------------------------- Score Display
+  .speed .title,
+  .speed .time
+    line-height: 1
+    font-weight: bold
+    margin: 0
+  .speed .title
+    font-size: 40px
+  .speed .time
+    font-size: $fontSizeMegaLarge + 20
+
+
+  // ----------------------------------------------------------- Correct/Incorrect Counts
+  .summary h3
+    display: inline-block
+    font-weight: bold
+    margin: 0 $space
+  .summary h3,
+  .summary .clock
+    vertical-align: middle
+  .summary .clock
+    margin-top: -$spaceTiny
+
+
+  // ----------------------------------------------------------- Buttons
+  .callToAction
+    margin-top: $space
+  .btn-primary
+    margin-top: $spaceLil
+    min-width: 0
+    margin: 0 $spaceTiny
+
+
+  // ----------------------------------------------------------- The little cloud lines that float
+  .underline:after
+    display: block
+    content: ''
+    position: absolute
+    height: $underlineHeight
+    width: 100%
+    bottom: -$underlineHeight + $spaceTiny
+    border-radius: $underlineHeight / 2
+    background: white
+
+  .stageHolder .fluff
+    width: $spaceBig
+    position: absolute
+  .stageHolder .left
+    top: 30%
+    left: 10%
+  .stageHolder .right
+    bottom: 25%
+    right: 10%
+  .stageHolder .bottom
+    width: $spaceLil
+    bottom: 0
+    right: 5%
+
+  .underline .underline
+    position: absolute
+    width: $spaceLil
+    right: -$spaceLil * 2
+  .underline.right .underline
+    position: absolute
+    width: $spaceLil
+    right: auto
+    left: -$spaceLil * 2
+  //.underline .underline:after
+  //  bottom: -$underlineHeight

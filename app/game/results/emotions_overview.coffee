@@ -16,7 +16,7 @@ define [
   perch
 ) ->
 
-  _chartName = 'Emotions'
+  _chartName = 'Primary Emotions'
   _min = .2
   _max = 5
 

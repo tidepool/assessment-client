@@ -10,6 +10,7 @@ define [
   'game/levels/circle_size_and_proximity'
   'game/levels/alex_trebek'
   'game/levels/emotions_circles'
+  'game/levels/snoozer'
   'game/calculate_results'
 ], (
   Backbone
@@ -23,6 +24,7 @@ define [
   CirclesTest
   AlexTrebek
   EmotionsCircles
+  Snoozer
   CalculateResultsView
 ) ->
 
@@ -34,6 +36,7 @@ define [
     CirclesTest: CirclesTest
     Survey: AlexTrebek
     emotions_circles: EmotionsCircles
+    Snoozer: Snoozer
 #  _titleByGameType =
 #    baseline: 'Core Personality Game'
 #    emotions: 'The Emotions Game'
@@ -93,10 +96,10 @@ define [
 
     # ------------------------------------------------------------- Game and Level Management
     _trackLevels: ->
+      return if @model.attributes.stages.length is 1
       @stepsRemaining = new StepsRemainingView
         collection: new Backbone.Collection @model.attributes.stages
       $(_stepsRemainingContainer).append @stepsRemaining.render().el
-      window.steps = @stepsRemaining
 
     _finishPreviousLevel: (levelView) ->
       if levelView and levelView instanceof Backbone.View
@@ -107,7 +110,8 @@ define [
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
       curStage = @model.get('stages')[stageId]
-      Level = _views[curStage.view_name]
+      # Get the class of the level we're on. There are two possible locations for backwards compatibility.
+      Level = _views[curStage.level_definition_name] || _views[curStage.view_name]
       unless Level
         throw new Error "View Class not found for game level of type #{curStage.view_name}"
       @_finishPreviousLevel @curLevel

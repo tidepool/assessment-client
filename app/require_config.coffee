@@ -10,6 +10,7 @@ define [], () ->
       'game/levels/circle_proximity'
       'game/levels/alex_trebek'
       'game/levels/emotions_circles'
+      'game/levels/snoozer'
       'dashboard/widgets/base'
       'dashboard/widgets/lister'
       'ui_widgets/formation'

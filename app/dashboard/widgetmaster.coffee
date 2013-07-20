@@ -23,6 +23,7 @@ define [
   'dashboard/teasers/reaction_time'
   'dashboard/teasers/emotions'
   'dashboard/teasers/personalizations'
+  'dashboard/teasers/snoozer'
   # Available Models
   'entities/cur_user_career'
   'entities/cur_user_recommendations'
@@ -49,6 +50,7 @@ define [
   WidgetTeaserReactionTime
   WidgetTeaserEmotions
   WidgetTeaserPersonalizations
+  WidgetTeaserSnoozer
   CurUserCareer
   CurUserRecommendations
   CurUserPersonality
@@ -74,6 +76,7 @@ define [
     'dashboard/teasers/reaction_time': WidgetTeaserReactionTime
     'dashboard/teasers/emotions': WidgetTeaserEmotions
     'dashboard/teasers/personalizations': WidgetTeaserPersonalizations
+    'dashboard/teasers/snoozer': WidgetTeaserSnoozer
   _models =
     'entities/cur_user_career': CurUserCareer
     'entities/cur_user_recommendations': CurUserRecommendations

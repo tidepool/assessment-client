@@ -1,0 +1,32 @@
+
+<div class="hero centered">
+    {{#if correct}}
+        <h1>Good!</h1>
+        <h3>You got <em>{{correct}}</em> out of <em>{{total}}</em></h3>
+        <h3>
+            Next, press the ringing clocks if they are green like this:
+        </h3>
+    {{else}}
+        <h1>Oops...</h1>
+        <h3>You missed all {{total}}</h3>
+        <h3>
+            Get ready this time. Press the ringing clocks if they are green:
+        </h3>
+    {{/if}}
+</div>
+
+<p class="textAlignCenter">
+    <span class="clock"></span>
+</p>
+
+<div class="centered">
+    <h3>But not if they're orange:</h3>
+</div>
+
+<p class="textAlignCenter decoy">
+    <span class="clock"></span>
+</p>
+
+<p class="textAlignCenter">
+    <button class="btn btn-large btn-primary" id="ActionNext" type="button">Ready</button>
+</p>

@@ -14,18 +14,24 @@ define [
 ) ->
 
   _me = 'game/levels/_base'
+
   _EVENTS =
-    start: 'test_started'
-    interact: 'interacted'
-    change: 'changed'
-    readyToProceed: 'ready_to_proceed'
+    start:             'test_started'
+    instructions:      'show_instructions'
+    subLevel:          'show_sublevel'
+    interact:          'interacted'
+    change:            'changed'
+    readyToProceed:    'ready_to_proceed'
     notReadyToProceed: 'not_ready_to_proceed'
-    end: 'test_completed'
+    summary:           'level_summary'
+    end:               'test_completed'
+
   _viewNameToModuleName =
     ImageRank: 'image_rank'
     CirclesTest: 'circles_test'
     ReactionTime: 'reaction_time'
     Survey: 'survey'
+    Snoozer: 'reaction_time'
     emotions_circles: 'emotions_circles'
 
 
@@ -40,7 +46,7 @@ define [
       if @model.attributes.data?
         @collection = new Backbone.Collection @model.attributes.data
       if typeof @start is "function"
-        @start() # Call the mixed-in level's start method, if it has impelemented one
+        @start() # Call the extending level's start method, if it has impelemented one
       else
         @track _EVENTS.start
 
@@ -83,10 +89,11 @@ define [
       @track _EVENTS.notReadyToProceed
 
     track: (eventName, event) ->
+      level = @model.attributes.level_definition_name || @model.attributes.view_name
       baseData =
         event_desc: eventName
         game_id: @options.assessment.attributes.id # The game instance
-        module: _viewNameToModuleName[@model.attributes.view_name] # The string id of the level type (eg: 'ImageRank')
+        module: _viewNameToModuleName[level] # The string id of the level type (eg: 'ImageRank')
         stage: @options.stageNo # The index of the level instance (eg: 0 is the first level in the game)
       userEvent = new UserEvent _.extend(baseData, event)
       userEvent.save()
