@@ -16,25 +16,27 @@ define [
       correct: 0
       incorrect: 0
       missed: 0
-      reactionTimes: []
+      reaction_times: []
+
 
     # ----------------------------------------------------- Backbone Extensions
     initialize: ->
 #      @on 'change', (e) -> console.log e
-      @set 'isTouch', detect.isTouch()
+      @set 'is_touch', detect.isTouch()
+
 
     # ----------------------------------------------------- Consumable
     # TODO: Abstract into a base class
     increment: (property) -> @set property, @get(property) + 1
 
     addTime: (reactionTime) ->
-      rt = @get 'reactionTimes'
+      rt = @get 'reaction_times'
       rt.push reactionTime
-      @set reactionTimes:rt
+      @set reaction_times:rt
 
     # calculate averages and such
     calculate: ->
-      times = @get 'reactionTimes'
+      times = @get 'reaction_times'
       return unless times.length
       @set fastest_time: _.min times
       @set slowest_time: _.max times

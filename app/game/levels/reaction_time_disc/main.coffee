@@ -7,6 +7,7 @@ define [
   'text!./instructions-simple.hbs'
   'text!./instructions-complex.hbs'
   'composite_views/perch'
+  'utils/detect'
 ], (
   _
   Backbone
@@ -16,6 +17,7 @@ define [
   instructionsSimple
   instructionsComplex
   perch
+  detect
 ) ->
 
   _me = 'game/levels/reaction_time_disc'
@@ -69,6 +71,7 @@ define [
       @track Level.EVENTS.start,
         sequence_type: @sequenceType
         color_sequence: colorSequenceInString
+        is_touch: detect.isTouch()
       $("#infobox").css("visibility", "hidden")
       @_waitAndShow()
 
