@@ -74,8 +74,8 @@ define [
           @$el.html @popper.render().el
         # Results
         else
-#          console.log summary:@summary
           @summary.calculate()
+#          console.log summary:@summary
           @$el.html _tmplScore @summary.attributes
           @track Level.EVENTS.summary, @summary.attributes
           @track Level.EVENTS.end

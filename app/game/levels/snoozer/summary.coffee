@@ -1,10 +1,12 @@
 define [
   'underscore'
   'backbone'
+  'utils/detect'
 ],
 (
   _
   Backbone
+  detect
 ) ->
 
   Model = Backbone.Model.extend
@@ -18,7 +20,8 @@ define [
 
     # ----------------------------------------------------- Backbone Extensions
     initialize: ->
-
+#      @on 'change', (e) -> console.log e
+      @set 'isTouch', detect.isTouch()
 
     # ----------------------------------------------------- Consumable
     # TODO: Abstract into a base class
