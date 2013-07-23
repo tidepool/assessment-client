@@ -20,7 +20,8 @@ define [
 #        event_type: null
         module: null # The string id of the level type (eg: 'rank_images')
         stage: null # The index of the level instance (eg: 0 is the first level in the game)
-        record_time: new Date().getTime()
+        record_time: (new Date()).getTime()
+        timezone_offset: (new Date).getTimezoneOffset()
         event_desc: 'Default Event Description'
       }
 
