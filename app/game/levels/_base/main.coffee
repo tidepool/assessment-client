@@ -31,7 +31,7 @@ define [
     CirclesTest: 'circles_test'
     ReactionTime: 'reaction_time'
     Survey: 'survey'
-    Snoozer: 'reaction_time'
+    Snoozer: 'snoozer'
     emotions_circles: 'emotions_circles'
 
 
@@ -51,19 +51,6 @@ define [
         @track _EVENTS.start
 
 
-    # ----------------------------------------------------- Private Methods
-    _close: ->
-      proceed.hide()
-      if @finalEventData? # Track the end of the level. The level may optionally provide @finalEventData to be tracked along with it
-        @track _EVENTS.end, @finalEventData
-      else
-        @track _EVENTS.end
-      @trigger 'done'
-      @close?() # Call the mixed-in level's close method, if it has implemented one
-      @remove()
-      @options.assessment.nextStage()
-
-
     # ------------------------------------------------------------- Consumable API
     # Clear `interacted` flag on each item in a collection. Useful if a collection is used in multiple levels
     clearInteracted: (collection) ->
@@ -78,7 +65,7 @@ define [
       return if @alreadyReady
       @alreadyReady = true
       proceed.show()
-      @listenToOnce proceed, 'click', @_close
+      @listenToOnce proceed, 'click', @endLevel
       @track _EVENTS.readyToProceed
 
     notReadyToProceed: ->
@@ -87,6 +74,17 @@ define [
       proceed.hide()
       @stopListening proceed
       @track _EVENTS.notReadyToProceed
+
+    endLevel: ->
+      proceed.hide()
+      if @finalEventData? # Track the end of the level. The level may optionally provide @finalEventData to be tracked along with it
+        @track _EVENTS.end, @finalEventData
+      else
+        @track _EVENTS.end
+      @trigger 'done'
+      @close?() # Call the mixed-in level's close method, if it has implemented one
+      @remove()
+      @options.assessment.nextStage()
 
     track: (eventName, event) ->
       level = @model.attributes.level_definition_name || @model.attributes.view_name

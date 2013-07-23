@@ -76,9 +76,11 @@ define [
         else
           @summary.calculate()
 #          console.log summary:@summary
-          @$el.html _tmplScore @summary.attributes
+          #@$el.html _tmplScore @summary.attributes
           @track Level.EVENTS.summary, @summary.attributes
-          @track Level.EVENTS.end
+          #@track Level.EVENTS.end
+          @endLevel()
+
 
 
     # ------------------------------------------------------------- Event Handlers
