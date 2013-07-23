@@ -1,5 +1,6 @@
 
 define [
+  'jquery'
   'underscore'
   'backbone'
   'core'
@@ -31,6 +32,7 @@ define [
   'entities/results/results'
   'entities/preferences/training'
 ], (
+  $
   _
   Backbone
   app
@@ -94,6 +96,17 @@ define [
       key = moduleId
     return key
 
+  _widgetParentSel = '.holder'
+
+  # These classnames change widget behavior and look/feel.
+  # We want to be able to isolate then so we can get down to the semantic classname only when we want to.
+  _stylingClassnames = [
+    'holder'
+    'tall'
+    'doubleWide'
+    'coolTones'
+  ]
+
 
 
   _me = 'dashboard/widgetmaster'
@@ -101,6 +114,9 @@ define [
   View = Backbone.View.extend
     className: 'widgetmaster'
     id: 'Widgetmaster'
+    events:
+      'click .widget.pressable': 'onClick'
+      'click a.widget': 'onClick'
 
     initialize: ->
       throw new Error "Need @options.widgets" unless @options.widgets
@@ -186,5 +202,18 @@ define [
       prevCount = app.user.get('gamesPlayed') || 0
       app.user.set gamesPlayed: Math.max(count, prevCount)
       count
+
+    # Whenever a pressable widget is clicked, log to analytics with the "title" of the widget
+    # Title is calculated based on the content of the widget
+    onClick: (e) ->
+      $widge = $(e.currentTarget)
+      className = $widge.closest(_widgetParentSel).prop('class')
+      className = className.replace word, '' for word in _stylingClassnames # Get rid of everything but semantic classnames
+      title = className.trim()
+      # Track if there's a title
+      app.analytics.track 'Widget', "Clicked #{title}" if title
+
+
+
 
   View

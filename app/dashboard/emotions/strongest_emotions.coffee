@@ -14,6 +14,7 @@ define [
 
   View = Widget.extend
     events: 'click .widget': 'onClick'
+    className: 'chart-primaryEmotions'
 
     render: ->
       @$el.html @tmplBase

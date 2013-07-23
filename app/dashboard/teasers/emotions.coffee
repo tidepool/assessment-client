@@ -12,5 +12,5 @@ define [
 
   Widget.extend
     tmpl: tmpl
-    className: 'emotions'
+    className: 'teaser-emotions'
 

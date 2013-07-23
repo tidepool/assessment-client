@@ -20,7 +20,7 @@ define [
 ) ->
 
   _widgetSel = '.widget'
-  _className = 'core'
+  _className = 'corePersonality'
   _tmpl = Handlebars.compile tmpl
 
   View = Widget.extend
@@ -50,5 +50,7 @@ define [
 
   View.dependsOn = 'entities/cur_user_personality'
   View
+
+
 
 

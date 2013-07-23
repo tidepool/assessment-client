@@ -14,7 +14,7 @@ define [
 
   View = Widget.extend
     tmpl: tmpl
-    className: 'twilight doubleWide'
+    className: 'twilight doubleWide teaser-personalizations'
     events: click: 'onClick'
 
     # Overriding default behavior here. Most widgets need data to display.

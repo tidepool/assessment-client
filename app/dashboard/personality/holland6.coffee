@@ -17,6 +17,7 @@ define [
   View = Widget.extend
     events:
       'click .widget': 'onClick'
+    className: 'chart-holland6'
 
     render: ->
       @$el.html @tmplBase

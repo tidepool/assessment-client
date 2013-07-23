@@ -6,5 +6,7 @@ define [
   Widget
 ) ->
 
-  Widget.extend tmpl: tmpl
+  Widget.extend
+    tmpl: tmpl
+    className: 'teaser-snoozer'
 

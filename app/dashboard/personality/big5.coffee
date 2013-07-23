@@ -17,6 +17,7 @@ define [
   View = Widget.extend
     events:
       'click .widget': 'onClick'
+    className: 'chart-big5'
 
     render: ->
       @$el.html @tmplBase

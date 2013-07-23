@@ -32,7 +32,6 @@ define [
       perchPsst.show
         msg: msg
         icon: 'icon-ok'
-      app.analytics.track _className, 'Teaser Pressed'
       $.ajax
         url: "#{app.cfg.apiServer}/api/v1/users/-/preorders"
         type: 'POST'
