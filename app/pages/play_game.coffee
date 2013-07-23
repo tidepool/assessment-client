@@ -30,6 +30,7 @@ define [
 
   _me = 'pages/playGame'
   _stepsRemainingContainer = '#HeaderRegion'
+  _coreGame = 'baseline'
   _views =
     ReactionTime: ReactionTime
     ImageRank: ImageRank
@@ -56,6 +57,10 @@ define [
 #      @_setTitle @options.params.def_id
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'change:stage_completed', @_onStageChanged
+
+      app.analytics.track @className, "#{@options.params.def_id} Game Started"
+      if @options.params.def_id is _coreGame
+        app.analytics.trackKeyMetric "#{_coreGame} game", 'Started'
 
 
     # ------------------------------------------------------------- Helper Methods
@@ -105,7 +110,7 @@ define [
       if levelView and levelView instanceof Backbone.View
         levelView.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
         levelStringId = levelView.model.get 'view_name'
-        app.analytics.track @className, "#{levelStringId} Finished"
+        app.analytics.track @className, "#{levelStringId} Level Finished"
 
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
@@ -123,11 +128,15 @@ define [
       @$el.html @curLevel.render().el
       @model.setLevelSeen curStage.view_name
       app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', curStage.view_name
-      app.analytics.track @className, "#{curStage.view_name} Started"
+      app.analytics.track @className, "#{curStage.view_name} Level Started"
 
 
     # ------------------------------------------------------------- Results
     _calculateResults: (gameModel) ->
+      app.analytics.trackKeyMetric "Game", "Finished"
+      app.analytics.track @className, "#{@options.params.def_id} Game Finished"
+      if @options.params.def_id is _coreGame
+        app.analytics.trackKeyMetric "#{_coreGame} Game", 'Finished'
       setTimeout (=>
         @curLevel = new CalculateResultsView
           game: gameModel

@@ -240,6 +240,7 @@ module.exports = (grunt) ->
           googleAnalyticsKey:  "<%= env.googleAnalyticsKey %>"
           fbId:                "<%= env.fbId %>"
           #fbSecret:            "<%= env.fbSecret %>" # not used
+          isDev:               "<%= env.isDev %>"
         prefix: '@@'
       dist:
         files: [

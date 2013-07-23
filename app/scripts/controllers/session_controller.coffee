@@ -65,7 +65,7 @@ define [
           @user.reset().fetch()
           .done (data, textStatus, jqXHR) =>
             @options.app.analytics.track 'session', 'Successful Sign In'
-            deferred.resolve("Success")
+            deferred.resolve("Success", data)
           .fail (jqXHR, textStatus, errorThrown) =>
             @options.app.analytics.track 'session', 'Failed Sign In'
             deferred.reject(textStatus)
@@ -81,8 +81,11 @@ define [
       .done (data, textStatus, jqXHR) =>
         #console.log "#{_me}.user.save().done()"
         @signIn()
-        .done =>
-          @options.app.analytics.track 'session', 'Successful Registration'
+        .done (status, data) =>
+          if data.guest
+            @options.app.analytics.track 'session', 'Successful Guest Registration'
+          else
+            @options.app.analytics.trackKeyMetric 'session', "Successful User Registration"
           deferred.resolve("Success")
         .fail =>
           @options.app.analytics.track 'session', 'Failed Registration'
@@ -93,8 +96,8 @@ define [
     # ---------------------------------------------- Callbacks
     onUserSync: (model) ->
 #      console.log "#{_me}.onUserSync()"
-      readableUserId = if model.isGuest() then model.attributes.id else model.attributes.email
-      @options.app.analytics.setUserIdentity readableUserId
+      #readableUserId = if model.isGuest() then model.attributes.id else model.attributes.email
+      #@options.app.analytics.setUserIdentity readableUserId
 
     # _ajaxAuthSuccess: (data) ->
     #   #@cfg.debug && console.log "#{_me}._ajaxAuthSuccess()"
@@ -183,9 +186,6 @@ define [
       else
         console.log 'Odd Error, no token received but redirected'
       @options.app.analytics.track 'session', 'Successful External Auth Login'
-
-
-
 
 
   SessionController

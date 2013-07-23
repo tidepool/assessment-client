@@ -13,3 +13,7 @@ define [
         googleAnalyticsKey: 1234
       expect(anna).toBeInstanceOf(Analytics)
 
+    #it 'has a .track method', ->
+    #it 'has a .trackPage method', ->
+    #it 'has a .trackBizEvent method', ->
+

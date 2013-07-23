@@ -44,7 +44,7 @@ define [
         name: @options.data.title
         caption: @options.data.text
       facebookShareBear.save()
-      app.analytics.track @className, 'clicked facebook'
+      app.analytics.trackKeyMetric @className, 'clicked facebook'
 
     onClickTwitter: (e) ->
       e.stopPropagation()
@@ -52,7 +52,7 @@ define [
         text: "#{@options.data.title} -- "
         url: @options.data.link
       twitterShareBear.save()
-      app.analytics.track @className, 'clicked twitter'
+      app.analytics.trackKeyMetric @className, 'clicked twitter'
 
     onClickMailto: (e) ->
       e.stopPropagation()
@@ -60,7 +60,7 @@ define [
         subject: @options.data.title
         body: @options.data.text
       email.save()
-      app.analytics.track @className, 'clicked mailto'
+      app.analytics.trackKeyMetric @className, 'clicked mailto'
 
 
     # ---------------------------------------------------------------- Public API
