@@ -46,6 +46,9 @@ define [
       return unless category? and action?
       @google?.trackEvent category, action
       @kiss?.track "#{category}:#{action}", data
+      # ------------------------------------------------------ v Line of Awesome
+#      console.log category:category, action:action # Uncomment this to view real-time details
+      # ------------------------------------------------------ ^ Line of Awesome
 
 
 

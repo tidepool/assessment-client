@@ -12,6 +12,8 @@ define [
   'game/levels/emotions_circles'
   'game/levels/snoozer'
   'game/calculate_results'
+  'game/ask_enjoyment'
+  'utils/numbers'
 ], (
   Backbone
   Handlebars
@@ -26,11 +28,14 @@ define [
   EmotionsCircles
   Snoozer
   CalculateResultsView
+  AskEnjoyment
+  numbers
 ) ->
 
   _me = 'pages/playGame'
   _stepsRemainingContainer = '#HeaderRegion'
   _coreGame = 'baseline'
+  _surveyOdds = 0.25 # % chance to show the end of game survey
   _views =
     ReactionTime: ReactionTime
     ImageRank: ImageRank
@@ -86,13 +91,14 @@ define [
     # ------------------------------------------------------------- Event Handlers
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed #+ 3 # Increment is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed #+ 5 # Increment is for testing only to skip to the level you're working on
       stageCount = model.attributes.stages.length
       @stepsRemaining?.setComplete curStage
       # Show the next stage
       if curStage is -1 then @_showWelcome()
       else if curStage < stageCount then @_showLevel curStage
-      else if curStage is stageCount then @_calculateResults model
+      else if curStage is stageCount then @_endGame()
+      else if curStage > stageCount then @_calculateResults()
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
     _curGameErr: ->
@@ -131,17 +137,45 @@ define [
       app.analytics.track @className, "#{curStage.view_name} Level Started"
 
 
-    # ------------------------------------------------------------- Results
-    _calculateResults: (gameModel) ->
+    # ------------------------------------------------------------- End Game
+    _endGame: ->
+      # Sometimes, ask the user if they've enjoyed themselves
+      if numbers.casino _surveyOdds
+        @curLevel = new AlexTrebek
+          assessment: @model
+          stageNo: 999
+          model: new Backbone.Model
+            data: [
+              question: "Did you enjoy playing this game?"
+              question_id: "enjoyed_game"
+              question_topic: "user_behavior_survey"
+              question_type: "select_by_icon"
+              options: [
+                { icon: 'gfx-happiness', value: 'yes' }
+                { icon: 'gfx-sadness', value: 'no' }
+              ]
+            ]
+        @$el.html @curLevel.render().el
+        app.analytics.trackKeyMetric "#{@options.params.def_id} Enjoyment", 'Shown Question'
+        @listenToOnce @curLevel, 'done', (data) ->
+          if data?.questions[0]?.answer is 'yes'
+            app.analytics.trackKeyMetric "#{@options.params.def_id} Enjoyment", 'Answered Yes'
+          else
+            app.analytics.track "#{@options.params.def_id} Enjoyment", 'Answered No'
+      # Most times just calculate the results
+      else
+        @_calculateResults()
+
+    _calculateResults: ->
       app.analytics.trackKeyMetric "Game", "Finished"
       app.analytics.track @className, "#{@options.params.def_id} Game Finished"
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} Game", 'Finished'
       setTimeout (=>
         @curLevel = new CalculateResultsView
-          game: gameModel
+          game: @model
           model: new Results
-            game_id: gameModel.get 'id'
+            game_id: @model.get 'id'
         @$el.html @curLevel.render().el
       ), _raceConditionDelay
 

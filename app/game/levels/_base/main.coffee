@@ -79,9 +79,10 @@ define [
       proceed.hide()
       if @finalEventData? # Track the end of the level. The level may optionally provide @finalEventData to be tracked along with it
         @track _EVENTS.end, @finalEventData
+        @trigger 'done', @finalEventData
       else
         @track _EVENTS.end
-      @trigger 'done'
+        @trigger 'done'
       @close?() # Call the mixed-in level's close method, if it has implemented one
       @remove()
       @options.assessment.nextStage()
