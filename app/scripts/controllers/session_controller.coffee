@@ -45,7 +45,7 @@ define [
       if @user.hasCurrentToken() and not @user.isGuest()
         @user.fetch()
         .done (data, textStatus, jqXHR) =>
-          deferred.resolve("Success")
+          deferred.resolve("Success", data)
         .fail (jqXHR, textStatus, errorThrown) =>
           deferred.reject(textStatus)
       else
