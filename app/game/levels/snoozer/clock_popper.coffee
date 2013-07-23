@@ -6,6 +6,7 @@ define [
   './clock_view'
   './clock'
   './summary'
+  'utils/numbers'
 ], (
   _
   Backbone
@@ -14,6 +15,7 @@ define [
   ClockView
   Clock
   Summary
+  numbers
 ) ->
 
   _stageSel = '.stage'
@@ -24,7 +26,6 @@ define [
     pauseTime: 1000 # Pauses before starting, and between difficult levels
     durationMax: 1600 # How long to show the clock ringing
     durationMin: 1100
-  _flipCoin = -> Math.floor(Math.random()*2)
 
   EVENTS =
     shown: 'circle_shown'
@@ -141,7 +142,7 @@ define [
       if delay
         setTimeout (-> clock.ring duration), delay
       else
-        if @options.complex and _flipCoin()
+        if @options.complex and numbers.flipCoin()
           clock.ring duration, true # Show a decoy clock, but don't count it towards the total clocks
           @step--
         else
