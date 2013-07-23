@@ -44,6 +44,8 @@ define [
 
   View = Backbone.View.extend
     className: 'actionItems'
+    events:
+      'click a': 'onClick'
 
     # -------------------------------------------------------- Backbone Methods
     initialize: ->
@@ -62,9 +64,13 @@ define [
     onSync: ->
       @render()
 
-
-    # -------------------------------------------------------- Private Methods
-
+    # Track when a next action rec is followed
+    onClick: (e) ->
+      $a = $(e.currentTarget)
+      title = $a.prop 'href'
+      # Track if there's a title
+      if title and @options.app
+        @options.app.analytics.track 'Action Items', "Clicked #{title}"
 
 
   View

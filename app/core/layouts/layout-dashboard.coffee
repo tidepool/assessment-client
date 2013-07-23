@@ -36,7 +36,7 @@ define [
       @
 
       # Add dashboard-specific content
-      ai = new ActionItems()
+      ai = new ActionItems app:@options.app
       @$('.content').before ai.el
       @$('.content').before tmplDashPicker
 
