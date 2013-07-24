@@ -1,21 +1,21 @@
 
 define [
-  'backbone'
+  'classes/model'
 ], (
-  Backbone
+  Model
 ) ->
 
   _me = 'entities/results/result'
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
     defaults:
       game_id: null
       user_id: null
       time_played: null
 
-  Model.STATES =
+  Export.STATES =
     pending: 'pending'
     error: 'error'
     done: 'done'
 
-  Model
+  Export

@@ -1,17 +1,17 @@
 define [
   'underscore'
-  'backbone'
+  'classes/model'
   'entities/games'
 ],
 (
   _
-  Backbone
+  Model
   Game
 ) ->
 
   _me = 'entities/user'
 
-  User = Backbone.Model.extend
+  User = Model.extend
 
     # ----------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users"

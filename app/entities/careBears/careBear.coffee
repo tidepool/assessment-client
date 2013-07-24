@@ -1,12 +1,13 @@
 define [
-  'backbone'
+  'classes/model'
 ], (
-  Backbone
+  Model
 ) ->
 
   _me = 'entities/careBears/careBear'
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
+
     initialize: ->
       @on 'error', @onErr
       @on 'invalid', @onInvalid
@@ -19,9 +20,8 @@ define [
       window.open url
 
     onErr: -> console.error "#{_me}: Trouble sharing"
+
     onInvalid: (model, err) -> console.error "#{_me}: Invalid: #{err}"
-  Model
 
-
-
+  Export
 

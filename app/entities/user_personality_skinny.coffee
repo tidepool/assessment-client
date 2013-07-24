@@ -1,17 +1,17 @@
 
 define [
-  'backbone'
+  'classes/model'
 ], (
-  Backbone
+  Model
 ) ->
 
   _me = 'entities/user_personality_skinny'
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
     defaults:
       name: null
       one_liner: null
       logo_url: null
 
-  Model
+  Export
 

@@ -1,14 +1,16 @@
 define [
   'backbone'
+  'classes/model'
 ],
 (
   Backbone
+  Model
 ) ->
 
 
   # --------------------------------------------------------------------- Model
   _me = 'game/levels/circle_proximity/circles'
-  Model = Backbone.Model.extend
+  Circle = Model.extend
     maxSize: 4
     baseSizePx: 75
     sizeToScale: [
@@ -87,8 +89,7 @@ define [
 
 
   # --------------------------------------------------------------------- Collection
-  Collection = Backbone.Collection.extend
-    model: Model
+  Collection = Backbone.Collection.extend model: Circle
 
 
   Collection

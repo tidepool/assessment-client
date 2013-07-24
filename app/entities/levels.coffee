@@ -1,12 +1,14 @@
 define [
   'backbone'
+  'classes/model'
 ],
 (
   Backbone
+  Model
 ) ->
 
   # A Single Game Level
-  Model = Backbone.Model.extend
+  Level = Model.extend
     defaults:
       friendly_name: 'Default Level Name'
       isComplete: false
@@ -17,7 +19,7 @@ define [
 
   # A Collection of Game Levels
   Collection = Backbone.Collection.extend
-    model: Model
+    model: Level
     setComplete: (LevelId) ->
       level = @at LevelId
       level.set('isComplete', true) if level?

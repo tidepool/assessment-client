@@ -85,9 +85,10 @@ define [
     # ----------------------------------------------------------- Server Event Handlers
     onSync: (dataResp, fieldsResp) ->
 #      console.log
-#        dataRespData: dataResp[0]
-#        fieldsRespData: fieldsResp[0]
-      @fields.setValues dataResp[0].data if dataResp and dataResp[0]
+#        dataRespData: dataResp[0] #unparsed
+#        fieldsRespData: fieldsResp[0] #unparsed
+#        data: @data #parsed
+      @fields.setValues @data.attributes.data if @data.attributes
       @renderContents()
 
     onError: (model, xhr) ->

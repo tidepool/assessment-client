@@ -3,18 +3,16 @@
 define [
   'jquery'
   'backbone'
-  'entities/results/result'
 ], (
   $
   Backbone
-  Result
 ) ->
 
   _me = 'entities/results_calculator'
   _maxTryCount = 2 # Total tries, from the beginning, only happens if the server errors
   _maxPollCount = 15 # Poll limit, normal behavior
 
-  Model = Backbone.Model.extend
+  Export = Backbone.Model.extend
 
     #TODO: Remove and replace with enum on the result model
     STATES:
@@ -73,4 +71,4 @@ define [
       @pollForProgress model.attributes.status.link
 
 
-  Model
+  Export

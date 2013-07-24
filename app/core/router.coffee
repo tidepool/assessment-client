@@ -66,7 +66,6 @@ define [
       @showDemographics()
       @navigate 'startGame', replace:true # Change, the url, but don't add to the browser's history stack
     showTrainingPreferences: ->
-#      console.log 'TODO: show training preferences'
       @navigate 'dashboard'
       @app.trigger 'action:showPersonalizations'
 

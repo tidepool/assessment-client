@@ -26,9 +26,6 @@ define [
 
 
     # ----------------------------------------------------- Consumable
-    # TODO: Abstract into a base class
-    increment: (property) -> @set property, @get(property) + 1
-
     addTime: (reactionTime) ->
       rt = @get 'reaction_times'
       rt.push reactionTime

@@ -1,13 +1,13 @@
 
 define [
-  'backbone'
+  'classes/collection'
   'entities/results/result'
   'core'
   'game/results/reaction_time'
   'game/results/personality'
   'game/results/emotions'
 ], (
-  Backbone
+  Collection
   Result
   app
   ReactionTimeResultView
@@ -26,7 +26,7 @@ define [
     EmoResult: EmotionsResultView
 
 
-  Collection = Backbone.Collection.extend
+  Export = Collection.extend
 
     url: -> "#{app.cfg.apiServer}/api/v1/users/-/games/#{@game_id}/results"
 
@@ -66,5 +66,5 @@ define [
 
     onErr: -> console.error "#{_me}: error"
 
-  Collection
+  Export
 

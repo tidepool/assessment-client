@@ -1,17 +1,17 @@
 
 define [
-  'backbone'
+  'classes/model'
   'core'
   'markdown'
 ], (
-  Backbone
+  Model
   app
   markdown
 ) ->
 
   _me = 'entities/cur_user_personality'
 
-  Model = Backbone.Model.extend
+  Personality = Model.extend
 
     url: "#{app.cfg.apiServer}/api/v1/users/-/personality"
 
@@ -19,7 +19,8 @@ define [
       @on 'sync', @onSync
       @on 'error', @onErr
 
-    parse: (resp) ->
+    parse: (resp, options) ->
+      resp = @dewrap resp # dewrap is from the extended/parent object
       htmlBullets = []
       # Parse markdown in the one_liner
       if resp?.profile_description?.one_liner?
@@ -37,5 +38,5 @@ define [
       # TODO: have server return 404 if the personality is empty
     onErr: -> console.error "#{_me}: Trouble getting the User Personality Model"
 
-  Model
+  Personality
 

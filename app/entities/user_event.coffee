@@ -1,17 +1,17 @@
 define [
   'underscore'
-  'backbone'
+  'classes/model'
   'core'
 ], (
   _
-  Backbone
+  Model
   app
 ) ->
 
   _me = 'entities/user_event'
 
 
-  UserEvent = Backbone.Model.extend
+  UserEvent = Model.extend
     urlRoot: "#{app.cfg.apiServer}/api/v1/user_events"
 
     defaults: ->

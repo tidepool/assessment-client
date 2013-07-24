@@ -1,15 +1,15 @@
 define [
-  'backbone'
+  'classes/model'
   'core'
 ],
 (
-  Backbone
+  Model
   app
 ) ->
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
     urlRoot: "#{app.cfg.apiServer}/api/v1/users/-/recommendations"
     id: 'latest'
 
-  Model
+  Export
 

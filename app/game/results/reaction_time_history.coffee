@@ -53,8 +53,11 @@ define [
         @options.afterShow?(@$tip, @$element)
 
     _compileTemplateForData: ->
-      maxVal = @collection.max (model) -> model.attributes.score.fastest_time
-      maxVal = maxVal.attributes.score.fastest_time
+      if @collection.at(0).attributes.score?
+        maxVal = @collection.max (model) -> model.attributes.score.fastest_time
+        maxVal = maxVal.attributes.score.fastest_time
+      else
+        maxVal = 9999 # handles an unusual server response without a JS error
       @collection.max = maxVal
       @collection.min = _minSpeed
       Handlebars.registerHelper 'normalizeReactionTime', (score) ->

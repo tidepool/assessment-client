@@ -1,13 +1,13 @@
 define [
-  'backbone'
+  'classes/model'
 ],
 (
-  Backbone
+  Model
 ) ->
 
 
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
 
     urlRoot: "#{window.apiServerUrl}/auth/new?"
 
@@ -29,15 +29,5 @@ define [
     setupAddAuthUrl: (provider) ->
       "#{authUrl}?redirect_uri=#{redirectUri}&user_id=#{@get('id')}&provider=#{provider}"
 
-#    onAddAuthRedirect: (hash, location) ->
-#      # additional_redirect.html#user_id=113&provider=twitter
-#      console.log("onAddAuthRedirect called with #{location} and hash #{hash}")
-#      params = @parseHash(hash)
-#      console.log("params are: #{params['user_id']} and #{params['provider']}")
-#      @trigger('user:authentication_added', params['provider'])
-
-
-  Model
-
-
+  Export
 

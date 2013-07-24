@@ -1,17 +1,17 @@
 
 define [
-  'backbone'
+  'classes/model'
   'core'
   'markdown'
 ], (
-  Backbone
+  Model
   app
   markdown
 ) ->
 
   _me = 'entities/cur_user_career'
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
 
     url: "#{app.cfg.apiServer}/api/v1/users/-/recommendations/career"
 
@@ -23,5 +23,5 @@ define [
 #      console.log model: model.attributes
     onErr: -> console.error "#{_me}: Trouble getting model data"
 
-  Model
+  Export
 

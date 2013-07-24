@@ -1,18 +1,16 @@
 
 define [
   'underscore'
-  'backbone'
-  './preferences'
+  'classes/model'
 ],
 (
   _
-  Backbone
-  Preferences
+  Model
 ) ->
 
   _me = 'entities/preferences/training'
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
     url: -> "#{window.apiServerUrl}/api/v1/users/-/preferences?type=TrainingPreference"
 
     defaults:
@@ -23,7 +21,8 @@ define [
       delete json.description
       json
 
-    parse: (resp) ->
+    parse: (resp, options) ->
+      resp = @dewrap resp # dewrap is from the extended/parent object
       return null unless resp
       # The server returns "true" and "false". Parse into bool
       if resp.data?
@@ -31,14 +30,6 @@ define [
           resp.data[key] = if val is "true" then true else false
       resp
 
-#    parse: (resp) ->
-#      return null unless resp
-#      # Merge stored field values with field descriptions
-#      fields = resp.description
-#      for field in fields
-#        field.value = resp.data[field.name]
-#      @fields = new Preferences fields
-#      @
 
     # ----------------------------------------------- Consumable API
     setValues: (values) ->
@@ -48,4 +39,4 @@ define [
       @set data:data
       @
 
-  Model
+  Export

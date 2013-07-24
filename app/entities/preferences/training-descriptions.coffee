@@ -1,12 +1,12 @@
 
 define [
-  './preferences'
+  'classes/collection'
 ],
 (
-  Preferences
+  Collection
 ) ->
 
-  Collection = Preferences.extend
+  Export = Collection.extend
     url: -> "#{window.apiServerUrl}/api/v1/preferences/training-preference/description"
 
 #    parse: (resp) ->
@@ -33,6 +33,6 @@ define [
     # Pull out a name value hash of the fields represented in this collection
     getValues: -> console.warn 'not implemented'
 
-  Collection
+  Export
 
 

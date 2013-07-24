@@ -1,14 +1,15 @@
 define [
-  'backbone'
+  'classes/collection'
   'core'
 ],
 (
-  Backbone
+  Collection
   app
 ) ->
 
-  Collection = Backbone.Collection.extend
+  Export = Collection.extend
     #TODO: resolve the circular dependency issue and remove window reference, use app.cfg instead
     url: "#{window.apiServerUrl}/api/v1/users/-/recommendations/actions"
-  Collection
+
+  Export
 

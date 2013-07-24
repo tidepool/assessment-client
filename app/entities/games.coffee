@@ -1,32 +1,24 @@
 define [
   'jquery'
-  'backbone'
+  'classes/model'
   'core'
 ],
 (
   $
-  Backbone
+  Model
   app
 ) ->
 
   _me = 'entities/games'
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
 
-#    LEVELS:
-#      rank_images: 'ImageRank'
-#      circle_size_and_proximity: 'CirclesTest'
-#      reaction_time_disc: 'ReactionTime'
-#      emotions_circles: 'EmotionsCircles'
 
     # ------------------------------------------------------------- Backbone Methods
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
 
     initialize: ->
-      #@on 'all', (e) -> console.log "#{_me} event: #{e}"
-      #@on 'reset', (model) -> console.log model.attributes
-#      @on 'sync', (model) -> console.log model:model.attributes
-      #@on 'change', (model) -> console.log model.attributes
+      # @on 'all', (e) -> console.log "#{_me} event: #{e}"
       @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @
 
@@ -34,29 +26,8 @@ define [
     toJSON: (options) ->
       _.pick @attributes, 'stage_completed', 'def_id' # The only thing we need to tell the server as we work on the game is the stage completed, and when we create the game, the def_id
 
-    # Server -> Front End. Translates data we receive from the server
-#    parse: (resp) ->
-#      # Mix in a result model
-#      if resp.result?
-#        resp.result = new Result resp.result, {parse:true}
-#      resp
 
-
-    # addUser: (user) ->
-    #   attrs = { 'user_id': user.get('id') }
-    #   deferred = $.Deferred()
-    #   @save attrs,
-    #     patch: false
-    #     # url: "#{@url()}/#{@get('id')}"
-    #   .done (data, textStatus, jqXHR) ->
-    #     console.log("Add User Success: #{textStatus}")
-    #     deferred.resolve(jqXHR.response)
-    #   .fail (jqXHR, textStatus, errorThrown) ->
-    #     console.log("Add User Error: #{textStatus}")
-    #     deferred.reject(textStatus)
-
-    #   deferred.promise()
-
+    # ------------------------------------------------------------- Public API
     getLatestWithProfile: ->
       deferred = $.Deferred()
       @fetch({ url: "#{@url()}/latest_with_profile" })
@@ -65,38 +36,8 @@ define [
           deferred.resolve()
         .fail (jqXHR, textStatus, errorThrown) =>
             deferred.reject()
-      deferred.promise()   
+      deferred.promise()
 
-#    getResult: ->
-#      deferred = $.Deferred()
-#      if @get('result')?
-#        deferred.resolve("Result already exists")
-#      else
-#        result = new Result({assessment_id: @get('id')})
-#        @set({result: result})
-#        if @get('status') is 'results_ready'
-#          result = @get('result')
-#          result.fetch()
-#          .done (data, textStatus, jqXHR) =>
-#            console.log("Get Result Success: #{textStatus}")
-#            deferred.resolve(jqXHR.response)
-#          .fail (jqXHR, textStatus, errorThrown) =>
-#            console.log("Get Result Error: #{textStatus}")
-#            deferred.reject(textStatus)
-#        else
-#          result = @get('result')
-#          result.calculateResult()
-#          .done =>
-#            console.log "#{_me}.getResult().result.calculateResult().done()"
-#            deferred.resolve()
-#          .fail =>
-#            console.log "#{_me}.getResult().result.calculateResult().fail()"
-#            deferred.reject()
-#
-#      deferred.promise()
-
-
-    # ------------------------------------------------------------- Public API
     create: (gameDefinitionId) ->
       if gameDefinitionId
         @save( def_id: gameDefinitionId )
@@ -123,4 +64,4 @@ define [
       return true
 
 
-  Model
+  Export

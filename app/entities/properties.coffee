@@ -1,8 +1,10 @@
 define [
   'backbone'
+  'classes/model'
 ],
 (
   Backbone
+  Model
 ) ->
 
   _me = 'entities/properities'
@@ -22,7 +24,7 @@ define [
 
 
 
-  OneProperty = Backbone.Model.extend
+  OneProperty = Model.extend
     # String ID is required. All the rest are optional
     defaults:
       string_id: null

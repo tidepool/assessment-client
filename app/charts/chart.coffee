@@ -1,12 +1,12 @@
 
 define [
   'underscore'
-  'backbone'
+  'classes/model'
   'Handlebars'
   './chart_colors'
 ], (
   _
-  Backbone
+  Model
   Handlebars
   chartColors
 ) ->
@@ -14,7 +14,7 @@ define [
 
   # ----------------------------------------------------------------------------- Model
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
     defaults:
       name: 'Default Chart Name'
       width: 150
@@ -34,12 +34,13 @@ define [
         i++
       preppedData
 
-    parse: (resp) ->
+    parse: (resp, options) ->
+      resp = @dewrap resp
       resp.chartValues = @_prepareData resp.chartValues
       resp
 
 
-  Model
+  Export
 
 
 
