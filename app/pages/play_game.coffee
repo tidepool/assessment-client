@@ -12,7 +12,6 @@ define [
   'game/levels/emotions_circles'
   'game/levels/snoozer'
   'game/calculate_results'
-  'game/ask_enjoyment'
   'utils/numbers'
 ], (
   Backbone
@@ -28,7 +27,6 @@ define [
   EmotionsCircles
   Snoozer
   CalculateResultsView
-  AskEnjoyment
   numbers
 ) ->
 
@@ -59,7 +57,6 @@ define [
     initialize: ->
       throw new Error "Need params" unless @options.params
       @model = app.user.createGame @options.params.def_id
-#      @_setTitle @options.params.def_id
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'change:stage_completed', @_onStageChanged
 
