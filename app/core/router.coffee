@@ -46,7 +46,7 @@ define [
           trigger: true
           replace: true
       else
-        @showDemographics()
+        @createDefaultGame()
     # Basic Site Pages
     showAbout: ->              @app.view.asSite 'pages/about'
     showTeam: ->               @app.view.asSite 'pages/team'
