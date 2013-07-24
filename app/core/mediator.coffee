@@ -6,7 +6,7 @@ define [
   'forms/user/login'
   'forms/user/profile'
   'preferences/personalization'
-  'connections/index'
+  'connections/connection_list'
 ],
 (
   _
@@ -15,7 +15,7 @@ define [
   UserLogin
   UserProfile
   PersonalizationView
-  ConnectionsView
+  ConnectionList
 ) ->
 
   _me = 'core/mediator'
@@ -71,7 +71,7 @@ define [
       perch.show
         title: 'Connections'
         btn1Text: 'Ok'
-        content: new ConnectionsView( app: @options.app )
+        content: new ConnectionList( app: @options.app )
 
     # ------------------------------------------------ Action command handlers
     _actionLogOut: ->

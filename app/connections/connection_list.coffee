@@ -2,12 +2,14 @@
 
 define [
   'backbone'
-  'text!./index.hbs'
-  './connection'
+  'text!./connection_list.hbs'
+  'entities/my/connections'
+  './connection_view'
 ],
 (
   Backbone
   tmpl
+  MyConnections
   ConnectionView
 ) ->
 
@@ -15,7 +17,7 @@ define [
 
   View = Backbone.View.extend
 
-    className: 'connectionsIndex'
+    className: 'connectionList'
 
     events:
       'click #ActionActiviateFitbit': 'onClickFitbit'
@@ -23,18 +25,26 @@ define [
 
     # ----------------------------------------------------------- Backbone Methods
     initialize: ->
-      @fitbit = new ConnectionView app: @options.app
+      @collection = new MyConnections app: @options.app
+      @listenTo @collection, 'sync', @onSync
+      @collection.fetch()
+      #@fitbit = new ConnectionView app: @options.app
 
     render: ->
       @$el.html tmpl
-      @$(_containerSel).append @fitbit.render().el
       @
 
 
     # ----------------------------------------------------------- Private Helper Methods
+    _renderList: ->
+      @collection.each (model) ->
+        model.view = new ConnectionView model:model
+        @$(_containerSel).append model.view.render().el
 
 
     # ----------------------------------------------------------- Event Handlers
+    onSync: ->
+      @_renderList()
 
 
   View

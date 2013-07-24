@@ -1,0 +1,23 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+@import '../styles/helpers'
+
+
+.connection
+  $size: 50px
+
+  i,
+  strong,
+  .activate
+    line-height: $size
+    min-height: $size
+    vertical-align: middle
+
+  strong
+    font-size: $fontSizeLarge
+
+  .activate
+    float: right
+
+  i.on // An active connection
+    color: $colorBrand3
