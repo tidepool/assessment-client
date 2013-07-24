@@ -2,14 +2,11 @@
 define [
   'classes/model'
   'core'
-  'markdown'
 ], (
   Model
   app
-  markdown
 ) ->
 
-  _me = 'entities/cur_user_career'
 
   Export = Model.extend
 
@@ -21,7 +18,7 @@ define [
 
     onSync: (model) ->
 #      console.log model: model.attributes
-    onErr: -> console.error "#{_me}: Trouble getting model data"
+    onErr: -> console.error "Trouble getting model data"
 
   Export
 

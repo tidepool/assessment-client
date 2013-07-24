@@ -6,7 +6,6 @@ define [
 ) ->
 
 
-
   Export = Model.extend
 
     urlRoot: "#{window.apiServerUrl}/auth/new?"

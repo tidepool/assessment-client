@@ -4,13 +4,13 @@ define [
   'backbone'
   'Handlebars'
   'text!./connection.hbs'
-  'entities/connection'
+  'entities/auth_link'
 ],
 (
   Backbone
   Handlebars
   tmpl
-  Connection
+  AuthLink
 ) ->
 
   _tmpl = Handlebars.compile tmpl
@@ -21,7 +21,7 @@ define [
 
     # ----------------------------------------------------------- Backbone Methods
     initialize: ->
-      @model = new Connection user_id: @options.app.user.id
+      @model = new AuthLink user_id: @options.app.user.id
 
     render: ->
       @$el.html _tmpl @model.attributes

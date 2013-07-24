@@ -1,10 +1,8 @@
 define [
   'classes/collection'
-  'core'
 ],
 (
   Collection
-  app
 ) ->
 
   Export = Collection.extend

@@ -18,7 +18,7 @@ define [
         list: @model.attributes.tools
       @
 
-  View.dependsOn = 'entities/cur_user_career'
+  View.dependsOn = 'entities/my/career'
   View
 
 

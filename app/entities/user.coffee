@@ -1,7 +1,7 @@
 define [
   'underscore'
   'classes/model'
-  'entities/games'
+  'entities/my/games'
 ],
 (
   _

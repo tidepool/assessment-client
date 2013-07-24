@@ -44,7 +44,7 @@ define [
             height: 300
 
 
-  View.dependsOn = 'entities/cur_user_personality'
+  View.dependsOn = 'entities/my/personality'
   View
 
 

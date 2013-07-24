@@ -47,7 +47,7 @@ define [
         btn1Text: 'Ok'
 
 
-  View.dependsOn = 'entities/cur_user_personality'
+  View.dependsOn = 'entities/my/personality'
   View
 
 

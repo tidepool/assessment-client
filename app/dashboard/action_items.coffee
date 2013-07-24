@@ -4,7 +4,7 @@ define [
   'backbone'
   'Handlebars'
   'text!./action_items.hbs'
-  'entities/cur_user_actions'
+  'entities/my/actions'
 ], (
   _
   Backbone

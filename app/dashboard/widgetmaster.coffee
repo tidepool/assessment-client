@@ -26,9 +26,9 @@ define [
   'dashboard/teasers/personalizations'
   'dashboard/teasers/snoozer'
   # Available Models
-  'entities/cur_user_career'
-  'entities/cur_user_recommendations'
-  'entities/cur_user_personality'
+  'entities/my/career'
+  'entities/my/recommendations'
+  'entities/my/personality'
   'entities/results/results'
   'entities/preferences/training'
 ], (
@@ -80,9 +80,9 @@ define [
     'dashboard/teasers/personalizations': WidgetTeaserPersonalizations
     'dashboard/teasers/snoozer': WidgetTeaserSnoozer
   _models =
-    'entities/cur_user_career': CurUserCareer
-    'entities/cur_user_recommendations': CurUserRecommendations
-    'entities/cur_user_personality': CurUserPersonality
+    'entities/my/career': CurUserCareer
+    'entities/my/recommendations': CurUserRecommendations
+    'entities/my/personality': CurUserPersonality
     'entities/results/results': Results
     'entities/preferences/training': TrainingPreferences
 

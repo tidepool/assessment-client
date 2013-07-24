@@ -1,15 +1,11 @@
 define [
   'jquery'
   'classes/model'
-  'core'
 ],
 (
   $
   Model
-  app
 ) ->
-
-  _me = 'entities/games'
 
   Export = Model.extend
 
@@ -18,7 +14,7 @@ define [
     urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
 
     initialize: ->
-      # @on 'all', (e) -> console.log "#{_me} event: #{e}"
+      # @on 'all', (e) -> console.log "event: #{e}"
       @_levelsSeen = [] # Used to track what the user has and hasn't seen
       @
 
@@ -46,7 +42,6 @@ define [
       @
 
     nextStage: ->
-      #console.log "#{_me}.nextStage()"
       i = @get('stage_completed')
 #      @save( {stage_completed: i + 1}, { wait:true } ) # Wait to change the client until the server confirms
       @save stage_completed: i + 1

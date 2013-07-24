@@ -9,7 +9,6 @@ define [
   markdown
 ) ->
 
-  _me = 'entities/cur_user_personality'
 
   Personality = Model.extend
 

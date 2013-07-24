@@ -20,7 +20,6 @@ define [
       window.open url
 
     onErr: -> console.error "#{_me}: Trouble sharing"
-
     onInvalid: (model, err) -> console.error "#{_me}: Invalid: #{err}"
 
   Export

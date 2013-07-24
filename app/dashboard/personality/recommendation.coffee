@@ -58,7 +58,7 @@ define [
       app.analytics.track _className, 'External Link Clicked'
 
 
-  View.dependsOn = 'entities/cur_user_recommendations'
+  View.dependsOn = 'entities/my/recommendations'
   View
 
 

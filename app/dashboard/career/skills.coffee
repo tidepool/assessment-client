@@ -16,7 +16,7 @@ define [
         list: @model.attributes.skills
       @
 
-  View.dependsOn = 'entities/cur_user_career'
+  View.dependsOn = 'entities/my/career'
   View
 
 

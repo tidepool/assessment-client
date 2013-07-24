@@ -40,7 +40,7 @@ define [
       console.log "Magical briefcase clicked"
 
 
-  View.dependsOn = 'entities/cur_user_career'
+  View.dependsOn = 'entities/my/career'
   View
 
 
