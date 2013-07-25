@@ -5,19 +5,54 @@
 
 .connection
   $size: 50px
+  height: $size
+  line-height: $size
+  margin-bottom: $spaceLil
 
-  i,
-  strong,
-  .activate
-    line-height: $size
-    min-height: $size
+  .serviceName,
+  .serviceName i,
+  .serviceName strong,
+  .btn-link,
+  .message
     vertical-align: middle
 
-  strong
+
+  // --------------------------------------------- Icon and Service Name
+  .fitbit
+    color: $colorFitbit
+  .facebook
+    color: $colorFacebook
+  .twitter
+    color: $colorTwitter
+  .inactive
+    color: $colorQuiet
+  .serviceName
+    height: $size
+    line-height: $size
+    float: left
     font-size: $fontSizeLarge
+    margin: 0
 
-  .activate
+
+  // --------------------------------------------- Status Message
+  .message
     float: right
+  .message small
+    line-height: 1.2
+  .error.message .btn-link
+    color: $colorBad
 
-  i.on // An active connection
-    color: $colorBrand3
+
+  // --------------------------------------------- Action Link / Button
+  .btn
+    padding: $spaceLil
+  .btn-large
+    padding: 0 $spaceLil
+  .btn.onHold
+    position: relative
+    color: white
+  .btn.onHold:hover
+    border: 1px solid transparent
+
+
+

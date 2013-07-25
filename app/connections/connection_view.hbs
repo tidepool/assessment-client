@@ -1,16 +1,53 @@
 
 
 
-<p class="large">
-    <i class="icon-lightbulb icon-2x {{#if activated}}on{{/if}}"></i>
-    <strong>{{display_name}}</strong>
-    <a class="btn btn-link btn-large activate" href="{{link}}">
-        {{#if activated}}
-            Deactivate
+    <p class="serviceName {{ provider }} {{#unless activated}}inactive{{/unless}}">
+        <i class="gfx-{{provider}} icon-fixed-width"></i>
+        <strong>{{display_name}}</strong>
+    </p>
+
+
+    {{#if activated}}
+
+        <!--<div class="error message">-->
+            <!--<a class="btn btn-link btn-large sync" href="{{link}}"-->
+               <!--title="Last Data Received: {{prettyDate last_accessed}} {{prettyTime last_accessed}}">-->
+                <!--Error, Try Again-->
+            <!--</a>-->
+        <!--</div>-->
+
+
+        {{#if msg}}
+            <div class="message">
+                <small class="muted">
+                    {{msg}}
+                </small>
+                <a class="btn btn-link {{#if isPolling}}onHold{{else}}sync{{/if}}" title="Refresh">
+                    <i class="icon-refresh"></i>
+                    {{#if isPolling}}
+                        <b class="holdPlease">
+                            <i class="icon-repeat icon-large"></i>
+                        </b>
+                    {{/if}}
+                </a>
+            </div>
         {{else}}
-            Activate
+            <div class="message">
+                <small class="muted" title="Last Data Received: {{prettyDate last_accessed}} {{prettyTime last_accessed}}">
+                    {{prettyDate last_accessed}} {{prettyTime last_accessed}}
+                </small>
+                <a class="btn btn-link sync" title="Refresh">
+                    <i class="icon-refresh"></i>
+                </a>
+            </div>
         {{/if}}
-    </a>
-</p>
+
+    {{else}}
+        <a class="btn btn-link btn-large activate pull-right" href="{{link}}">
+            Activate
+        </a>
+    {{/if}}
+
+
 
 

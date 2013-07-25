@@ -66,7 +66,7 @@ define [
         @tryTryAgain()
 
 
-  # ------------------------------------------------------------------------------ Callbacks
+    # ------------------------------------------------------------------------------ Callbacks
     onSync: (model) ->
       @pollForProgress model.attributes.status.link
 

@@ -70,7 +70,7 @@ define [
     _showConnections: ->
       perch.show
         title: 'Connections'
-        btn1Text: 'Ok'
+        btn1Text: null
         content: new ConnectionList( app: @options.app )
 
     # ------------------------------------------------ Action command handlers

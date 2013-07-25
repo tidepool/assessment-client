@@ -11,18 +11,30 @@ define [
   tmpl
 ) ->
 
+
+  Handlebars.registerHelper 'prettyDate', (dateStr) ->
+    date = new Date dateStr
+    date.toLocaleDateString()
+  Handlebars.registerHelper 'prettyTime', (dateStr) ->
+    date = new Date dateStr
+    date.toLocaleTimeString()
   _tmpl = Handlebars.compile tmpl
 
   View = Backbone.View.extend
-    className: 'connection'
+    className: 'connection clearfix'
     tagName: 'li'
+    events: 'click .sync': 'onClickSync'
 
     # ----------------------------------------------------------- Backbone Methods
-    initialize: ->
+    initialize: -> @listenTo @model, 'change', @render
 
     render: ->
       @$el.html _tmpl @model.attributes
       @
+
+    onClickSync: -> @model.syncConnection()
+
+
 
 
   View

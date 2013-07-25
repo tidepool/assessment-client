@@ -28,7 +28,6 @@ define [
       @collection = new MyConnections app: @options.app
       @listenTo @collection, 'sync', @onSync
       @collection.fetch()
-      #@fitbit = new ConnectionView app: @options.app
 
     render: ->
       @$el.html tmpl
@@ -37,6 +36,7 @@ define [
 
     # ----------------------------------------------------------- Private Helper Methods
     _renderList: ->
+#      console.log collection:@collection.toJSON()
       @collection.each (model) ->
         model.view = new ConnectionView model:model
         @$(_containerSel).append model.view.render().el
