@@ -23,6 +23,7 @@ define [
 
     start: ->
 #      console.log model:@model.attributes
+      @options.instructions.set text: @model.get('instructions')
       @collection = new Circles @model.attributes.circles
       @collection.each (model) -> model.set 'size', 4 # Emotions circles all start at the largest size
       @clearInteracted @collection # Since we set the size it thinks the user interacted with them. Psych!

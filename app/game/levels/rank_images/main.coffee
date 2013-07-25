@@ -37,11 +37,13 @@ define [
 
     start: ->
       @collection = new RankableImages @model.get('image_sequence')
+      @options.instructions.set text: @model.get('instructions')
       # Bind the funky callbacks we need for jQuery Sortable
       _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onUnrankedImageKeypress'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
       @track Level.EVENTS.start, image_sequence:@collection.toJSON()
+
 
     render: ->
       @$el.html tmpl

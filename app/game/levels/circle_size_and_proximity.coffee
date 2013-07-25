@@ -39,6 +39,7 @@ define [
 
     # ------------------------------------------------------------- Running the Game Level / Stage
     _showCircleSize: ->
+      @options.instructions.set text: @model.get('instructions')[0]
       @curView = new CircleSize
         collection: @circlesCollection
         runner: @
@@ -49,6 +50,7 @@ define [
       @listenToOnce @curView, 'done', @_showCircleProximity
 
     _showCircleProximity: ->
+      @options.instructions.set text: @model.get('instructions')[1]
       @curView = new CircleProximity
         collection: @circlesCollection
         runner: @

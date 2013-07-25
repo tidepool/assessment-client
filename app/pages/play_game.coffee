@@ -12,6 +12,7 @@ define [
   'game/levels/emotions_circles'
   'game/levels/snoozer'
   'game/calculate_results'
+  'game/mini_instructions'
   'utils/numbers'
 ], (
   Backbone
@@ -27,11 +28,12 @@ define [
   EmotionsCircles
   Snoozer
   CalculateResultsView
+  MiniInstructions
   numbers
 ) ->
 
   _me = 'pages/playGame'
-  _stepsRemainingContainer = '#HeaderRegion'
+  _headerRegionSel = '#HeaderRegion'
   _coreGame = 'baseline'
   _surveyOdds = 0.25 # % chance to show the end of game survey
   _views =
@@ -39,7 +41,7 @@ define [
     ImageRank: ImageRank
     CirclesTest: CirclesTest
     Survey: AlexTrebek
-    emotions_circles: EmotionsCircles
+    EmotionsCircles: EmotionsCircles
     Snoozer: Snoozer
 #  _titleByGameType =
 #    baseline: 'Core Personality Game'
@@ -59,7 +61,6 @@ define [
       @model = app.user.createGame @options.params.def_id
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'change:stage_completed', @_onStageChanged
-
       app.analytics.track @className, "#{@options.params.def_id} Game Started"
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} game", 'Started'
@@ -72,6 +73,9 @@ define [
 
     _showWelcome: ->
       @_trackLevels()
+      @miniInstructions = new MiniInstructions
+      $(_headerRegionSel).append @miniInstructions.el
+      # Decide whether to show game introduction instructions
       if @model.attributes.definition?.instructions
         perch.show
           title: 'Welcome'
@@ -107,31 +111,34 @@ define [
       return if @model.attributes.stages.length is 1
       @stepsRemaining = new StepsRemainingView
         collection: new Backbone.Collection @model.attributes.stages
-      $(_stepsRemainingContainer).append @stepsRemaining.render().el
+      $(_headerRegionSel).append @stepsRemaining.render().el
 
     _finishPreviousLevel: (levelView) ->
       if levelView and levelView instanceof Backbone.View
         levelView.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
         levelStringId = levelView.model.get 'view_name'
+        @miniInstructions.model.set text:''
         app.analytics.track @className, "#{levelStringId} Level Finished"
 
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
-      curStage = @model.get('stages')[stageId]
+      stageData = @model.get('stages')[stageId]
+#      console.log stageData:stageData
       # Get the class of the level we're on. There are two possible locations for backwards compatibility.
-      Level = _views[curStage.level_definition_name] || _views[curStage.view_name]
+      Level = _views[stageData.level_definition_name] || _views[stageData.view_name]
       unless Level
-        throw new Error "View Class not found for game level of type #{curStage.view_name}"
+        throw new Error "View Class not found for game level of type #{stageData.view_name}"
       @_finishPreviousLevel @curLevel
       @curLevel = new Level
-        model: new Backbone.Model(curStage)
+        model: new Backbone.Model(stageData)
         assessment: @model
         stageNo: stageId
-        showInstructions: @model.isFirstTimeSeeingLevel curStage.view_name
+        showInstructions: stageData.view_name is 'ReactionTime' || false #@model.isFirstTimeSeeingLevel stageData.view_name
+        instructions: @miniInstructions.model
       @$el.html @curLevel.render().el
-      @model.setLevelSeen curStage.view_name
-      app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', curStage.view_name
-      app.analytics.track @className, "#{curStage.view_name} Level Started"
+      @model.setLevelSeen stageData.view_name
+      app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', stageData.view_name
+      app.analytics.track @className, "#{stageData.view_name} Level Started"
 
 
     # ------------------------------------------------------------- End Game
