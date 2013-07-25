@@ -168,6 +168,7 @@ module.exports = (grunt) ->
           name: 'core'
           include: [
             'pages/dashboard/mood'
+            'pages/dashboard/personality'
             'pages/dashboard/productivity'
             'pages/dashboard/summary'
             'pages/about'

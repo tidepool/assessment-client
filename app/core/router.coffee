@@ -25,6 +25,7 @@ define [
       'gameResults/:id':        'showGameResults'
       dashboard:                'showDashboard'
       'dashboard-mood':         'showDashMood'
+      'dashboard-personality':  'showDashPersonality'
       'dashboard-productivity': 'showDashProductivity'
       'referrer/:refId':        'recordReferrer'
       'preferences-training':   'showTrainingPreferences'
@@ -59,6 +60,7 @@ define [
     showDashboard: ->          @app.view.asDash 'pages/dashboard/summary'
     showDashProductivity: ->   @app.view.asDash 'pages/dashboard/productivity'
     showDashMood: ->           @app.view.asDash 'pages/dashboard/mood'
+    showDashPersonality: ->    @app.view.asDash 'pages/dashboard/personality'
     # Other
     recordReferrer: (refId) ->
       @app.analytics.track 'Referral', refId
