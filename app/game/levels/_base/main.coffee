@@ -32,7 +32,7 @@ define [
     ReactionTime: 'reaction_time'
     Survey: 'survey'
     Snoozer: 'snoozer'
-    emotions_circles: 'emotions_circles'
+    EmotionsCircles: 'emotions_circles'
 
 
 
