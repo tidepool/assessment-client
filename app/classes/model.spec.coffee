@@ -17,7 +17,16 @@ define [
     status: {}
     data: _data
   _unwrappedResponse = _data
-  _failedResponse = null
+  _dontUnwrapMe =
+    name: 'Bob'
+    email: 'bob@bob.com'
+    data:
+      steps: 1000
+      goal: 5000
+
+
+
+
 
 
   describe 'classes/model', ->
@@ -53,6 +62,11 @@ define [
         expect(mine.attributes.nameAndEmail).toBeDefined()
         expect(mine.attributes.nameAndEmail).toContain _data.name
         expect(mine.attributes.nameAndEmail).toContain _data.email
+      it 'only does the dewrap if there\'s a status property that is an object AND a data property', ->
+        parsedData = model.parse _dontUnwrapMe
+        expect(parsedData.name).toEqual _dontUnwrapMe.name
+        expect(parsedData.data).toBeDefined()
+
 
 
 

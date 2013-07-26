@@ -13,7 +13,7 @@ define [
     # Remove the wrapper around the response if it is present
     dewrap: (resp, options) ->
       # Return the data directly if it is there
-      if _.isObject resp.data
+      if _.isObject(resp.data) and _.isObject(resp.status)
         resp.data
       else
         resp
