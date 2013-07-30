@@ -177,6 +177,7 @@ module.exports = (grunt) ->
             'pages/game_results'
             'pages/home'
             'pages/play_game'
+            'pages/social_results'
             'pages/team'
           ]
           paths:
