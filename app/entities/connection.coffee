@@ -37,7 +37,7 @@ define [
 #      app.analytics.track 'entities/connection', 'Error getting progress'
       console.warn "Error getting progress on the connection: #{msg}"
       @unset 'isPolling'
-      @set msg:'Error Syncing'
+      @set msg:'Error'
 
     onProgressSync: (progressModel) ->
 #      console.log

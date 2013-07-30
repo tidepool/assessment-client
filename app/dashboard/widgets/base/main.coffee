@@ -20,7 +20,8 @@ define [
     tmplBase: Handlebars.compile tmplBase
 
     initialize: ->
-      # If there's a model, we should render once it syncs. Otherwise, render right away
+      # Delay rendering until data comes in.
+      # Widgets may depend on nothing, a model, or a collection
       if @model
         @renderLoading()
         @listenTo @model, 'sync', @onSync

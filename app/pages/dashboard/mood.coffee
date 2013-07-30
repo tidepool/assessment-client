@@ -10,6 +10,7 @@ define [
     render: -> @renderWidgets [
       'dashboard/emotions/highest_emotion'
       'dashboard/emotions/historical_highest'
+#      'dashboard/fitness/steps_and_emotions'
       'dashboard/emotions/strongest_emotions'
       'dashboard/teasers/reaction_time'
     ]
