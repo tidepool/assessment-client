@@ -23,6 +23,7 @@ define [],() ->
 
     # ----------------------------------------------------------- The Basics
     track: (eventName, props) ->
+      _kmq = _kmq or []
       _kmq.push [
         'record'
         eventName
