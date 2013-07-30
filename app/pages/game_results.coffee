@@ -118,7 +118,7 @@ define [
             origin: window.location.origin
 
           @$(_ctaSel).append _friendTeaserTmpl _.extend teaserData,
-            emailSubject: encodeURIComponent 'Help me with a fun personality game'
+            emailSubject: encodeURIComponent 'Request for Help'
             emailBody: encodeURIComponent _friendTeaserEmail teaserData
 
 #          console.log

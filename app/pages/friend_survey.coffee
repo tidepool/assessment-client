@@ -30,8 +30,15 @@ define [
     toJSON: (options) ->
       nvp = {}
       @each (model) -> nvp[model.attributes.question_id] = model.attributes.value
-      nvp
-    sync: -> $.post _.result(@, 'url'), @toJSON()
+      { friend_survey: nvp }
+    sync: (options) ->
+      Backbone.sync 'create', @, options
+#      $.ajax
+#        url: _.result(@, 'url')
+#        data: JSON.stringify @toJSON()
+#        contentType: 'application/json'
+#        dataType: 'json'
+
 
 
   Me = Backbone.View.extend
@@ -61,7 +68,7 @@ define [
 #        collObj:@collection
       holdPlease.show _submitSel
       app.analytics.trackKeyMetric 'Friend Survey', 'Submitted Answers'
-      promise = @collection.sync()
+      promise = @collection.sync 'create'
       promise.done @onSync
       promise.fail @onError
     onSync: ->
