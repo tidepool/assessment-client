@@ -4,8 +4,7 @@
 .stepsRemaining
   position: relative
   display: inline-block
-  box-sizing: border-box
-  height: $space
+  height: $space - ($spaceTiny * 4) // 2 paddings and 2 borders
   line-height: 0
   background: $colorBackground
   border: $spaceTiny solid $colorVeryQuiet

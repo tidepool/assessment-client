@@ -35,7 +35,7 @@ $rankImagesHeight: 198px
     color: $highlightThick
     border: $spaceTiny dashed $highlightThin
     border-radius: $radiusMed
-    box-sizing: border-box
+    //box-sizing: border-box
     background: $highlightVeryThin
     //background-size: 50px 50px
     //+linear-gradient(-45deg, $highlightVeryThin 25%, transparent 25%, transparent 50%, $highlightVeryThin 50%, $highlightVeryThin 75%, transparent 75%, transparent)
@@ -99,7 +99,7 @@ $rankImagesHeight: 198px
     .rankingArea
       min-height: ($rankImagesHeight + 10) * .8
     .message
-      min-height: $rankImagesHeight * .8
+      min-height: $rankImagesHeight * .8 - ($spaceBig*2)
       font-size: $fontSizeSmall * 2
       padding: $spaceBig
     .rankableImage
