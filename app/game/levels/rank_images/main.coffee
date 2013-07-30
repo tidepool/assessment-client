@@ -39,7 +39,7 @@ define [
       @collection = new RankableImages @model.get('image_sequence')
       @options.instructions.set text: @model.get('instructions')
       # Bind the funky callbacks we need for jQuery Sortable
-      _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onUnrankedImageKeypress'
+      _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onUnrankedImageKeypress', 'onRankedImageKeypress'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
       @track Level.EVENTS.start, image_sequence:@collection.toJSON()
@@ -61,14 +61,19 @@ define [
           placeholder: 'rankableImage placeholder'
           connectWith: _sortableSel
           cancel:  ".#{@$msg.prop('class')}"
-          over: @onOver
+          over:  @onOver
           start: @onSortStart
-          stop: @onSortEnd
+          stop:  @onSortEnd
         @$(_sortableSel).disableSelection()
-        @$(_unrankedSel).on 'click', '.rankableImage', @onUnrankedImageClick
-        @$(_rankingSel).on 'click', '.rankableImage', @onRankedImageClick
+        # Keyboard support
         @$(_unrankedSel).on 'keypress', '.rankableImage', @onUnrankedImageKeypress
-        @$(_rankingSel).on 'keypress', '.rankableImage', @onRankedImageClick
+        @$(_rankingSel).on 'keypress', '.rankableImage',    @onRankedImageKeypress
+        # Click to rank, except Gecko which has problems
+        # http://stackoverflow.com/questions/947195/jquery-ui-sortable-how-can-i-cancel-the-click-event-on-an-item-thats-dragged
+        unless navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+          @$(_unrankedSel).on 'click', '.rankableImage',  @onUnrankedImageClick
+          @$(_rankingSel).on  'click', '.rankableImage',    @onRankedImageClick
+
       @
 
 
@@ -106,19 +111,24 @@ define [
 
     # ----------------------------------------------------- Event Handlers
     onUnrankedImageKeypress: (e) ->
+      return unless e.charCode or e.which is 32 # Only spacebar
       @onUnrankedImageClick e
       $firstImg = @$(_unrankedSel).find(_rankableImageSel).first() # Optimizing for speed so that we power users and testers can complete the assessment superfast
       if $firstImg
         $firstImg.focus()
 
+    onRankedImageKeypress: (e) ->
+      return unless e.charCode or e.which is 32 # Only spacebar
+      @onRankedImageClick e
+
     onUnrankedImageClick: (e) ->
-      #console.log "#{_me}.onUnrankedImageClick()"
+#      console.log "#{_me}.onUnrankedImageClick()"
       @$(_rankingSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
 
     onRankedImageClick: (e) ->
-      #console.log "#{_me}.onRankedImageClick()"
+#      console.log "#{_me}.onRankedImageClick()"
       @$(_unrankedSel).append e.currentTarget
       @_checkOnMsg()
       @_checkOnRanks()
@@ -128,11 +138,9 @@ define [
     onSortStart: (e, ui) ->
       id = $(e.currentTarget).find('img').data('id')
       @_trackDragged id
-      # Remove the helper from the original location. This way css labels on :first-child and :last-child will work beautifully
-#      ui.helper.appendTo('body') # The appendTo option on the jquery sortable seems broken, but manually removing the helper like this seems to work well
 
     onSortEnd: (e, ui) ->
-      #console.log "#{_me}.onSortEnd"
+#      console.log "#{_me}.onSortEnd"
       @_checkOnRanks()
 
     onRankChange: (model, value, options) ->
