@@ -28,7 +28,7 @@ define [
       @$(_sliderSel).slider
         min: 1
         max: @model.attributes.steps
-#        value: null
+        value: @model.attributes.value
         range: 'min'
         slide: @onSlide
         stop: @onStop
@@ -52,6 +52,7 @@ define [
 
     onStop: (e, ui) ->
       @_shimmer $(ui.handle)
+      @model.set 'value', ui.value
       @trigger 'stop',
         model: @model
         value: ui.value

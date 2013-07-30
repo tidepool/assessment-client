@@ -1,0 +1,54 @@
+@import '../styles/_appVars'
+@import '../styles/_colorVars'
+@import '../styles/_helpers'
+
+
+
+.friendSurveyPage
+  max-width: $maxSiteWidth * .75
+  margin: 0 auto
+
+  .intro
+    background: $highlight
+    border-radius: $radiusSmall
+    padding: $spaceLil $space
+    margin: 0 -$space
+    margin-top: $space
+    margin-bottom: $spaceBig
+
+
+  .content .holdPlease
+    margin-left: $spaceLil
+  .content .holdPlease i
+    color: $colorQuiet
+
+  .content
+    padding-top: $space
+
+
+  // ---------------------------------------------------------- Icon Slider
+  .iconSlider .ui-slider-handle i
+    font-size: $space
+
+  .iconSlider
+    @media all and (min-width: 1001px)
+      padding-left: 390px
+      margin-bottom: $spaceBig + $space
+      p
+        font-size: $fontSizeLarge
+        position: absolute
+        top: -5px
+        left: 0
+        padding: 0
+        max-width: 350px
+      legend
+        display: none
+        min-height: 0
+      &:first-child legend
+        display: block
+        margin-top: -110px
+
+
+  // ---------------------------------------------------------- Action Button
+
+

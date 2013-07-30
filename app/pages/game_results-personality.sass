@@ -3,6 +3,32 @@
 
 body.gameResultsPage-PersonalityResult
 
+  .guestSignup,
+  .friendTeaser
+    min-height: 220px
+    width: 90%
+    padding: $space
+    padding-bottom: $spaceLil
+    margin-bottom: $spaceLil
+    display: inline-block
+    background: $highlightThin
+    border-radius: $radiusSmall
+    vertical-align: top
+    text-align: left
+    @media all and (min-width: 1001px)
+      width: 40%
+      max-width: 450px
+      margin: 0 $spaceLil/2
+  .friendTeaser
+    input
+      margin: 0
+    .btn-large
+      padding: 0 $spaceLil
+      i
+        vertical-align: top
+
+
+
   // This is a SASS factory for making results backgrounds for each personality type
   @mixin personalityResultBg($id: 'The-Soloist')
     &.gameResultsPage-#{$id}

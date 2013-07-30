@@ -29,6 +29,9 @@ define [
       'dashboard-productivity': 'showDashProductivity'
       'referrer/:refId':        'recordReferrer'
       'preferences-training':   'showTrainingPreferences'
+      'friendHelper/:uid/:gid': 'showFriendHelper'
+      'friendResults/:gid':     'showFriendResults'
+
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
@@ -49,18 +52,20 @@ define [
       else
         @createDefaultGame()
     # Basic Site Pages
-    showAbout: ->              @app.view.asSite 'pages/about'
-    showTeam: ->               @app.view.asSite 'pages/team'
-    showDemographics: ->       @app.view.asGame 'pages/demographics'
+    showAbout: ->                    @app.view.asSite 'pages/about'
+    showTeam: ->                     @app.view.asSite 'pages/team'
+    showDemographics: ->             @app.view.asGame 'pages/demographics'
     # Game
-    createDefaultGame: ->      @createGame 'baseline'
-    createGame: (def_id) ->    @app.view.asGame 'pages/play_game', def_id:def_id
-    showGameResults: (id) ->   @app.view.asGame 'pages/game_results', game_id:id
+    createDefaultGame: ->            @createGame 'baseline'
+    createGame: (def_id) ->          @app.view.asGame 'pages/play_game', def_id:def_id
+    showGameResults: (id) ->         @app.view.asGame 'pages/game_results', game_id:id
     # Dashboard
-    showDashboard: ->          @app.view.asDash 'pages/dashboard/summary'
-    showDashProductivity: ->   @app.view.asDash 'pages/dashboard/productivity'
-    showDashMood: ->           @app.view.asDash 'pages/dashboard/mood'
-    showDashPersonality: ->    @app.view.asDash 'pages/dashboard/personality'
+    showDashboard: ->                @app.view.asDash 'pages/dashboard/summary'
+    showDashProductivity: ->         @app.view.asDash 'pages/dashboard/productivity'
+    showDashMood: ->                 @app.view.asDash 'pages/dashboard/mood'
+    showDashPersonality: ->          @app.view.asDash 'pages/dashboard/personality'
+    showFriendHelper: (uid, gid) ->  @app.view.asGame 'pages/friend_survey', user_id:uid, game_id:gid
+    showFriendResults: (gid) ->      @app.view.asGame 'pages/social_results', game_id:gid
     # Other
     recordReferrer: (refId) ->
       @app.analytics.track 'Referral', refId

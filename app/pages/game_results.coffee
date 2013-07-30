@@ -4,6 +4,8 @@ define [
   'text!./game_results.hbs'
   'text!./game_results-rt.hbs'
   'text!./game_results-emo.hbs'
+  'text!./game_results-friend_teaser.hbs'
+  'text!./game_results-friend_teaser_email.hbs'
   'entities/results/game'
   'entities/results/results'
   'game/results/reaction_time_history'
@@ -18,6 +20,8 @@ define [
   tmpl
   rtTmpl
   emoTmpl
+  friendTeaserTmpl
+  friendTeaserEmail
   GameResults
   Results
   ReactionTimeHistoryView
@@ -38,9 +42,17 @@ define [
     ReactionTimeResult: rtTmpl
     EmoResult: emoTmpl
 
+  _friendTeaserTmpl = Handlebars.compile friendTeaserTmpl
+  _friendTeaserEmail = Handlebars.compile friendTeaserEmail
+
+
+
   Me = Backbone.View.extend
     title: 'Results'
     className: 'gameResultsPage'
+    events:
+      'click .friendSurvey': 'onClickFriendSurvey'
+      'click .surveyPreview': 'onClickSurveyPreview'
 
     initialize: ->
       throw new Error "Need game_id" unless @options.params?.game_id?
@@ -98,9 +110,17 @@ define [
         when TYPES.emo
           @_appendEmotionCharts()
         when TYPES.pers
-          # TODO: customize background per badge
           personalityModel = @collection.find (m) -> m.attributes.type is TYPES.pers
           stringId = personalityModel.attributes.score.name.split(' ').join('-')
+          teaserData =
+            user_id: app.user.id
+            game_id: @collection.game_id
+            origin: window.location.origin
+
+          @$(_ctaSel).append _friendTeaserTmpl _.extend teaserData,
+            emailSubject: encodeURIComponent 'Help me with a fun personality game'
+            emailBody: encodeURIComponent _friendTeaserEmail teaserData
+
 #          console.log
 #            coll: @collection.toJSON()
 #            pers: personalityModel
@@ -150,6 +170,9 @@ define [
         title: "Error Getting Results"
         msg: "Sorry, but we coudln't get any results for game #{collection.game_id}"
         type: psst.TYPES.error
+
+    onClickFriendSurvey: ->  app.analytics.trackKeyMetric 'Friend Survey', 'Clicked Email Link'
+    onClickSurveyPreview: -> app.analytics.trackKeyMetric 'Friend Survey', 'Clicked Survey Preview'
 
 
   Me
