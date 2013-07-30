@@ -30,6 +30,7 @@ define [
       console.error "Need game_id" unless @options.params.game_id
       @model = new FriendResults game_id:@options.params.game_id
       @listenTo @model, 'sync', @onSync
+      @listenTo @model, 'error', @onErr
       @model.fetch()
 
     render: ->
@@ -56,9 +57,10 @@ define [
       @$(_selfContentSel).append @chartSelf.render().el
       @$(_socialContentSel).append @chartSocial.render().el
 
-    onErr: -> @$(_contentSel).html _tmplNotEnough
-      game_id: @options.params.game_id
-      origin: window.location.origin
+    onErr: ->
+      @$el.html _tmplNotEnough
+        game_id: @options.params.game_id
+        origin: window.location.origin
 
 
   Me

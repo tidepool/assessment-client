@@ -26,23 +26,19 @@ define [
     _prepareData: (data) ->
       preppedData = []
       i = 0
-
-#      data = _.sortBy data, (val) -> val
-
-      for label, value of data
+      tuples = _.map data, (val, key) -> [key, val]
+      tuples = _.sortBy tuples, (t) -> t[0]
+      for value in tuples
         preppedData.push
-          label: label
+          label: value[0]
           color: chartColors[i]
-          value: value
+          value: value[1]
         i++
-#      preppedData = _.sortBy preppedData, 'label'
-#      console.log preppedData:preppedData
       preppedData
 
     parse: (resp, options) ->
       resp = @dewrap resp
       resp.chartValues = @_prepareData resp.chartValues
-      console.log resp:resp
       resp
 
 
