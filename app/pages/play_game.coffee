@@ -33,6 +33,7 @@ define [
 ) ->
 
   _me = 'pages/playGame'
+  _parentPageName = '/pages/play_game'
   _headerRegionSel = '#HeaderRegion'
   _coreGame = 'baseline'
   _surveyOdds = 0.25 # % chance to show the end of game survey
@@ -137,7 +138,7 @@ define [
         instructions: @miniInstructions.model
       @$el.html @curLevel.render().el
       @model.setLevelSeen stageData.view_name
-      app.analytics.track @className, "game/1/level/#{stageId}", 'levelName', stageData.view_name
+      app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
       app.analytics.track @className, "#{stageData.view_name} Level Started"
 
 
