@@ -12,7 +12,7 @@
   cursor: default
 
   i
-    color: black
+    color: $shade
     @include animation(spin 1.2s ease-in-out infinite)
     @include transform-origin(50% 50%)
     text-shadow: 0 0 $space white
@@ -41,7 +41,12 @@
     //margin: 0
     top: auto
 
-
+  .msg
+    position: absolute
+    top: 50%
+    left: 50%
+    margin-left: 40px
+    margin-top: 15px
 
 
 // ----- When in other situations...
@@ -54,6 +59,8 @@
 // .onHold helper class is applied to the parent container to change any visuals we'd like to adjust there
 .btn.onHold
   border-color: $highlight
+
+
 
 
 

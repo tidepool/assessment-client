@@ -2,16 +2,31 @@ define [
   'jquery'
   'backbone'
   'Handlebars'
-  "text!./hold_please.hbs"
+  'text!./hold_please.hbs'
+  'utils/numbers'
 ],
 (
   $
   Backbone
   Handlebars
   tmpl
+  numbers
 ) ->
 
   _me = 'ui_widgets/hold_please'
+  _msgHolderSel = '.msg'
+  _loadingMessages = [
+    'Powering up the Flux Capacitor...'
+    'Seeking the Keymaster...'
+    'Venturing in the jungle for the golden statue...'
+    'Seeking the lost ark...'
+    'Finding the secret plans...'
+    'Wax on, wax off...'
+    'Recieving signal from a galaxy far, far away...'
+    'Seeking the sourthern oracle...'
+    'Evading the nothing...'
+    'Microwaving the potato...'
+  ]
 
   Me = Backbone.View.extend
     tmpl: Handlebars.compile tmpl
@@ -19,15 +34,24 @@ define [
     className: 'holdPlease'
     events:
       "click": "_clicked"
+
     initialize: ->
+
     # Optionally pass in a font-awesome icon size http://fortawesome.github.io/Font-Awesome/examples/#larger-icons
     render: (iconSize) ->
       @$el.html @tmpl
         iconSize: iconSize
       @
+
     _clicked: (e) ->
       e.preventDefault()
       e.stopPropagation()
+
+    _addMsg: (msg) ->
+      console.log "adding msg: #{msg}"
+      if msg
+        msg = numbers.pickOneAnyOne _loadingMessages if msg is true
+        $(".#{@className} #{_msgHolderSel}").text msg # This odd selector is because we're cloning the element, so we don't have a reference to it
 
     _showOnSelector: (selector, iconSize) ->
       #Use a small icon for buttons that aren't large
@@ -55,8 +79,9 @@ define [
 
 
     # Public API
-    show: (selector) ->
+    show: (selector, msg) ->
       if selector then @_showOnSelector selector else @_showFullScreen()
+      @_addMsg msg
     hide: (selector) ->
       if selector then @_hideInSelector selector else @_hideAll()
 

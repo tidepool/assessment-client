@@ -6,6 +6,7 @@ define [
   './layouts/layout-game'
   './layouts/layout-dashboard'
   'ui_widgets/user_menu'
+  'ui_widgets/hold_please'
   'composite_views/perch'
   'bootstrap' # someone, anyone, has to include it
 ],
@@ -16,6 +17,7 @@ define [
   GameLayout
   DashLayout
   userMenu
+  holdPlease
   perch
 ) ->
 
@@ -45,7 +47,12 @@ define [
       @_curView?.close?()
       @_curView?.remove()
 
-    _loadView: (module, data) ->
+    _showLoader: -> holdPlease.show null, true
+    _hideLoader: -> holdPlease.hide()
+
+    _loadView: (module, data, showLoader) ->
+      @_cleanupOldView()
+      @_showLoader() if showLoader
       #console.log "#{_me}._loadView(#{module})"
       require [
         module
@@ -53,8 +60,7 @@ define [
       (
         ViewClass
       ) =>
-        #console.log "#{_me}.require().loaded new page"
-        @_cleanupOldView()
+        @_hideLoader()
         # Start the view with a model if one was provided
         if data?.model
           @_curView = new ViewClass
@@ -74,22 +80,18 @@ define [
         @options.app.analytics.trackPage module
 
 
+
     # ------------------------------------------------------------- Public API
     asSite: (viewModuleString, data) ->
-      #console.log "#{_me}.asSite(#{viewModuleString})"
       @_curLayout = new SiteLayout
         app: @options.app
       $('body').addClass viewModuleString.split('/').join('-')
       @_loadView viewModuleString, data
 
     asGame: (viewModuleString, data) ->
-#      console.log "#{_me}.asGame(#{viewModuleString})"
-#      console.log
-#        viewModuleString: viewModuleString
-#        data: data
       @_curLayout = new GameLayout
         app: @options.app
-      @_loadView viewModuleString, data
+      @_loadView viewModuleString, data, true
 
     asDash: (viewModuleString, data) ->
       @_curLayout = new DashLayout
