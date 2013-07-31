@@ -60,7 +60,7 @@ define [
     onErr: ->
       @$el.html _tmplNotEnough
         game_id: @options.params.game_id
-        origin: window.location.protocol + '//' + window.location.hostname + window.location.hash
+        origin: window.location.protocol + '//' + window.location.hostname
 
 
   Me

@@ -115,7 +115,7 @@ define [
           teaserData =
             user_id: app.user.id
             game_id: @collection.game_id
-            origin: window.location.protocol + '//' + window.location.hostname + window.location.hash
+            origin: window.location.protocol + '//' + window.location.hostname
 
           @$(_ctaSel).append _friendTeaserTmpl _.extend teaserData,
             emailSubject: encodeURIComponent 'Request for Help'
