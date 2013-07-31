@@ -45,7 +45,11 @@ define [
     trackKeyMetric: (category, action, data) ->
       return unless category? and action?
       @google?.trackEvent category, action
-      @kiss?.track "#{category}:#{action}", data
+      try
+        @kiss?.track "#{category}:#{action}", data
+      catch err
+        console.warn 'Error Logging to Kiss'
+        console.log err
       # ------------------------------------------------------ v Line of Awesome
 #      console.log category:category, action:action # Uncomment this to view real-time details
       # ------------------------------------------------------ ^ Line of Awesome
