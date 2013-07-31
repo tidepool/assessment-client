@@ -5,6 +5,7 @@ define [
   'composite_views/perch'
   'entities/results_calculator'
   'ui_widgets/steps_remaining'
+  'ui_widgets/hold_please'
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'
   'game/levels/circle_size_and_proximity'
@@ -21,6 +22,7 @@ define [
   perch
   Results
   StepsRemainingView
+  holdPlease
   ReactionTime
   ImageRank
   CirclesTest
@@ -59,8 +61,10 @@ define [
 
     initialize: ->
       throw new Error "Need params" unless @options.params
+      holdPlease.show null, true # (no selector, show a message)
       @model = app.user.createGame @options.params.def_id
       @listenTo @model, 'error', @_curGameErr
+      @listenTo @model, 'sync', @onSync
       @listenTo @model, 'change:stage_completed', @_onStageChanged
       app.analytics.track @className, "#{@options.params.def_id} Game Started"
       if @options.params.def_id is _coreGame
@@ -91,6 +95,7 @@ define [
 
 
     # ------------------------------------------------------------- Event Handlers
+    onSync: -> holdPlease.hide()
     _onStageChanged: (model, stage) ->
       #console.log "#{_me}._onStageChanged(model, #{stage})"
       curStage = model.attributes.stage_completed #+ 5 # Increment is for testing only to skip to the level you're working on
@@ -191,6 +196,8 @@ define [
     close: ->
       @curLevel?.close?()
       @curLevel?.remove()
+
+
 
 
 

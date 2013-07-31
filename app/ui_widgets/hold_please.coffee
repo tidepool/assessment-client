@@ -48,7 +48,6 @@ define [
       e.stopPropagation()
 
     _addMsg: (msg) ->
-      console.log "adding msg: #{msg}"
       if msg
         msg = numbers.pickOneAnyOne _loadingMessages if msg is true
         $(".#{@className} #{_msgHolderSel}").text msg # This odd selector is because we're cloning the element, so we don't have a reference to it
