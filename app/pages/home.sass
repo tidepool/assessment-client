@@ -3,24 +3,75 @@
 @import '../styles/_helpers'
 
 
+.homePage
+  $gap: $space * 4
+
+  // ---------------------------------------- Structural Components
+  .majorSection
+    margin: 0 auto
+    max-width: $maxSiteWidth
+    //margin-bottom: $spaceBig
+    //@media all and (min-width: 1001px)
+    //  margin-bottom: 300px
+  .majorDivider
+    min-height: $space
+    //padding: $spaceBig 0
+    background: $colorBrand1
+    box-shadow: 0 $spaceTiny $spaceTiny $shade
+  .majorDivider.withContent
+    padding: $space 0
+    background: $colorGood
 
 
-.homePage .hero
-  $gap: $space * 3
-  text-align: center
-  margin: $gap 0
-
-  h1, h2
+  // ---------------------------------------- Common Elements
+  h1, h2, h3
     text-transform: uppercase
     color: white
     text-shadow: $spaceTiny 1px $spaceLil $shade, -$spaceTiny 1px $spaceLil $shade, 0 $spaceTiny $spaceLil $shade
     letter-spacing: .02em
     line-height: 1.2
   h1
-    font-size: $fontSizeMegaLarge
+    font-size: $fontSizeVeryLarge
+    @media all and (min-width: 1001px)
+      font-size: $fontSizeMegaLarge
   h2
-    font-size: $fontSizeMegaLarge
-    margin-bottom: $spaceBig
+    font-size: $fontSizeVeryLarge
+    margin-bottom: $space
+    @media all and (min-width: 1001px)
+      font-size: $fontSizeMegaLarge
+      margin-bottom: $spaceBig
+  h3
+    font-size: $fontSizeLarge
+    @media all and (min-width: 1001px)
+      font-size: $fontSizeVeryLarge
+
+
+  // ----------------------------------------- Main Pitch
+  .heroHolder
+    +bigassBackground('../images/home_page/homepage_bg.jpg')
+    padding: $spaceBig 0
+    @media all and (min-width: 1001px)
+      padding: $gap 0 $gap * 2
+
+  .hero
+    text-align: center
+  .hero p
+    margin-bottom: $spaceTiny
+  .hero .whisper
+    display: inline-block
+    color: white
+    font-size: $fontSizeSmall
+    //background: $shadeLight
+    //padding: $spaceTiny $spaceLil
+    //border-radius: $radiusTiny
+
+
+  .hero .btn-primary
+    @media all and (min-width: 601px)
+      height: $space * 2.5
+      line-height: $space * 2.5
+      font-size: $fontSizeLarge
+      min-width: 250px
 
   .shadowWarrior
     display: inline-block
@@ -29,9 +80,62 @@
 
 
 
+  // ----------------------------------------- Value Prop Description
+  .valueDesc
+    max-width: $maxSiteWidth
+    margin: 0 auto
+  .valueDesc img
+    max-width: 100px
+  .valueDesc ul
+    margin: 0
+    list-style: none
+    text-align: center
+  .valueDesc li
+    color: white
+    font-size: $fontSizeLarge
+    padding: $spaceLil 0
+    vertical-align: middle
+    line-height: 1.3
+  .valueDesc li.hasImg
+    margin: 0 $spaceLil
+  .valueDesc li em
+    color: white
+    font-size: $fontSizeLarge + $spaceLil
+
+  @media all and (min-width: 601px)
+    .valueDesc li
+      display: inline-block
+      max-width: 40%
+      text-align: center
 
 
+  // ------------------------------------------ About
+  .aboutHolder
+    background: $shadeLight
+  .aboutPage
+    padding: $spaceBig 0
+    @media all and (min-width: 1001px)
+      padding: $gap 0
+
+
+
+  // ------------------------------------------ Team
+  .teamHolder
+    background: $highlightThin
+  .teamPage
+    padding: $spaceBig 0
+    @media all and (min-width: 1001px)
+      padding: $gap 0
 
 
 body.pages-home
-  +bigassBackground('../images/home_page/homepage_bg.jpg')
+  +bigassBackground
+
+
+
+
+
+
+
+
+

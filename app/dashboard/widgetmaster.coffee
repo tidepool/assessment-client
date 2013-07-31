@@ -130,11 +130,11 @@ define [
 
       # Build keyed list of data dependencies
       @dataSources = @_setUpDataSources @options.widgets
-      console.log dataSources:@dataSources
+#      console.log dataSources:@dataSources
 
       # Instantiate each widget view and give it a reference to the dataSource(s) it needs
       @widgets = @_makeWidgets @options.widgets, @dataSources
-      console.log widgets:@widgets
+#      console.log widgets:@widgets
 
       # fetch all models
       fetchPromises = []
