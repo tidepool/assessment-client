@@ -81,8 +81,8 @@ define [
       .done (data, textStatus, jqXHR) =>
         #console.log "#{_me}.user.save().done()"
         @signIn()
-        .done (status, data) =>
-          if data.guest
+        .done (status, resp) =>
+          if resp.data.guest
             @options.app.analytics.track 'session', 'Successful Guest Registration'
           else
             @options.app.analytics.trackKeyMetric 'session', "Successful User Registration"
