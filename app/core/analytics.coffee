@@ -2,6 +2,7 @@ define [
   './analytics/google'
   './analytics/kiss'
   './analytics/uservoice'
+
 ],(
   Google
   Kiss
@@ -48,21 +49,22 @@ define [
       return unless category? and action?
       @google?.trackEvent category, action
       @kiss?.track "#{category}:#{action}", data
-
       # ------------------------------------------------------ v Line of Awesome
 #      console.log category:category, action:action # Uncomment this to view real-time details
       # ------------------------------------------------------ ^ Line of Awesome
 
     trackPerformance: (pageName) ->
       # Track page load times
-      if performance?.timing?
+      if performance?.timing? #and numbers.casino(.05) #TODO: only send a percentage of the time.
         data =
           latency:       performance.timing.responseEnd  - performance.timing.fetchStart
           pageLoad:      performance.timing.loadEventEnd - performance.timing.responseEnd
           totalLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart
           entryPage:     window.location.protocol + '//' + window.location.hostname + window.location.hash
-        console.log data
-        @kiss?.track 'performance', data
+#        console.log data
+        @kiss?.track        'performance', data
+        @google?.trackEvent 'performance', 'log', 'latency', data.latency
+        @google?.trackEvent 'performance', 'log', 'pageLoad', data.pageLoad
 
 
 

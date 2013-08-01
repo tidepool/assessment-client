@@ -28,16 +28,13 @@ define [],() ->
         page: "/#{pageName}" # Must start with `/`
 
     # https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#create
-    trackEvent: (category, action) ->
+    trackEvent: (category, action, label, val) ->
       #console.log 'tracking to ga'
       ga 'send', 'event',
         eventCategory: category
         eventAction: action
-        #eventLabel: ''
-        #eventValue: ''
-
-    # TODO: Measure load times
-    # https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings
+        eventLabel: label
+        eventValue: val
 
 
     # ----------------------------------------------------------- Custom Dimensions and Metrics
