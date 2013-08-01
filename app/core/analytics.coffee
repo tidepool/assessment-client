@@ -15,7 +15,6 @@ define [
   Analytics = (cfg) ->
     @google = new Google(cfg.googleAnalyticsKey, cfg.isDev) if cfg.googleAnalyticsKey
     @kiss = new Kiss(cfg.kissKey) if cfg.kissKey
-    console.log 'kiss instantiated'
     UserVoice.start()
     @trackPerformance()
     # Track all javascript errors
