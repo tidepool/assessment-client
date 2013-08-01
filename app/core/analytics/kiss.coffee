@@ -3,7 +3,7 @@ define [],() ->
 
   # ----------------------------------------------------------- Constructor
   Kiss = (key) ->
-    _kms = (u) ->
+    window._kms = (u) ->
       setTimeout (->
         d = document
         f = d.getElementsByTagName("script")[0]
@@ -13,17 +13,18 @@ define [],() ->
         s.src = u
         f.parentNode.insertBefore s, f
       ), 1
-    _kmq = _kmq or []
-    _kmk = _kmk or key
-    _kms "//i.kissmetrics.com/i.js"
-    _kms "//doug1izaerwt3.cloudfront.net/" + _kmk + ".1.js"
+    window._kmq = window._kmq or []
+    window._kmk = window._kmk or key
+    window._kms "//i.kissmetrics.com/i.js"
+    window._kms "//doug1izaerwt3.cloudfront.net/" + window._kmk + ".1.js"
+    @ #constructor returns `this`
 
 
   Kiss.prototype =
 
     # ----------------------------------------------------------- The Basics
     track: (eventName, props) ->
-      _kmq.push [
+      window._kmq.push [
         'record'
         eventName
         props

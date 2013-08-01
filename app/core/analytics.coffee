@@ -14,7 +14,9 @@ define [
   Analytics = (cfg) ->
     @google = new Google(cfg.googleAnalyticsKey, cfg.isDev) if cfg.googleAnalyticsKey
     @kiss = new Kiss(cfg.kissKey) if cfg.kissKey
+    console.log 'kiss instantiated'
     UserVoice.start()
+    @trackPerformance()
     # Track all javascript errors
     window.onerror = (msg, url, lineNumber) =>
       @trackKeyMetric @CATEGORIES.jsErr, msg, {url:lineNumber}
@@ -45,14 +47,23 @@ define [
     trackKeyMetric: (category, action, data) ->
       return unless category? and action?
       @google?.trackEvent category, action
-      try
-        @kiss?.track "#{category}:#{action}", data
-      catch err
-        console.warn 'Error Logging to Kiss'
-        console.log err
+      @kiss?.track "#{category}:#{action}", data
+
       # ------------------------------------------------------ v Line of Awesome
 #      console.log category:category, action:action # Uncomment this to view real-time details
       # ------------------------------------------------------ ^ Line of Awesome
+
+    trackPerformance: (pageName) ->
+      # Track page load times
+      if performance?.timing?
+        data =
+          latency:       performance.timing.responseEnd  - performance.timing.fetchStart
+          pageLoad:      performance.timing.loadEventEnd - performance.timing.responseEnd
+          totalLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart
+          entryPage:     window.location.protocol + '//' + window.location.hostname + window.location.hash
+        console.log data
+        @kiss?.track 'performance', data
+
 
 
 
