@@ -2,22 +2,36 @@
 @import '../styles/_colorVars.sass'
 
 .stepsRemaining
-  position: relative
-  display: inline-block
-  height: $space - ($spaceTiny * 4) // 2 paddings and 2 borders
+  $stepHeight: $space
+  float: left
   line-height: 0
-  background: $colorBackground
-  border: $spaceTiny solid $colorVeryQuiet
-  padding: $spaceTiny
-  border-radius: $space / 2
-  vertical-align: middle
-  font-size: 0 // decides amount of space between each step
+
+  .title
+    text-transform: none
+    text-align: center
+    margin: 0 $spaceLil
+    height: $headerHeight - ($stepHeight/2)
+    line-height: $headerHeight - ($stepHeight/2)
+    color: $colorGood
+
+
+  .pillHolder
+    display: inline-block
+    position: relative
+    height: $space - ($spaceTiny * 2) // 2 paddings
+    background: white
+    //border: $spaceTiny solid $colorVeryQuiet
+    padding: $spaceTiny
+    border-radius: $space / 2
+    vertical-align: middle
+    font-size: 0 // decides amount of space between each step
+    line-height: 0
 
   .step
     display: inline-block
     width: $spaceLil
     height: 100%
-    background: $colorVeryQuiet
+    background: $colorMegaQuiet
     margin-right: 1px
   .step.completed
     background: $colorGood
@@ -27,11 +41,10 @@
   .step:last-child
     border-bottom-right-radius: $space / 2
     border-top-right-radius: $space / 2
+    margin-right: 0
 
 header .stepsRemaining
   margin-left: $spaceLil
-
-
 
 // Sizing changes based on screen width
 @media all and (min-width: 601px)
@@ -40,7 +53,15 @@ header .stepsRemaining
   .stepsRemaining .step
     width: $space
     border-radius: $radiusTiny
-    margin-right: 0
+    margin-right: $spaceTiny
 @media all and (min-width: 1001px)
   .stepsRemaining .step
     width: $space + $spaceLil
+  .title
+    background: $colorMegaQuiet
+    text-shadow: 0 1px $highlight
+
+
+
+
+

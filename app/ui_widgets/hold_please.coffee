@@ -26,6 +26,12 @@ define [
     'Seeking the sourthern oracle...'
     'Evading the nothing...'
     'Microwaving the potato...'
+    'Getting on the highway to the danger zone...'
+    'Pulling baby out of the corner...'
+    'Phoning home...'
+    'Getting loose. Footloose...'
+    'Feeding Seymore...'
+    'Just a jump the the left and a step to the right. More to go...'
   ]
 
   Me = Backbone.View.extend

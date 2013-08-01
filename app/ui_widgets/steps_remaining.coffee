@@ -20,6 +20,7 @@ define [
     render: ->
 #      console.log stages: @collection.toJSON()
       @$el.html _tmpl
+        title: @options.title
         levels: @collection.toJSON()
       @
 

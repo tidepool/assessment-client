@@ -1,9 +1,15 @@
+<h3 class="title">
+    {{title}}
+</h3>
 
-{{#each levels}}
-    <div
-        class="step {{#isComplete}}completed{{/isComplete}}"
-        title="{{ friendly_name }}"
-    >
-    </div>
-{{/each}}
+<div class="pillHolder">
+    {{#each levels}}
+        <div
+            class="step {{#isComplete}}completed{{/isComplete}}"
+            title="{{ friendly_name }}"
+        >
+        </div>
+    {{/each}}
+</div>
+
 

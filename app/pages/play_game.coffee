@@ -46,10 +46,10 @@ define [
     Survey: AlexTrebek
     EmotionsCircles: EmotionsCircles
     Snoozer: Snoozer
-#  _titleByGameType =
-#    baseline: 'Core Personality Game'
-#    emotions: 'The Emotions Game'
-#    reaction_time: 'The Reaction Time Game'
+  _titleByGameType =
+    baseline: 'The Personality Game'
+    emotions: 'Emotions Game'
+#    reaction_time: 'Reaction Time'
   _defaultTitle = 'Play a Game'
   _animationTime = 1
   _raceConditionDelay = 500 #TODO: remove this. Prevents a race condition exhibited if the server starts calculating before all events are received
@@ -116,6 +116,7 @@ define [
     _trackLevels: ->
       return if @model.attributes.stages.length is 1
       @stepsRemaining = new StepsRemainingView
+        title: _titleByGameType[@options.params.def_id]
         collection: new Backbone.Collection @model.attributes.stages
       $(_headerRegionSel).append @stepsRemaining.render().el
 
