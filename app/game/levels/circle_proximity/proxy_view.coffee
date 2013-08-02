@@ -84,6 +84,16 @@ define [
       distance = _calculateXYDistance moving, @options.selfView.getSelfCenter()
       angle = 180 / Math.PI * Math.acos( distance.y / length )
       angle *= -1 if distance.x > 0
+
+      # Try sizing based on proxmity
+#      @$(_circleSel).css
+#        '-webkit-transform': "scale(#{.5 + 200/moving.y})"
+#        '-moz-transform':    "scale(#{.5 + 200/length})"
+#        '-o-transform':      "scale(#{.5 + 200/length})"
+#        '-ms-transform':     "scale(#{.5 + 200/length})"
+#        'transform':         "scale(#{.5 + 200/length})"
+
+
       # Apply the magic numbers to actual screen shapes
       @options.$line.css
         height: length

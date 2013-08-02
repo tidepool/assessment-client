@@ -1,0 +1,35 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.interestPicker
+  padding: $space 0
+  max-width: $maxSiteWidth
+  margin: 0 auto
+
+  .menu, .bentoBox
+    display: block
+    vertical-align: top
+    min-height: 100px
+
+  .menu
+    margin-right: $spaceLil
+
+  .menu .content, .bentoBox .content
+    background: white
+    border-radius: $radiusMed
+    box-shadow: inset 1px $spaceTiny $spaceTiny $shadeLight
+    padding: $spaceLil
+
+
+  @media all and (min-width: 601px)
+    .menu
+      float: right
+      width: 66%
+      clear: left
+    .bentoBox
+      float: right
+      width: 30%
+

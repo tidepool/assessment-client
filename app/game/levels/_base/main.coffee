@@ -33,6 +33,7 @@ define [
     Survey: 'survey'
     Snoozer: 'snoozer'
     EmotionsCircles: 'emotions_circles'
+    InterestPicker: 'interest_picker'
 
 
 

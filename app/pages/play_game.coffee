@@ -12,6 +12,7 @@ define [
   'game/levels/alex_trebek'
   'game/levels/emotions_circles'
   'game/levels/snoozer'
+  'game/levels/interest_picker'
   'game/calculate_results'
   'game/mini_instructions'
   'utils/numbers'
@@ -29,6 +30,7 @@ define [
   AlexTrebek
   EmotionsCircles
   Snoozer
+  InterestPicker
   CalculateResultsView
   MiniInstructions
   numbers
@@ -46,6 +48,7 @@ define [
     Survey: AlexTrebek
     EmotionsCircles: EmotionsCircles
     Snoozer: Snoozer
+    InterestPicker: InterestPicker
   _titleByGameType =
     baseline: 'The Personality Game'
     emotions: 'Emotions Game'

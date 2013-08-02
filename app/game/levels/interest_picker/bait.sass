@@ -1,0 +1,36 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.interestPicker .bait
+  $size: $spaceBig * 2
+  display: inline-block
+  min-height: $size
+  min-width: $size
+  line-height: $size
+  border-radius: $radiusSmall
+  padding: 0 $spaceLil
+  cursor: pointer
+  text-align: center
+  font-size: $size * .3
+  //text-transform: uppercase
+  font-weight: bold
+
+
+
+
+
+  // ----------------------------------------- Symbols
+  i
+    font-size: $size * .8
+    line-height: $size
+    vertical-align: middle
+
+
+
+  // ----------------------------------------- Ixn
+  &:hover
+    background: $colorHighlight
+

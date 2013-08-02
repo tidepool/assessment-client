@@ -53,7 +53,7 @@ define [
           when @STATES.done then @set 'status', data.status
           when @STATES.error then @_handleServerError data
           else @trigger 'error', @, "Unexpected status #{data.status.state}"
-      promise.fail (jqXHR, textStatus, errorThrown) ->
+      promise.fail (jqXHR, textStatus, errorThrown) =>
         @trigger 'error', @, textStatus, { jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown }
 
 
