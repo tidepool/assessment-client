@@ -15,7 +15,7 @@ define [
     defaults:
       type: _TYPES.symbol
       value: 'Default'
-      desc: 'Default Value'
+      desc: null
       isPicked: null
       factors:
         realistic:     null

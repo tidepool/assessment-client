@@ -2,7 +2,6 @@ define [], () ->
   [
     {
       value: 'gfx-hol6-social1'
-
     }
     { value: 'gfx-hol6-social2' }
     { value: 'gfx-hol6-social3' }
@@ -25,7 +24,10 @@ define [], () ->
     { value: 'gfx-hol6-artistic2' }
     { value: 'gfx-hol6-artistic3' }
     { value: 'gfx-hol6-artistic4' }
-
+    { value: 'gfx-hol6-investigative1' }
+    { value: 'gfx-hol6-investigative2' }
+    { value: 'gfx-hol6-investigative3' }
+    { value: 'gfx-hol6-investigative4' }
 
     { type: 'word', value: 'Hands-on' }
     { type: 'word', value: 'Mechanical' }
@@ -40,5 +42,5 @@ define [], () ->
     { type: 'word', value: 'Detail-Oriented' }
     { type: 'word', value: 'Thorough' }
 
-
   ]
+
