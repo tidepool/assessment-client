@@ -6,7 +6,6 @@ define [
   'utils/numbers'
   'text!./interest_picker.hbs'
   './baits'
-  './bait_definitions'
   './bait_view'
 ], (
   _
@@ -16,7 +15,6 @@ define [
   numbers
   tmpl
   BaitCollection
-  definitions
   BaitView
 ) ->
 
@@ -69,16 +67,6 @@ define [
       true if words.length >= _wordPicks and symbols.length >= _symbolPicks
 
 
-
-
-
-
-
-    # Pull the symbol off the dom
-    # Clean up any events
-    # Make it available for placement again (put it in a queue of things to show)
-
-
     # Every _tempo add another symbol
     _step: ->
       model = @collection.at(@_i)
@@ -126,11 +114,10 @@ define [
 
     # ------------------------------------------------------------- Event Handlers
     close: ->
-      clearInterval @_interval
-      @remove()
       # Clean up all intervals and timeouts
-      # Clean up event listeners
+      clearInterval @_interval
       # Remove stuff from DOM
+      @remove()
 
 
 
