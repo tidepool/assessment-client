@@ -45,7 +45,10 @@ define [
         throw new Error "Need assessment and stageNo"
       #      console.log "#{_me}.initialize()"
       if @model.attributes.data?
-        @collection = new Backbone.Collection @model.attributes.data
+        if @CollectionClass
+          @collection = new @CollectionClass @model.attributes.data
+        else
+          @collection = new Backbone.Collection @model.attributes.data
       if typeof @start is "function"
         @start() # Call the extending level's start method, if it has impelemented one
       else

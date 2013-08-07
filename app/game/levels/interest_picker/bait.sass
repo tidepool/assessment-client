@@ -19,18 +19,91 @@
   font-weight: bold
 
 
-
-
-
   // ----------------------------------------- Symbols
-  i
+  &.symbol i
     font-size: $size * .8
     line-height: $size
     vertical-align: middle
 
 
+  // ----------------------------------------- Words
+  &.word
+    white-space: nowrap
+
 
   // ----------------------------------------- Ixn
   &:hover
-    background: $colorHighlight
+    background: $colorHighlightThin
+
+
+// ----------------------------------------- Buffet Carosel Animation
+.menu .bait
+  position: absolute
+  //margin-left: -100px
+  left: -200px
+  +transition( left 5s linear, color .2s, background .2s )
+  &.sliding
+    left: 105%
+  &.sliding.picked
+    left: 1500%
+  // ----------------------------------------- Naughty (no more of that pick allowed)
+  &.naughty
+    background: $colorBadThin
+    color: $colorBad
+    left: 105%
+
+
+  // ----------------------------------------- Gentle Constant Animation
+  @include animation(rockTheBoat 4s 0     linear infinite)
+.menu .bait:nth-child(2n)
+  @include animation(rockTheBoat 4s .25s  linear infinite)
+  //background: lawngreen
+.menu .bait:nth-child(3n)
+  @include animation(rockTheBoat 3.7s .5s linear infinite)
+  //background: peru
+.menu .bait:nth-child(5n)
+  @include animation(rockTheBoat 4.2s 1s  linear infinite)
+  //background: lavender
+
+
++keyframes(rockTheBoat)
+  0%, 100%
+    +transform( rotateZ(0) translateY(0) )
+  25%
+    +transform( rotateZ(-5deg) )
+  50%
+    +transform( rotateZ(0) translateY(-5px) )
+  75%
+    +transform( rotateZ(3deg) )
+
+//+keyframes(surfinUSA)
+//  0%, 100%
+//    +transform( translateY(0) )
+//  50%
+//    +transform( translateY(-3px) )
+
+
+// ----------------------------------------- 'Picked' Bait
+.bentoBox .bait
+  $size: $spaceBig * 1.25
+  min-height: $size
+  min-width: $size
+  line-height: $size
+  font-size: $size * .4
+  &.word
+    display: block
+    min-height:  $size * .75
+    line-height: $size * .75
+    text-align: left
+  &.symbol i
+    font-size:   $size * .8
+    line-height: $size
+    padding: 0 $spaceTiny
+
+
+
+
+
+
+
 

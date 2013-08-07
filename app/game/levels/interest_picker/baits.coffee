@@ -27,6 +27,14 @@ define [
 
   Export = Backbone.Collection.extend
     model: Bait
+    countPickedWords: ->
+      words = @filter (item) ->
+        item.get('isPicked') and (item.get('type') is item.TYPES.word)
+      words.length
+    countPickedSymbols: ->
+      symbols = @filter (item) ->
+        item.get('isPicked') and (item.get('type') is item.TYPES.symbol)
+      symbols.length
 
   Export.TYPES = _TYPES
   Export

@@ -16,7 +16,6 @@ define [
     @google = new Google(cfg.googleAnalyticsKey, cfg.isDev) if cfg.googleAnalyticsKey
     @kiss = new Kiss(cfg.kissKey) if cfg.kissKey
     UserVoice.start()
-    @trackPerformance()
     # Track all javascript errors
     window.onerror = (msg, url, lineNumber) =>
       @trackKeyMetric @CATEGORIES.jsErr, msg, {url:lineNumber}
@@ -52,18 +51,22 @@ define [
 #      console.log category:category, action:action # Uncomment this to view real-time details
       # ------------------------------------------------------ ^ Line of Awesome
 
-    trackPerformance: (pageName) ->
-      # Track page load times
-      if performance?.timing? #and numbers.casino(.05) #TODO: only send a percentage of the time.
+    # Compares a given time to the start of page loading, and tracks the difference
+    trackPerformance: (coreLoadedTime) ->
+      if performance?.timing? #and numbers.casino(.05) #TODO: consider only tracking a percentage of the time.
         data =
           latency:       performance.timing.responseEnd  - performance.timing.fetchStart
           pageLoad:      performance.timing.loadEventEnd - performance.timing.responseEnd
           totalLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart
+          jsLoadTime:    coreLoadedTime - performance.timing.navigationStart
           entryPage:     window.location.protocol + '//' + window.location.hostname + window.location.hash
 #        console.log data
         @kiss?.track        'performance', data
-        @google?.trackEvent 'performance', 'log', 'latency', data.latency
-        @google?.trackEvent 'performance', 'log', 'pageLoad', data.pageLoad
+        @google?.trackEvent 'performance', 'log', 'latency',    data.latency
+        @google?.trackEvent 'performance', 'log', 'pageLoad',   data.pageLoad
+        @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime
+
+
 
 
 
