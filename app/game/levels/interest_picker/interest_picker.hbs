@@ -3,8 +3,6 @@
 
 
 <div class="menu">
-    <h2>Pick 3 Words and 7 Symbols</h2>
-    <p>Pick things that represent what you're interested in</p>
     <div class="content">
         <div class="row one"></div>
         <div class="row two"></div>
@@ -14,14 +12,25 @@
 </div>
 
 <div class="bentoBox">
-    <h2>Your Picks</h2>
-    <p>&nbsp;</p>
-    <div class="content">
-        <h3 id="SymbolCount"></h3>
-        <div class="symbols"></div>
-        <h3 id="WordCount"></h3>
-        <div class="words"></div>
+
+    <h3 id="SymbolCount">Symbols</h3>
+    <div class="symbols content">
+        <div id="SymbolCountdown" class="countdown">
+            Collect <br/>
+            <strong>{{symbols}}</strong>
+        </div>
     </div>
+
+    <br/>
+
+    <h3 id="WordCount">Words</h3>
+    <div class="words content">
+        <div id="WordCountdown" class="countdown">
+            Collect <br/>
+            <strong>{{words}}</strong>
+        </div>
+    </div>
+
 </div>
 
 

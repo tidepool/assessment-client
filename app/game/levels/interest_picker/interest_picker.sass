@@ -4,6 +4,7 @@
 @import '../../../styles/helpers'
 
 
+
 .interestPicker
   padding: $space 0
   max-width: $maxSiteWidth
@@ -14,24 +15,31 @@
     vertical-align: top
     min-height: 100px
 
-  .menu
-    margin-right: $spaceLil
 
-  .menu .content, .bentoBox .content
-    background: white
+  // ----------------------------------------------- The Buffet Menu
+  .menu .content
+    margin-right: $spaceLil
+    background: $colorForegroundCool
+    border: $spaceLil solid lighten($colorForegroundCool, 20%)
+    border-top: none
+    border-bottom: none
+    color: white
     border-radius: $radiusMed
-    box-shadow: inset 1px $spaceTiny $spaceTiny $shadeLight
-    padding: $spaceLil
+    padding: $spaceTiny 1px
 
   .menu .row
     position: relative
     display: block
-    height: 100px
-    margin: $spaceTiny 0
+    margin: 0
+    height: $spaceBig
+    padding: $spaceLil 0
     @media all and (min-width: 801px)
+      height: $spaceBig * 2
       padding: $space 0
-      margin: $spaceLil 0
     overflow: hidden
+    border-bottom: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
+  .menu .content .row:first-child
+    border-top: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
 
   @media all and (min-width: 801px)
     .menu, .bentoBox
@@ -41,4 +49,51 @@
       clear: left
     .bentoBox
       width: 25%
+
+
+  // ----------------------------------------------- The Picked Items
+  .bentoBox h3
+    margin: 0 0 $spaceTiny 0
+    color: tint($colorForegroundCool, 60%)
+    text-transform: uppercase
+    font-weight: bold
+    text-align: center
+
+  .bentoBox h3 .good
+    color: $colorForegroundCool
+
+  .bentoBox .content
+    position: relative
+    color: $colorForegroundCool
+    padding: $spaceLil
+    border-radius: $radiusMed
+    &.shimmer
+      @include animation(jollyGreenGiant .75s ease-out 2 alternate) // Do this N second animation Y times, and change the direction each time
+    @media all and (min-width: 801px)
+      background: white
+      min-height: 200px
+      .countdown
+        display: block
+
+  .bentoBox .countdown
+    display: none
+    position: absolute
+    left: 0
+    top: $space
+    width: 100%
+    text-align: center
+    color: tint($colorForegroundCool, 85%)
+    font-size: $fontSizeVeryLarge
+    line-height: .8
+    strong
+      font-size: $fontSizeMegaLarge * 3
+
+
++keyframes(jollyGreenGiant)
+  0%
+    box-shadow: inset 0 0 0 $spaceTiny white
+    background: white
+  100%, 25%
+    box-shadow: inset 0 0 0 $spaceTiny $colorGood
+    background: tint($colorGood, 90%)
 

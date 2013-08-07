@@ -5,24 +5,35 @@
 
 
 .interestPicker .bait
-  $size: $spaceBig * 2
+  $size: $spaceBig
+  position: relative
   display: inline-block
   min-height: $size
   min-width: $size
   line-height: $size
   border-radius: $radiusSmall
-  padding: 0 $spaceLil
+  padding: 0 $spaceTiny
   cursor: pointer
   text-align: center
   font-size: $size * .3
   //text-transform: uppercase
   font-weight: bold
-
-
-  // ----------------------------------------- Symbols
   &.symbol i
     font-size: $size * .8
     line-height: $size
+  @media all and (min-width: 801px)
+    $size: $spaceBig * 2
+    min-height: $size
+    min-width: $size
+    line-height: $size
+    padding: 0 $spaceLil
+    font-size: $size * .3
+    &.symbol i
+      font-size: $size * .8
+      line-height: $size
+
+  // ----------------------------------------- Symbols
+  &.symbol i
     vertical-align: middle
 
 
@@ -32,8 +43,11 @@
 
 
   // ----------------------------------------- Ixn
-  &:hover
-    background: $colorHighlightThin
+.interestPicker .bait:hover
+  background: tint($colorForegroundCool, 80%)
+  z-index: 1
+.interestPicker .menu .bait:hover
+  background: tint($colorForegroundCool, 10%)
 
 
 // ----------------------------------------- Buffet Carosel Animation
@@ -41,29 +55,32 @@
   position: absolute
   //margin-left: -100px
   left: -200px
-  +transition( left 5s linear, color .2s, background .2s )
+  text-shadow: $spaceTiny 0 1px $colorForegroundCool, -$spaceTiny 0 1px $colorForegroundCool, 0 $spaceTiny 1px $colorForegroundCool, 0 -$spaceTiny 1px $colorForegroundCool
+  +transition( left 12s linear, color .2s, background .2s )
   &.sliding
     left: 105%
   &.sliding.picked
-    left: 1500%
-  // ----------------------------------------- Naughty (no more of that pick allowed)
-  &.naughty
-    background: $colorBadThin
-    color: $colorBad
-    left: 105%
+    left: 19999px
 
 
   // ----------------------------------------- Gentle Constant Animation
-  @include animation(rockTheBoat 4s 0     linear infinite)
+  // All this nth-child stuff pseduo randomizes the animation effect
+  @include animation(rockTheBoat 6s 0     linear infinite)
 .menu .bait:nth-child(2n)
-  @include animation(rockTheBoat 4s .25s  linear infinite)
+  @include animation(rockTheBoat 6s .25s  linear infinite)
   //background: lawngreen
 .menu .bait:nth-child(3n)
-  @include animation(rockTheBoat 3.7s .5s linear infinite)
+  @include animation(rockTheBoat 5.5s .5s linear infinite)
   //background: peru
 .menu .bait:nth-child(5n)
-  @include animation(rockTheBoat 4.2s 1s  linear infinite)
+  @include animation(rockTheBoat 6.5s 1s  linear infinite)
   //background: lavender
+
+
+  // ----------------------------------------- Naughty (no more of that pick allowed)
+.interestPicker .menu .bait.naughty
+  left: 105%
+  @include animation(saltShaker .15s linear 3) // Shake it like a salt shaker
 
 
 +keyframes(rockTheBoat)
@@ -82,26 +99,48 @@
 //  50%
 //    +transform( translateY(-3px) )
 
++keyframes(saltShaker)
+  0%, 100%
+    +transform( translateX(0) )
+  25%
+    +transform( translateX(10px) )
+  75%
+    +transform( translateX(-10px) )
+
 
 // ----------------------------------------- 'Picked' Bait
 .bentoBox .bait
-  $size: $spaceBig * 1.25
+  $size: $spaceBig * .75
   min-height: $size
   min-width: $size
   line-height: $size
   font-size: $size * .4
   &.word
-    display: block
     min-height:  $size * .75
     line-height: $size * .75
-    text-align: left
+    padding: 0 $spaceTiny
   &.symbol i
     font-size:   $size * .8
     line-height: $size
     padding: 0 $spaceTiny
 
-
-
+  @media all and (min-width: 801px)
+    $size: $spaceBig * 1.25
+    min-height: $size
+    min-width: $size
+    line-height: $size
+    font-size: $size * .4
+    padding: 0 $spaceTiny
+    &.word
+      display: block
+      min-height:  $size * .75
+      line-height: $size * .75
+      text-align: left
+      margin: 0
+    &.symbol i
+      font-size:   $size * .8
+      line-height: $size
+      padding: 0 $spaceTiny
 
 
 
