@@ -155,7 +155,7 @@ define [
     # ------------------------------------------------------------- End Game
     _endGame: ->
       # Sometimes, ask the user if they've enjoyed themselves
-      if true # numbers.casino _surveyOdds
+      if numbers.casino _surveyOdds
         @_finishPreviousLevel @curLevel
         @curLevel = new AlexTrebek
           assessment: @model
