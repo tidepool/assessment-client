@@ -18,12 +18,8 @@ define [
   CircleProximity
 ) ->
 
-  _me = 'game/levels/circle_size_and_proximity'
-  _EVENTS =
-    startedSizing: 'size_circles_started'
-    startedProximity: 'move_circles_started'
 
-  View = Level.extend
+  Export = Level.extend
 
     # ------------------------------------------------------------- Backbone Methods
     className: 'circleSizeAndProximity'
@@ -45,7 +41,7 @@ define [
         runner: @
         showInstructions: @options.showInstructions
       @$el.html @curView.el
-      @track _EVENTS.startedSizing
+      @track Level.EVENTS.sublevelStart
       @circlesCollection = @curView.collection
       @listenToOnce @curView, 'done', @_showCircleProximity
 
@@ -57,26 +53,19 @@ define [
         showInstructions: @options.showInstructions
       @$el.html @curView.el
       @curView.render() # Render after putting in the dom since it needs to compute locations
-      @track _EVENTS.startedProximity,
-        circles: @circlesCollection.toJSON()
+      @track Level.EVENTS.sublevelStart, data:@circlesCollection.toJSON()
       @listenToOnce @curView, 'done', @onTestDone
 
 
     # ------------------------------------------------------------- Event Handlers
     onTestDone: ->
-      @remove()
-      @track Level.EVENTS.end,
-        circles: @circlesCollection.toJSON()
+      @summaryData =
+        data: @circlesCollection.toJSON()
         self_coord:
           top: @curView.selfView.getSelfCenter().y - @curView.selfView.getSelfRadius()
           left: @curView.selfView.getSelfCenter().x - @curView.selfView.getSelfRadius()
           size: @curView.selfView.getSelfRadius() * 2
-      @options.assessment.nextStage()
+      @endLevel()
 
 
-    # ------------------------------------------------------------- Consumable API
-    close: ->
-
-
-
-  View
+  Export

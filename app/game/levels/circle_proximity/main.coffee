@@ -21,10 +21,6 @@ define [
   proceed
 ) ->
 
-  _me = 'game/levels/circle_proximity'
-  _USEREVENTS =
-    dragStart: ''
-    dragStop: ''
   _degToRad = (deg) -> deg * Math.PI / 180
 
 
@@ -39,7 +35,6 @@ define [
       _.bindAll @, '_renderLevel'
 
     render: ->
-      #console.log "#{_me}.render()"
       if @options.showInstructions
         perch.show
           content: instructions
@@ -81,7 +76,7 @@ define [
       increment = 360 / count
       deg = increment / 2 + 270
       distance = 250
-      @collection.each (circle) =>
+      @collection.each (circle) ->
         circle.view.positionByCenter
           x: Math.cos( _degToRad(deg) ) * distance + center.x
           y: Math.sin( _degToRad(deg) ) * distance + center.y

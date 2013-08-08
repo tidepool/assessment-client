@@ -42,11 +42,6 @@ define [
         diff = (new Date()).getTime() - event.attributes.time
         expect(0 <= diff < 500).toBeTruthy() # Any reasonable timestamp should be less than .5 seconds ago in this situation
 
-      it 'the models have a timezone_offset', ->
-        event = events.pop()
-        expect(event.attributes.timezone_offset).toBeDefined()
-        expect( -1000 < event.attributes.timezone_offset < 1000).toBeTruthy() # Any timezone offset is +- 1000 http://stackoverflow.com/questions/2853474/can-i-get-the-browser-time-zone-in-asp-net-or-do-i-have-to-rely-on-js-operations
-
 
 
     describe 'required properties', ->

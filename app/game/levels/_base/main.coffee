@@ -1,49 +1,30 @@
 define [
   'underscore'
   'backbone'
+  'entities/user_event/_event_bundle'
   'composite_views/perch'
   'ui_widgets/proceed'
-  'entities/user_event'
 ],
 (
   _
   Backbone
+  EventBundle
   perch
   proceed
-  UserEvent
 ) ->
 
   _me = 'game/levels/_base'
 
-  _EVENTS =
-    start:             'test_started'
-    instructions:      'show_instructions'
-    subLevel:          'show_sublevel'
-    interact:          'interacted'
-    change:            'changed'
-    readyToProceed:    'ready_to_proceed'
-    notReadyToProceed: 'not_ready_to_proceed'
-    summary:           'level_summary'
-    end:               'test_completed'
 
-  _viewNameToModuleName =
-    ImageRank: 'image_rank'
-    CirclesTest: 'circles_test'
-    ReactionTime: 'reaction_time'
-    Survey: 'survey'
-    Snoozer: 'snoozer'
-    EmotionsCircles: 'emotions_circles'
-    InterestPicker: 'interest_picker'
-
-
-
-  View = Backbone.View.extend
+  Export = Backbone.View.extend
 
     # ----------------------------------------------------- Backbone Extensions
     initialize: ->
-      unless @options.assessment? and @options.stageNo?
-        throw new Error "Need assessment and stageNo"
-      #      console.log "#{_me}.initialize()"
+      throw new Error "Need assessment and stageNo and stageDef" unless @options.assessment? and @options.stageNo? and @options.stageDef?
+      @event = new EventBundle
+        event_type: @options.stageDef
+        stage: @options.stageNo
+        game_id: @options.assessment.get 'id'
       if @model.attributes.data?
         if @CollectionClass
           @collection = new @CollectionClass @model.attributes.data
@@ -52,7 +33,7 @@ define [
       if typeof @start is "function"
         @start() # Call the extending level's start method, if it has impelemented one
       else
-        @track _EVENTS.start
+        @track EventBundle.EVENTS.start
 
 
     # ------------------------------------------------------------- Consumable API
@@ -70,36 +51,31 @@ define [
       @alreadyReady = true
       proceed.show()
       @listenToOnce proceed, 'click', @endLevel
-      @track _EVENTS.readyToProceed
+      @track EventBundle.EVENTS.readyToProceed
 
     notReadyToProceed: ->
       return if not @alreadyReady
       @alreadyReady = false
       proceed.hide()
       @stopListening proceed
-      @track _EVENTS.notReadyToProceed
+      @track EventBundle.EVENTS.notReadyToProceed
 
     endLevel: ->
       proceed.hide()
-      if @finalEventData? # Track the end of the level. The level may optionally provide @finalEventData to be tracked along with it
-        @track _EVENTS.end, @finalEventData
-        @trigger 'done', @finalEventData
-      else
-        @track _EVENTS.end
-        @trigger 'done'
+      # Send level summary
+      @track EventBundle.EVENTS.summary, @summaryData
+      # Send level end event
+      @track EventBundle.EVENTS.end#, @endData
+      @event.save()
+      @trigger 'done', @summaryData
       @close?() # Call the mixed-in level's close method, if it has implemented one
       @remove()
       @options.assessment.nextStage()
 
-    track: (eventName, event) ->
-      level = @model.attributes.level_definition_name || @model.attributes.view_name
+    track: (eventName, eventData) ->
       baseData =
-        event_desc: eventName
-        game_id: @options.assessment.attributes.id # The game instance
-        module: _viewNameToModuleName[level] # The string id of the level type (eg: 'ImageRank')
-        stage: @options.stageNo # The index of the level instance (eg: 0 is the first level in the game)
-      userEvent = new UserEvent _.extend(baseData, event)
-      userEvent.save()
+        event: eventName
+      @event.record _.extend baseData, eventData
 
     remove: ->
       proceed.hide()
@@ -107,7 +83,6 @@ define [
       @stopListening()
       return this
 
-
-  View.EVENTS = _EVENTS
-  View
+  Export.EVENTS = EventBundle.EVENTS
+  Export
 

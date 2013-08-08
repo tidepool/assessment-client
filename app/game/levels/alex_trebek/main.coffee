@@ -51,25 +51,17 @@ define [
       else
         console.warn "#{type} is not a known question type"
 
-    _setDataForServer: ->
-      @finalEventData =
-        questions: @collection.toJSON()
+    _setDataForServer: -> @summaryData = data: @collection.toJSON()
 
 
     # ----------------------------------------------------- Event Handlers
     onSlide: (data) ->
-      @track Level.EVENTS.interact,
-        question_id: data.model.attributes.question_id
-        question_topic: data.model.attributes.question_topic
-        answer: data.value
+      @track Level.EVENTS.interact, data.model.attributes
 
     onChange: (data) ->
       data.model.set 'interacted': true
       data.model.set 'answer', data.value
-      @track Level.EVENTS.change,
-        question_id: data.model.attributes.question_id
-        question_topic: data.model.attributes.question_topic
-        answer: data.value
+      @track Level.EVENTS.change, data.model.attributes
       @readyToProceed() if @checkAllInteracted @collection
       @_setDataForServer()
 

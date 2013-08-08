@@ -7,7 +7,6 @@ define [
   'text!./instructions-simple.hbs'
   'text!./instructions-complex.hbs'
   'composite_views/perch'
-  'utils/detect'
 ], (
   _
   Backbone
@@ -17,7 +16,6 @@ define [
   instructionsSimple
   instructionsComplex
   perch
-  detect
 ) ->
 
   _me = 'game/levels/reaction_time_disc'
@@ -31,16 +29,13 @@ define [
   _TYPES =
     simple: 'simple'
     complex: 'complex'
-  _EVENTS =
-    shown: "circle_shown"
-    correct: "correct_circle_clicked"
-    incorrect: "wrong_circle_clicked"
 
   ReactionTime = Level.extend
     className: 'reactionTimeDisc'
     events:
       "click #ReactionTimeTarget": "_onCircleClicked"
       "click .target #ReactionTimeTarget": "_onCorrectClick"
+
 
     # ------------------------------------------------------------- Backbone Methods
     start: ->
@@ -70,8 +65,7 @@ define [
       colorSequenceInString = (color.color + ":" + color.interval for color in @colorSequence)[..]
       @track Level.EVENTS.start,
         sequence_type: @sequenceType
-        color_sequence: colorSequenceInString
-        is_touch: detect.isTouch()
+        data: colorSequenceInString
       $("#infobox").css("visibility", "hidden")
       @_waitAndShow()
 
@@ -80,9 +74,9 @@ define [
       if @sequenceNo < @numOfSequences
         curStep = @colorSequence[@sequenceNo]
         prevStep = @colorSequence[@sequenceNo - 1]
-        @track _EVENTS.shown,
-          circle_color: curStep.color
-          sequence_no: @sequenceNo
+        @track Level.EVENTS.shown,
+          color: curStep.color
+          index: @sequenceNo
           time_interval: curStep.interval
         $(_colorizerSel).prop('class', curStep.color)
 
@@ -107,8 +101,9 @@ define [
       @step = setTimeout @_end, _maxDelay
 
     _end: ->
-      @track Level.EVENTS.end, sequence_no: @sequenceNo
-      @assessment.nextStage()
+      @endLevel()
+#      @track Level.EVENTS.end, index: @sequenceNo
+#      @assessment.nextStage()
 
 
     # ------------------------------------------------------------- Event Handlers
@@ -132,15 +127,16 @@ define [
     _trackCorrect: ->
       curStep = @colorSequence[@sequenceNo]
       return if curStep.alreadyTracked
-      @track _EVENTS.correct,
-        circle_color: curStep.color
-        sequence_no: @sequenceNo
+      @track Level.EVENTS.correct,
+        color: curStep.color
+        index: @sequenceNo
       curStep.alreadyTracked = true
 
     _trackIncorrect: ->
-      @track _EVENTS.incorrect,
-        circle_color: @colorSequence[@sequenceNo]?.color or 'blank'
-        sequence_no: @sequenceNo
+      @track Level.EVENTS.incorrect,
+        color: @colorSequence[@sequenceNo]?.color or 'blank'
+        index: @sequenceNo
+
 
     # ------------------------------------------------------------- Consumable API
     close: ->

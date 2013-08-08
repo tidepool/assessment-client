@@ -45,7 +45,6 @@ define [
       it 'uses the same parse method as the Model', ->
         expect(collection.parse).toEqual Model.prototype.parse
       it 'dewraps returned data if there is a data property', ->
-        console.log collection:collection
         expect(collection.at(0).attributes.name).toEqual _p1.name
 
 

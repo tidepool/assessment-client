@@ -32,7 +32,9 @@ define [
     favorite_singer: 'Lone Bellow'
   _validEvent =
     event: 'black female president elected'
-
+  _expectedEvents =
+    start:             'level_started'
+    end:               'level_completed'
 
 
   describe 'entities/user_event/_event_bundle', ->
@@ -41,11 +43,20 @@ define [
     it 'should be a model', ->
       expect(ebFarnum).toBeInstanceOf Backbone.Model
 
+    describe 'static properties', ->
+      it 'exposes an `EVENTS` enum on the class', ->
+        expect(EventBundle.EVENTS).toBeDefined()
+        expect(EventBundle.EVENTS.start).toEqual _expectedEvents.start
+        expect(EventBundle.EVENTS.end).toEqual _expectedEvents.end
+
     describe 'default properties', ->
       it 'creates an empty backbone collection called `events`', ->
         events = ebFarnum.attributes.events
         expect(events).toBeInstanceOf Backbone.Collection
         expect(events.length).toEqual 0
+      it 'the model has a timezone_offset', ->
+        expect(ebFarnum.attributes.timezone_offset).toBeDefined()
+        expect( -1000 < ebFarnum.attributes.timezone_offset < 1000).toBeTruthy() # Any timezone offset is +- 1000 http://stackoverflow.com/questions/2853474/can-i-get-the-browser-time-zone-in-asp-net-or-do-i-have-to-rely-on-js-operations
 
     describe 'instantiation requirements', ->
       it 'unless `event_type`, pitches a fit', ->
@@ -82,11 +93,21 @@ define [
         expect(ebFarnum.attributes.events.length).toEqual 2
 
     describe 'flattens itself for the server', ->
+      it 'wraps events in `event_log` for the server', ->
+        eventsForServer = ebFarnum.toJSON()
+        expect(eventsForServer.event_log).toBeDefined()
+
       it 'turns events into a flat array after `toJSON`', ->
         ebFarnum.record _validEvent
         ebFarnum.record _validEvent
-        events = ebFarnum.toJSON().events
-#        console.log events: events
-        expect(_.isArray events).toBeTruthy()
-        expect(events.length).toEqual 2
+        eventsForServer = ebFarnum.toJSON()
+        expect(_.isArray eventsForServer.event_log.events).toBeTruthy()
+        expect(eventsForServer.event_log.events.length).toEqual 2
+
+
+
+
+
+
+
 

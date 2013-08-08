@@ -13,8 +13,6 @@ define [
   CircleProximity
 ) ->
 
-  _me = 'game/levels/emotions_circles'
-
 
   View = Level.extend
 
@@ -27,8 +25,7 @@ define [
       @collection = new Circles @model.attributes.circles
       @collection.each (model) -> model.set 'size', 4 # Emotions circles all start at the largest size
       @clearInteracted @collection # Since we set the size it thinks the user interacted with them. Psych!
-      @track Level.EVENTS.start,
-        circles: @collection.toJSON()
+      @track Level.EVENTS.start
 
     render: ->
       @circleProximity = new CircleProximity
@@ -43,14 +40,13 @@ define [
 
     # ----------------------------------------------------- Event Handlers
     onTestDone: ->
-      @track Level.EVENTS.end,
-        circles: @collection.toJSON()
+      @summaryData =
+        data: @collection.toJSON()
         self_coord:
           top: @circleProximity.selfView.getSelfCenter().y - @circleProximity.selfView.getSelfRadius()
           left: @circleProximity.selfView.getSelfCenter().x - @circleProximity.selfView.getSelfRadius()
           size: @circleProximity.selfView.getSelfRadius() * 2
-      @remove()
-      @options.assessment.nextStage()
+      @endLevel()
 
 
   View

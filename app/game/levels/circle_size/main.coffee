@@ -19,9 +19,6 @@ define [
   proceed
 ) ->
 
-  _me = 'game/levels/circle_size'
-  _USEREVENTS =
-    resized: 'circle_resized'
 
   View = Level.extend
 
@@ -65,8 +62,8 @@ define [
 
     # ----------------------------------------------------- Event Handlers
     onChangeSize: (model, size) ->
-      @options.runner.track _USEREVENTS.resized,
-        circle_no: model.collection.indexOf model
+      @options.runner.track Level.EVENTS.resize,
+        index: model.collection.indexOf model
         new_size: size
 
     onChangeInteracted: -> proceed.show() if @checkAllInteracted @collection

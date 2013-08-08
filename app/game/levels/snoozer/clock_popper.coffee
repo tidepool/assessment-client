@@ -7,6 +7,7 @@ define [
   './clock'
   './summary'
   'utils/numbers'
+  'game/levels/_base'
 ], (
   _
   Backbone
@@ -16,6 +17,7 @@ define [
   Clock
   Summary
   numbers
+  Level
 ) ->
 
   _stageSel = '.stage'
@@ -26,13 +28,6 @@ define [
     pauseTime: 1000 # Pauses before starting, and between difficult levels
     durationMax: 1600 # How long to show the clock ringing
     durationMin: 1100
-
-  EVENTS =
-    shown: 'circle_shown'
-    decoy: 'decoy'
-    miss: 'miss'
-    correct: 'correct_circle_clicked'
-    incorrect: 'wrong_circle_clicked'
 
 
   View = Backbone.View.extend
@@ -73,20 +68,20 @@ define [
     # ------------------------------------------------------------- Clock Events
     onRing: (clock) ->
       @options.level.summary.increment 'total'
-      @options.level.track EVENTS.shown, clock.attributes
+      @options.level.track Level.EVENTS.shown, clock.attributes
     onDecoy: (clock) ->
       @options.level.summary.increment 'decoys'
-      @options.level.track EVENTS.decoy, clock.attributes
+      @options.level.track Level.EVENTS.decoy, clock.attributes
     onMiss: (clock) ->
       @options.level.summary.increment 'missed'
-      @options.level.track EVENTS.miss, clock.attributes
+      @options.level.track Level.EVENTS.miss, clock.attributes
     onCorrect: (clock) ->
       @options.level.summary.increment 'correct'
       @options.level.summary.addTime clock.attributes.reaction_time
-      @options.level.track EVENTS.correct, clock.attributes
+      @options.level.track Level.EVENTS.correct, clock.attributes
     onIncorrect: (clock) ->
       @options.level.summary.increment 'incorrect'
-      @options.level.track EVENTS.incorrect, clock.attributes
+      @options.level.track Level.EVENTS.incorrect, clock.attributes
 
 
     # ------------------------------------------------------------- Clock Management

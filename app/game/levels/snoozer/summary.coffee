@@ -1,15 +1,15 @@
 define [
   'underscore'
-  'backbone'
+  'classes/model'
   'utils/detect'
 ],
 (
   _
-  Backbone
+  Model
   detect
 ) ->
 
-  Model = Backbone.Model.extend
+  Export = Model.extend
     defaults:
       total: null
       decoys: null
@@ -41,5 +41,5 @@ define [
       @set average_time: sum / times.length
       @
 
-  Model
+  Export
 

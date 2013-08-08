@@ -3,6 +3,7 @@ define [
   'backbone'
   'Handlebars'
   'text!./proxy_view.hbs'
+  'game/levels/_base'
   'jqueryui/draggable'
 ],
 (
@@ -10,6 +11,7 @@ define [
   Backbone
   Handlebars
   tmpl
+  Level
   x_JqDraggable
 ) ->
 
@@ -18,9 +20,6 @@ define [
   _animationTriggerClass = 'yay'
   _freshClass = 'fresh'
   _draggableStackSel = '.ui-draggable'
-  _USEREVENTS =
-    dragStart: 'circle_start_move'
-    dragStop: 'circle_end_move'
   _calculateXYDistance = (p1, p2) ->
     distance =
       x: p1.x - p2.x
@@ -153,9 +152,9 @@ define [
     onDragStart: (e, ui) ->
       @$el.removeClass(_freshClass)
       @_showLine()
-      @options.track _USEREVENTS.dragStart,
-        circle_no: @model.collection.indexOf @model
-        circle: @model.toJSON()
+      @options.track Level.EVENTS.moveStart,
+        index: @model.collection.indexOf @model
+        item: @model.toJSON()
 
     onDrag: (e, ui) ->
       @_maintainLine(e, ui)
@@ -164,9 +163,9 @@ define [
       @_shimmerSelf()
       @_hideLine()
       @_updateModelPosition()
-      @options.track _USEREVENTS.dragStop,
-        circle_no: @model.collection.indexOf @model
-        circle: @model.toJSON()
+      @options.track Level.EVENTS.moveEnd,
+        index: @model.collection.indexOf @model
+        item: @model.toJSON()
 
     onFocus: (e) -> @_updateModelPosition()
     onClick: -> @_updateModelPosition()

@@ -4,6 +4,7 @@ define [
   'core'
   'composite_views/perch'
   'entities/results_calculator'
+  'entities/user_event/_event_bundle'
   'ui_widgets/steps_remaining'
   'ui_widgets/hold_please'
   'game/levels/reaction_time_disc'
@@ -22,6 +23,7 @@ define [
   app
   perch
   Results
+  EventBundle
   StepsRemainingView
   holdPlease
   ReactionTime
@@ -55,7 +57,6 @@ define [
 #    reaction_time: 'Reaction Time'
   _defaultTitle = 'Play a Game'
   _animationTime = 1
-  _raceConditionDelay = 500 #TODO: remove this. Prevents a race condition exhibited if the server starts calculating before all events are received
   _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
   Me = Backbone.View.extend
@@ -126,9 +127,8 @@ define [
     _finishPreviousLevel: (levelView) ->
       if levelView and levelView instanceof Backbone.View
         levelView.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
-        levelStringId = levelView.model.get 'view_name'
         @miniInstructions.model.set text:''
-        app.analytics.track @className, "#{levelStringId} Level Finished"
+        app.analytics.track @className, "#{levelView.model.attributes.stageDef} Level Finished"
 
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
@@ -143,26 +143,29 @@ define [
         model: new Backbone.Model(stageData)
         assessment: @model
         stageNo: stageId
+        stageDef: stageData.level_definition_name || stageData.view_name
         showInstructions: stageData.view_name is 'ReactionTime' || false #@model.isFirstTimeSeeingLevel stageData.view_name
         instructions: @miniInstructions.model
       @$el.html @curLevel.render().el
       @model.setLevelSeen stageData.view_name
       app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
-      app.analytics.track @className, "#{stageData.view_name} Level Started"
+      app.analytics.track @className, "#{@curLevel.model.attributes.stageDef} Level Started"
 
 
     # ------------------------------------------------------------- End Game
     _endGame: ->
       # Sometimes, ask the user if they've enjoyed themselves
-      if numbers.casino _surveyOdds
+      if true # numbers.casino _surveyOdds
+        @_finishPreviousLevel @curLevel
         @curLevel = new AlexTrebek
           assessment: @model
           stageNo: 999
+          stageDef: 'survey'
           model: new Backbone.Model
             data: [
               question: "Did you enjoy playing this game?"
               question_id: "enjoyed_game"
-              question_topic: "user_behavior_survey"
+              topic: "user_behavior_survey"
               question_type: "select_by_icon"
               options: [
                 { icon: 'gfx-happiness', value: 'yes' }
@@ -172,7 +175,7 @@ define [
         @$el.html @curLevel.render().el
         app.analytics.trackKeyMetric "#{@options.params.def_id} Enjoyment", 'Shown Question'
         @listenToOnce @curLevel, 'done', (data) ->
-          if data?.questions[0]?.answer is 'yes'
+          if data?.data[0]?.answer is 'yes'
             app.analytics.trackKeyMetric "#{@options.params.def_id} Enjoyment", 'Answered Yes'
           else
             app.analytics.track "#{@options.params.def_id} Enjoyment", 'Answered No'
@@ -185,13 +188,19 @@ define [
       app.analytics.track @className, "#{@options.params.def_id} Game Finished"
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} Game", 'Finished'
-      setTimeout (=>
+      # Don't start the results calculation until we get a successful response on the user event
+      @listenToOnce @curLevel.event, 'sync', (eventModel,resp,jqXHR) ->
+        console.log
+          eventModel:eventModel
+          resp:resp
+        @_finishPreviousLevel @curLevel
         @curLevel = new CalculateResultsView
           game: @model
           model: new Results
             game_id: @model.get 'id'
         @$el.html @curLevel.render().el
-      ), _raceConditionDelay
+      # Clean up the last level
+
 
 
     # ------------------------------------------------------------- Consumable API

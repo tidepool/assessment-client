@@ -14,7 +14,6 @@ define [
       {
         event: null # The name of the event
         time: (new Date()).getTime()
-        timezone_offset: (new Date).getTimezoneOffset()
       }
 
     initialize: ->

@@ -4,7 +4,6 @@ define [
   'game/levels/_base'
   'text!./main.hbs'
   './rankable_images'
-  'entities/user_event'
   'jqueryui/sortable'
 ],
 (
@@ -13,8 +12,7 @@ define [
   Level
   tmpl
   RankableImages
-  UserEvent
-  Sortable
+  xJqUISortable
 ) ->
 
   _me = 'game/levels/rank_images'
@@ -27,7 +25,6 @@ define [
   _EVENTS =
     ranked: "image_ranked"
     unranked: "image_rank_cleared"
-    dragged: "image_drag_start"
 
 
   View = Level.extend
@@ -42,7 +39,7 @@ define [
       _.bindAll @, 'onOver', 'onSortStart', 'onSortEnd', 'onUnrankedImageClick', 'onRankedImageClick', 'onUnrankedImageKeypress', 'onRankedImageKeypress'
       #@listenTo @collection, 'all', (e) -> console.log "#{_me} event: #{e}"
       @listenTo @collection, 'change:rank', @onRankChange
-      @track Level.EVENTS.start, image_sequence:@collection.toJSON()
+      @track Level.EVENTS.start, data:@collection.toJSON()
 
 
     render: ->
@@ -106,7 +103,7 @@ define [
       else
         @notReadyToProceed()
 
-    _buildRankArrayForServer: -> @finalEventData = final_rank: @collection.pluck 'rank'
+    _buildRankArrayForServer: -> @summaryData = final_rank: @collection.pluck 'rank'
 
 
     # ----------------------------------------------------- Event Handlers
@@ -145,7 +142,7 @@ define [
 
     onRankChange: (model, value, options) ->
       #console.log "#{_me}.onRankingChange new rank for image #{model.attributes.image_id}: #{model.attributes.rank}"
-      if value is -1
+      if value is null
         @_trackRankCleared model.attributes.image_id, model.previous('rank')
       else
         @_trackRanked model.attributes.image_id, value
@@ -160,10 +157,10 @@ define [
     _trackRankCleared: (id, oldRank) ->
       @track _EVENTS.unranked,
         image_no: id
-        rank: oldRank
+        prev_rank: oldRank
 
     _trackDragged: (id) ->
-      @track _EVENTS.dragged,
+      @track Level.EVENTS.moveStart,
         image_no: id
 
 
