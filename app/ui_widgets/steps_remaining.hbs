@@ -1,6 +1,11 @@
-<h3 class="title">
-    {{title}}
-</h3>
+{{#if title}}
+    <h3 class="title">
+        {{title}}
+    </h3>
+{{else}}
+    <h3 class="title spacer"></h3>
+{{/if}}
+
 
 <div class="pillHolder">
     {{#each levels}}
