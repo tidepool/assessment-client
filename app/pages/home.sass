@@ -31,19 +31,24 @@
     letter-spacing: .02em
     line-height: 1.2
   h1
-    font-size: $fontSizeVeryLarge
-    @media all and (min-width: 1001px)
-      font-size: $fontSizeMegaLarge
-  h2
-    font-size: $fontSizeVeryLarge
-    margin-bottom: $space
-    @media all and (min-width: 1001px)
-      font-size: $fontSizeMegaLarge
-      margin-bottom: $spaceBig
-  h3
-    font-size: $fontSizeLarge
-    @media all and (min-width: 1001px)
+    font-size: $fontSizeMegaLarge
+    margin-bottom: $spaceBig
+    +phone
       font-size: $fontSizeVeryLarge
+      margin-bottom: $space
+      line-height: 1
+      letter-spacing: -.02em
+  h2
+    font-size: $fontSizeMegaLarge
+    margin-bottom: $spaceBig
+    +phone
+      font-size: $fontSizeVeryLarge - $spaceLil
+      margin-bottom: $spaceLil
+  h3
+    font-size: $fontSizeVeryLarge
+    +phone
+      font-size: $fontSizeLarge
+
 
 
   // ----------------------------------------- Main Pitch
@@ -52,6 +57,8 @@
     padding: $spaceBig 0
     @media all and (min-width: 1001px)
       padding: $gap 0 $gap * 2
+    +phone
+      background: tint($colorInfoDark, 50%)
 
   .hero
     text-align: center
@@ -131,7 +138,9 @@
 body.pages-home
   +bigassBackground
 
-
++phone
+  body.pages-home
+    background: tint($colorInfoDark, 50%)
 
 
 

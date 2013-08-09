@@ -24,4 +24,20 @@ $radiusLarge: 25px
 
 $headerHeight: 60px
 
+// For Device & Screen responding
+$sizePhone: 603px
+$sizeTablet: 1024px
+
+
+@mixin phone
+  @media (max-width: $sizePhone)
+    @content
+
+@mixin tablet
+  @media (min-width: $sizePhone+1) and (max-width: $sizeTablet)
+    @content
+
+@mixin desktop
+  @media (min-width: $sizeTablet+1)
+    @content
 

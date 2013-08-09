@@ -12,7 +12,7 @@ define [],() ->
       link_color: "#188ff4"
       default_mode: "feedback"
       forum_id: 212724
-      tab_label: "Feedback"
+      tab_label: 'Feedback'
       tab_color: "#e43e45"
       tab_position: "bottom-left"
       tab_inverted: false

@@ -14,6 +14,8 @@ define [
   # External Dependencies
   'entities/user'
   'controllers/session_controller'
+  # 3rd Party Dependencies
+  'bower_components/fastclick/lib/fastclick'
 ],
 (
   _
@@ -25,6 +27,7 @@ define [
   Router
   User
   SessionController
+  FastClick
 ) ->
 
   _me = 'core/main'
@@ -39,6 +42,9 @@ define [
 
   Core.prototype =
     start: ->
+      # Handle click/tap differences with this polyfill
+      FastClick.attach document.body
+
       #@cfg.debug && console.log "#{_me} started"
 
       # Analytics is fired up

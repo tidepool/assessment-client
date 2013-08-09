@@ -68,6 +68,11 @@ define [
         else
           document.title = _companyName
 
+        # For mobile devices, scroll the address bar away
+        if window.matchMedia?("(max-width: 603px)").matches
+          setTimeout (-> window.scrollTo(0,1) ), 0
+
+
         @options.app.analytics.trackPage module
 
 
