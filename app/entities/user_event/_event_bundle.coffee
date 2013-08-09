@@ -91,10 +91,8 @@ define [
     record: (eventData, options) ->
       @attributes.events.add eventData, _.extend({validate:true}, options)
       # ------------------------------------------------------ v Line of Awesome
-      # Uncomment this to view real-time details of every recorded user event
-#      console.log
-#        eventBundle: @toJSON()
-#        eventData: eventData
+#      console.log eventData # Uncomment this to view real-time details of every recorded user event
+#      console.log eventBundle: @toJSON()
       # ------------------------------------------------------ ^ Line of Awesome
       @
 
