@@ -7,6 +7,7 @@ define [
   'entities/user_event/_event_bundle'
   'ui_widgets/steps_remaining'
   'ui_widgets/hold_please'
+  'ui_widgets/psst'
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'
   'game/levels/circle_size_and_proximity'
@@ -26,6 +27,7 @@ define [
   EventBundle
   StepsRemainingView
   holdPlease
+  psst
   ReactionTime
   ImageRank
   CirclesTest
@@ -65,8 +67,9 @@ define [
 
     initialize: ->
       throw new Error "Need params" unless @options.params
-      holdPlease.show null, true # (no selector, show a message)
+      holdPlease.show null, true # (null = no selector, true = show a random message)
       @model = app.user.createGame @options.params.def_id
+      @listenTo app.user, 'error', @_userModelErr
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'sync', @onSync
       @listenTo @model, 'change:stage_completed', @_onStageChanged
@@ -113,7 +116,22 @@ define [
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
     _curGameErr: ->
-      console.error "#{_me}: Error on the curGame model"
+      holdPlease.hide()
+      psst
+        title: 'Error'
+        msg: 'Sorry, there was a problem loading the game.'
+        sel: @$el
+        type: psst.TYPES.error
+      throw new Error "#{_me}: Error on the game model"
+
+    _userModelErr: ->
+      holdPlease.hide()
+      psst
+        title: 'Error'
+        msg: 'Sorry, there was a problem loading the user.'
+        sel: @$el
+        type: psst.TYPES.error
+      throw new Error "#{_me}: Error on the user model"
 
 
     # ------------------------------------------------------------- Game and Level Management

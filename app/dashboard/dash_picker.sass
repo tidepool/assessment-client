@@ -7,11 +7,14 @@
 .dashPicker
   background: $shade
   margin: $spaceLil 0
+  +phone
+    margin-top: 0
   line-height: 1
 
   ul
     max-width: $maxSiteWidth
     margin: 0 auto
+    text-align: center
 
   ul, li
     list-style: none
@@ -25,6 +28,10 @@
     text-align: center
     padding: $spaceLil*2 $space
     min-width: $spaceBig * 2
+    +phone
+      padding: $spaceLil
+      padding-top: $spaceTiny
+      min-width: 0
     color: white
   a:hover
     text-decoration: none
@@ -35,12 +42,17 @@
     font-size: $space
     width: $space
     margin-bottom: $spaceTiny
+    +phone
+      font-size: $spaceLil * 2
+      width: $spaceLil * 2
 
   a label
     font-size: $fontSizeBody
     text-transform: uppercase
     margin: 0
     margin-bottom: -$spaceTiny
+    +phone
+      font-size: $fontSizeTiny
 
 
 

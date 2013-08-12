@@ -15,7 +15,7 @@ define [
   'entities/user'
   'controllers/session_controller'
   # 3rd Party Dependencies
-  'bower_components/fastclick/lib/fastclick'
+  'fastclick'
 ],
 (
   _

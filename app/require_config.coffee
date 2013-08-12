@@ -35,6 +35,7 @@ define [], () ->
       toastr: "bower_components/toastr"
       chart: "bower_components/Chart.js/Chart.min"
       markdown: 'bower_components/markdown/lib/markdown'
+      fastclick: 'bower_components/fastclick/lib/fastclick'
 
       # 3rd Party non-Bower Libraries
       nested_view: "scripts/vendor/nested_view"

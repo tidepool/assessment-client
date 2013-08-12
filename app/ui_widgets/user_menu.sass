@@ -5,12 +5,26 @@
 .userMenu
   float: right
 
-  .icon-fixed-width
-    text-align: center
 
+  // ------------------------------------------------------ Login Link
+  +phone
+    .btn-large
+      padding-top: 0
+      top: 0
+      height: $shortHeaderHeight
+      line-height: $shortHeaderHeight - $spaceTiny
+
+
+  // ------------------------------------------------------ Photo of user
   .avatar
     margin-right: $spaceTiny
+    +phone
+      margin-right: 0
 
+
+  // ------------------------------------------------------ Drop-down user menu
+  .icon-fixed-width
+    text-align: center
   .dropdown-toggle
     height: $headerHeight
     line-height: $headerHeight - $spaceLil + $spaceTiny
@@ -19,11 +33,21 @@
     top: - $spaceTiny
     padding-top: $spaceTiny
     cursor: default
+    +phone
+      padding-top: 0
+      top: 0
+      height: $shortHeaderHeight
+      line-height: $shortHeaderHeight - $spaceTiny
   .dropdown-toggle i:last-child
     margin-left: $spaceLil
   .dropdown-menu
     top: $headerHeight - 1 // for any rounding issues
+    +phone
+      top: $shortHeaderHeight - 1
     width: 100%
+    min-width: 200px
+    left: auto
+    right: 0
     box-sizing: border-box
     margin: 0
     padding: 0
@@ -46,15 +70,33 @@
     color: white
     text-shadow: none
     padding: $spaceLil $space
+    +phone
+      padding: $spaceLil $spaceTiny
   .dropdown-menu li a:hover,
   .dropdown-menu li a:focus
     background: $colorBrand
   .dropdown-toggle:hover .dropdown-menu,
   .dropdown-toggle:focus .dropdown-menu
     display: block
+    +phone
+      &:before
+        content: ''
+        position: absolute
+        height: $shortHeaderHeight
+        width: 100%
+        top: -$shortHeaderHeight
+        left: 0
+        background: $colorForeground
+        border-top-left-radius: $radiusMed
 
   .dropdown-menu
     z-index: 1
   .avatar, loginArea.userName
     position: relative
     z-index: 2
+
+  +phone
+    .arrow, .nickname
+      display: none
+
+

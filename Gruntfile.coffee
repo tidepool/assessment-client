@@ -244,7 +244,6 @@ module.exports = (grunt) ->
           fbId:                "<%= env.fbId %>"
           #fbSecret:            "<%= env.fbSecret %>" # not used
           isDev:               "<%= env.isDev %>"
-          appIconSuffix:       "<%= env.appIconSuffix %>" # So that the home screen icon can read dev/localhost/prod
         prefix: '@@'
       dist:
         files: [

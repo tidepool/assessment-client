@@ -15,6 +15,8 @@ define [
 ) ->
 
   _me = 'core/layouts/layout'
+  _logoSel = '.siteLogo'
+  _logoShimmerClass = 'flirt'
 
   Me = Backbone.View.extend
 
@@ -32,6 +34,7 @@ define [
     # Public
     show: (view) ->
       @_cleanupChildren()
+      view.layout = @
       @_curView = view
       @$('#ContentRegion').html @_curView.render().el
 
@@ -39,6 +42,9 @@ define [
       @_cleanupChildren()
 
     resetHeader: -> @$('#HeaderRegion').html markupLogo
+
+    # Show the logo text briefly, then animate it away
+    shimmerLogo: -> @$(_logoSel).removeClass(_logoShimmerClass).addClass _logoShimmerClass
 
   Me
 

@@ -13,6 +13,7 @@ define [
     tmpl: Handlebars.compile tmpl
     render: ->
       @$el.html @tmpl()
+      @layout?.shimmerLogo?()
       @
   Me
 

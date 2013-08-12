@@ -1,6 +1,7 @@
 @import '../bower_components/bourbon/app/assets/stylesheets/bourbon'
 @import '../styles/appVars'
 @import '../styles/colorVars'
+@import '../styles/helpers'
 
 
 .siteLogo
@@ -17,8 +18,6 @@
     left: -9999px // Text only here for SEO
     margin: 0
     padding: 0
-  &:hover
-    background-color: $colorBrand
   &:after
     content: ''
     position: absolute
@@ -26,20 +25,72 @@
     left: 10px
     width: 88px
     height: 50px
-    background-image: url('../images/brand1x.png')
+    //background-image: url('../images/brand.png')
+    +twiceable('../images/brand', 400px)
     background-position: 0 -25px
-  &:hover:after
-    background-color: $colorBrand
-    background-position: -88px -25px
-  &:hover:before
-    position: absolute
-    box-sizing: border-box
-    width: 100%
-    height: $spaceLil
-    left: 0
-    top: 100%
-    margin-top: - $spaceLil / 2
-    content: ''
-    background: $colorBrand
-    border-bottom-right-radius: $radiusSmall
-    border-bottom-left-radius: $radiusSmall
+
+
+  // ------------------------------------------------------------ Large Screens
+  +desktop
+    &:hover
+      background-color: $colorBrand
+    &:hover:after
+      background-color: $colorBrand
+      background-position: -88px -25px
+    &:hover:before
+      position: absolute
+      box-sizing: border-box
+      width: 100%
+      height: $spaceLil
+      left: 0
+      top: 100%
+      margin-top: - $spaceLil / 2
+      content: ''
+      background: $colorBrand
+      border-bottom-right-radius: $radiusSmall
+      border-bottom-left-radius: $radiusSmall
+
+
+  // ------------------------------------------------------------ Small Screens
+  +phone
+    $fishWidth: 35px
+    height: $shortHeaderHeight
+    width: $fishWidth
+    margin-top: 0
+    padding-left: $spaceTiny
+    // The fish icon
+    &:after
+      top: $spaceTiny
+      left: $spaceTiny
+      height: $shortHeaderHeight - $spaceTiny
+      width: $fishWidth
+      background-position: 0 0
+    // The text 'TIDEPOOL'
+    &:before
+      content: ''
+      position: absolute
+      margin-top: -$shortHeaderHeight
+      left: $fishWidth + $spaceTiny
+      top: 0
+      height: $shortHeaderHeight - $spaceTiny
+      width: 105px - $fishWidth
+      background-position: -$fishWidth 0
+      +twiceable('../images/brand', 400px)
+      +transitionable
+    &:hover:before,
+    &:focus:before
+      margin-top: $spaceTiny
+    &.flirt:before // Show the text for a moment, then hide it
+      +animation( slideDown 6s )
+    &.marry:before // Keep the text displayed. f o r e v e r.
+      margin-top: $spaceTiny
+
+
+
++keyframes(slideDown)
+  0%, 100%
+    margin-top: -30px
+  10%, 80%
+    margin-top: $spaceTiny
+
+

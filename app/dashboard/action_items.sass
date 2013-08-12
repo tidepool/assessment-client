@@ -19,6 +19,8 @@
     float: left
     height: 100%
     padding: $spaceLil $spaceLil $spaceLil 0
+    +phone
+      display: none
     //box-shadow: $spaceTiny*2 0 $spaceTiny (-$spaceTiny) $shadeLight
   .welcome h2,
   .welcome h5
@@ -49,6 +51,8 @@
     color: white
     margin: 0
     margin-left: $space * 3 // Room for the icon
+    +phone
+      margin-left: $space * 2
 
   .item a
     display: block
@@ -56,6 +60,11 @@
     cursor: pointer
     padding: $spaceLil
     min-height: $innerSize
+    +phone
+      padding: $spaceTiny
+      line-height: 1.2
+      .small
+        font-size: $fontSizeTiny
   .item a:hover
     text-decoration: none
     background: $shadeLight

@@ -42,3 +42,15 @@
   background-size: cover
   //filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.myBackground.jpg', sizingMethod='scale');
   -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')"
+
+//Support 1 and 2x image sizes
+@mixin twiceable($extentionlessUrl, $bgImgWidth)
+  background-image: url($extentionlessUrl + ".png")
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx)
+    background-image: url($extentionlessUrl + "@2x.png")
+    background-size: $bgImgWidth/2 auto
+
+// Border. Mostly for quick debugging
+@mixin border($width: 1px, $pattern: dotted, $color: peru)
+  border: $width $pattern $color
+

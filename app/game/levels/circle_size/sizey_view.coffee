@@ -4,13 +4,16 @@ define [
   'Handlebars'
   './circle_view'
   'text!./sizey_view.hbs'
+  'fastclick'
   'jqueryui/slider'
+
 ],
 (
   Backbone
   Handlebars
   CircleView
   tmpl
+  FastClick
   JqSlider
 ) ->
 
@@ -18,6 +21,7 @@ define [
   _sliderSel = '.slider'
   _sliderHandleSel = '.ui-slider-handle'
   _circleSel = '.circle'
+  _needsNormalClickClass = 'needsclick'
 
   View = Backbone.View.extend
 
@@ -26,7 +30,7 @@ define [
     tmpl: Handlebars.compile tmpl
 
     initialize: ->
-      _.bindAll @, 'onSlide', 'onClick', 'onFocus'
+      _.bindAll @, 'onSlide', 'onFocus', 'onClick'
       @circle = new CircleView
         model: @model
 
@@ -43,7 +47,10 @@ define [
 
 
     # ----------------------------------------------------- Event Callbacks
-    onSlide: (e, ui) -> @model.set size: ui.value
+    onSlide: (e, ui) ->
+      @model.set
+        size: ui.value
+        interacted:true
     onClick: -> @model.set interacted:true
     onFocus: -> @model.set interacted:true
 
