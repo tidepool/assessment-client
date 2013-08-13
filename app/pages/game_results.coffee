@@ -168,7 +168,7 @@ define [
       psst
         sel: _contentSel
         title: "Error Getting Results"
-        msg: "Sorry, but we coudln't get any results for game #{collection.game_id}"
+        msg: xhr.responseJSON?.status.message || xhr.statusText
         type: psst.TYPES.error
 
     onClickFriendSurvey: ->  app.analytics.trackKeyMetric 'Friend Survey', 'Clicked Email Link'
