@@ -5,8 +5,9 @@
 
 
 .siteLogo
-  position: relative
-  float: left
+  position: absolute
+  left: 0
+  top: 0
   height: $headerHeight + 5px
   margin-top: -5px
   width: 110px
@@ -32,12 +33,12 @@
 
   // ------------------------------------------------------------ Large Screens
   +tabletAndUp
-    &:hover
+    &.interactive:hover
       background-color: $colorBrand
-    &:hover:after
+    &.interactive:hover:after
       background-color: $colorBrand
       background-position: -88px -25px
-    &:hover:before
+    &.interactive:hover:before
       position: absolute
       box-sizing: border-box
       width: 100%
@@ -77,8 +78,8 @@
       background-position: -$fishWidth 0
       +twiceable('../images/brand', 400px)
       +transitionable
-    &:hover:before,
-    &:focus:before
+    &.interactive:hover:before,
+    &.interactive:focus:before
       margin-top: $spaceTiny
     &.flirt:before // Show the text for a moment, then hide it
       +animation( slideDown 6s )

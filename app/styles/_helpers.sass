@@ -50,8 +50,9 @@
     background-size: $bgImgWidth/2 auto
 
 // Border. Mostly for quick debugging
-@mixin border($width: 1px, $pattern: dotted, $color: peru)
-  border: $width $pattern $color
+@mixin border($color: peru)
+  border: 1px dotted $color
 
-
+@mixin bg($color: pink)
+  background-color: transparentize($color, .75)
 

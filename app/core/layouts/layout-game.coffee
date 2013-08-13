@@ -20,12 +20,12 @@ define [
     className: 'gameLayout'
 
     initialize: ->
-      Me.__super__.initialize.call(this)
+      Me.__super__.initialize.call this
       @render()
 
     render: ->
       @$el.html @tmpl()
-      Me.__super__.resetHeader.call(this)
+      Me.__super__.resetHeader.call this, {nolink:true}
 #      @$('#HeaderRegion')
 #        .append(userMenu.el)
       @

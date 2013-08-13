@@ -5,6 +5,7 @@ define [
   'Handlebars'
   'text!./layout.hbs'
   'text!ui_widgets/site_logo.hbs'
+  'text!ui_widgets/site_logo_nolink.hbs'
 ],
 (
   _
@@ -12,6 +13,7 @@ define [
   Handlebars
   tmpl
   markupLogo
+  markupLogoNolink
 ) ->
 
   _me = 'core/layouts/layout'
@@ -41,7 +43,12 @@ define [
     close: ->
       @_cleanupChildren()
 
-    resetHeader: -> @$('#HeaderRegion').html markupLogo
+    resetHeader: (options) ->
+      if options?.nolink
+        @$('#HeaderRegion').html markupLogoNolink
+      else
+        @$('#HeaderRegion').html markupLogo
+
 
     # Show the logo text briefly, then animate it away
     shimmerLogo: -> @$(_logoSel).removeClass(_logoShimmerClass).addClass _logoShimmerClass

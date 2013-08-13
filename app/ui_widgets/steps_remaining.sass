@@ -1,69 +1,70 @@
-@import '../styles/_appVars.sass'
-@import '../styles/_colorVars.sass'
+@import '../styles/_appVars'
+@import '../styles/_colorVars'
+@import '../styles/_helpers'
 
 .stepsRemaining
   $stepHeight: $space
-  float: left
-  line-height: 0
+  display: inline-block
+  position: relative
+  height: $headerHeight
+  min-width: 175px
+  line-height: $headerHeight
+  +phone
+    height: $shortHeaderHeight
+    line-height: $shortHeaderHeight
 
   .title
+    display: block
+    position: relative
+    height: 100%
+    line-height: $headerHeight
+    +phone
+      line-height: $shortHeaderHeight * .75
+      font-size: $fontSizeBody
     text-transform: none
     text-align: center
-    margin: 0 $spaceLil
-    height: $headerHeight - ($stepHeight/2)
-    line-height: $headerHeight - ($stepHeight/2)
-    color: $colorGood
-  .title.spacer //if the game has no title
-    background: none
-    height: $headerHeight/2 - ($stepHeight/2)
+    color: $colorForegroundMild
+    margin: 0
 
   .pillHolder
-    display: inline-block
-    position: relative
-    height: $space - ($spaceTiny * 2) // 2 paddings
-    background: white
-    //border: $spaceTiny solid $colorVeryQuiet
+    display: block
+    position: absolute
+    box-shadow: 0 -1px 2px $shadeLight
+    background: $colorBackground
+    left: 0
+    top: 100%
+    height: $space
+    margin-top: -$space/2
+    width: 100%
+    +box-sizing(border-box)
     padding: $spaceTiny
-    border-radius: $space / 2
+    border-radius: $space/2
     vertical-align: middle
     font-size: 0 // decides amount of space between each step
     line-height: 0
+    text-align: center
+    +phone
+      height: $space - $spaceLil
+      margin-top: -($space - $spaceLil)/2
 
   .step
     display: inline-block
-    width: $spaceLil
     height: 100%
-    background: $colorMegaQuiet
-    margin-right: 1px
+    background: $colorBackgroundWarm
+    border-right: $spaceTiny solid $colorBackground
+    +box-sizing(border-box)
   .step.completed
     background: $colorGood
   .step:first-child
-    border-bottom-left-radius: $space / 2
-    border-top-left-radius: $space / 2
+    border-bottom-left-radius: $space/2
+    border-top-left-radius: $space/2
   .step:last-child
-    border-bottom-right-radius: $space / 2
-    border-top-right-radius: $space / 2
-    margin-right: 0
+    border-bottom-right-radius: $space/2
+    border-top-right-radius: $space/2
+    border-right: none
 
 header .stepsRemaining
   margin-left: $spaceLil
-
-// Sizing changes based on screen width
-@media all and (min-width: 601px)
-  .stepsRemaining
-    font-size: $fontSizeBody
-  .stepsRemaining .step
-    width: $space
-    border-radius: $radiusTiny
-    margin-right: $spaceTiny
-@media all and (min-width: 1001px)
-  .stepsRemaining .step
-    width: $space + $spaceLil
-  .title
-    background: $colorMegaQuiet
-    text-shadow: 0 1px $highlight
-
-
 
 
 

@@ -22,6 +22,7 @@ define [
       @$el.html _tmpl
         title: @options.title
         levels: @collection.toJSON()
+        width: "#{Math.floor(1 / @collection.length * 100)}%" # convert to a percentage
       @
 
     setComplete: (LevelId) ->
