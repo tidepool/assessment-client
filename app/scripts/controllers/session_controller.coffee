@@ -115,12 +115,7 @@ define [
 
 
     # ---------------------------------------------- Private Utility Methods
-    _nuke: ->
-      delete sessionStorage['access_token']
-      delete sessionStorage['expires_in']
-      delete sessionStorage['token_received']
-      delete sessionStorage['refresh_token']
-      delete sessionStorage['guest']
+
 
     # authorizeThrough: facebook, twitter or fitbit
     _buildExternalServiceUrl: (authorizeThrough) ->
@@ -144,9 +139,10 @@ define [
 
     _persistLocally: (data) ->
       sessionStorage['access_token'] = data['access_token']
-      sessionStorage['expires_in'] = data['expires_in'] * 1000 # Store in ms
+      sessionStorage['expires_in'] = if data['expires_in']? then data['expires_in'] * 1000 else null # Store in ms
       sessionStorage['token_received'] = new Date().getTime()
-      sessionStorage['refresh_token'] = data['refresh_token']
+      sessionStorage['refresh_token'] = if data['refresh_token']? then data['refresh_token'] else null
+      @
 
 
     # ------------------------------------------------ Public API
@@ -170,9 +166,22 @@ define [
       window.OAuthRedirect = _.bind(@externalAuthServiceCallback, @)
       window.open(@_buildExternalServiceUrl(provider), "Login", "width=#{width}, height=#{height}, left=#{left}, top=#{top}, menubar=no")
 
+    nuke: ->
+      delete sessionStorage['access_token']
+      delete sessionStorage['expires_in']
+      delete sessionStorage['token_received']
+      delete sessionStorage['refresh_token']
+      delete sessionStorage['guest']
+      @
+
     logOut: ->
-      @_nuke()
+      @nuke()
       @user.reset()
+      @
+
+    persistToken: (token) ->
+      @_persistLocally access_token:token
+      @
 
     # Called as a global object by the opened window
     externalAuthServiceCallback: (hash, location) ->

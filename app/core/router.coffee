@@ -22,6 +22,7 @@ define [
       demographics:             'showDemographics'
       'game/:def_id':           'createGame'
       game:                     'createDefaultGame'
+      'gameForUser/:token':     'createGameForUser'
       'gameResults/:id':        'showGameResults'
       dashboard:                'showDashboard'
       'dashboard-mood':         'showDashMood'
@@ -58,6 +59,11 @@ define [
     # Game
     createDefaultGame: ->            @createGame 'baseline'
     createGame: (def_id) ->          @app.view.asGame 'pages/play_game', def_id:def_id
+    createGameForUser: (token) ->
+      @listenToOnce @app.user, 'sync', ->               @createGame 'baseline'
+      @listenToOnce @app.user, 'error', (model, xhr) -> @showError xhr.responseJSON.status.message, model
+      @app.user.reset(token).fetch()
+
     showGameResults: (id) ->         @app.view.asGame 'pages/game_results', game_id:id
     # Dashboard
     showDashboard: ->                @app.view.asDash 'pages/dashboard/summary'
@@ -75,6 +81,10 @@ define [
     showTrainingPreferences: ->
       @navigate 'dashboard'
       @app.trigger 'action:showPersonalizations'
+
+
+    # ------------------------------------------------- Route Helpers
+    showError: (message, object) ->  @app.view.asSite 'pages/error', { message:message, object:object }
 
 
   MainRouter

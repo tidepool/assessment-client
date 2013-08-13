@@ -44,7 +44,7 @@ define [
   _parentPageName = '/pages/play_game'
   _headerRegionSel = '#HeaderRegion'
   _coreGame = 'baseline'
-  _surveyOdds = 0.25 # % chance to show the end of game survey
+  _surveyOdds = 0.25 # percent chance to show the end of game survey
   _views =
     ReactionTime: ReactionTime
     ImageRank: ImageRank
@@ -218,7 +218,6 @@ define [
             game_id: @model.get 'id'
         @$el.html @curLevel.render().el
       # Clean up the last level
-
 
 
     # ------------------------------------------------------------- Consumable API

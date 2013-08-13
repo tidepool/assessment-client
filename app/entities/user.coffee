@@ -63,11 +63,15 @@ define [
       delete sessionStorage['token_received']
       delete sessionStorage['refresh_token']
       delete sessionStorage['guest']
+      @
+
+    _tokenGutCheck: ->
+      10 < @get('accessToken')?.length < 9999
 
 
     # ----------------------------------------------------------- Callbacks
     _onModelError: (model, xhr, options) ->
-      console.log "#{_me}._onModelError() xhr.statusText: #{xhr.statusText}"
+      console.error xhr.responseJSON?.status?.message
       console.log model:model , xhr: xhr
       # Flush the local cache whenever we get a login exception from the server
       if xhr.status is 401
@@ -129,22 +133,28 @@ define [
 
     hasCurrentToken: ->
       curToken = false
-      if @get('accessToken')?.length
+      if @_tokenGutCheck()
         currentTime = new Date().getTime()
         expires_in = parseInt(sessionStorage['expires_in'])
         token_received = parseInt(sessionStorage['token_received'])
-        if expires_in? and token_received? and currentTime < token_received + expires_in
+        if expires_in? and token_received? and currentTime < token_received + expires_in # Token is valid if not expired
+          curToken = true
+        else if not expires_in # Token is valid if no expiration date was set
           curToken = true
         else
           @_nuke()
-#      console.log "#{_me}.hasCurrentToken(): #{curToken}"
       curToken
+
     isLoggedIn: -> @hasCurrentToken()
 
     # Set the client version of the model back to as if it were new
-    reset: ->
-#      console.log "#{_me}.reset()"
+    # If the optional token is passed in, reset the user to that
+    reset: (token) ->
+      @session.nuke().persistToken token if token?
       @clear().set @defaults()
-      return this
+      @
+
+
+
 
   User
