@@ -45,9 +45,7 @@ define [
       #console.log model: @model
       app.analytics.track @className, 'Successfully calculated game results'
       if @ios.isUp # The ios container should be sent a message
-        @ios.holla
-          data: model
-          status: {}
+        @ios.holla 1
       else
         @_showResults()
 
@@ -55,9 +53,7 @@ define [
 #      console.log model:model, xhr:xhr
       # Send the user to the results page, since some of the results could be calculated, they're just suspect
       # If they're a guest send the user to play again since there's nothing else to do
-      @ios.holla
-        data: model
-        status: xhr.responseJSON?.status
+      @ios.holla 0
       app.analytics.track @className, 'Error Getting game results'
       perch.show
         title: 'Sorry, There Is a Problem.'
