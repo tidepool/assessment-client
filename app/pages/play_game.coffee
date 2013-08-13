@@ -207,17 +207,19 @@ define [
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} Game", 'Finished'
       # Don't start the results calculation until we get a successful response on the user event
-      @listenToOnce @curLevel.event, 'sync', (eventModel,resp,jqXHR) ->
-        console.log
-          eventModel:eventModel
-          resp:resp
-        @_finishPreviousLevel @curLevel
-        @curLevel = new CalculateResultsView
-          game: @model
-          model: new Results
-            game_id: @model.get 'id'
-        @$el.html @curLevel.render().el
-      # Clean up the last level
+      @listenToOnce @curLevel.event, 'sync', @_eventSync
+      @listenToOnce @curLevel.event, 'error', @_eventSync
+
+    _eventSync: (model, resp) ->
+#      console.log
+#        eventModel:model
+#        resp:resp
+      @_finishPreviousLevel @curLevel
+      @curLevel = new CalculateResultsView
+        game: @model
+        model: new Results
+          game_id: @model.get 'id'
+      @$el.html @curLevel.render().el
 
 
     # ------------------------------------------------------------- Consumable API

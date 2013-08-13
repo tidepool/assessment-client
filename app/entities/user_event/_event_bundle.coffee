@@ -84,7 +84,12 @@ define [
 
     # --------------------------------------------------- Event Handling
 #    onSync: (model) -> console.log model.attributes
-    onErr: -> throw new Error 'Error syncing user_event'
+    onErr: (model, xhr) ->
+      console.error
+        message: xhr.responseJSON?.status.message || xhr.statusText
+        model: model
+        xhr: xhr
+#      throw new Error 'Error syncing user_event'
 
 
     # --------------------------------------------------- Consumable API
