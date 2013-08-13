@@ -36,11 +36,10 @@
   border-left: none
   border-right-color: $color
 
-@mixin bigassBackground($url: '../images/home_page/homepageblur_bg.jpg', $fallbackColor: $colorBackground)
-  background-color: $fallbackColor
+@mixin bigassBackground($url: '../images/home_page/homepageblur_bg.jpg', $fallbackColor: tint($colorInfoDark, 50%))
   background: url($url) no-repeat top center fixed
+  background-color: $fallbackColor
   background-size: cover
-  //filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.myBackground.jpg', sizingMethod='scale');
   -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')"
 
 //Support 1 and 2x image sizes
@@ -53,4 +52,6 @@
 // Border. Mostly for quick debugging
 @mixin border($width: 1px, $pattern: dotted, $color: peru)
   border: $width $pattern $color
+
+
 

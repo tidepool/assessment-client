@@ -53,12 +53,13 @@
 
   // ----------------------------------------- Main Pitch
   .heroHolder
-    +bigassBackground('../images/home_page/homepage_bg.jpg')
     padding: $spaceBig 0
-    @media all and (min-width: 1001px)
+    +desktop
       padding: $gap 0 $gap * 2
+    +bigassBackground('../images/home_page/homepage_bg.jpg')
     +phone
-      background: tint($colorInfoDark, 50%)
+      background: url('../images/home_page/homepage_bg.jpg') no-repeat top center
+      background-size: cover
 
   .hero
     text-align: center
@@ -74,7 +75,7 @@
 
 
   .hero .btn-primary
-    @media all and (min-width: 601px)
+    +tabletAndUp
       height: $space * 2.5
       line-height: $space * 2.5
       font-size: $fontSizeLarge
@@ -109,7 +110,7 @@
     color: white
     font-size: $fontSizeLarge + $spaceLil
 
-  @media all and (min-width: 601px)
+  +tabletAndUp
     .valueDesc li
       display: inline-block
       max-width: 40%
@@ -121,7 +122,7 @@
     background: $shadeLight
   .aboutPage
     padding: $spaceBig 0
-    @media all and (min-width: 1001px)
+    +desktop
       padding: $gap 0
 
 
@@ -131,15 +132,13 @@
     background: $highlightThin
   .teamPage
     padding: $spaceBig 0
-    @media all and (min-width: 1001px)
+    +desktop
       padding: $gap 0
 
 
 body.pages-home
   +bigassBackground
-
-+phone
-  body.pages-home
+  +phone
     background: tint($colorInfoDark, 50%)
 
 
