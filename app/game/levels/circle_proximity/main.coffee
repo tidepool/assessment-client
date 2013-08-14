@@ -32,6 +32,9 @@ define [
     initialize: ->
       @listenTo @collection, 'change:interacted', @onChangeInteracted
       @listenToOnce proceed, 'click', @_close
+      @distanceFromSelf = 250 # Distance from each of the circles to the self circle
+      if $(window).width() < 603
+        @distanceFromSelf = 200
       _.bindAll @, '_renderLevel'
 
     render: ->
@@ -75,7 +78,7 @@ define [
       count = @collection.length
       increment = 360 / count
       deg = increment / 2 + 270
-      distance = 250
+      distance = @distanceFromSelf
       @collection.each (circle) ->
         circle.view.positionByCenter
           x: Math.cos( _degToRad(deg) ) * distance + center.x

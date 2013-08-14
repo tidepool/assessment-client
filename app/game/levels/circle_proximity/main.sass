@@ -4,11 +4,15 @@
 @import '../../../styles/helpers'
 
 
-
 .circleProximity
   position: relative
   min-height: 800px // So that the screen doesn't collapse when you drag the bottom circle up
 
-
++phone
+  .circleSizeAndProximity
+    text-align: center
+  .circleProximity
+    display: inline-block
+    min-width: 450px // Match the size of the circles around the self so that circles aren't lost off the left side of the screen for small width devices
 
 
