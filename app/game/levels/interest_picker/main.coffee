@@ -37,6 +37,8 @@ define [
   _symbolCountTmpl = Handlebars.compile "Symbols <span class='muted'>{{count}}/#{_symbolPicks}</span>"
   _tmpl =            Handlebars.compile tmpl
   _doneMarkup = '<span class="good"><i class="icon-ok-sign"></i> Done</span>'
+  _EVENTS =
+    start:             'test_started'
 
 
   Export = Level.extend
@@ -44,7 +46,7 @@ define [
     CollectionClass: BaitCollection
 
     start: ->
-      @track Level.EVENTS.start
+      @track _EVENTS.start
       @collection.reset @collection.shuffle(), { silent:true }
       @collection.each (model) ->
         view = new BaitView model:model
@@ -128,7 +130,6 @@ define [
     # ------------------------------------------------------------- Event Handlers
     onChange: (model) ->
       @_updateCounts()
-      @_onBaitChange model
       switch model.attributes.type
         when model.TYPES.word
           if @collection.countPickedWords() > _wordPicks
@@ -137,20 +138,10 @@ define [
           if @collection.countPickedSymbols() > _symbolPicks
             model.view.unpick().sayNo()
       if @_hasPickedEnough()
-        @summaryData = picked: @collection.getPicked()
+        @finalEventData = collection: @collection.toJSON()
         @readyToProceed()
       else
         @notReadyToProceed()
-
-    # Given a model that has just changed, log a user event for it
-    _onBaitChange: (model) ->
-      switch model.attributes.isPicked
-        when true
-          @track Level.EVENTS.selected, model.toJSON()
-        when false
-          @track Level.EVENTS.deselected, model.toJSON()
-        else
-          console.warn 'Twilight zone. Neither picked nor not picked'
 
 
     # ------------------------------------------------------------- Event Handlers
@@ -162,6 +153,8 @@ define [
       @remove()
 
 
+
   Export
+
 
 

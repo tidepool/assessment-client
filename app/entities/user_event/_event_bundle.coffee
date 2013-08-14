@@ -35,8 +35,6 @@ define [
     miss:              'miss'
     correct:           'correct'
     incorrect:         'incorrect'
-    selected:          'selected'
-    deselected:        'deselected'
     readyToProceed:    'ready_to_proceed'
     notReadyToProceed: 'not_ready_to_proceed'
     summary:           'level_summary'

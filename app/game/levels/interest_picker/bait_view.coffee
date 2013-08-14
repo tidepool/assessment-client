@@ -43,6 +43,7 @@ define [
       @
 
     onClick: (e) ->
+      console.log 'clicked'
       # Move from Picked -> Unpicked
       if @model.attributes.isPicked
         @unpick().remove()
