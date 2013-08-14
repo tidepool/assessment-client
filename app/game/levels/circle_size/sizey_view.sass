@@ -8,12 +8,16 @@
 .circleSize .sizey
   $scaleIncrement: 0.25
   display: inline-block
-  margin: 0 $space
+  margin: 0 $spaceLil
+  +desktop
+    margin: 0 $space
 
 
   // -------------------------------------------------------------------- Circles
   .circle
-    margin: $spaceBig 0
+    margin: $space 0
+    +desktop
+      margin: $spaceBig 0
     +transitionable
   .circle.size1
     +transform( scale(0.4) )
