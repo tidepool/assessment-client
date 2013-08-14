@@ -1,0 +1,39 @@
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/helpers'
+
+
+.gameWelcome
+  text-align: center
+  max-width: $featuredContentWidth
+  margin: 0 auto
+  margin-top: $space
+  +tabletAndUp
+    margin-top: $spaceBig
+
+
+  // ------------------------------------------ The Game Title
+  .title
+    h1
+      font-size: $spaceBig * 1.25
+      +tablet
+        font-size: $spaceBig * 1.75
+      +desktop
+        font-size: $spaceBig * 2
+    h3
+      +tabletAndUp
+        width: 80%
+        margin: 0 auto
+
+
+  // ------------------------------------------ The Image
+  .image
+    margin-top: $space
+
+
+  // ------------------------------------------ The Action Button(s)
+  .action
+    margin-top: $space
+    +tabletAndUp
+      margin-top: $spaceBig
+

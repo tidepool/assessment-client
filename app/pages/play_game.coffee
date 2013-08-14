@@ -2,12 +2,12 @@ define [
   'backbone'
   'Handlebars'
   'core'
-  'composite_views/perch'
   'entities/results_calculator'
   'entities/user_event/_event_bundle'
   'ui_widgets/steps_remaining'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
+  # Levels
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'
   'game/levels/circle_size_and_proximity'
@@ -15,6 +15,9 @@ define [
   'game/levels/emotions_circles'
   'game/levels/snoozer'
   'game/levels/interest_picker'
+  # Welcome Pages
+  'text!game/welcome/personality.hbs'
+  # Other
   'game/calculate_results'
   'game/mini_instructions'
   'utils/numbers'
@@ -22,12 +25,12 @@ define [
   Backbone
   Handlebars
   app
-  perch
   Results
   EventBundle
   StepsRemainingView
   holdPlease
   psst
+  # Levels
   ReactionTime
   ImageRank
   CirclesTest
@@ -35,6 +38,9 @@ define [
   EmotionsCircles
   Snoozer
   InterestPicker
+  # Welcome Pages
+  tmplWelcomePersonality
+  # Other
   CalculateResultsView
   MiniInstructions
   numbers
@@ -53,6 +59,8 @@ define [
     EmotionsCircles: EmotionsCircles
     Snoozer: Snoozer
     InterestPicker: InterestPicker
+  _gameWelcomePages =
+    baseline: tmplWelcomePersonality
   _titleByGameType =
     baseline: 'The Personality Game'
     emotions: 'Emotions Game'
@@ -64,6 +72,7 @@ define [
   Me = Backbone.View.extend
     title: _defaultTitle
     className: 'playGamePage'
+    events: 'click #ActionBeginGame': '_begin'
 
     initialize: ->
       throw new Error "Need params" unless @options.params
@@ -84,28 +93,24 @@ define [
 #      document.title = if title then title else _defaultTitle
 
     _showWelcome: ->
+      gameDef = @options.params.def_id
+      # Decide whether to show game introduction instructions
+      if _gameWelcomePages[gameDef]?
+        @$el.html _gameWelcomePages[gameDef]
+      else
+        @_begin()
+
+    _begin: ->
       @_trackLevels()
       @miniInstructions = new MiniInstructions
       $(_headerRegionSel).append @miniInstructions.el
-      # Decide whether to show game introduction instructions
-      if @model.attributes.definition?.instructions
-        perch.show
-          title: 'Welcome'
-          msg: @model.attributes.definition.instructions
-          btn1Text: 'Let\'s Go'
-          onClose: => setTimeout _.bind(@model.nextStage, @model), _animationTime
-            # This delay is needed because bootstrap's modal does not handle 2 dialogs in quick succession well.
-            # Without it, the onClose event is not separately fired and the callbacks cannot behave as expected.
-          mustUseButton: true
-      else
-        @model.nextStage()
+      @model.nextStage()
 
 
     # ------------------------------------------------------------- Event Handlers
     onSync: -> holdPlease.hide()
     _onStageChanged: (model, stage) ->
-      #console.log "#{_me}._onStageChanged(model, #{stage})"
-      curStage = model.attributes.stage_completed #+ 5 # Increment is for testing only to skip to the level you're working on
+      curStage = model.attributes.stage_completed
       stageCount = model.attributes.stages.length
       @stepsRemaining?.setComplete curStage
       # Show the next stage
