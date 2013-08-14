@@ -21,8 +21,8 @@ define [
 
 
 
-  _symbolPicks = 7
-  _wordPicks = 3
+  _symbolPicks = 2
+  _wordPicks = 1
   _tempo = 800 # How often to add a new symbol
   _travelTime = 12 * 1000 # Time for a symbol to cross the screen
   _rowSel = '.menu .row'
@@ -37,8 +37,6 @@ define [
   _symbolCountTmpl = Handlebars.compile "Symbols <span class='muted'>{{count}}/#{_symbolPicks}</span>"
   _tmpl =            Handlebars.compile tmpl
   _doneMarkup = '<span class="good"><i class="icon-ok-sign"></i> Done</span>'
-  _EVENTS =
-    start:             'test_started'
 
 
   Export = Level.extend
@@ -46,7 +44,7 @@ define [
     CollectionClass: BaitCollection
 
     start: ->
-      @track _EVENTS.start
+      @track Level.EVENTS.start
       @collection.reset @collection.shuffle(), { silent:true }
       @collection.each (model) ->
         view = new BaitView model:model
@@ -130,6 +128,7 @@ define [
     # ------------------------------------------------------------- Event Handlers
     onChange: (model) ->
       @_updateCounts()
+      @_onBaitChange model
       switch model.attributes.type
         when model.TYPES.word
           if @collection.countPickedWords() > _wordPicks
@@ -138,10 +137,20 @@ define [
           if @collection.countPickedSymbols() > _symbolPicks
             model.view.unpick().sayNo()
       if @_hasPickedEnough()
-        @finalEventData = collection: @collection.toJSON()
+        @summaryData = picked: @collection.getPicked()
         @readyToProceed()
       else
         @notReadyToProceed()
+
+    # Given a model that has just changed, log a user event for it
+    _onBaitChange: (model) ->
+      switch model.attributes.isPicked
+        when true
+          @track Level.EVENTS.selected, model.toJSON()
+        when false
+          @track Level.EVENTS.deselected, model.toJSON()
+        else
+          console.warn 'Twilight zone. Neither picked nor not picked'
 
 
     # ------------------------------------------------------------- Event Handlers
@@ -153,8 +162,6 @@ define [
       @remove()
 
 
-
   Export
-
 
 

@@ -1,7 +1,9 @@
 define [
+  'underscore'
   'backbone'
   'classes/model'
 ], (
+  _
   Backbone
   Model
 ) ->
@@ -15,6 +17,7 @@ define [
     defaults:
       type: _TYPES.symbol
       value: 'Default'
+      dimension: null
       desc: null
       isPicked: null
       factors:
@@ -35,6 +38,11 @@ define [
       symbols = @filter (item) ->
         item.get('isPicked') and (item.get('type') is item.TYPES.symbol)
       symbols.length
+    getPicked: ->
+      picked = @filter (item) -> item.get('isPicked')
+      #pickedJSON = []
+      #for item in picked
+      _.map picked, (item) -> item.toJSON()
 
   Export.TYPES = _TYPES
   Export
