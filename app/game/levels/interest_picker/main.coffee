@@ -21,8 +21,8 @@ define [
 
 
 
-  _symbolPicks = 2
-  _wordPicks = 1
+  _symbolPicks = 7
+  _wordPicks = 3
   _tempo = 800 # How often to add a new symbol
   _travelTime = 12 * 1000 # Time for a symbol to cross the screen
   _rowSel = '.menu .row'
@@ -149,8 +149,6 @@ define [
           @track Level.EVENTS.selected, model.toJSON()
         when false
           @track Level.EVENTS.deselected, model.toJSON()
-        else
-          console.warn 'Twilight zone. Neither picked nor not picked'
 
 
     # ------------------------------------------------------------- Event Handlers
