@@ -6,11 +6,10 @@
 
 
 .interestPicker
-  padding: $space 0
+  margin: $space auto
   +phone
-    padding-top: $spaceLil
+    margin-top: $spaceLil
   max-width: $maxSiteWidth
-  margin: 0 auto
 
   .menu, .bentoBox
     display: block
@@ -30,6 +29,7 @@
   // ----------------------------------------------- The Buffet Menu
   .menu .content
     margin: 0 $spaceLil
+    overflow: hidden
     background: $colorForegroundCool
     border: $spaceLil solid lighten($colorForegroundCool, 20%)
     +phone
@@ -45,19 +45,18 @@
     position: relative
     display: block
     margin: 0
-    height: $spaceBig
-    padding: $spaceLil 0
-    +tabletAndUp
-      height: $spaceBig * 2
-      padding: $space 0
-    overflow: hidden
+    min-height: $spaceBig
     border-bottom: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
+    margin-bottom: -$spaceLil/2
     +phone
       border-bottom-width: $spaceTiny
+      margin-bottom: -$spaceTiny
   .menu .content .row:first-child
     border-top: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
+    margin-bottom: -$spaceLil - $spaceTiny
     +phone
       border-top-width: $spaceTiny
+      margin-bottom: -$spaceTiny*3
 
   +desktop
     .menu, .bentoBox
@@ -71,6 +70,17 @@
       display: none
     .groovy
       display: none
+
+
+  // ----------------------------------------------- Menu at full height
+  .menu,
+  .menu .content
+    height: 100%
+  +phone
+    min-height: 200px
+  +tabletAndUp
+    min-height: 400px
+
 
   // ----------------------------------------------- The grooved gripper shape
   .groovy
@@ -144,7 +154,7 @@
       padding-top: $spaceBig
       font-size: 0
       width: 100%
-      background: $colorForegroundCool
+      background: shade($colorForegroundCool, 15%)
       border-top: $spaceTiny solid shade($colorBackgroundWarm, 10%)
       +transition( bottom .2s )
 
@@ -174,12 +184,11 @@
           @include animation(darkGreenGiant .75s ease-out 2 alternate) // Make green, then reverse
       .content.words
         left: 50%
-        border-left: $spaceTiny solid tint($colorForegroundCool, 25%)
+        border-left: $spaceTiny solid $colorForegroundCool
         .bait
           display: block
       .countdown
         display: none
-
 
 
 +keyframes(jollyGreenGiant)
@@ -197,3 +206,5 @@
   100%, 25%
     box-shadow: inset 0 0 0 $spaceTiny $colorGood
     background: mix($colorGood, $colorForegroundCool)
+
+

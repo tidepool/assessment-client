@@ -6,10 +6,9 @@
 
 <div class="menu">
     <div class="content">
-        <div class="row one"></div>
-        <div class="row two"></div>
-        <div class="row three"></div>
-        <div class="row four"></div>
+        {{#each rows}}
+            <div class="row row{{this}}" style="height:{{../rowHeight}}"></div>
+        {{/each}}
     </div>
 </div>
 

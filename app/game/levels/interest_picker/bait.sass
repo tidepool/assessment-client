@@ -11,19 +11,21 @@
   min-height: $size
   min-width: $size
   line-height: $size
+  top: 50%
+  margin-top: -($size/2)
   border-radius: $radiusSmall
   padding: 0 $spaceTiny
   cursor: pointer
   text-align: center
   font-size: $size * .3
-  //text-transform: uppercase
   font-weight: bold
   &.symbol i
     font-size: $size * .8
     line-height: $size
-  +tabletAndUp
-    $size: $spaceBig * 2
+  +tablet
+    $size: $spaceBig * 1.5
     min-height: $size
+    margin-top: -($size/2)
     min-width: $size
     line-height: $size
     padding: 0 $spaceLil
@@ -31,6 +33,18 @@
     &.symbol i
       font-size: $size * .8
       line-height: $size
+  +desktop
+    $size: $spaceBig * 2
+    min-height: $size
+    margin-top: -($size/2)
+    min-width: $size
+    line-height: $size
+    padding: 0 $spaceLil
+    font-size: $size * .3
+    &.symbol i
+      font-size: $size * .8
+      line-height: $size
+
 
   // ----------------------------------------- Symbols
   &.symbol i
@@ -55,7 +69,6 @@
 // ----------------------------------------- Buffet Carosel Animation
 .menu .bait
   position: absolute
-  //margin-left: -200px
   left: -20%
   text-shadow: $spaceTiny 0 1px $colorForegroundCool, -$spaceTiny 0 1px $colorForegroundCool, 0 $spaceTiny 1px $colorForegroundCool, 0 -$spaceTiny 1px $colorForegroundCool
   +transition( left 12s linear, margin 12s linear, color .2s, background .2s )
@@ -116,30 +129,54 @@
   $size: $spaceBig * .75
   min-height: $size
   min-width: $size
+  top: 0
+  margin-top: 0
   line-height: $size
   font-size: $size * .4
   &.word
+    display: block
     min-height:  $size * .75
     line-height: $size * .75
     padding: 0 $spaceTiny
+    margin: 0
   &.symbol i
     font-size:   $size * .8
     line-height: $size
     padding: 0 $spaceTiny
 
-  +tabletAndUp
-    $size: $spaceBig * 1.25
-    min-height: $size
-    min-width: $size
-    line-height: $size
-    font-size: $size * .4
-    padding: 0 $spaceTiny
+  +tablet
+    $size: $spaceBig * .75
     &.word
-      display: block
-      min-height:  $size * .75
-      line-height: $size * .75
-      margin: 0
-    &.symbol i
-      font-size:   $size * .8
+      font-size:   $size * .5
+      min-height:  $size
       line-height: $size
-      padding: 0 $spaceTiny
+    &.symbol i
+      font-size:   $size * 1.25 * .8
+      line-height: $size * 1.25
+
+  +desktop
+    $size: $spaceBig
+    &.word
+      font-size:   $size * .5
+      min-height:  $size
+      line-height: $size
+    &.symbol i
+      font-size:   $size * 1.25 * .8
+      line-height: $size * 1.25
+
+  //+tabletAndUp
+  //  $size: $spaceBig * 1.25
+  //  min-height: $size
+  //  min-width: $size
+  //  line-height: $size
+  //  font-size: $size * .4
+  //  padding: 0 $spaceTiny
+  //  &.word
+  //    display: block
+  //    min-height:  $size * .75
+  //    line-height: $size * .75
+  //    margin: 0
+  //  &.symbol i
+  //    font-size:   $size * .8
+  //    line-height: $size
+  //    padding: 0 $spaceTiny

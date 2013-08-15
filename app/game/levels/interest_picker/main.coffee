@@ -24,9 +24,12 @@ define [
   _symbolPicks = 7
   _wordPicks = 3
   _tempo = 800 # How often to add a new symbol
+  _drawerSize = 53 # how large is the drawer that shows up at the bottom on small screens?
+  _rowCount = 4 # How many rows of items to show
 #  _travelTime = 12 * 1000 # Time for a symbol to cross the screen
-  _rowSel = '.menu .row'
-  _blockedClass = 'blocked' # Don't add the bait to this row
+  _menuSel =         '.menu'
+  _rowSel =          '.menu .row'
+  _blockedClass =    'blocked' # Don't add the bait to this row
   _wordContentSel =  '.content.words'
   _symbolContentSel ='.content.symbols'
   _wordCountSel =    '#WordCount'
@@ -54,6 +57,7 @@ define [
         view = new BaitView model:model
         model.view = view
       @listenTo @collection, 'change', @onChange
+      @once 'domInsert', @_calculateHeight
       _.bindAll @, '_step', '_startSteppin'
       @_i = 0
       # Don't keep throwing symbols when the window isn't focused, otherwise they'll stack up
@@ -66,9 +70,12 @@ define [
 
     # ------------------------------------------------------------- Backbone Methods
     render: ->
+      rows = (i for i in [1.._rowCount]) # The numbers themselves aren't really used, Handlebars just needs something to iterate over
       @$el.html _tmpl
         words: _wordPicks
         symbols: _symbolPicks
+        rows: rows
+        rowHeight: "#{Math.floor(1 / rows.length * 100)}%" # convert to a percentage
       @
 
 
@@ -127,6 +134,18 @@ define [
       $el = $(sel)
       $el.removeClass _shimmerClass
       setTimeout (-> $el.addClass _shimmerClass), 1 # This delay lets the dom notice and animate the added class
+
+    _calculateHeight: ->
+      margins = parseInt(@$el.css('margin-top')) #+ parseInt(@$el.css('margin-bottom'))
+      availHeight = $(window).height() - @$(_menuSel).offset().top - _drawerSize - margins
+#      console.log
+#        offset: @$(_menuSel).offset().top
+#        window: $(window).height()
+#        availHeight: availHeight
+#        margins: margins
+      @$el.css height:availHeight
+      availHeight
+
 
 
     # ------------------------------------------------------------- Event Handlers

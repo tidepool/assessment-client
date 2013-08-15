@@ -170,6 +170,7 @@ define [
         showInstructions: stageData.view_name is 'ReactionTime' || false #@model.isFirstTimeSeeingLevel stageData.view_name
         instructions: @miniInstructions.model
       @$el.html @curLevel.render().el
+      @curLevel.trigger 'domInsert'
       @model.setLevelSeen stageData.view_name
       app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
       app.analytics.track @className, "#{@curLevel.model.attributes.stageDef} Level Started"
