@@ -5,6 +5,7 @@ define [
   'game/levels/_base'
   'utils/numbers'
   'text!./interest_picker.hbs'
+  'text!./count.hbs'
   './baits'
   './bait_view'
 ], (
@@ -14,17 +15,16 @@ define [
   Level
   numbers
   tmpl
+  countTmpl
   BaitCollection
   BaitView
 ) ->
 
 
-
-
   _symbolPicks = 7
   _wordPicks = 3
   _tempo = 800 # How often to add a new symbol
-  _travelTime = 12 * 1000 # Time for a symbol to cross the screen
+#  _travelTime = 12 * 1000 # Time for a symbol to cross the screen
   _rowSel = '.menu .row'
   _blockedClass = 'blocked' # Don't add the bait to this row
   _wordContentSel =  '.content.words'
@@ -32,16 +32,20 @@ define [
   _wordCountSel =    '#WordCount'
   _symbolCountSel =  '#SymbolCount'
   _countdownSel =    '.countdown'
+  _bentoSel =        '.bentoBox'
   _shimmerClass =    'shimmer'
-  _wordCountTmpl =   Handlebars.compile   "Words <span class='muted'>{{count}}/#{_wordPicks}</span>"
-  _symbolCountTmpl = Handlebars.compile "Symbols <span class='muted'>{{count}}/#{_symbolPicks}</span>"
+  _expandedClass =   'expanded'
+  _countTmpl =       Handlebars.compile countTmpl
   _tmpl =            Handlebars.compile tmpl
-  _doneMarkup = '<span class="good"><i class="icon-ok-sign"></i> Done</span>'
+  _doneMarkup = '<output class="good"><i class="icon-ok-sign"></i> Done</output>'
 
 
   Export = Level.extend
     className: 'interestPicker'
     CollectionClass: BaitCollection
+    events:
+      'click .bentoBox .title': 'onClickTitle'
+      'click .bentoBox .groovy': 'onClickTitle'
 
     start: ->
       @track Level.EVENTS.start
@@ -55,6 +59,7 @@ define [
       # Don't keep throwing symbols when the window isn't focused, otherwise they'll stack up
       $(window).blur => clearInterval @_interval
       $(window).focus @_startSteppin
+      @_updateCounts()
       @_startSteppin()
       @
 
@@ -64,7 +69,6 @@ define [
       @$el.html _tmpl
         words: _wordPicks
         symbols: _symbolPicks
-      @_updateCounts()
       @
 
 
@@ -109,14 +113,14 @@ define [
         $(_wordCountSel).html _doneMarkup
         @_shimmerSel _wordContentSel
       else
-        $(_wordCountSel).html _wordCountTmpl count:count
+        $(_wordCountSel).html _countTmpl count:count, limit:_wordPicks
 
     _updateSymbolCount: (count) ->
       if count is _symbolPicks
         $(_symbolCountSel).html _doneMarkup
         @_shimmerSel _symbolContentSel
       else
-        $(_symbolCountSel).html _symbolCountTmpl count:count
+        $(_symbolCountSel).html _countTmpl count:count, limit:_symbolPicks
 
     # Given a selector, add a class that makes it shimmer like the moonlight on a breezy pond
     _shimmerSel: (sel) ->
@@ -149,6 +153,9 @@ define [
           @track Level.EVENTS.selected, model.toJSON()
         when false
           @track Level.EVENTS.deselected, model.toJSON()
+
+    onClickTitle: (e) ->
+      $(_bentoSel).toggleClass _expandedClass
 
 
     # ------------------------------------------------------------- Event Handlers

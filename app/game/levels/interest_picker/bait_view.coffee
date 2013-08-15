@@ -1,9 +1,11 @@
 define [
+  'jquery'
   'underscore'
   'backbone'
   'Handlebars'
   'text!./bait_symbol.hbs'
 ], (
+  $
   _
   Backbone
   Handlebars
@@ -11,11 +13,12 @@ define [
 ) ->
 
   _tmplSymbol = Handlebars.compile tmplSymbol
-  _bentoSel = '.bentoBox .content'
+  _bentoSel = '.bentoBox'
+  _expandedClass = 'expanded'
   _animTime = 200
   _bentoBoxes =
-    word: '.bentoBox .words'
-    symbol: '.bentoBox .symbols'
+    word: '.bentoBox .words.content'
+    symbol: '.bentoBox .symbols.content'
   _menuSel = '.menu .content'
   _slidingClass = 'sliding'
   _pickAnimClass = 'picked'
@@ -80,6 +83,7 @@ define [
 
     sayNo: ->
       @$el.addClass _naughtyClass
+      $(_bentoSel).addClass _expandedClass
       @timeout = setTimeout (=> @$el.addClass(_slidingClass).removeClass _naughtyClass), _animTime * 2
       @
 

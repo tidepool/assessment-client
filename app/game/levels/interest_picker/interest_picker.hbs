@@ -1,6 +1,8 @@
 
 
-
+<p class="instructions large textAlignCenter">
+    Collect the items you connect with most.
+</p>
 
 <div class="menu">
     <div class="content">
@@ -13,7 +15,12 @@
 
 <div class="bentoBox">
 
-    <h3 id="SymbolCount">Symbols</h3>
+    <h3 class="symbols title">
+        <span class="remaining" id="SymbolCount">
+            <span class="hideDesktop">collect <output>{{symbols}}</output></span>
+        </span>
+        <span class="name">Symbols</span>
+    </h3>
     <div class="symbols content">
         <div id="SymbolCountdown" class="countdown">
             Collect <br/>
@@ -21,9 +28,14 @@
         </div>
     </div>
 
-    <br/>
+    <i class="groovy icon-align-justify"></i>
 
-    <h3 id="WordCount">Words</h3>
+    <h3 class="words title">
+        <span class="remaining" id="WordCount">
+            <span class="hideDesktop">collect <output>{{words}}</output></span>
+        </span>
+        <span class="name">Words</span>
+    </h3>
     <div class="words content">
         <div id="WordCountdown" class="countdown">
             Collect <br/>

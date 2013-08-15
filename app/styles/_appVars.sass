@@ -46,3 +46,7 @@ $sizeTablet: 1024px
 @mixin tabletAndUp
   @media (min-width: $sizePhone+1)
     @content
+
+@mixin phoneAndTablet
+  @media (max-width: $sizeTablet)
+    @content
