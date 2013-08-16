@@ -4,7 +4,7 @@ define [
   detect
 ) ->
 
-  _urlRoot = "iosAction://"
+  _urlRoot = "iosaction://"
   _noOp = -> @
 
 
