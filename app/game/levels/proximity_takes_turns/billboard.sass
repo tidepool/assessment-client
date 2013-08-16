@@ -1,0 +1,26 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.proximityTakesTurns .billboard
+  $height: 50px
+  position: absolute
+  bottom: 0
+  left: 0
+  width: 100%
+  height: $height
+  line-height: $height
+  font-size: $fontSizeLarge
+  background: $colorForeground
+  color: white
+  text-align: center
+  z-index: 7
+  +phone
+    $height: 30px
+    height: $height
+    line-height: $height
+    font-size: $fontSizeBody
+
+

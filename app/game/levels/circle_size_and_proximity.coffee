@@ -8,6 +8,7 @@ define [
   'game/levels/circle_size'
   'game/levels/person_fill'
   'game/levels/circle_proximity'
+  'game/levels/proximity_takes_turns'
   'utils/detect'
 ], (
   $
@@ -19,6 +20,7 @@ define [
   CircleSize
   PersonFill
   CircleProximity
+  ProximityTakesTurns
   detect
 ) ->
 
@@ -31,21 +33,22 @@ define [
     start: (options) ->
       @circlesCollection = new Circles @model.get 'circles'
       @track Level.EVENTS.start
-      @once 'domInsert', (=> @curView.trigger 'domInsert')
+      @on 'domInsert', (=> @curView.trigger 'domInsert')
 
     render: ->
-      @_showCircleSize()
+#      @_showCircleSize() #TODO: put this back as the first level
+      @_showCircleProximity()
       @
 
 
     # ------------------------------------------------------------- Running the Game Level / Stage
     _showCircleSize: ->
       if detect.isPhoneOrTablet()
-        SizingLevel = PersonFill
+        SizeLevel = PersonFill
       else
-        SizingLevel = CircleSize
+        SizeLevel = CircleSize
       @options.instructions.set text: @model.get('instructions')[0]
-      @curView = new SizingLevel
+      @curView = new SizeLevel
         collection: @circlesCollection
         runner: @
         showInstructions: @options.showInstructions
@@ -56,8 +59,12 @@ define [
 
     _showCircleProximity: ->
       @curView?.close?().remove()
+      if detect.isPhoneOrTablet()
+        ProxLevel = ProximityTakesTurns
+      else
+        ProxLevel = CircleProximity
       @options.instructions.set text: @model.get('instructions')[1]
-      @curView = new CircleProximity
+      @curView = new ProxLevel
         collection: @circlesCollection
         runner: @
         showInstructions: @options.showInstructions
@@ -76,6 +83,11 @@ define [
           left: @curView.selfView.getSelfCenter().x - @curView.selfView.getSelfRadius()
           size: @curView.selfView.getSelfRadius() * 2
       @endLevel()
+
+
+    close: ->
+      @off 'domInsert'
+      @
 
 
   Export

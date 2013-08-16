@@ -4,7 +4,6 @@ define [
   'entities/circles'
   'game/levels/_base'
   'text!./instructions.hbs'
-  'composite_views/perch'
   './self_view'
   './proxy_view'
   'ui_widgets/proceed'
@@ -15,7 +14,6 @@ define [
   Circles
   Level
   instructions
-  perch
   SelfView
   Proxy
   proceed
@@ -35,23 +33,10 @@ define [
       @distanceFromSelf = 250 # Distance from each of the circles to the self circle
       if $(window).width() < 603
         @distanceFromSelf = 200
-      _.bindAll @, '_renderLevel'
 
+
+    # ----------------------------------------------------- Rendering
     render: ->
-      if @options.showInstructions
-        perch.show
-          content: instructions
-          btn1Text: "I'm Ready"
-          large: true
-          onClose: @_renderLevel
-          mustUseButton: true
-          supressTracking: true
-      else
-        @_renderLevel()
-
-
-    # ----------------------------------------------------- Private Methods
-    _renderLevel: ->
       # Self
       @selfView = new SelfView
       @$el.html @selfView.render().el
@@ -74,6 +59,8 @@ define [
       @_positionCirclesAround @selfView.getSelfCenter()
       @
 
+
+    # ----------------------------------------------------- Private Methods
     _positionCirclesAround: (center) ->
       count = @collection.length
       increment = 360 / count

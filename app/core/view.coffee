@@ -7,6 +7,7 @@ define [
   './layouts/layout-dashboard'
   'ui_widgets/user_menu'
   'composite_views/perch'
+  'utils/detect'
   'bootstrap' # someone, anyone, has to include it
 ],
 (
@@ -17,6 +18,7 @@ define [
   DashLayout
   userMenu
   perch
+  detect
 ) ->
 
   _me = 'core/view'
@@ -68,30 +70,35 @@ define [
         else
           document.title = _companyName
 
-        # For mobile devices, scroll the address bar away
-        if window.matchMedia?("(max-width: 603px)").matches
-          setTimeout (-> window.scrollTo(0,1) ), 0
-
-
+        @scrollToTop()
         @options.app.analytics.trackPage module
-
+        @
 
 
     # ------------------------------------------------------------- Public API
+    # For mobile devices, scroll the address bar away
+    scrollToTop: ->
+      if detect.isPhone()
+        setTimeout (-> window.scrollTo(0,1) ), 0
+      @
+
     asSite: (viewModuleString, data) ->
       @_curLayout = new SiteLayout
         app: @options.app
       $('body').addClass viewModuleString.split('/').join('-')
       @_loadView viewModuleString, data
+      @
 
     asGame: (viewModuleString, data) ->
       @_curLayout = new GameLayout
         app: @options.app
       @_loadView viewModuleString, data
+      @
 
     asDash: (viewModuleString, data) ->
       @_curLayout = new DashLayout
         app: @options.app
       @_loadView viewModuleString, data
+      @
 
   Me

@@ -1,4 +1,5 @@
 define [
+  'jquery'
   'underscore'
   'backbone'
   'entities/user_event/_event_bundle'
@@ -6,6 +7,7 @@ define [
   'ui_widgets/proceed'
 ],
 (
+  $
   _
   Backbone
   EventBundle
@@ -34,6 +36,11 @@ define [
         @start() # Call the extending level's start method, if it has impelemented one
       else
         @track EventBundle.EVENTS.start
+
+
+    # ------------------------------------------------------------- Private Methods
+    _fillHeight: ->
+      @$el.css height: @getAvailHeight()
 
 
     # ------------------------------------------------------------- Consumable API
@@ -77,7 +84,24 @@ define [
         event: eventName
       @event.record _.extend baseData, eventData
 
+    getAvailHeight: ->
+      availHeight = $(window).height() - @$el.offset().top
+#      console.log
+#        offset: @$el.offset().top
+#        windowHeight: $(window).height()
+#        availHeight: availHeight
+      availHeight
+
+    # Fill the height to what is available, and continue to do so if the window size changes
+    fillHeight: ->
+      @_fillHeight()
+      debounced = _.debounce @_fillHeight, 100
+      $(window).on 'resize', _.bind debounced, @
+
+
     remove: ->
+      @close?()
+      $(window).off 'resize'
       proceed.hide()
       @$el.remove()
       @stopListening()

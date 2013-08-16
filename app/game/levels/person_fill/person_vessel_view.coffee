@@ -140,7 +140,6 @@ define [
 
     # Bump the percentage up or down to the next step
     bumpUp: ->
-      console.log 'bumpUp'
       percent = @model.get 'percentage'
       if percent?
         newVal = Math.round(percent / 10) + 1
@@ -153,7 +152,6 @@ define [
       @
 
     bumpDown: ->
-      console.log 'bumpDown'
       percent = @model.get 'percentage'
       if percent?
         newVal = Math.round(percent / 10) - 1

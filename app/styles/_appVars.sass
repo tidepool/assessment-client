@@ -51,6 +51,8 @@ $sizeTablet: 1024px
     @content
 
 
+
+
 // IOS browser chrome sizes
 $iosStatusBar: 20px
 $iosNavbar: 44px
@@ -58,4 +60,22 @@ $iosTabBar: 49px
 $iosTotalChrome: $iosStatusBar + $iosNavbar + $iosTabBar
 $iosIphone4: 480px
 $iosIphone4Avail: $iosIphone4 - $iosTotalChrome
+$iosIphone5: 568px
+$iosIphone5Avail: $iosIphone5 - $iosStatusBar
 
+// Less common height detection, useful in some cases
+$heightPhone: $iosIphone5Avail
+$heightTablet: 1024px
+
+@mixin phoneHeightShort
+  @media (max-height: $iosIphone4Avail)
+    @content
+@mixin phoneHeight
+  @media (max-height: $heightPhone)
+    @content
+@mixin tabletHeight
+  @media (min-height: $heightPhone+1) and (max-height: $sizeTablet)
+    @content
+@mixin desktopHeight
+  @media (min-height: $heightTablet+1)
+    @content

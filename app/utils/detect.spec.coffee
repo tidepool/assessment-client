@@ -19,3 +19,10 @@ define [
         expect(detect.isUIwebView).toBeDefined()
       it 'returns false (since you\'re running this on a desktop device)', ->
         expect(detect.isUIwebView()).toBeFalsy()
+
+    describe 'isPhone', ->
+      it 'exists', -> expect(detect.isPhone).toBeDefined()
+
+    describe 'isPhoneOrTablet', ->
+      it 'exists', -> expect(detect.isPhoneOrTablet).toBeDefined()
+

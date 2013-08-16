@@ -1,0 +1,48 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.proximityTakesTurns .circleHolder
+  $size: $space * 3
+  position: absolute !important // Prevents JQ Draggable from putting pos: relative on them and making them behave oddly
+  left: 50%
+  margin-left: -$size/2
+
+  &.fresh // untouched
+    bottom: $spaceBig + $spaceLil
+    +phone
+      bottom: 30px + $spaceLil
+    right: -$size + $spaceLil // Only peek out a few px
+  &.onDeck // ready to drag in
+    right: 0
+  .circle
+    cursor: pointer
+    box-shadow: 0 0 0 $spaceTiny $colorBackground
+    text-align: center
+
+
+  // Scale for Draggable circles
+  // This has to be managed differently because JqDraggable can't read sizes on transformed elements
+  =circleSize( $scale: 1.0 )
+    +transform(none)
+    font-size: $fontSizeVeryLarge * $scale
+    width: $size * $scale
+    height: $size * $scale
+    line-height: $size * $scale
+    em
+      font-size: ( $fontSizeVeryLarge + $spaceLil ) * $scale
+
+  .circle
+    +circleSize(1.0)
+  //.circle.size1
+  //  +circleSize(0.4)
+  //.circle.size2
+  //  +circleSize(0.7)
+  //.circle.size3
+  //  +circleSize(1.0)
+  //.circle.size4
+  //  +circleSize(1.3)
+  //.circle.size5
+  //  +circleSize(1.6)

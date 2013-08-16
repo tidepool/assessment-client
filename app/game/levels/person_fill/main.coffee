@@ -36,7 +36,7 @@ define [
       _.bindAll @, '_next'
       @listenTo proceed, 'click', @onProceedClick
       @listenTo @collection, 'change:size', @onChangeSize
-      @once 'domInsert', @_calculateHeight
+      @once 'domInsert', @fillHeight
       @render()
       _.bindAll @, 'onKeyDown'
       $(window).on 'keydown', @onKeyDown
@@ -50,17 +50,6 @@ define [
 
 
     # ----------------------------------------------------- Private Methods
-    _calculateHeight: ->
-#      margins = parseInt(@$el.css('margin-top')) #+ parseInt(@$el.css('margin-bottom'))
-      availHeight = $(window).height() - @$el.offset().top
-#      console.log
-#        offset: @$el.offset().top
-#        window: $(window).height()
-#        availHeight: availHeight
-#        margins: margins
-      @$el.css height:availHeight
-      @
-
     _addPeople: (sel) ->
       @collection.each (person) =>
         person.view = new PersonVesselView model: person

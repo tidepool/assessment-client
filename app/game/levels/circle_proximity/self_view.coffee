@@ -22,9 +22,10 @@ define [
   View = Backbone.View.extend
     id: 'SelfCircle'
     className: 'self'
+    tmpl: tmpl
     initialize: -> @model = new Self()
     render: ->
-      @$el.html tmpl
+      @$el.html @tmpl
       @
     _setCssStyling: (data) ->
       @$el.css
