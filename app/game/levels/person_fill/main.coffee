@@ -35,6 +35,7 @@ define [
       @i = -1
       _.bindAll @, '_next'
       @listenTo proceed, 'click', @onProceedClick
+      @listenTo @collection, 'change:size', @onChangeSize
       @once 'domInsert', @_calculateHeight
       @render()
       _.bindAll @, 'onKeyDown'
@@ -87,9 +88,15 @@ define [
       @collection.each (circle) -> circle.view?.remove?() #Close them down properly. Lets them assign widths and remove events.
       proceed.hide()
       @clearInteracted @collection
-      console.log collection:@collection.toJSON()
       @trigger 'done'
       @remove()
+
+
+    # ----------------------------------------------------- Data Events
+    onChangeSize: (model, size) ->
+      @options.runner.track Level.EVENTS.resize,
+        index: model.collection.indexOf model
+        new_size: size
 
 
     # ----------------------------------------------------- Keyboard Events
