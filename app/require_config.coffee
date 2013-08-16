@@ -7,6 +7,7 @@ define [], () ->
       'game/levels/reaction_time_disc'
       'game/levels/rank_images'
       'game/levels/circle_size'
+      'game/levels/person_fill'
       'game/levels/circle_proximity'
       'game/levels/alex_trebek'
       'game/levels/emotions_circles'

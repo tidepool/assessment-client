@@ -1,4 +1,8 @@
-define [], () ->
+define [
+  'jquery'
+], (
+  $
+) ->
 
 
   # Utility Methods for doing feature detection
@@ -7,5 +11,8 @@ define [], () ->
     isTouch: -> !!('ontouchstart' of window) or !!('onmsgesturechange' of window) # most browsers || ie10 surface
     # http://stackoverflow.com/questions/4460205/detect-ipad-iphone-webview-via-javascript
     isUIwebView: -> /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test navigator.userAgent
+    isPhoneOrTablet: ->
+      tabletWidth = 1024
+      $(window).width() <= tabletWidth
 
   detect

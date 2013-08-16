@@ -1,0 +1,42 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.personFill
+  $imgHeight: 370px
+  margin-top: $space
+  +phone
+    margin-top: $spaceLil
+
+  .instructions
+    position: relative
+    top: 15%
+    font-size: $fontSizeLarge
+    margin-top: -55px
+    z-index: 1
+    output
+      font-weight: bold
+      color: $colorBrand1
+    p
+      display: inline-block
+      margin: 0
+      line-height: 1.2
+      padding: $spaceTiny $spaceLil
+      background: transparentize( $colorBackground, 0.25 )
+    +phone
+      font-size: $fontSizeBody
+
+  ul.people
+    list-style: none
+    margin: 0
+    padding: 0
+  .people
+    position: absolute
+    bottom: 0
+    left: 0
+    height: 80%
+    max-height: $imgHeight
+    width: 100%
+    overflow: hidden // People are off screen on purpose

@@ -30,7 +30,6 @@ $shortHeaderHeight: 30px
 $sizePhone: 603px
 $sizeTablet: 1024px
 
-
 @mixin phone
   @media (max-width: $sizePhone)
     @content
@@ -50,3 +49,13 @@ $sizeTablet: 1024px
 @mixin phoneAndTablet
   @media (max-width: $sizeTablet)
     @content
+
+
+// IOS browser chrome sizes
+$iosStatusBar: 20px
+$iosNavbar: 44px
+$iosTabBar: 49px
+$iosTotalChrome: $iosStatusBar + $iosNavbar + $iosTabBar
+$iosIphone4: 480px
+$iosIphone4Avail: $iosIphone4 - $iosTotalChrome
+

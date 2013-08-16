@@ -50,6 +50,7 @@ define [
       @_setWidthBySize @get 'size'
       @on 'change:size', @onChangeSize
       @on 'change:pos', @onChangePos
+      @on 'change:percentage', @onChangePercentage
 
 
     # ------------------------------------------------------------------- Private Methods
@@ -70,6 +71,16 @@ define [
     _setWidthBySize: (size) ->
       @set width: @sizeToScale[size] * @baseSizePx
 
+    _setSizeByPercent: (percent) ->
+      # Sizes are in 5 steps
+      step = Math.round (percent / 20) + .5 # the .5 shifts it into the middle of the step
+      size = step - 1
+#      console.log
+#        percentage: percent
+#        step: step
+#        size: size
+      @set size:size
+
 
     # ------------------------------------------------------------------- Event Handlers
     onChangeSize: (model, sz) ->
@@ -82,6 +93,9 @@ define [
       @set
         userChangedPos: true
         interacted: true
+
+    onChangePercentage: (model, percent) -> @_setSizeByPercent percent
+
 
     # ------------------------------------------------------------------- Public API
     getScale: -> @sizeToScale[ @get('size') ]

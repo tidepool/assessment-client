@@ -6,7 +6,9 @@ define [
   'game/levels/_base'
   'entities/circles'
   'game/levels/circle_size'
+  'game/levels/person_fill'
   'game/levels/circle_proximity'
+  'utils/detect'
 ], (
   $
   _
@@ -15,7 +17,9 @@ define [
   Level
   Circles
   CircleSize
+  PersonFill
   CircleProximity
+  detect
 ) ->
 
 
@@ -27,6 +31,7 @@ define [
     start: (options) ->
       @circlesCollection = new Circles @model.get 'circles'
       @track Level.EVENTS.start
+      @once 'domInsert', (=> @curView.trigger 'domInsert')
 
     render: ->
       @_showCircleSize()
@@ -35,8 +40,12 @@ define [
 
     # ------------------------------------------------------------- Running the Game Level / Stage
     _showCircleSize: ->
+      if detect.isPhoneOrTablet()
+        SizingLevel = PersonFill
+      else
+        SizingLevel = CircleSize
       @options.instructions.set text: @model.get('instructions')[0]
-      @curView = new CircleSize
+      @curView = new SizingLevel
         collection: @circlesCollection
         runner: @
         showInstructions: @options.showInstructions
@@ -46,6 +55,7 @@ define [
       @listenToOnce @curView, 'done', @_showCircleProximity
 
     _showCircleProximity: ->
+      @curView?.close?().remove()
       @options.instructions.set text: @model.get('instructions')[1]
       @curView = new CircleProximity
         collection: @circlesCollection
