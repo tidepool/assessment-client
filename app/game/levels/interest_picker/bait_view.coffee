@@ -28,6 +28,7 @@ define [
     className: 'bait'
     events:
       'mousedown': 'onClick'
+      'touchstart': 'onClick'
 
     # ------------------------------------------------------------- Backbone Methods
     initialize: ->
@@ -46,6 +47,7 @@ define [
       @
 
     onClick: (e) ->
+      e.preventDefault()
       # Move from Picked -> Unpicked
       if @model.attributes.isPicked
         @unpick().remove()
