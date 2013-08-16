@@ -63,6 +63,7 @@ module.exports = (grunt) ->
         path: "http://assessments-front.dev/"
 
     watch:
+
       hbs:
         files: ["<%= cfg.app %>/**/*.hbs"]
         tasks: ["livereload"]
