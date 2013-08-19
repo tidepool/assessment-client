@@ -23,7 +23,9 @@ define [
   proceed
 ) ->
 
+
   _selfContentSel = '.zoneSelf'
+
 
   View = Level.extend
 
@@ -32,16 +34,20 @@ define [
 
     initialize: ->
       @listenTo @collection, 'change:interacted', @onChangeInteracted
+      @listenTo @collection, 'change:focus', @onChangeFocus
+      @listenTo @collection, 'change:selfProximityPx', @onChangeSelfProximityPx
       @listenToOnce proceed, 'click', @_finish
-      console.log collection:@collection.toJSON()
       @once 'domInsert', @fillHeight
+      _.bindAll @, 'next'
 
     render: ->
       @$el.html tmpl
-      @$el.append (new Billboard).render().el
+      @billboard = new Billboard
+      @$el.append @billboard.render().el
       @selfView = new SelfView
       @$(_selfContentSel).append @selfView.render().el
       @_renderCircles()
+      @next()
       @
 
 
@@ -54,21 +60,70 @@ define [
           selfView: @selfView
           track: _.bind @options.runner.track, @options.runner
         @$el.append circle.view.render().el
+      @
 
     _finish: ->
       @collection.each (model) -> model.view.remove() # Removing one at a time lets views clean up their events
       proceed.hide()
       @trigger 'done'
       @remove()
+      @
 
+    # Remove the focus appearance and attribute from all circles
+    _clearFocus: ->
+      @collection.invoke 'set', focus:false # Set focus:false on all models in the collection
+      @billboard.focusOut()
 
-    # ----------------------------------------------------- UI Events
+    # Focus on a single circle
+    _focusCircle: (circle) ->
+#      console.log "#{circle.attributes.abbreviation} focused"
+      @_clearFocus()
+      circle.set focus:true, {dontBubble:true}
+      if circle.attributes.interacted
+        @billboard.focusIn circle
+      else
+        @billboard.slideIn circle
+      @
+
 
     # ----------------------------------------------------- Data Events
     onChangeInteracted: ->
-      proceed.show() if @checkAllInteracted @collection
+      @next() unless @allMoved
+
+    onChangeFocus: (model, isFocused, options) ->
+      return if options.dontBubble # prevents circular event triggering
+      @_focusCircle model if isFocused
+
+    # Recalculate the normalized distances whenever any of them change
+    onChangeSelfProximityPx: ->
+      # Get all the distances
+      distances = @collection.pluck 'selfProximityPx'
+      max = _.max distances
+      ratio = max / 100
+      @collection.each (model) ->
+        if model.attributes.selfProximityPx?
+          normalized = Math.round model.attributes.selfProximityPx / ratio
+          model.set selfProximityNormalized:normalized
+        else
+          model.set selfProximityNormalized:null
+#      console.log nrmlDistances: @collection.pluck 'selfProximityNormalized'
 
 
+    # ----------------------------------------------------- Consumable API
+    # Show the next circle
+    next: ->
+      # Get the first circle that hasn't been touched
+      fresh = @collection.filter (item) -> !item.get('interacted')
+      firstModel = fresh[0]
+      # If there is an untouched circle, focus on it
+      if firstModel
+        firstModel.set focus:true
+      # Otherwise allow the level to end
+      else
+        @allMoved = true
+        @_clearFocus()
+        proceed.show()
+      @
 
 
 

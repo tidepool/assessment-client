@@ -1,8 +1,10 @@
 define [
+  'underscore'
   'backbone'
   'classes/model'
 ],
 (
+  _
   Backbone
   Model
 ) ->
@@ -52,6 +54,16 @@ define [
       @on 'change:pos', @onChangePos
       @on 'change:percentage', @onChangePercentage
 
+    toJSON: (options) ->
+#      attrs = _.pluck @attributes, 'left', 'pos', 'selfOverlapPx', 'selfOverlapRatio', 'selfProximityPx', 'size', 'top', 'trait1', 'trait2', 'width'
+      attrs = _.clone @attributes
+      delete attrs.interacted
+      delete attrs.focus
+      delete attrs.abbreviation
+      delete attrs.userChangedPos
+      delete attrs.userChangedSize
+      attrs
+
 
     # ------------------------------------------------------------------- Private Methods
     _calcAbbreviation: ->
@@ -75,10 +87,6 @@ define [
       # Sizes are in 5 steps
       step = Math.round (percent / 20) + .5 # the .5 shifts it into the middle of the step
       size = step - 1
-#      console.log
-#        percentage: percent
-#        step: step
-#        size: size
       @set size:size
 
 

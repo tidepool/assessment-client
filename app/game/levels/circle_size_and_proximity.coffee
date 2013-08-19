@@ -33,11 +33,9 @@ define [
     start: (options) ->
       @circlesCollection = new Circles @model.get 'circles'
       @track Level.EVENTS.start
-      @on 'domInsert', (=> @curView.trigger 'domInsert')
 
     render: ->
-#      @_showCircleSize() #TODO: put this back as the first level
-      @_showCircleProximity()
+      @_showCircleSize()
       @
 
 
@@ -53,6 +51,7 @@ define [
         runner: @
         showInstructions: @options.showInstructions
       @$el.html @curView.el
+      @curView.trigger 'domInsert'
       @track Level.EVENTS.sublevelStart
       @circlesCollection = @curView.collection
       @listenToOnce @curView, 'done', @_showCircleProximity
@@ -70,6 +69,7 @@ define [
         showInstructions: @options.showInstructions
       @$el.html @curView.el
       @curView.render() # Render after putting in the dom since it needs to compute locations
+      @curView.trigger 'domInsert'
       @track Level.EVENTS.sublevelStart, data:@circlesCollection.toJSON()
       @listenToOnce @curView, 'done', @onTestDone
 
@@ -84,9 +84,8 @@ define [
           size: @curView.selfView.getSelfRadius() * 2
       @endLevel()
 
-
     close: ->
-      @off 'domInsert'
+      @curView?.close?().remove()
       @
 
 

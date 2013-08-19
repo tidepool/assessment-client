@@ -8,19 +8,39 @@
   $height: 50px
   position: absolute
   bottom: 0
-  left: 0
   width: 100%
   height: $height
   line-height: $height
-  font-size: $fontSizeLarge
   background: $colorForeground
+  border-top: $spaceTiny solid $colorBrand1
   color: white
   text-align: center
-  z-index: 7
+  z-index: 100
+  overflow: hidden
   +phone
     $height: 30px
     height: $height
     line-height: $height
-    font-size: $fontSizeBody
 
+  label
+    text-align: center
+    position: absolute
+    display: block
+    left: 100%
+    top: 0%
+    width: 100%
+    height: 100%
+    line-height: inherit
+    +transitionable(all, .2s, ease-out)
+    font-size: $fontSizeLarge
+    +phone
+      font-size: $fontSizeBody
+    &.onDeck // ready to drag in
+      left: 0%
+    &.focusOut
+      top: 100%
+    &.above
+      top: -100%
+    .muted
+      color: $highlightThick
 

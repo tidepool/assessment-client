@@ -44,6 +44,10 @@ $proceedElementSize: 100px
 
 .proceed.bounceIn
   right: $space
+  +tablet
+    right: $spaceLil
+  +phone
+    right: 0
   opacity: .99
   +animation(bounceLeft .7s)
 
@@ -61,3 +65,4 @@ $proceedElementSize: 100px
     +transform( translateX(-$spaceLil * 2) )
   60%
     +transform( translateX(-$spaceLil) )
+

@@ -179,7 +179,8 @@ define [
         top: Math.round coords.y
 
     getCircleSize: ->
-      @_width = @_width || @$(_circleSel).width() # We use this method a lot, and the el width should stay the same during the object's life, so cache it
+      @_width = @_width || @$(_circleSel).width() || @$el.width() # We use this method a lot, and the el width should stay the same during the object's life, so cache it
+      console.warn 'no width' unless @_width
       @_width
 
     coordToCenter: (coord) ->

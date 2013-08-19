@@ -7,6 +7,7 @@ define [
   tmpl
 ) ->
 
+  _userIconSel = '.user'
 
 
   View = CircleProximitySelfView.extend
@@ -20,11 +21,19 @@ define [
 
 
     # ----------------------------------------------------- Consumable API
-    # TODO: Implement, so that external objects can calculate the self circle's position
     getSelfCenter: ->
-      #@_center or @_calculateSelfCenter()
+      return @_center if @_center
+      $userIcon = @$(_userIconSel)
+      @_center = {}
+      @_center.x = $(window).width() / 2
+      @_center.y = $userIcon.position().top
+#      console.log center:@_center
+      @_center
+
     getSelfRadius: ->
-      #@_radius or @model.get('pxSize') / 2
+      @_rad = @_rad || @$el.height() / 2
+      @_rad
+
 
   View
 
