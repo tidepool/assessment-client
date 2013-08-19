@@ -25,6 +25,7 @@ define [
   _wordPicks = 3
   _tempo = 800 # How often to add a new symbol
   _drawerSize = 53 # how large is the drawer that shows up at the bottom on small screens?
+  _margins = 50
   _rowCount = 4 # How many rows of items to show
 #  _travelTime = 12 * 1000 # Time for a symbol to cross the screen
   _menuSel =         '.menu'
@@ -57,7 +58,9 @@ define [
         view = new BaitView model:model
         model.view = view
       @listenTo @collection, 'change', @onChange
-      @once 'domInsert', @_calculateHeight
+#      @once 'domInsert', @_calculateHeight
+      @heightAdjustment = _drawerSize + _margins
+      @once 'domInsert', @fillHeight
       _.bindAll @, '_step', '_startSteppin'
       @_i = 0
       # Don't keep throwing symbols when the window isn't focused, otherwise they'll stack up
@@ -182,8 +185,6 @@ define [
       # Clean up all intervals and timeouts
       clearInterval @_interval
       $(window).off() # Lose all the window focus/blur events
-      # Remove stuff from DOM
-      @remove()
 
 
   Export
