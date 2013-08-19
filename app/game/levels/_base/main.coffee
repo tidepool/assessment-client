@@ -86,6 +86,7 @@ define [
 
     getAvailHeight: ->
       availHeight = $(window).height() - @$el.offset().top
+      availHeight -= @heightAdjustment if @heightAdjustment
 #      console.log
 #        offset: @$el.offset().top
 #        windowHeight: $(window).height()

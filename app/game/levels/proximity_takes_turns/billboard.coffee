@@ -18,26 +18,15 @@ define [
 
   View = Backbone.View.extend
 
-    # ----------------------------------------------------- Backbone Extensions
     className: 'billboard'
 
-    initialize: ->
-
-    render: ->
-      @
-
-    # ----------------------------------------------------- Private Methods
-
-    # ----------------------------------------------------- UI Events
-
-
-    # ----------------------------------------------------- Data Events
 
     # ----------------------------------------------------- Consumable API
     # Slide new text in with a circle
     slideIn: (model) ->
       @$el.append _tmpl model.attributes
-      setTimeout (=> @$(_labelSel).addClass _onDeckClass), 4
+      $label = @$(_labelSel)
+      setTimeout (-> $label.addClass _onDeckClass), 1
 
     # Drop the current text down
     focusOut: ->
@@ -48,10 +37,9 @@ define [
 
     # Bring new text in
     focusIn: (model) ->
-      console.log 'focus in'
       $label = $ _tmpl _.extend model.attributes, { className: "#{_aboveClass} #{_onDeckClass}" }
       @$el.append $label
-      setTimeout (-> $label.removeClass _aboveClass), 4
+      setTimeout (-> $label.removeClass _aboveClass), 1
 
   View
 
