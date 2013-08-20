@@ -36,6 +36,7 @@ define [
 
     render: ->
       @_showCircleSize()
+#      @_showCircleProximity()
       @
 
 
@@ -69,7 +70,7 @@ define [
         showInstructions: @options.showInstructions
       @$el.html @curView.el
       @curView.render() # Render after putting in the dom since it needs to compute locations
-      @curView.trigger 'domInsert'
+      setTimeout (=> @curView.trigger 'domInsert'), 1 # Allow the dom time to draw before declaring it inserted
       @track Level.EVENTS.sublevelStart, data:@circlesCollection.toJSON()
       @listenToOnce @curView, 'done', @onTestDone
 

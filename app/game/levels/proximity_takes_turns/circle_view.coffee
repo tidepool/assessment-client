@@ -15,6 +15,7 @@ define [
   _draggableStackSel = '.ui-draggable'
   _animTriggerClass = 'plop'
   _bumpAmount = 100
+  _tmplIntroduction = "<i class='introduction icon-arrow-up'></i>"
   _calculateXYDistance = (p1, p2) ->
     distance =
       x: p1.x - p2.x
@@ -125,6 +126,9 @@ define [
     # ----------------------------------------------------- Consumable
     bumpUp: ->   @_bump -_bumpAmount
     bumpDown: -> @_bump +_bumpAmount
+    showIntroduction: ->
+      console.log 'show introduction'
+      @$el.append _tmplIntroduction
 
 
   View

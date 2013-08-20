@@ -4,8 +4,6 @@
 @import '../../../styles/helpers'
 
 
-
-
 .proximityTakesTurns
   position: relative
   overflow: hidden
@@ -42,4 +40,15 @@
       box-shadow: 0 0 0 300px tint($colorGood, 75%)
 
 
-
+  .instructions
+    position: absolute
+    margin: 0 auto
+    left: 50%
+    width: 310px
+    margin-left: -160px - $spaceLil - $spaceTiny
+    padding: $spaceLil
+    background: mix($colorBackground, tint($colorGood, 75%))
+    border: $spaceTiny solid tint($colorGood, 70%)
+    color: $colorGood
+    border-radius: $radiusMed
+    top: 33%

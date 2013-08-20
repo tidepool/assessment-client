@@ -25,8 +25,10 @@ define [
 
 
   _selfContentSel = '.zoneSelf'
+  _instructionsSel = '.instructions'
   _upKey = 38
   _downKey = 40
+  _instructions = 'Place each circle near yourself based on importance.'
 
 
   View = Level.extend
@@ -51,6 +53,7 @@ define [
       @$(_selfContentSel).append @selfView.render().el
       @_renderCircles()
       @next()
+      @_showIntroduction()
       @
 
 
@@ -63,6 +66,13 @@ define [
           selfView: @selfView
           track: _.bind @options.runner.track, @options.runner
         @$el.append circle.view.render().el
+      @
+
+    # Show an introductory animation and explanation
+    _showIntroduction: ->
+      firstModel = @collection.at(0)
+      firstModel.view.showIntroduction()
+      @$(_instructionsSel).text _instructions
       @
 
     _finish: ->
@@ -111,6 +121,7 @@ define [
 
     # Recalculate the normalized distances whenever any of them change
     onChangeSelfProximityPx: ->
+      @$(_instructionsSel).hide()
       # Get all the distances
       distances = @collection.pluck 'selfProximityPx'
       max = _.max distances

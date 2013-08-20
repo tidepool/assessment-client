@@ -29,6 +29,27 @@
     background: $colorBrand1
 
 
+  // ------------------------------------- Introduction Animation
+  .introduction
+    display: none
+    position: absolute
+    $circleSize: 75px
+    $width: 100px
+    width: $width
+    height: 0
+    left: 50%
+    margin-left: -$width/2
+    bottom: $circleSize
+    overflow: hidden
+    opacity: 0
+    //+bg(pink)
+    color: $colorBrand1
+    font-size: 50px
+  &.onDeck .introduction
+    display: block
+    +animation( fadeUp 4s infinite .5s )
+
+
   // Scale for Draggable circles
   // This has to be managed differently because JqDraggable can't read sizes on transformed elements
   =circleSize( $scale: 1.0 )
@@ -69,3 +90,23 @@
     background: $colorBrand1
   30%, 60%
     box-shadow: 0 0 0 $spaceTiny $colorBackground, 0 0 0 $spaceTiny + $space*1 transparentize($colorBrand1, .8), 0 0 0 $spaceTiny + $space*2 transparentize($colorBrand1, .9)
+
+
++keyframes(fadeUp)
+  0%
+    opacity: .01
+    height: 0
+    margin-bottom: -50px
+  10%, 90%
+    margin-bottom: 0
+    height: 75px
+  20%, 85%
+    opacity: 1
+  50%
+    height: 75px
+  11%, 29%, 49%, 69%, 89%
+    +transform( translateY(-$spaceLil) )
+  21%, 41%, 61%, 81%
+    +transform( translateY(0) )
+
+
