@@ -14,6 +14,7 @@ define [
   _focusClass = 'focus'
   _draggableStackSel = '.ui-draggable'
   _animTriggerClass = 'plop'
+  _bumpAmount = 100
   _calculateXYDistance = (p1, p2) ->
     distance =
       x: p1.x - p2.x
@@ -29,6 +30,7 @@ define [
     events:
       mousedown: 'onMousedown'
       touchstart: 'onTouchstart'
+      focus: 'onFocus'
 
     initialize: ->
       _.bindAll @, 'onDragStart', 'onDrag', 'onDragStop'
@@ -72,6 +74,15 @@ define [
         selfProximityPx: Math.round @_calculateDistanceFromSelf center
       @
 
+    _bump: (amount) ->
+      pos = @$el.position()
+      @$el.css
+        top: pos.top + amount
+        left: pos.left
+      @_updateModelPosition()
+      @onDragStart()
+      @
+
 
     # ----------------------------------------------------- Draggable Events
     onDragStart: (e, ui) ->
@@ -83,7 +94,7 @@ define [
         item: @model.toJSON()
 
     onDrag: (e, ui) ->
-      @_maintainLine(e, ui)
+#      @_maintainLine(e, ui)
 
     onDragStop: (e, ui) ->
       @_updateModelPosition()
@@ -99,6 +110,8 @@ define [
       @_concentrate()
     onMousedown: ->
       @_concentrate()
+    onFocus: ->
+      @_concentrate()
 
 
     # ----------------------------------------------------- Data Events
@@ -109,6 +122,9 @@ define [
         setTimeout (=> @$el.addClass _onDeckClass), 4
 
 
+    # ----------------------------------------------------- Consumable
+    bumpUp: ->   @_bump -_bumpAmount
+    bumpDown: -> @_bump +_bumpAmount
 
 
   View

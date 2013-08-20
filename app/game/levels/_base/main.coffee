@@ -97,12 +97,13 @@ define [
     fillHeight: ->
       @_fillHeight()
       debounced = _.debounce @_fillHeight, 100
-      $(window).on 'resize', _.bind debounced, @
+      @debouncedFill = _.bind debounced, @
+      $(window).on 'resize', @debouncedFill
 
 
     remove: ->
       @close?()
-      $(window).off 'resize'
+      $(window).off 'resize', @debouncedFill
       proceed.hide()
       @$el.remove()
       @stopListening()

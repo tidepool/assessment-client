@@ -92,9 +92,6 @@ define [
     onKeydown: (event) ->
       return unless @curPerson
       code = event.charCode || event.which
-#      console.log
-#        event:event
-#        charCode: code
       switch code
         when _upKey then @curPerson.bumpUp()
         when _downKey then @curPerson.bumpDown()
@@ -109,7 +106,7 @@ define [
         @_finish()
 
     close: ->
-      $(window).off 'keypress', @onKeydown
+      $(window).off 'keydown', @onKeydown
       @
 
 

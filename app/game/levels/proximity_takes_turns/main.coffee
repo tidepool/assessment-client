@@ -25,6 +25,8 @@ define [
 
 
   _selfContentSel = '.zoneSelf'
+  _upKey = 38
+  _downKey = 40
 
 
   View = Level.extend
@@ -38,7 +40,8 @@ define [
       @listenTo @collection, 'change:selfProximityPx', @onChangeSelfProximityPx
       @listenToOnce proceed, 'click', @_finish
       @once 'domInsert', @fillHeight
-      _.bindAll @, 'next'
+      _.bindAll @, 'next', 'onKeydown'
+      $(window).on 'keydown', @onKeydown
 
     render: ->
       @$el.html tmpl
@@ -86,6 +89,18 @@ define [
       @
 
 
+    # ----------------------------------------------------- UI Events
+    onKeydown: (event) ->
+      code = event.charCode || event.which
+      curCircle = @collection.find (circle) -> circle.attributes.focus
+      console.log 'keydown'
+      return unless curCircle
+      switch code
+        when _upKey then curCircle.view.bumpUp()
+        when _downKey then curCircle.view.bumpDown()
+      @
+
+
     # ----------------------------------------------------- Data Events
     onChangeInteracted: ->
       @next() unless @allMoved
@@ -125,6 +140,9 @@ define [
         proceed.show()
       @
 
+    close: ->
+      $(window).off 'keydown', @onKeydown
+      @
 
 
   View
