@@ -11,6 +11,7 @@ define [
 
   _me = 'ui_widgets/proceed'
   _parentSel = 'body'
+  _rightKey = 39
 
   Me = Backbone.View.extend
     tagName: 'button'
@@ -18,7 +19,8 @@ define [
     events:
       "click": "onClick"
     initialize: ->
-      _.bindAll @, 'show', 'hide'
+      _.bindAll @, 'show', 'hide', 'onKeydown'
+
 
     render: ->
       return if @$el.is(':visible') # don't rerender or animate if it's already visible
@@ -26,6 +28,7 @@ define [
       $(_parentSel).append @el
       @delegateEvents()
       @_animateIn()
+      $(window).on 'keydown', @onKeydown
       @
 
     _animateIn: ->
@@ -36,11 +39,19 @@ define [
 
     # Event Handlers
     onClick: (e) ->
-      #console.log "#{_me}.onClick()"
+#      console.log "#{_me}.onClick()"
       @trigger 'click'
 
-    # Public API
+    onKeydown: (e) ->
+      code = event.charCode || event.which
+      switch code
+        when _rightKey then @$el.trigger 'click'
+
+
+    # ----------------------------------------- API for Consumption
     show: -> @render()
-    hide: -> @remove()
+    hide: ->
+      $(window).off 'keypress', @onKeydown
+      @remove()
 
   new Me()
