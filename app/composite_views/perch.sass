@@ -103,23 +103,25 @@
 
 
 
-
-
-
-
-
-
-
 // Screen Size Adjustments
-.perch.modal.small,
-.perch.modal.huge
-  width: 300px
-  margin-left: -150px
-
-@media all and (min-width: 450px)
++tabletAndUp
+  .perch
+    position: absolute
+    left: 50%
   .perch.modal.small
     width: 400px
     margin-left: -200px
   .perch.modal.huge
     width: 800px
     margin-left: -400px
+
++phone
+  .perch,
+  .perch.modal.small,
+  .perch.modal.huge
+    position: fixed
+    top: $space
+    left: $space
+    right: $space
+    margin-left: 0
+    width: auto
