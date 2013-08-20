@@ -81,6 +81,7 @@ define [
         left: pos.left
       @_updateModelPosition()
       @onDragStart()
+      @onDragStop()
       @
 
 
@@ -98,7 +99,6 @@ define [
 
     onDragStop: (e, ui) ->
       @_updateModelPosition()
-      @model.set interacted:true
       @_animatePlop()
       @options.track Level.EVENTS.moveEnd,
         index: @model.collection.indexOf @model

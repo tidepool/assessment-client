@@ -93,7 +93,7 @@ define [
     onKeydown: (event) ->
       code = event.charCode || event.which
       curCircle = @collection.find (circle) -> circle.attributes.focus
-      console.log 'keydown'
+#      console.log 'keydown'
       return unless curCircle
       switch code
         when _upKey then curCircle.view.bumpUp()

@@ -62,6 +62,7 @@ define [
       delete attrs.abbreviation
       delete attrs.userChangedPos
       delete attrs.userChangedSize
+      delete attrs.className
       attrs
 
 
