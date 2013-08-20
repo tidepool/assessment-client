@@ -23,9 +23,9 @@ define [
       @_prepareData()
 
     _prepareData: ->
-      score = @model.get 'score'
-      score.one_liner = markdown.toHTML score.one_liner
-      @model.set 'score', score
+      attrs = @model.attributes
+      attrs.one_liner = markdown.toHTML attrs.one_liner
+      @model.set attrs
       return this
 
   View

@@ -25,7 +25,7 @@ define [
     holla: (data, skipCleanup) ->
       @iframe = @iframe || document.createElement "IFRAME"
       @iframe.setAttribute 'src', "#{_urlRoot}#{JSON.stringify data}"
-      console.log iosAction:JSON.stringify data
+#      console.log iosAction:JSON.stringify data
       document.documentElement.appendChild @iframe
       @cleanUp unless skipCleanup
       @

@@ -111,7 +111,7 @@ define [
           @_appendEmotionCharts()
         when TYPES.pers
           personalityModel = @collection.find (m) -> m.attributes.type is TYPES.pers
-          stringId = personalityModel.attributes.score.name.split(' ').join('-')
+          stringId = personalityModel.attributes.name.split(' ').join('-')
           teaserData =
             user_id: app.user.id
             game_id: @collection.game_id
