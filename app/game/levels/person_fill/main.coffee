@@ -38,8 +38,8 @@ define [
       @listenTo @collection, 'change:size', @onChangeSize
       @once 'domInsert', @fillHeight
       @render()
-      _.bindAll @, 'onKeyDown'
-      $(window).on 'keydown', @onKeyDown
+      _.bindAll @, 'onKeydown'
+      $(window).on 'keydown', @onKeydown
 
     render: ->
       @$el.html tmpl
@@ -89,7 +89,7 @@ define [
 
 
     # ----------------------------------------------------- Keyboard Events
-    onKeyDown: (event) ->
+    onKeydown: (event) ->
       return unless @curPerson
       code = event.charCode || event.which
 #      console.log
@@ -109,7 +109,7 @@ define [
         @_finish()
 
     close: ->
-      $(window).off 'keydown'
+      $(window).off 'keypress', @onKeydown
       @
 
 
