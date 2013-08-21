@@ -67,6 +67,7 @@ define [
 #      console.log thus:@toJSON()
 
     _calculateAge: (model, val) ->
+      return unless val
       year = val.split('-')[0]
       unless year? and year.length is 4
         console.error "Can't find the year in DOB: #{val}"
