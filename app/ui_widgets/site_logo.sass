@@ -5,12 +5,15 @@
 
 
 .siteLogo
+  $largeLogoWidth: 177px
+  $smallTextWidth: 1
+  $smallLogoWidth: 1
   position: absolute
   left: 0
   top: 0
   height: $headerHeight + 5px
   margin-top: -5px
-  width: 110px
+  width: $largeLogoWidth + $spaceLil*2
   background: $highlightVeryThin //larger hover area
   vertical-align: top
 
@@ -22,13 +25,13 @@
   &:after
     content: ''
     position: absolute
-    top: $spaceLil
+    top: $spaceLil*1.5
     left: 10px
-    width: 88px
-    height: 50px
+    width: $largeLogoWidth
+    height: 40px
     //background-image: url('../images/brand.png')
-    +twiceable('../images/brand', 200px)
-    background-position: 0 -25px
+    +twiceable('../images/brand', 377px)
+    background-position: 0 -35px
 
 
   // ------------------------------------------------------------ Large Screens
@@ -37,7 +40,7 @@
       background-color: $colorBrand
     &.interactive:hover:after
       background-color: $colorBrand
-      background-position: -88px -25px
+      background-position: -$largeLogoWidth (-35px)
     &.interactive:hover:before
       position: absolute
       box-sizing: border-box
@@ -54,29 +57,29 @@
 
   // ------------------------------------------------------------ Small Screens
   +phone
-    $fishWidth: 35px
+    $symbolWidth: 20px
     height: $shortHeaderHeight
-    width: $fishWidth
+    width: $symbolWidth
     margin-top: 0
     padding-left: $spaceTiny
-    // The fish icon
+    // The symbol
     &:after
       top: $spaceTiny
       left: $spaceTiny
-      height: $shortHeaderHeight - $spaceTiny
-      width: $fishWidth
-      background-position: 0 0
-    // The text 'TIDEPOOL'
+      height: 25px
+      width: $symbolWidth
+      background-position: -96px 0
+    // The text 'TidePool'
     &:before
       content: ''
       position: absolute
       margin-top: -$shortHeaderHeight
-      left: $fishWidth + $spaceTiny
+      left: $symbolWidth
       top: 0
-      height: $shortHeaderHeight - $spaceTiny
-      width: 105px - $fishWidth
-      background-position: -$fishWidth 0
-      +twiceable('../images/brand', 200px)
+      height: 25px
+      width: 105px - $symbolWidth
+      background-position: 0 0
+      +twiceable('../images/brand', 377px)
       +transitionable
     &.interactive:hover:before,
     &.interactive:focus:before
@@ -92,5 +95,10 @@
     margin-top: -30px
   10%, 80%
     margin-top: $spaceTiny
+
+
+
+
+
 
 
