@@ -123,7 +123,9 @@ define [
       @options.app.analytics?.track @className, 'Validation Issue'
 
     _onModelError: (model, xhr, options) ->
-      @_showErr "#{xhr.status}: #{xhr.statusText}"
+      msg = xhr.responseJSON?.status?.message
+      msg = msg || "#{xhr.status}: #{xhr.statusText}"
+      @_showErr msg
       holdPlease.hide _submitSel
 
 
