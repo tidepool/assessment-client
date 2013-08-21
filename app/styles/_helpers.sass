@@ -42,10 +42,15 @@
   background-size: cover
   -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')"
 
+@mixin doubleRes
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx)
+    @content
+
+
 //Support 1 and 2x image sizes
 @mixin twiceable($extentionlessUrl, $imgWidth)
   background-image: url($extentionlessUrl + ".png")
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx)
+  +doubleRes
     background-image: url($extentionlessUrl + "@2x.png")
     background-size: $imgWidth auto
 
