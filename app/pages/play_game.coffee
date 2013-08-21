@@ -21,6 +21,7 @@ define [
   'game/calculate_results'
   'game/mini_instructions'
   'utils/numbers'
+  'entities/daddy_ios'
 ], (
   Backbone
   Handlebars
@@ -44,6 +45,7 @@ define [
   CalculateResultsView
   MiniInstructions
   numbers
+  IOS
 ) ->
 
   _me = 'pages/playGame'
@@ -78,6 +80,7 @@ define [
       throw new Error "Need params" unless @options.params
       holdPlease.show null, true # (null = no selector, true = show a random message)
       @model = app.user.createGame @options.params.def_id
+      @ios = new IOS
       @listenTo app.user, 'error', @_userModelErr
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'sync', @onSync
@@ -122,20 +125,24 @@ define [
 
     _curGameErr: ->
       holdPlease.hide()
+      msg = 'Sorry, there was a problem loading the game.'
       psst
         title: 'Error'
-        msg: 'Sorry, there was a problem loading the game.'
+        msg: msg
         sel: @$el
         type: psst.TYPES.error
+      @ios.error msg
       throw new Error "#{_me}: Error on the game model"
 
     _userModelErr: ->
       holdPlease.hide()
+      msg = 'Sorry, there was a problem loading the user.'
       psst
         title: 'Error'
-        msg: 'Sorry, there was a problem loading the user.'
+        msg: msg
         sel: @$el
         type: psst.TYPES.error
+      @ios.error msg
       throw new Error "#{_me}: Error on the user model"
 
 
@@ -175,6 +182,7 @@ define [
       @model.setLevelSeen stageData.view_name
       app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
       app.analytics.track @className, "#{@curLevel.model.attributes.stageDef} Level Started"
+      @ios.log "Game showLevel: #{stageId}"
 
 
     # ------------------------------------------------------------- End Game
@@ -214,6 +222,7 @@ define [
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} Game", 'Finished'
       # Don't start the results calculation until we get a successful response on the user event
+      throw new Error 'Need @curLevel.event' unless @curLevel.event?
       @listenToOnce @curLevel.event, 'sync', @_eventSync
       @listenToOnce @curLevel.event, 'error', @_eventSync
 

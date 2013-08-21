@@ -5,7 +5,8 @@ define [
 ) ->
 
   _urlAction = "iosaction"
-  _urlLog = "ioslog"
+  _urlLog =    "ioslog"
+  _urlError =  "ioserr"
   _noOp = -> @
 
 
@@ -14,7 +15,7 @@ define [
     if detect.isUIwebView() or options?.force
       @isUp = true
     else
-      @save = @cleanUp = _noOp
+      @holla = @log = @error = @cleanUp = _noOp # Blank out all methods
     @
 
 
@@ -27,13 +28,15 @@ define [
     holla: (msg, skipCleanup, urlRoot) ->
       root = urlRoot || _urlAction
       @iframe = @iframe || document.createElement "IFRAME"
-      @iframe.setAttribute 'src', "#{root}://#{msg}"
+      src = "#{root}://#{msg}"
+      console.log "daddy_ios: #{src}"
+      @iframe.setAttribute 'src', src
       document.documentElement.appendChild @iframe
       @cleanUp unless skipCleanup
       @
 
-    log: (msg, skipCleanup) ->
-      @holla msg, skipCleanup, _urlLog
+    log:   (msg, skipCleanup) -> @holla msg, skipCleanup, _urlLog
+    error: (msg, skipCleanup) -> @holla msg, skipCleanup, _urlError
 
     cleanUp: ->
       return unless @iframe?

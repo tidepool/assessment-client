@@ -9,7 +9,9 @@ define [
 
   _userName = 'Bob Bohanabranson'
   _iosLogProtocol = 'ioslog'
+  _iosErrorProtocol = 'ioserr'
   _nonsensicalProtocol = 'borgTranslation'
+  _fakeErrMsg = 'This sputnik has flown the coop'
 
   describe 'entities/daddy_ios', ->
     ios = null
@@ -46,5 +48,12 @@ define [
         ios.cleanUp()
         expect($('iframe')).toHaveLength 0
 
-
+    describe 'error', ->
+      it 'sends error messages to ios', ->
+        ios.error _fakeErrMsg, true
+        expect($('iframe')).toHaveLength 1
+        expect($('iframe').attr('src').indexOf _fakeErrMsg).not.toEqual -1
+        expect($('iframe').attr('src').indexOf _iosErrorProtocol).not.toEqual -1
+        ios.cleanUp()
+        expect($('iframe')).toHaveLength 0
 

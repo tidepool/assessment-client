@@ -87,8 +87,10 @@ define [
     # --------------------------------------------------- Event Handling
 #    onSync: (model) -> console.log model.attributes
     onErr: (model, xhr) ->
+      msg = xhr.responseJSON?.status.message || xhr.statusText
+      @ios.error msg
       console.error
-        message: xhr.responseJSON?.status.message || xhr.statusText
+        message: msg
         model: model
         xhr: xhr
 #      throw new Error 'Error syncing user_event'

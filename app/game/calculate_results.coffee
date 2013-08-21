@@ -50,14 +50,13 @@ define [
         @_showResults()
 
     onError: (model, xhr) ->
-#      console.log model:model, xhr:xhr
-      # Send the user to the results page, since some of the results could be calculated, they're just suspect
-      # If they're a guest send the user to play again since there's nothing else to do
+      msg = xhr.responseJSON?.status.message || xhr.statusText
+      @ios.error msg
       @ios.holla 0
       app.analytics.track @className, 'Error Getting game results'
       perch.show
         title: 'Sorry, There Is a Problem.'
-        msg: xhr.responseJSON?.status.message || xhr.statusText
+        msg: msg
         btn1Text: 'Ok'
         onClose: => @_showResults() #-> app.router.navigate('home', trigger: true)
         mustUseButton: true
@@ -66,7 +65,9 @@ define [
       #console.log "#{_me}.model.result changed"
       #console.log model: model.attributes
       @_updateStatusMsg model
-      @_gotGameResults model if model.attributes.status.state is model.STATES.done
+      if model.attributes.status.state is model.STATES.done
+        @_gotGameResults model
+        @ios.log 'Got game results'
 
 
 
