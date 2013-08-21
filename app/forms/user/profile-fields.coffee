@@ -14,10 +14,9 @@ define [],() ->
       className: 'large input-block-level'
     }
     {
-      string_id: 'dob'
-      type: 'date'
-      label: 'Birthdate'
-      className: 'large input-block-level'
+      string_id: 'age'
+      label: 'Age'
+      className: 'large narrow'
     }
     {
       string_id: 'education'

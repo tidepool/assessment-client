@@ -74,6 +74,7 @@ define [
       psst.hide()
       holdPlease.show @$(_submitBtnSel)
       formData = @form.getVals()
+      @model.set age:formData.age
       @model.save formData,
         wait: true # Don't update the client model until the server state is changed
         profile: true # Do the validation as a profile save not as a login

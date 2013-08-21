@@ -17,7 +17,6 @@ define [
       email: 'jjb@musicians.net'
       gender: 'male'
       handedness: [ 'left', 'right' ]
-      dob: '1960-06-25'
       education: 'Salt Life'
       timezone: '-7'
       city: 'San Francisco'
@@ -46,15 +45,5 @@ define [
     it 'creates a name field that has our user\'s name in it', ->
       $('#sandbox').html _factory().render().el
       expect( _valByName('name') ).toEqual _mockUser().attributes.name
-
-
-#    it 'has fields for dob, education, handedness, and gender', ->
-#      $('#sandbox').html _factory().render().el
-#      user = _mockUser().attributes
-#      expect($(_myClassName)).toContainText user.dob
-#      expect($(_myClassName)).toContainText user.education
-#      expect($(_myClassName)).toContainText user.handedness[0]
-#      expect($(_myClassName)).toContainText user.gender
-
 
 

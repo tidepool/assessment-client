@@ -28,6 +28,8 @@ define [
       @on 'change:name', @_calculateNickname
       @on 'change:email', @_calculateNickname
       @on 'change:guest', @_calculateNickname
+      @on 'change:age', @_calculateDOB
+      @on 'change:date_of_birth', @_calculateAge
       @on 'error', @_onModelError
       @on 'invalid', @_onModelInvalid
 
@@ -56,6 +58,24 @@ define [
       @set
         nickname: nick,
         {silent: true}
+
+    _calculateDOB: (model, val) ->
+      @set is_dob_by_age: true
+      fuzzyDOB = (new Date()).getFullYear() - val
+      @set date_of_birth: "#{fuzzyDOB}-01-01"
+#      console.log fuzzyDOB:fuzzyDOB
+#      console.log thus:@toJSON()
+
+    _calculateAge: (model, val) ->
+      year = val.split('-')[0]
+      unless year? and year.length is 4
+        console.error "Can't find the year in DOB: #{val}"
+      age = (new Date()).getFullYear() - year
+#      console.log
+#        val:val
+#        year:year
+#        age:age
+      @set age:age
 
     _nuke: ->
       delete sessionStorage['access_token']
