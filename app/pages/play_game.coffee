@@ -53,6 +53,7 @@ define [
   _headerRegionSel = '#HeaderRegion'
   _coreGame = 'baseline'
   _surveyOdds = 0.25 # percent chance to show the end of game survey
+  _loadTimeout = 10 * 1000 # After this long waiting, the game has failed to load and should time out
   _views =
     ReactionTime: ReactionTime
     ImageRank: ImageRank
@@ -85,6 +86,7 @@ define [
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'sync', @onSync
       @listenTo @model, 'change:stage_completed', @_onStageChanged
+      @loadTimeoutPointer = setTimeout (=> @_onGameTimeout()), _loadTimeout
       app.analytics.track @className, "#{@options.params.def_id} Game Started"
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} game", 'Started'
@@ -109,10 +111,21 @@ define [
       $(_headerRegionSel).append @miniInstructions.el
       @model.nextStage()
 
+    _showError: (msg) ->
+      holdPlease.hide()
+      psst
+        title: 'Error'
+        msg: msg
+        sel: @$el
+        type: psst.TYPES.error
+      @ios.error msg
+      throw new Error "#{_me}: #{msg}"
+
 
     # ------------------------------------------------------------- Event Handlers
     onSync: -> holdPlease.hide()
     _onStageChanged: (model, stage) ->
+      clearTimeout @loadTimeoutPointer
       curStage = model.attributes.stage_completed
       stageCount = model.attributes.stages.length
       @stepsRemaining?.setComplete curStage
@@ -123,27 +136,9 @@ define [
       else if curStage > stageCount then @_calculateResults()
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
-    _curGameErr: ->
-      holdPlease.hide()
-      msg = 'Sorry, there was a problem loading the game.'
-      psst
-        title: 'Error'
-        msg: msg
-        sel: @$el
-        type: psst.TYPES.error
-      @ios.error msg
-      throw new Error "#{_me}: Error on the game model"
-
-    _userModelErr: ->
-      holdPlease.hide()
-      msg = 'Sorry, there was a problem loading the user.'
-      psst
-        title: 'Error'
-        msg: msg
-        sel: @$el
-        type: psst.TYPES.error
-      @ios.error msg
-      throw new Error "#{_me}: Error on the user model"
+    _curGameErr: ->    @_showError 'Sorry, there was a problem loading the game.'
+    _userModelErr: ->  @_showError 'Sorry, there was a problem loading the user.'
+    _onGameTimeout: -> @_showError 'Sorry, it looks like there is a problem. The game is taking too long to load.'
 
 
     # ------------------------------------------------------------- Game and Level Management

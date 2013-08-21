@@ -52,7 +52,6 @@ define [
     onError: (model, xhr) ->
       msg = xhr.responseJSON?.status.message || xhr.statusText
       @ios.error msg
-      @ios.holla 0
       app.analytics.track @className, 'Error Getting game results'
       perch.show
         title: 'Sorry, There Is a Problem.'
