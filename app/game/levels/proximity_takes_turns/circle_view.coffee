@@ -85,6 +85,21 @@ define [
       @onDragStop()
       @
 
+    _maintainRings: (e, ui) ->
+      moving = @coordToCenter
+        x: ui.position.left
+        y: ui.position.top
+      self = @options.selfView
+      xyDist = _calculateXYDistance moving, self.getRingCenter()
+      # Pythag, yo
+      distance = Math.sqrt( xyDist.x * xyDist.x + xyDist.y * xyDist.y )
+      self.incoming distance # tell the self circle how close we are
+      @
+
+    _shhRings: ->
+      @options.selfView.clearHighlights()
+      @
+
 
     # ----------------------------------------------------- Draggable Events
     onDragStart: (e, ui) ->
@@ -96,11 +111,12 @@ define [
         item: @model.toJSON()
 
     onDrag: (e, ui) ->
-#      @_maintainLine(e, ui)
+      @_maintainRings(e, ui)
 
     onDragStop: (e, ui) ->
       @_updateModelPosition()
       @_animatePlop()
+      @_shhRings()
       @options.track Level.EVENTS.moveEnd,
         index: @model.collection.indexOf @model
         item: @model.toJSON()
@@ -124,11 +140,9 @@ define [
 
 
     # ----------------------------------------------------- Consumable
+    showIntroduction: -> @$el.append _tmplIntroduction
     bumpUp: ->   @_bump -_bumpAmount
     bumpDown: -> @_bump +_bumpAmount
-    showIntroduction: ->
-      console.log 'show introduction'
-      @$el.append _tmplIntroduction
 
 
   View

@@ -58,7 +58,7 @@ define [
 
     _showCircleProximity: ->
       @curView?.close?().remove()
-      if false #TODO: replace - detect.isPhoneOrTablet()
+      if detect.isPhoneOrTablet()
         ProxLevel = ProximityTakesTurns
       else
         ProxLevel = CircleProximity

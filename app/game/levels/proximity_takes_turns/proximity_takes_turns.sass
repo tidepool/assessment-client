@@ -31,6 +31,9 @@
     height: $size
     margin-left: -$size/2
     background: tint($colorGood, 25%)
+    +transitionable
+    &.overSelf
+      background: tint($colorGood, 15%)
     box-shadow: 0 0 0 400px tint($colorGood, 75%)
     +phoneHeight
       box-shadow: 0 0 0 200px tint($colorGood, 75%)
@@ -38,6 +41,14 @@
       box-shadow: 0 0 0 120px tint($colorGood, 75%)
     +tabletHeight
       box-shadow: 0 0 0 300px tint($colorGood, 75%)
+    &.overRing1
+      box-shadow: 0 0 0 400px tint($colorGood, 65%)
+      +phoneHeight
+        box-shadow: 0 0 0 200px tint($colorGood, 65%)
+      +phoneHeightShort
+        box-shadow: 0 0 0 120px tint($colorGood, 65%)
+      +tabletHeight
+        box-shadow: 0 0 0 300px tint($colorGood, 65%)
 
 
   .instructions
@@ -48,7 +59,7 @@
     margin-left: -160px - $spaceLil - $spaceTiny
     padding: $spaceLil
     background: mix($colorBackground, tint($colorGood, 75%))
-    border: $spaceTiny solid tint($colorGood, 70%)
+    border: $spaceTiny solid tint($colorGood, 60%)
     color: $colorGood
     border-radius: $radiusMed
     top: 33%
