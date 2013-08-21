@@ -136,9 +136,16 @@ define [
       else if curStage > stageCount then @_calculateResults()
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
-    _curGameErr: ->    @_showError 'Sorry, there was a problem loading the game.'
-    _userModelErr: ->  @_showError 'Sorry, there was a problem loading the user.'
-    _onGameTimeout: -> @_showError 'Sorry, it looks like there is a problem. The game is taking too long to load.'
+    _curGameErr: ->
+      clearTimeout @loadTimeoutPointer
+      @_showError 'Sorry, there was a problem loading the game.'
+
+    _userModelErr: ->
+      clearTimeout @loadTimeoutPointer
+      @_showError 'Sorry, there was a problem loading the user.'
+
+    _onGameTimeout: ->
+      @_showError 'Sorry, it looks like there is a problem. The game is taking too long to load.'
 
 
     # ------------------------------------------------------------- Game and Level Management
