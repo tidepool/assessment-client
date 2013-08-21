@@ -58,9 +58,9 @@ define [
 
     # Compares a given time to the start of page loading, and tracks the difference
     trackPerformance: (coreLoadedTime) ->
-      data = {}
-      data.entryPage  = window.location.protocol + '//' + window.location.hostname + window.location.hash
-      data.jsLoadTime = coreLoadedTime - window.pageLoadStart if window.pageLoadStart
+      data =
+        entryPage:  window.location.protocol + '//' + window.location.hostname + window.location.hash
+        jsLoadTime: coreLoadedTime - window.pageLoadStart if window.pageLoadStart
 
       # If the new performance api is aviailable, log that stuff too
       if performance?.timing? #and numbers.casino(.05) #TODO: consider only tracking a percentage of the time.
