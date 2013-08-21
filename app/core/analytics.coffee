@@ -54,22 +54,22 @@ define [
 
     # Compares a given time to the start of page loading, and tracks the difference
     trackPerformance: (coreLoadedTime) ->
+      data =
+        jsLoadTime:    coreLoadedTime - performance.timing.navigationStart
+        entryPage:     window.location.protocol + '//' + window.location.hostname + window.location.hash
+      # If the new performance api is aviailable, log that stuff too
       if performance?.timing? #and numbers.casino(.05) #TODO: consider only tracking a percentage of the time.
-        data =
-          latency:       performance.timing.responseEnd  - performance.timing.fetchStart
-          pageLoad:      performance.timing.loadEventEnd - performance.timing.responseEnd
-          totalLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart
-          jsLoadTime:    coreLoadedTime - performance.timing.navigationStart
-          entryPage:     window.location.protocol + '//' + window.location.hostname + window.location.hash
-#        console.log data
+        data.latency =       performance.timing.responseEnd  - performance.timing.fetchStart
+        data.pageLoad =      performance.timing.loadEventEnd - performance.timing.responseEnd
+        data.totalLoadTime = performance.timing.loadEventEnd - performance.timing.navigationStart
         @kiss?.track        'performance', data
         @google?.trackEvent 'performance', 'log', 'latency',    data.latency
         @google?.trackEvent 'performance', 'log', 'pageLoad',   data.pageLoad
         @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime
-
-
-
-
+      # Always log jsLoadTime
+      else
+        @kiss?.track        'performance', data
+        @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime
 
 
 
