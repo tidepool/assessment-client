@@ -4,7 +4,8 @@ define [
   detect
 ) ->
 
-  _urlRoot = "iosaction://"
+  _urlAction = "iosaction"
+  _urlLog = "ioslog"
   _noOp = -> @
 
 
@@ -17,18 +18,22 @@ define [
     @
 
 
-
   Export.prototype =
 
     # Save data using an iframe.
-    # Support skipping so that unit testing can observe the iframe before cleaning it up
-    holla: (data, skipCleanup) ->
+    # msg: a string to send to IOS
+    # skipCleanup: if true, don't remove the iframe. used for unit testing
+    # urlRoot: optional. If set, changes the URL root. Useful for telling IOS to treat the message differently
+    holla: (msg, skipCleanup, urlRoot) ->
+      root = urlRoot || _urlAction
       @iframe = @iframe || document.createElement "IFRAME"
-      @iframe.setAttribute 'src', "#{_urlRoot}#{JSON.stringify data}"
-#      console.log iosAction:JSON.stringify data
+      @iframe.setAttribute 'src', "#{root}://#{msg}"
       document.documentElement.appendChild @iframe
       @cleanUp unless skipCleanup
       @
+
+    log: (msg, skipCleanup) ->
+      @holla msg, skipCleanup, _urlLog
 
     cleanUp: ->
       return unless @iframe?
@@ -38,5 +43,4 @@ define [
 
 
   Export
-
 

@@ -7,10 +7,9 @@ define [
   Ios
 ) ->
 
-  _testData =
-    userName: 'Bob Bohanabranson'
-    userId: 42
-    pi: Math.PI
+  _userName = 'Bob Bohanabranson'
+  _iosLogProtocol = 'ioslog'
+  _nonsensicalProtocol = 'borgTranslation'
 
   describe 'entities/daddy_ios', ->
     ios = null
@@ -26,12 +25,26 @@ define [
 
     describe 'holla', ->
       it 'creates an iframe as a way to holla data to ios', ->
-        ios.holla _testData, true # true = skip cleanup. Not the typical usage, but allows for testing the iframe
+        ios.holla _userName, true # true = skip cleanup. Not the typical usage, but allows for testing the iframe
         expect($('iframe')).toHaveLength 1
-        expect($('iframe').attr('src').indexOf _testData.userName).not.toEqual -1
+        expect($('iframe').attr('src').indexOf _userName).not.toEqual -1
+        ios.cleanUp()
+        expect($('iframe')).toHaveLength 0
+      it 'supports sending with any protocol as the 3rd param', ->
+        ios.holla _userName, true, _nonsensicalProtocol
+        expect($('iframe')).toHaveLength 1
+        expect($('iframe').attr('src').indexOf _nonsensicalProtocol).not.toEqual -1
         ios.cleanUp()
         expect($('iframe')).toHaveLength 0
 
+    describe 'log', ->
+      it 'log data to ios with a different protocol', ->
+        ios.log _userName, true
+        expect($('iframe')).toHaveLength 1
+        expect($('iframe').attr('src').indexOf _userName).not.toEqual -1
+        expect($('iframe').attr('src').indexOf _iosLogProtocol).not.toEqual -1
+        ios.cleanUp()
+        expect($('iframe')).toHaveLength 0
 
 
 
