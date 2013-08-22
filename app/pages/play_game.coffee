@@ -98,6 +98,7 @@ define [
 #      document.title = if title then title else _defaultTitle
 
     _showWelcome: ->
+      @ios.log 'Game loaded'
       gameDef = @options.params.def_id
       # Decide whether to show game introduction instructions
       if _gameWelcomePages[gameDef]?
@@ -246,9 +247,6 @@ define [
     close: ->
       @curLevel?.close?()
       @curLevel?.remove()
-
-
-
 
 
   Me
