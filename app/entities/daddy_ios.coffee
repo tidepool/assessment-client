@@ -32,6 +32,7 @@ define [
 #      console.log "daddy_ios: #{src}"
       @iframe.setAttribute 'src', src
       document.documentElement.appendChild @iframe
+      $('iframe').contents().find("head").append($("<style type='text/css'>  body{background:lawngreen;}  </style>")) # make them bright green and easy to find
       @cleanUp unless skipCleanup
       @
 
