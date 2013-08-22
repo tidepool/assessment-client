@@ -29,14 +29,16 @@ define [
       root = urlRoot || _urlAction
       @iframe = @iframe || document.createElement "IFRAME"
       src = "#{root}://#{msg}"
-      console.log "daddy_ios: #{src}"
+#      console.log "daddy_ios: #{src}"
       @iframe.setAttribute 'src', src
       document.documentElement.appendChild @iframe
       @cleanUp unless skipCleanup
       @
 
-    log:   (msg, skipCleanup) -> @holla msg, skipCleanup, _urlLog
-    error: (msg, skipCleanup) -> @holla msg, skipCleanup, _urlError
+    log:   (msg, skipCleanup) -> #@holla msg, skipCleanup, _urlLog
+    error: (msg, skipCleanup) ->
+      @ios.holla 0
+      #@holla msg, skipCleanup, _urlError
 
     cleanUp: ->
       return unless @iframe?

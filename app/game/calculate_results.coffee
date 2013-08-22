@@ -69,6 +69,5 @@ define [
         @ios.log 'Got game results'
 
 
-
   View
 
