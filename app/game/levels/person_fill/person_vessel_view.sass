@@ -85,6 +85,12 @@
       +animation(wiggleBottomMargin .5s alternate infinite)
     .fill
       +animation(wiggleHeight .5s alternate infinite)
+  &:first-child .fill
+    height: 100%
+  &.untouched:first-child // The first person shows an introductory de-filling animation
+    .fill
+      +transitionable(height, .5s, ease-out)
+      height: 0%
 
 
 +keyframes(wiggleHeight)

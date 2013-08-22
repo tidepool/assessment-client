@@ -20,7 +20,9 @@ define [
   _fillSel = '.fill'
   _personMaskSel = '.mask'
   _outputSel = "#{_fillSel} output"
+  _defillDelay = 1000 # Show the first person as full for this amount of time before animating him de-filling
   _tmpl = Handlebars.compile tmpl
+
 
   View = Backbone.View.extend
 
@@ -129,8 +131,17 @@ define [
 
     # ----------------------------------------------------- Consumable API
     yourTurn: ->
-      @$el.addClass "#{_currentClass} #{_initialClass}"
+      # Move it to the center
+      @$el.addClass _currentClass
       @$(_fillSel).attr tabindex:1
+      # Add the intro animation. The first child has a longer intro than the others
+      if @$el.is(':first-child')
+        setTimeout (=>
+          @$el.addClass _initialClass unless @model.attributes.interacted # Don't add the intro animation if someone already interacted with it
+        ), _defillDelay
+      else
+        @$el.addClass _initialClass
+
       @
 
     done: ->
