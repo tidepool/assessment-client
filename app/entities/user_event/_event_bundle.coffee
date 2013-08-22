@@ -4,12 +4,14 @@ define [
   './_events'
   'utils/detect'
   'core'
+  'entities/daddy_ios'
 ], (
   _
   Model
   Events
   detect
   app
+  IOS
 ) ->
 
   _viewNameToModuleName =
@@ -65,6 +67,7 @@ define [
       throw new Error 'Need game_id' unless @attributes.game_id
 #      @on 'sync', @onSync
       @on 'error', @onErr
+      @ios = new IOS
       @_translateEventType()
 
     validate: (attrs, options) ->
