@@ -33,7 +33,7 @@ define [
       @iframe.setAttribute 'src', src
       document.documentElement.appendChild @iframe
       $('iframe').contents().find("head").append($("<style type='text/css'>  body{background:lawngreen;}  </style>")) # make them bright green and easy to find
-      @cleanUp unless skipCleanup
+      @cleanUp() unless skipCleanup
       @
 
     log:   (msg, skipCleanup) -> @holla msg, skipCleanup, _urlLog
