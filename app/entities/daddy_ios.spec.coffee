@@ -39,21 +39,21 @@ define [
         ios.cleanUp()
         expect($('iframe')).toHaveLength 0
 
-#    describe 'log', ->
-#      it 'log data to ios with a different protocol', ->
-#        ios.log _userName, true
-#        expect($('iframe')).toHaveLength 1
-#        expect($('iframe').attr('src').indexOf _userName).not.toEqual -1
-#        expect($('iframe').attr('src').indexOf _iosLogProtocol).not.toEqual -1
-#        ios.cleanUp()
-#        expect($('iframe')).toHaveLength 0
-#
-#    describe 'error', ->
-#      it 'sends error messages to ios', ->
-#        ios.error _fakeErrMsg, true
-#        expect($('iframe')).toHaveLength 1
-#        expect($('iframe').attr('src').indexOf _fakeErrMsg).not.toEqual -1
-#        expect($('iframe').attr('src').indexOf _iosErrorProtocol).not.toEqual -1
-#        ios.cleanUp()
-#        expect($('iframe')).toHaveLength 0
+    describe 'log', ->
+      it 'log data to ios with a different protocol', ->
+        ios.log _userName, true
+        expect($('iframe')).toHaveLength 1
+        expect($('iframe').attr('src').indexOf _userName).not.toEqual -1
+        expect($('iframe').attr('src').indexOf _iosLogProtocol).not.toEqual -1
+        ios.cleanUp()
+        expect($('iframe')).toHaveLength 0
+
+    describe 'error', ->
+      it 'sends error messages to ios', ->
+        ios.error _fakeErrMsg, true
+        expect($('iframe')).toHaveLength 1
+        expect($('iframe').attr('src').indexOf _fakeErrMsg).not.toEqual -1
+        expect($('iframe').attr('src').indexOf _iosErrorProtocol).not.toEqual -1
+        ios.cleanUp()
+        expect($('iframe')).toHaveLength 0
 
