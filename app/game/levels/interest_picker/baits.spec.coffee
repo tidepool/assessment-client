@@ -55,18 +55,21 @@ define [
 
     describe 'getPicked', ->
       it 'Returns the right number of items', ->
-        expect(bait.getPicked().length).toEqual _testData.length - _unpickedJunk.length
-        expect(bait.getPickedWords()[0]).toBeInstanceOf bait.model
+        items = bait.getPicked()
+        expect(items.length).toEqual _testData.length - _unpickedJunk.length
+        expect(items[0].value).toBeDefined()
 
     describe 'getPickedWords', ->
       it 'Returns the right items', ->
-        expect(bait.getPickedWords().length).toEqual _pickedWords.length
-        expect(bait.getPickedWords()[0]).toBeInstanceOf bait.model
+        items = bait.getPickedWords()
+        expect(items.length).toEqual _pickedWords.length
+        expect(items[0].value).toBeDefined()
 
     describe 'getPickedSymbols', ->
       it 'Returns the right items', ->
-        expect(bait.getPickedSymbols().length).toEqual _pickedSymbols.length
-        expect(bait.getPickedWords()[0]).toBeInstanceOf bait.model
+        items = bait.getPickedSymbols()
+        expect(items.length).toEqual _pickedSymbols.length
+        expect(items[0].value).toBeDefined()
 
     describe 'countPickedWords', ->
       it 'Returns the right count', ->

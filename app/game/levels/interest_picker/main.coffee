@@ -53,12 +53,11 @@ define [
 
     start: ->
       @track Level.EVENTS.start
-      @collection.reset @collection.shuffle(), { silent:true }
+#      @collection.reset @collection.shuffle(), { silent:true }
       @collection.each (model) ->
         view = new BaitView model:model
         model.view = view
       @listenTo @collection, 'change', @onChange
-#      @once 'domInsert', @_calculateHeight
       @heightAdjustment = _drawerSize + _margins
       @once 'domInsert', @fillHeight
       _.bindAll @, '_step', '_startSteppin'
@@ -88,11 +87,7 @@ define [
       @_interval = setInterval @_step, _tempo
 
     _hasPickedEnough: ->
-      words = @collection.filter (item) ->
-        item.get('isPicked') and (item.get('type') is item.TYPES.word)
-      symbols = @collection.filter (item) ->
-        item.get('isPicked') and (item.get('type') is item.TYPES.symbol)
-      true if words.length >= _wordPicks and symbols.length >= _symbolPicks
+      true if @collection.countPickedWords() >= _wordPicks and @collection.countPickedSymbols() >= _symbolPicks
 
     # Every _tempo add another symbol
     _step: ->
@@ -138,18 +133,6 @@ define [
       $el.removeClass _shimmerClass
       setTimeout (-> $el.addClass _shimmerClass), 1 # This delay lets the dom notice and animate the added class
 
-    _calculateHeight: ->
-      margins = parseInt(@$el.css('margin-top')) #+ parseInt(@$el.css('margin-bottom'))
-      availHeight = $(window).height() - @$(_menuSel).offset().top - _drawerSize - margins
-#      console.log
-#        offset: @$(_menuSel).offset().top
-#        window: $(window).height()
-#        availHeight: availHeight
-#        margins: margins
-      @$el.css height:availHeight
-      availHeight
-
-
 
     # ------------------------------------------------------------- Event Handlers
     onChange: (model) ->
@@ -163,7 +146,9 @@ define [
           if @collection.countPickedSymbols() > _symbolPicks
             model.view.unpick().sayNo()
       if @_hasPickedEnough()
-        @summaryData = picked: @collection.getPicked()
+        @summaryData =
+          symbol_list: @collection.getPickedSymbols()
+          word_list:   @collection.getPickedWords()
         @readyToProceed()
       else
         @notReadyToProceed()
