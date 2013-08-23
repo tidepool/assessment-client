@@ -27,7 +27,7 @@
     "grunt-replace": "~0.4.4",
     "grunt-contrib-sass": "~0.3.0",
     "grunt-contrib-watch": "~0.5.2",
-    "grunt-s3": "~0.2.0-alpha.2"
+    "grunt-aws-s3": "~0.6.0"
   },
   "engines": {
     "node": ">`=0.8.0"

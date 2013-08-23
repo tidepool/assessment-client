@@ -15,6 +15,7 @@ module.exports = (grunt) ->
     dist: "dist"
     dev: ".devServer"
     temp: ".tmp"
+    timestamp: grunt.template.today('mm-dd_HHMM')
     research: "../OAuthProvider/public/"
     sassSourceGlob: [
       "<%= cfg.app %>/**/*.sass"
@@ -36,6 +37,7 @@ module.exports = (grunt) ->
     ]
     imagesGlob: [
       "images/**/{*.png,*.jpg,*.jpeg}"
+      "apple*.png"
     ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
@@ -43,6 +45,7 @@ module.exports = (grunt) ->
   grunt.initConfig
     cfg: buildConfig
     env: grunt.file.readJSON '.env.json'
+    pkg: grunt.file.readJSON 'package.json'
     connect:
       options:
         port: 7000
@@ -246,6 +249,7 @@ module.exports = (grunt) ->
           fbId:                "<%= env.fbId %>"
           #fbSecret:            "<%= env.fbSecret %>" # not used
           isDev:               "<%= env.isDev %>"
+          timestamp:           "<%= cfg.timestamp %>"
         prefix: '@@'
       dist:
         files: [
@@ -309,7 +313,33 @@ module.exports = (grunt) ->
           src: "**/*.*"
           dest: "<%= cfg.research %>"
         ]
+      toTimestamp:
+        files: [
+          expand: true
+          cwd: "<%= cfg.dist %>"
+          src: "**/*.{html,ico,png,jpg,js,css,txt}" # Whitelist only certain files. Careful, don't send up the .env files here.
+          dest: "builds/<%= cfg.timestamp %>"
+        ]
 
+    aws_s3:
+      options:
+        accessKeyId:     '<%= env.awsKey %>'
+        secretAccessKey: '<%= env.awsSecret %>'
+        bucket:          '<%= env.awsBucket %>'
+        region:          '<%= env.awsRegion %>'
+        params:
+          # Two Year cache policy (1000 * 60 * 60 * 24 * 730)#
+          CacheControl: '630720000'
+#          ContentType: 'application/json',
+#        access: 'public-read'
+        gzip: true
+      deploy:
+        files: [
+          expand: true
+          cwd: "<%= cfg.dist %>"
+          src: '**'
+          dest: '<%= cfg.timestamp %>/'
+        ]
 
     exec:
       convert_jqueryui_amd:
@@ -386,6 +416,7 @@ module.exports = (grunt) ->
     "dist"
     "copy:distToPublic"
   ]
+
 
   grunt.registerTask 'spec', 'exec:unitTest'
   grunt.registerTask "s", "server"
