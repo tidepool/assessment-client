@@ -9,17 +9,23 @@ module.exports = (grunt) ->
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
 
+  # Enum for target switching behavior
+  TARGETS =
+    dev: 'dev'
+    dist: 'dist'
+    research: 'research'
+
   # configurable paths and globs
   buildConfig =
     app: "app"
     dist: "dist"
-    dev: ".devServer"
     temp: ".tmp"
+    dev: '.devServer'
     timestamp: grunt.template.today('mm-dd_HHMM')
     research: "../OAuthProvider/public/"
     sassSourceGlob: [
-      "<%= cfg.app %>/**/*.sass"
-      "!<%= cfg.app %>/bower_components/*"
+      "**/*.sass"
+      "!bower_components/*"
     ]
     cssSourceGlob: [
 #      "<%= cfg.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
@@ -145,23 +151,19 @@ module.exports = (grunt) ->
         ]
 
     sass:
-      dev:
+      quatch:
         options:
-          #debugInfo: true
-          #lineNumbers: true
+#          lineNumbers: true #TODO switch on targets and use this to decide whether to add line numbers or not
+#          sourcemap: true #Requires Sass 3.3.0, which can be installed with gem install sass --pre
           trace: true
           style: 'compact'
-        files:
-          "<%= cfg.dev %>/all-min.css": "<%= cfg.sassSourceGlob %>"
-
-    compass:
-      sassPrep:
-        options:
-          sassDir: "<%= cfg.app %>"
-          specify: "<%= cfg.sassSourceGlob %>"
-          cssDir: "<%= cfg.temp %>"
-          outputStyle: "compact"
-          noLineComments: true
+        files: [
+          expand: true
+          cwd:  '<%= cfg.app %>'
+          src:  '<%= cfg.sassSourceGlob %>'
+          dest: '<%= cfg.app %>' # Create css files as siblings of sass files
+          ext:  '.css'
+        ]
 
     # https://github.com/jrburke/r.js/blob/master/build/example.build.js
     requirejs:
@@ -206,37 +208,10 @@ module.exports = (grunt) ->
       options:
         dirs: ["<%= cfg.dist %>"]
 
-    imagemin:
-      dist:
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>/images"
-          src: "{,*/}*.{png,jpg,jpeg}"
-          dest: "<%= cfg.dist %>/images"
-        ]
-
     cssmin:
-      dev:
-        options:
-          report: 'min'
-        files:
-          "<%= cfg.dev %>/all-min.css": "<%= cfg.cssSourceGlob %>"
-      dist:
-        options:
-          #banner: '/* Copyright 2013 TidePool, Inc */'
-          report: 'min'
-        files:
-          "<%= cfg.dist %>/all-min.css": "<%= cfg.cssSourceGlob %>"
-
-    htmlmin:
-      dist:
-        options: {}
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>"
-          src: "index.html"
-          dest: "<%= cfg.dist %>"
-        ]
+      ify:
+        options: report: 'min'
+        files: "<%= grunt.option('target') %>/all-min.css": "<%= cfg.cssSourceGlob %>"
 
     replace:
       options:
@@ -313,13 +288,6 @@ module.exports = (grunt) ->
           src: "**/*.*"
           dest: "<%= cfg.research %>"
         ]
-      toTimestamp:
-        files: [
-          expand: true
-          cwd: "<%= cfg.dist %>"
-          src: "**/*.{html,ico,png,jpg,js,css,txt}" # Whitelist only certain files. Careful, don't send up the .env files here.
-          dest: "builds/<%= cfg.timestamp %>"
-        ]
 
     aws_s3:
       options:
@@ -336,8 +304,8 @@ module.exports = (grunt) ->
       deploy:
         files: [
           expand: true
-          cwd: "<%= cfg.dist %>"
-          src: '**'
+          cwd: "<%= cfg.dist %>/<%= cfg.timestamp %>"
+          src: '**/*.{html,js,css}' # keep it lightweight to save data transfer dollars until I get this figured out :)
           dest: '<%= cfg.timestamp %>/'
         ]
 
@@ -406,7 +374,6 @@ module.exports = (grunt) ->
     "requirejs"
     "copy:requireJsPost"
     "copy:dist"
-    "htmlmin"
     "clean:temp"
   ]
 
@@ -423,4 +390,52 @@ module.exports = (grunt) ->
   grunt.registerTask "ds", ['dist', 'distServer']
   grunt.registerTask "t", "test"
   grunt.registerTask "default", 'server'
+
+
+
+
+  # Set the output path for built files.
+  # Most tasks will key off this so it is a prerequisite for running any grunt task.
+  setPath = ->
+    if grunt.option 'dev'
+      grunt.option 'target', buildConfig.dev
+    else if grunt.option 'dist'
+      grunt.option 'target', "#{buildConfig.dist}/#{buildConfig.timestamp}"
+    else # Default path
+      grunt.option 'target', buildConfig.dev
+    grunt.log.writeln "Output path set to: `#{grunt.option 'target'}`"
+    targets = []
+    targets.push target for target of TARGETS
+    grunt.log.writeln "You can set targets using grunt options, such as `--dev`"
+    grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
+
+  setPath()
+
+
+
+#  grunt.registerTask 'setPath', 'Sets the output path', (dest) ->
+#    if      dest is TARGETS.dist
+#      grunt.option 'target', "#{buildConfig.dist}/#{buildConfig.timestamp}"
+#    else if dest is TARGETS.dev
+#      grunt.option 'target', buildConfig.dev
+#    else
+#      grunt.option 'target', dest
+#    grunt.log.writeln "Output path set to: #{grunt.option 'target'}"
+
+
+#  grunt.registerTask("setBuildType", "Set the build type. Either build or local", (val) ->
+#    grunt.log.writeln val + " :setBuildType val"
+#    global.buildType = val
+#
+#  grunt.registerTask("setOutput", "Set the output folder for the build.", ->
+#    if global.buildType is 'dev'
+#      global.outputPath = MACHINE_PATH
+#    else if global.buildType is 'dist'
+#      global.outputPath = LOCAL_PATH
+#    if grunt.option "target"
+#      global.outputPath = grunt.option "target"
+#    grunt.option "target", global.outputPath
+#    grunt.log.writeln() "Output path: " + grunt.option("target") )
+
+
 
