@@ -6,7 +6,6 @@
 .gameResultsPage .result.reactionTime .metric .holder label
   font-size: 80px // Bigger, but only on the results page. Dashboard doesn't have that much room
 
-
 .result.reactionTime
   $colorFastestMild: lighten($colorFastest, 35%)
   $colorSlowestMild: lighten($colorSlowest, 27%)
@@ -36,7 +35,6 @@
     //background: $colorBackgroundWarm
     overflow: hidden
 
-
   .metric.good
     //bottom: 35px
     background: $colorFastestMild
@@ -46,7 +44,6 @@
     //top: 75px
     background: $colorSlowestMild
     margin: 0 $spaceLil 0 $spaceLil/2
-
 
   .metric .holder
     position: absolute
@@ -85,8 +82,7 @@
   .metric.bad small
     color: $colorSlowest
 
-
-  // The up and down arrow shapes
+  // ---------------------------------- The up and down arrow shapes
   .metric.good:after,
   .metric.bad:after
     content: ''
@@ -105,5 +101,3 @@
     bottom: 0
     border-bottom: $spaceTiny*2 solid white
     border-top: $space + $spaceLil solid $colorSlowestMild
-
-
