@@ -11,8 +11,8 @@ module.exports = (grunt) ->
 
   # Enum for target switching behavior
   TARGETS =
-    dev: 'dev'
-    dist: 'dist'
+    dev:      'dev'
+    dist:     'dist'
     research: 'research'
 
   # configurable paths and globs
@@ -27,20 +27,19 @@ module.exports = (grunt) ->
       "**/*.sass"
       "!bower_components/*"
     ]
-    cssSourceGlob: [
-#      "<%= cfg.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
-      "<%= cfg.app %>/styles/gfx.css"
-      "<%= cfg.temp %>/**/*.css"
-      "!<%= cfg.temp %>/library.css"
+    coffeeSourceGlob: [
+      "**/*.coffee"
+      "!**/*.spec.coffee"
+      "!bower_components/**/*.coffee"
     ]
+    coffeeSpecGlob: '**/*.spec.coffee'
+    cssSourceGlob: "<%= cfg.app %>/**/*.css"
     horseAndBuggyJsGlob: [
       "bower_components/**/{*.js,*.css}"
       "bower_components_ext/*.js"
       "scripts/vendor/*.js"
     ]
-    handlebarsGlob: [
-      "**/*.hbs"
-    ]
+    handlebarsGlob: "**/*.hbs"
     imagesGlob: [
       "images/**/{*.png,*.jpg,*.jpeg}"
       "apple*.png"
@@ -73,38 +72,25 @@ module.exports = (grunt) ->
 
     watch:
 
-      hbs:
-        files: ["<%= cfg.app %>/**/*.hbs"]
-        tasks: ["livereload"]
-
-      coffee:
-        files: ["<%= cfg.app %>/**/*.coffee"]
-        tasks: ["coffee:dev", "replace:dev"]
-
-      coffeeTest:
-        files: ["<%= cfg.app %>/**/*.spec.coffee"]
-        tasks: ["coffee:spec"]
+      css:
+        files: '<%= cfg.cssSourceGlob %>'
+        tasks: 'cssmin'
 
       specScribe:
         files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
         tasks: ["exec:scribeDevSpecs", "livereload"]
 
-      compass:
-        files: "<%= cfg.sassSourceGlob %>"
-        tasks: ["compass", "cssmin:dev", "clean:temp", "livereload"]
-
       libraryCss:
-        files: "<%= cfg.temp %>/library.css"
+        files: "<%= cfg.app %>/library.css"
         tasks: "copy:libraryCss"
 
-      livereload:
+      deployedFiles:
         files: [
-          "<%= cfg.app %>/*.html"
-          "<%= cfg.dev %>/spec.html"
-          "<%= cfg.dev %>/**/*.css"
-          "<%= cfg.app %>/library.css"
-          "<%= cfg.dev %>/**/*.js"
-          "<%= cfg.app %>/**/*.{png,jpg}"
+          "<%= grunt.option('target') %>/**/*.html"
+          "<%= grunt.option('target') %>/**/*.css"
+          "<%= grunt.option('target') %>/**/*.js"
+          "<%= grunt.option('target') %>/<%= cfg.handlebarsGlob %>"
+          "<%= grunt.option('target') %>/**/*.{png,jpg}"
         ]
         tasks: ["livereload"]
 
@@ -117,38 +103,56 @@ module.exports = (grunt) ->
     coffee:
       options:
         bare: true
-      temp:
-          files: [
-            expand: true
-            cwd: "<%= cfg.app %>"
-            src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-            dest: "<%= cfg.temp %>"
-            ext: ".js"
-          ]
-      dev:
+        sourceMap: true
+      cup:
         files: [
           expand: true
-          cwd: "<%= cfg.app %>"
-          src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-          dest: "<%= cfg.dev %>"
-          ext: ".js"
+          cwd:  '<%= cfg.app %>'
+          src:  '<%= cfg.coffeeSourceGlob %>'
+          dest: '<%= cfg.app %>' # Create compiled files as siblings of source files
+          ext:  '.js'
         ]
       spec:
+        options: sourceMap: false
         files: [
           expand: true
-          cwd: "<%= cfg.app %>"
-          src: "**/*.spec.coffee"
-          dest: "<%= cfg.dev %>"
-          ext: ".spec.js"
+          cwd:  '<%= cfg.app %>'
+          src:  '<%= cfg.coffeeSpecGlob %>'
+          dest: '<%= cfg.app %>'
+          ext:  '.spec.js'
         ]
-      specToTemp:
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>"
-          src: "**/*.spec.coffee"
-          dest: "<%= cfg.temp %>"
-          ext: ".spec.js"
-        ]
+#      temp:
+#          files: [
+#            expand: true
+#            cwd: "<%= cfg.app %>"
+#            src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
+#            dest: "<%= cfg.temp %>"
+#            ext: ".js"
+#          ]
+#      dev:
+#        files: [
+#          expand: true
+#          cwd: "<%= cfg.app %>"
+#          src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
+#          dest: "<%= cfg.dev %>"
+#          ext: ".js"
+#        ]
+#      spec:
+#        files: [
+#          expand: true
+#          cwd: "<%= cfg.app %>"
+#          src: "**/*.spec.coffee"
+#          dest: "<%= cfg.dev %>"
+#          ext: ".spec.js"
+#        ]
+#      specToTemp:
+#        files: [
+#          expand: true
+#          cwd: "<%= cfg.app %>"
+#          src: "**/*.spec.coffee"
+#          dest: "<%= cfg.temp %>"
+#          ext: ".spec.js"
+#        ]
 
     sass:
       quatch:
@@ -164,6 +168,12 @@ module.exports = (grunt) ->
           dest: '<%= cfg.app %>' # Create css files as siblings of sass files
           ext:  '.css'
         ]
+
+    cssmin:
+      ify:
+        options: report: 'min'
+        files: "<%= grunt.option('target') %>/all-min.css": "<%= cfg.cssSourceGlob %>"
+
 
     # https://github.com/jrburke/r.js/blob/master/build/example.build.js
     requirejs:
@@ -207,11 +217,6 @@ module.exports = (grunt) ->
       css: ["<%= cfg.dist %>/styles/{,*/}*.css"]
       options:
         dirs: ["<%= cfg.dist %>"]
-
-    cssmin:
-      ify:
-        options: report: 'min'
-        files: "<%= grunt.option('target') %>/all-min.css": "<%= cfg.cssSourceGlob %>"
 
     replace:
       options:

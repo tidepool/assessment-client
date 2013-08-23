@@ -7,7 +7,9 @@ app/bower_components
 .DS_Store
 .idea
 .env
-app/scripts/app_secrets_dev.js
+.env.json
 *.css
 !gfx.css
-.env.json
+*.js.map
+*.js
+!scripts/vendor/*.js
