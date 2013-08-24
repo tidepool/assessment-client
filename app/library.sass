@@ -4,120 +4,122 @@
 
 
 
-body
+body.componentLibrary
   max-width: 700px
   margin: 50px auto
 
-h2
-  margin-top: 50px
 
-.modal h2
-  margin-top: 10px
+.componentLibrary
+  h2
+    margin-top: 50px
+
+  .modal h2
+    margin-top: 10px
 
 
 
 
-// ------------------------------------------ Colors
-.swatch
-  display: inline-block
-  width: $spaceBig
-  height: $spaceBig
-  margin: 0 $spaceTiny $spaceTiny 0
-  box-sizing: border-box
-  border: $spaceTiny solid white
-  box-shadow: 0 1px 1px 0 $shadeLight
-  cursor: pointer
-  +transitionable
-.swatch:hover
-  +transform( translateY(-3px) )
-  box-shadow: 0 4px 3px 0 $shadeLight
-.swatch:hover:after
-  position: absolute
-  top: 110%
-  left: 0
-  color: $colorQuiet
-  font-size: $fontSizeTiny
-  content: attr(title)
-  background-color: $highlightThick
-  padding: $spaceTiny
+  // ------------------------------------------ Colors
+  .swatch
+    display: inline-block
+    width: $spaceBig
+    height: $spaceBig
+    margin: 0 $spaceTiny $spaceTiny 0
+    box-sizing: border-box
+    border: $spaceTiny solid white
+    box-shadow: 0 1px 1px 0 $shadeLight
+    cursor: pointer
+    +transitionable
+  .swatch:hover
+    +transform( translateY(-3px) )
+    box-shadow: 0 4px 3px 0 $shadeLight
+  .swatch:hover:after
+    position: absolute
+    top: 110%
+    left: 0
+    color: $colorQuiet
+    font-size: $fontSizeTiny
+    content: attr(title)
+    background-color: $highlightThick
+    padding: $spaceTiny
 
-// Tidepool Colors
-.colorBrand
-  background-color: $colorBrand
-.colorBrand1
-  background-color: $colorBrand1
-.colorBrand2
-  background-color: $colorBrand2
-.colorBrand3
-  background-color: $colorBrand3
-.colorBrand4
-  background-color: $colorBrand4
-.colorBrand5
-  background-color: $colorBrand5
+  // Tidepool Colors
+  .colorBrand
+    background-color: $colorBrand
+  .colorBrand1
+    background-color: $colorBrand1
+  .colorBrand2
+    background-color: $colorBrand2
+  .colorBrand3
+    background-color: $colorBrand3
+  .colorBrand4
+    background-color: $colorBrand4
+  .colorBrand5
+    background-color: $colorBrand5
 
-.colorBrandContrast
-  background-color: $colorBrandContrast
-.colorBrandContrastLight
-  background-color: $colorBrandContrastLight
-.colorBrandContrastNeutral
-  background-color: $colorBrandContrastNeutral
-.colorBrandContrastNeutralLight
-  background-color: $colorBrandContrastNeutralLight
-.colorBackground
-  background-color: $colorBackground
-.colorForeground
-  background-color: $colorForeground
-.colorForegroundMild
-  background-color: $colorForegroundMild
+  .colorBrandContrast
+    background-color: $colorBrandContrast
+  .colorBrandContrastLight
+    background-color: $colorBrandContrastLight
+  .colorBrandContrastNeutral
+    background-color: $colorBrandContrastNeutral
+  .colorBrandContrastNeutralLight
+    background-color: $colorBrandContrastNeutralLight
+  .colorBackground
+    background-color: $colorBackground
+  .colorForeground
+    background-color: $colorForeground
+  .colorForegroundMild
+    background-color: $colorForegroundMild
 
-// Semantic Colors
-.colorGood
-  background-color: $colorGood
-.colorGoodLight
-  background-color: $colorGoodLight
-.colorInfo
-  background-color: $colorInfo
-.colorInfoLight
-  background-color: $colorInfoLight
-.colorInfoDark
-  background-color: $colorInfoDark
-.colorQuestion
-  background-color: $colorQuestion
-.colorWarn
-  background-color: $colorWarn
-.colorWarnBright
-  background-color: $colorWarnBright
-.colorBad
-  background-color: $colorBad
-.colorQuiet
-  background-color: $colorQuiet
-.colorVeryQuiet
-  background-color: $colorVeryQuiet
-.colorLink
-  background-color: $colorLink
+  // Semantic Colors
+  .colorGood
+    background-color: $colorGood
+  .colorGoodLight
+    background-color: $colorGoodLight
+  .colorInfo
+    background-color: $colorInfo
+  .colorInfoLight
+    background-color: $colorInfoLight
+  .colorInfoDark
+    background-color: $colorInfoDark
+  .colorQuestion
+    background-color: $colorQuestion
+  .colorWarn
+    background-color: $colorWarn
+  .colorWarnBright
+    background-color: $colorWarnBright
+  .colorBad
+    background-color: $colorBad
+  .colorQuiet
+    background-color: $colorQuiet
+  .colorVeryQuiet
+    background-color: $colorVeryQuiet
+  .colorLink
+    background-color: $colorLink
 
-// 3rd Party Brand Colors
-.colorFacebook
-  background-color: $colorFacebook
-.colorFitbit
-  background-color: $colorFitbit
-.colorLinkedIn
-  background-color: $colorLinkedIn
-.colorGoogle
-  background-color: $colorGoogle
-.colorTwitter
-  background-color: $colorTwitter
+  // 3rd Party Brand Colors
+  .colorFacebook
+    background-color: $colorFacebook
+  .colorFitbit
+    background-color: $colorFitbit
+  .colorLinkedIn
+    background-color: $colorLinkedIn
+  .colorGoogle
+    background-color: $colorGoogle
+  .colorTwitter
+    background-color: $colorTwitter
 
-// Gender Colors
-.colorMale
-  background-color: $colorMale
-.colorFemale
-  background-color: $colorFemale
+  // Gender Colors
+  .colorMale
+    background-color: $colorMale
+  .colorFemale
+    background-color: $colorFemale
 
-// Game Colors
-.colorFastest
-  background-color: $colorFastest
-.colorSlowest
-  background-color: $colorSlowest
+  // Game Colors
+  .colorFastest
+    background-color: $colorFastest
+  .colorSlowest
+    background-color: $colorSlowest
 
 
