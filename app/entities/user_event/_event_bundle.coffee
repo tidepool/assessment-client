@@ -55,6 +55,7 @@ define [
         events: new Events()
         timezone_offset: (new Date).getTimezoneOffset()
         is_touch: detect.isTouch()
+        is_phone_width: detect.isPhone()
       }
 
 

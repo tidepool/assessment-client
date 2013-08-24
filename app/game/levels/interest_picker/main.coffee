@@ -21,8 +21,10 @@ define [
 ) ->
 
 
-  _symbolPicks = 7
-  _wordPicks = 3
+  _symbolPicks = 5
+  _wordPicks = 5
+  _symbolPicksMax = 8
+  _wordPicksMax = 8
   _tempo = 800 # How often to add a new symbol
   _drawerSize = 53 # how large is the drawer that shows up at the bottom on small screens?
   _margins = 50
@@ -53,7 +55,7 @@ define [
 
     start: ->
       @track Level.EVENTS.start
-#      @collection.reset @collection.shuffle(), { silent:true }
+      @collection.reset @collection.shuffle(), { silent:true }
       @collection.each (model) ->
         view = new BaitView model:model
         model.view = view
@@ -97,7 +99,17 @@ define [
         @_pickRow().append model.view.render().el
       # Counter bound by 0 and the collection.length
       @_i++
-      @_i = 0 if @_i >= @collection.length
+
+      if @_i >= @collection.length
+        @_i = 0
+        @_seenAll = true
+
+      if @_seenAll
+        $('.miniInstructions').html('<span class="good" style="color:black"><strong>All items seen.</strong></span>')
+      else
+        $('.miniInstructions').text("Seen #{@_i} of #{@collection.length} items.")
+
+      @_proceedIfDone()
 
     # Pick a random row to put the bait in, but not if the row is blocked with something.
     # Blocked is determined by last used for now
@@ -133,6 +145,12 @@ define [
       $el.removeClass _shimmerClass
       setTimeout (-> $el.addClass _shimmerClass), 1 # This delay lets the dom notice and animate the added class
 
+    _proceedIfDone: ->
+      if @_hasPickedEnough() and @_seenAll
+        @readyToProceed()
+      else
+        @notReadyToProceed()
+
 
     # ------------------------------------------------------------- Event Handlers
     onChange: (model) ->
@@ -140,16 +158,16 @@ define [
       @_onBaitChange model
       switch model.attributes.type
         when model.TYPES.word
-          if @collection.countPickedWords() > _wordPicks
+          if @collection.countPickedWords() > _wordPicksMax
             model.view.unpick().sayNo()
         when model.TYPES.symbol
-          if @collection.countPickedSymbols() > _symbolPicks
+          if @collection.countPickedSymbols() > _symbolPicksMax
             model.view.unpick().sayNo()
       if @_hasPickedEnough()
         @summaryData =
           symbol_list: @collection.getPickedSymbols()
           word_list:   @collection.getPickedWords()
-        @readyToProceed()
+        @_proceedIfDone()
       else
         @notReadyToProceed()
 
