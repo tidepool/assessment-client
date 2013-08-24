@@ -15,17 +15,19 @@ module.exports = (grunt) ->
     dist:     'dist'
     research: 'research'
 
-  # configurable paths and globs
+  # Configurable paths and globs
   buildConfig =
-    app: "app"
-    dist: "dist"
-    temp: ".tmp"
-    dev: '.devServer'
-    timestamp: grunt.template.today('mm-dd_HHMM')
+    dev: '.build'
     research: "../OAuthProvider/public/"
+    dist: "dist"
+    app: "app"
+    temp: ".tmp"
+    timestamp: grunt.template.today('mm-dd_HHMM')
+    minName: 'all-min'
+    libraryCSS: 'library.css'
     sassSourceGlob: [
       "**/*.sass"
-      "!bower_components/*"
+      "!bower_components/**"
     ]
     coffeeSourceGlob: [
       "**/*.coffee"
@@ -33,19 +35,26 @@ module.exports = (grunt) ->
       "!bower_components/**/*.coffee"
     ]
     coffeeSpecGlob: '**/*.spec.coffee'
-    cssSourceGlob: "<%= cfg.app %>/**/*.css"
-    horseAndBuggyJsGlob: [
-      "bower_components/**/{*.js,*.css}"
-      "bower_components_ext/*.js"
-      "scripts/vendor/*.js"
+    cssSourceGlob: [
+      '<%= cfg.app %>/**/*.css'
+      '!<%= cfg.app %>/bower_components/**'
+      '!<%= cfg.app %>/<%= cfg.libraryCSS %>'
     ]
-    handlebarsGlob: "**/*.hbs"
+    bowerComponents: 'bower_components/**'
     imagesGlob: [
-      "images/**/{*.png,*.jpg,*.jpeg}"
-      "apple*.png"
+      'images/**/{*.png,*.jpg,*.jpeg}'
+      'welcome/**/{*.png,*.jpg,*.jpeg}'
+      'apple*.png'
+      'favicon.ico'
     ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
+
+
+
+
+
+
 
   grunt.initConfig
     cfg: buildConfig
@@ -55,16 +64,16 @@ module.exports = (grunt) ->
       options:
         port: 7000
         hostname: '0.0.0.0' #"localhost" # change this to '0.0.0.0' to access the server from outside
-      livereload:
+      dev:
         options:
           middleware: (connect) ->
             # A grunt variable does not work here
-            [lrSnippet, mountFolder(connect, ".devServer"), mountFolder(connect, "app")]
+            [lrSnippet, mountFolder(connect, ".build")]
       dist:
         options:
-          keepalive: true
+#          keepalive: true
           middleware: (connect) ->
-            [mountFolder(connect, "dist")]
+            [lrSnippet, mountFolder(connect, "dist")]
 
     open:
       devHome:
@@ -74,31 +83,36 @@ module.exports = (grunt) ->
 
       css:
         files: '<%= cfg.cssSourceGlob %>'
-        tasks: 'cssmin'
+        tasks: 'combineCSS'
 
-      specScribe:
-        files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
-        tasks: ["exec:scribeDevSpecs", "livereload"]
+      markup:
+        files: [
+          '<%= cfg.app %>/**/*.html'
+          '<%= cfg.app %>/**/*.hbs'
+        ]
+        tasks: [ 'copy:markup', 'livereload' ]
 
-      libraryCss:
-        files: "<%= cfg.app %>/library.css"
-        tasks: "copy:libraryCss"
+#      specScribe:
+#        files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
+#        tasks: ["exec:scribeDevSpecs", "livereload"]
 
       deployedFiles:
         files: [
-          "<%= grunt.option('target') %>/**/*.html"
-          "<%= grunt.option('target') %>/**/*.css"
-          "<%= grunt.option('target') %>/**/*.js"
-          "<%= grunt.option('target') %>/<%= cfg.handlebarsGlob %>"
-          "<%= grunt.option('target') %>/**/*.{png,jpg}"
+          "<%= grunt.option('target') %>/index.html"
+          "<%= grunt.option('target') %>/spec.html"
+          "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
+#          "<%= grunt.option('target') %>/**/*.js"
+#          "<%= grunt.option('target') %>/**/*.hbs"
+#          "<%= grunt.option('target') %>/**/*.{png,jpg}"
         ]
-        tasks: ["livereload"]
+        tasks: 'livereload'
 
     clean:
-      dev: ["<%= cfg.dev %>", "<%= cfg.temp %>", ".grunt"]
-      temp: "<%= cfg.temp %>"
-      dist: "<%= cfg.dist %>"
-      hbs: "<%= cfg.temp %>/**/*.hbs"
+      target: "<%= grunt.option('target') %>"
+      dev:    "<%= cfg.dev %>"
+      temp:   "<%= cfg.temp %>"
+      dist:   "<%= cfg.dist %>"
+#      hbs:  "<%= cfg.temp %>/**/*.hbs"
 
     coffee:
       options:
@@ -121,45 +135,13 @@ module.exports = (grunt) ->
           dest: '<%= cfg.app %>'
           ext:  '.spec.js'
         ]
-#      temp:
-#          files: [
-#            expand: true
-#            cwd: "<%= cfg.app %>"
-#            src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-#            dest: "<%= cfg.temp %>"
-#            ext: ".js"
-#          ]
-#      dev:
-#        files: [
-#          expand: true
-#          cwd: "<%= cfg.app %>"
-#          src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-#          dest: "<%= cfg.dev %>"
-#          ext: ".js"
-#        ]
-#      spec:
-#        files: [
-#          expand: true
-#          cwd: "<%= cfg.app %>"
-#          src: "**/*.spec.coffee"
-#          dest: "<%= cfg.dev %>"
-#          ext: ".spec.js"
-#        ]
-#      specToTemp:
-#        files: [
-#          expand: true
-#          cwd: "<%= cfg.app %>"
-#          src: "**/*.spec.coffee"
-#          dest: "<%= cfg.temp %>"
-#          ext: ".spec.js"
-#        ]
 
     sass:
       quatch:
         options:
-#          lineNumbers: true #TODO switch on targets and use this to decide whether to add line numbers or not
+          lineNumbers: true #TODO switch on targets and use this to decide whether to add line numbers or not
 #          sourcemap: true #Requires Sass 3.3.0, which can be installed with gem install sass --pre
-          trace: true
+#          trace: true
           style: 'compact'
         files: [
           expand: true
@@ -169,10 +151,15 @@ module.exports = (grunt) ->
           ext:  '.css'
         ]
 
+    concat:
+      enate:
+        src: '<%= cfg.cssSourceGlob %>'
+        dest: "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
+
     cssmin:
       ify:
         options: report: 'min'
-        files: "<%= grunt.option('target') %>/all-min.css": "<%= cfg.cssSourceGlob %>"
+        files: "<%= grunt.option('target') %>/<%= cfg.minName %>.css": "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
 
 
     # https://github.com/jrburke/r.js/blob/master/build/example.build.js
@@ -247,52 +234,52 @@ module.exports = (grunt) ->
         ]
 
     copy:
-      libraryCss:
-        src: "<%= cfg.temp %>/library.css"
-        dest: "<%= cfg.app %>/library.css"
-      dist:
+      markup:
         files: [
           expand: true
           cwd: "<%= cfg.app %>"
-          dest: "<%= cfg.dist %>"
+          dest: "<%= grunt.option('target') %>"
           src: [
-            "welcome/**"
-            ".htaccess"
-            "*.html"
-            "!spec.html"
-            "*.{ico,txt}"
-            #"<%= cfg.horseAndBuggyJsGlob %>"
-            #"<%= cfg.handlebarsGlob %>"
-            "<%= cfg.imagesGlob %>"
+            '**/*.html'
+            '**/*.hbs'
           ]
         ]
-      requireJsPrep:
+      target:
         files: [
           expand: true
           cwd: "<%= cfg.app %>"
-          dest: "<%= cfg.temp %>"
+          dest: "<%= grunt.option('target') %>"
           src: [
-            "<%= cfg.horseAndBuggyJsGlob %>"
-            "<%= cfg.handlebarsGlob %>"
+            '**/*.js'
+            '**/*.css.map'
+            '*.txt'
+            '<%= cfg.imagesGlob %>'
+            '<%= cfg.bowerComponents %>'
+            '.htaccess'
+            'library.css'
           ]
         ]
-      requireJsPost:
-        files: [
-          expand: true
-          cwd: "<%= cfg.temp %>"
-          dest: "<%= cfg.dist %>"
-          src: [
-            "require_config.js"
-            "<%= cfg.horseAndBuggyJsGlob %>"
-          ]
-        ]
-      distToPublic:
-        files: [
-          expand: true
-          cwd: "<%= cfg.dist %>"
-          src: "**/*.*"
-          dest: "<%= cfg.research %>"
-        ]
+#      requireJsPrep:
+#        files: [
+#          expand: true
+#          cwd: "<%= cfg.app %>"
+#          dest: "<%= cfg.temp %>"
+#          src: [
+#            "<%= cfg.horseAndBuggyJsGlob %>"
+#            "**/*.hbs"
+#          ]
+#        ]
+#      requireJsPost:
+#        files: [
+#          expand: true
+#          cwd: "<%= cfg.temp %>"
+#          dest: "<%= cfg.dist %>"
+#          src: [
+#            "require_config.js"
+#            "<%= cfg.horseAndBuggyJsGlob %>"
+#          ]
+#        ]
+
 
     aws_s3:
       options:
@@ -330,36 +317,25 @@ module.exports = (grunt) ->
 
   grunt.renameTask "regarde", "watch"
 
-  grunt.registerTask "build", [
-    "clean:dev"
-    "clean:temp"
-    "exec:convert_jqueryui_amd"
-    "coffee:dev"
-    "replace:dev"
-    "coffee:spec"
-    "compass"
-    "cssmin:dev"
-    "exec:scribeDevSpecs"
-    "copy:libraryCss"
-  ]
+#  grunt.registerTask "build", [
+#    "clean:dev"
+#    "clean:temp"
+#    "exec:convert_jqueryui_amd"
+#    "coffee:dev"
+#    "replace:dev"
+#    "coffee:spec"
+#    "compass"
+#    "cssmin:dev"
+#    "exec:scribeDevSpecs"
+#    "copy:libraryCss"
+#  ]
 
-  grunt.registerTask "devServer", [
-    "livereload-start"
-    "connect:livereload"
-  ]
   grunt.registerTask 'distServer', [
     'open'
     'connect:dist'
   ]
 
-  grunt.registerTask "server", (target) ->
-    return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
-    grunt.task.run [
-      "build"
-      "devServer"
-      "open"
-      "watch"
-    ]
+
 
   grunt.registerTask "test", [
     "build"
@@ -391,7 +367,7 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask 'spec', 'exec:unitTest'
-  grunt.registerTask "s", "server"
+
   grunt.registerTask "ds", ['dist', 'distServer']
   grunt.registerTask "t", "test"
   grunt.registerTask "default", 'server'
@@ -399,48 +375,94 @@ module.exports = (grunt) ->
 
 
 
+
+
+
+
+  # ---------------------------------------------------------------------- v2 Task Definitions
+
+  # precompile
+  # ----------
+  # Turn SASS into CSS as sibling files
+  # Turn Coffeescript into JS as sibling files
+  # Optional to run if you preocompile SASS and Coffeescript on your dev machine
+  grunt.registerTask 'precompile', [ 'sass', 'coffee' ]
+
+
+  # combineCSS
+  # ----------
+  grunt.registerTask 'combineCSS', 'Combines css into one file. With minify if the --dist option is set.', ->
+    grunt.task.run 'concat'
+    grunt.task.run('cssmin') if grunt.option TARGETS.dist # only minify non-dist builds
+
+
+  # build
+  # -----
+  # Clean the target dir
+  # Merge separate css files into a minified one
+  # Move files from the source dir to a build dir
+  grunt.registerTask 'build', 'Clean the target, concat css, and copy static asset files to it',
+    [ 'clean:target', 'combineCSS', 'copy' ]
+
+
+  # server
+  # ------
+  grunt.registerTask 'server', 'Open the target folder as a web server', ->
+    grunt.task.run 'livereload-start'
+    switch grunt.option 'target'
+      when TARGETS.dev  then grunt.task.run 'connect:dev'
+      when TARGETS.dist then grunt.task.run 'connect:dist'
+      else grunt.task.run 'connect:dev'
+    grunt.task.run [
+      'open'
+      'watch'
+    ]
+    #return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # ---------------------------------------------------------------------- Task Shortcuts
+  grunt.registerTask "s", [ 'build', 'server' ]
+
+
+
+
+
+
+
+
+
+
+
+
   # Set the output path for built files.
   # Most tasks will key off this so it is a prerequisite for running any grunt task.
   setPath = ->
-    if grunt.option 'dev'
-      grunt.option 'target', buildConfig.dev
-    else if grunt.option 'dist'
-      grunt.option 'target', "#{buildConfig.dist}/#{buildConfig.timestamp}"
+    if grunt.option TARGETS.dev
+      grunt.option 'target', buildConfig[TARGETS.dev]
+    else if grunt.option TARGETS.dist
+      grunt.option 'target', "#{buildConfig[TARGETS.dist]}/#{buildConfig.timestamp}"
+    else if grunt.option TARGETS.research
+      grunt.option 'target', buildConfig[TARGETS.research]
     else # Default path
       grunt.option 'target', buildConfig.dev
-    grunt.log.writeln "Output path set to: `#{grunt.option 'target'}`"
+    grunt.log.writeln "Grunt output path set to: `#{grunt.option 'target'}`"
     targets = []
     targets.push target for target of TARGETS
     grunt.log.writeln "You can set targets using grunt options, such as `--dev`"
     grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
 
   setPath()
-
-
-
-#  grunt.registerTask 'setPath', 'Sets the output path', (dest) ->
-#    if      dest is TARGETS.dist
-#      grunt.option 'target', "#{buildConfig.dist}/#{buildConfig.timestamp}"
-#    else if dest is TARGETS.dev
-#      grunt.option 'target', buildConfig.dev
-#    else
-#      grunt.option 'target', dest
-#    grunt.log.writeln "Output path set to: #{grunt.option 'target'}"
-
-
-#  grunt.registerTask("setBuildType", "Set the build type. Either build or local", (val) ->
-#    grunt.log.writeln val + " :setBuildType val"
-#    global.buildType = val
-#
-#  grunt.registerTask("setOutput", "Set the output folder for the build.", ->
-#    if global.buildType is 'dev'
-#      global.outputPath = MACHINE_PATH
-#    else if global.buildType is 'dist'
-#      global.outputPath = LOCAL_PATH
-#    if grunt.option "target"
-#      global.outputPath = grunt.option "target"
-#    grunt.option "target", global.outputPath
-#    grunt.log.writeln() "Output path: " + grunt.option("target") )
 
 
 
