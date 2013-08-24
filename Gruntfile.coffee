@@ -68,7 +68,8 @@ module.exports = (grunt) ->
         options:
           middleware: (connect) ->
             # A grunt variable does not work here
-            [lrSnippet, mountFolder(connect, ".build")]
+#            [lrSnippet, mountFolder(connect, ".build")]
+            [lrSnippet, mountFolder(connect, '.build'), mountFolder(connect, 'app')]
       dist:
         options:
 #          keepalive: true
@@ -85,12 +86,13 @@ module.exports = (grunt) ->
         files: '<%= cfg.cssSourceGlob %>'
         tasks: 'combineCSS'
 
-      markup:
+      app:
         files: [
           '<%= cfg.app %>/**/*.html'
           '<%= cfg.app %>/**/*.hbs'
+          '<%= cfg.app %>/**/*.js'
         ]
-        tasks: [ 'copy:markup', 'livereload' ]
+        tasks: 'livereload'
 
 #      specScribe:
 #        files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
@@ -98,8 +100,6 @@ module.exports = (grunt) ->
 
       deployedFiles:
         files: [
-          "<%= grunt.option('target') %>/index.html"
-          "<%= grunt.option('target') %>/spec.html"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
 #          "<%= grunt.option('target') %>/**/*.js"
 #          "<%= grunt.option('target') %>/**/*.hbs"
@@ -164,9 +164,9 @@ module.exports = (grunt) ->
 
     # https://github.com/jrburke/r.js/blob/master/build/example.build.js
     requirejs:
-      dist:
+      allInOne:
         options:
-          mainConfigFile: "<%= cfg.temp %>/require_config.js"
+          mainConfigFile: "<%= cfg.app %>/require_config.js"
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
           include: [
@@ -187,7 +187,7 @@ module.exports = (grunt) ->
           paths:
             jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
             bootstrap: 'empty:'
-          out: '<%= cfg.dist %>/core/main.js'
+          out: '<%= grunt.option("target") %>/core/main.js'
           optimize: "uglify2"
           #optimize: "none"
           generateSourceMaps: true
@@ -234,16 +234,16 @@ module.exports = (grunt) ->
         ]
 
     copy:
-      markup:
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>"
-          dest: "<%= grunt.option('target') %>"
-          src: [
-            '**/*.html'
-            '**/*.hbs'
-          ]
-        ]
+#      markup:
+#        files: [
+#          expand: true
+#          cwd: "<%= cfg.app %>"
+#          dest: "<%= grunt.option('target') %>"
+#          src: [
+#            '**/*.html'
+#            '**/*.hbs'
+#          ]
+#        ]
       target:
         files: [
           expand: true
@@ -309,11 +309,8 @@ module.exports = (grunt) ->
       unitTest:
         command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
 
-      scribeDevSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dev %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
-
-      scribeDistSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dist %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
+      scribeSpecs:
+        command: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"target\") %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
 
   grunt.renameTask "regarde", "watch"
 
@@ -401,8 +398,9 @@ module.exports = (grunt) ->
   # Clean the target dir
   # Merge separate css files into a minified one
   # Move files from the source dir to a build dir
-  grunt.registerTask 'build', 'Clean the target, concat css, and copy static asset files to it',
-    [ 'clean:target', 'combineCSS', 'copy' ]
+  grunt.registerTask 'build', 'Clean the target and build to it', ->
+    grunt.task.run [ 'clean:target', 'combineCSS', 'exec:scribeSpecs' ]
+    grunt.task.run 'requirejs' if grunt.option TARGETS.dist
 
 
   # server
