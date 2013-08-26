@@ -135,9 +135,9 @@ module.exports = (grunt) ->
       cup:
         files: [
           expand: true
-          cwd:  '<%= cfg.src.target %>'
+          cwd:  '<%= cfg.src.parent %>'
           src:  '<%= cfg.coffeeSourceGlob %>'
-          dest: '<%= cfg.src.target %>' # Create compiled files as siblings of source files
+          dest: '<%= cfg.src.parent %>' # Create compiled files as siblings of source files
           ext:  '.js'
         ]
       spec:
@@ -159,9 +159,9 @@ module.exports = (grunt) ->
           style: 'compact'
         files: [
           expand: true
-          cwd:  '<%= cfg.src.target %>'
+          cwd:  '<%= cfg.src.parent %>'
           src:  '<%= cfg.sassSourceGlob %>'
-          dest: '<%= cfg.src.target %>' # Create css files as siblings of sass files
+          dest: '<%= cfg.src.parent %>' # Create css files as siblings of sass files
           ext:  '.css'
         ]
 
