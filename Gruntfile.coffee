@@ -19,15 +19,16 @@ module.exports = (grunt) ->
 
   # Configurable paths and globs
   buildConfig =
-    app: 'app'
     timestamp: timestamp
+    src:
+      parent: 'src'
+      target: 'src/static'
     dev:
       parent: '.build'
       target: ".build/#{timestamp}"
     dist:
       parent: 'dist'
       target: "dist/#{timestamp}"
-    temp: ".tmp"
     research: "../OAuthProvider/public/#{timestamp}/"
     minName: 'all-min'
     libraryCSS: 'library.css'
@@ -42,9 +43,9 @@ module.exports = (grunt) ->
     ]
     coffeeSpecGlob: '**/*.spec.coffee'
     cssSourceGlob: [
-      '<%= cfg.app %>/**/*.css'
-      '!<%= cfg.app %>/bower_components/**'
-      '!<%= cfg.app %>/<%= cfg.libraryCSS %>'
+      '<%= cfg.src.parent %>/**/*.css'
+      '!<%= cfg.src.target %>/bower_components/**'
+      '!<%= cfg.src.parent %>/<%= cfg.libraryCSS %>'
     ]
     bowerComponents: 'bower_components/**'
     imagesGlob: [
@@ -71,13 +72,13 @@ module.exports = (grunt) ->
         port: 7000
         hostname: '0.0.0.0' #"localhost" # change this to '0.0.0.0' to access the server from outside
         target: "<%= grunt.option('target') %>"
+        src: "<%= cfg.src.parent %>"
         dev: "<%= cfg.dev.parent %>"
         dist: "<%= cfg.dist.parent %>"
       dev:
         options:
           middleware: (connect, options) ->
-            [lrSnippet, mountFolder(connect, options.dev)]
-#            [lrSnippet, mountFolder(connect, options.dev), mountFolder(connect, 'app')]
+            [lrSnippet, mountFolder(connect, options.dev), mountFolder(connect, options.src)]
       dist:
         options:
 #          keepalive: true
@@ -91,11 +92,11 @@ module.exports = (grunt) ->
     watch:
 
       appHtml:
-        files: [ '<%= cfg.app %>/*.html', '!<%= cfg.app %>/<%= specFile %>.html' ]
+        files: [ '<%= cfg.src.parent %>/*.html', '!<%= cfg.src.parent %>/<%= specFile %>.html' ]
         tasks: [ 'copy:html', 'includereplace' ]
 
       specHtml:
-        files: '<%= cfg.app %>/<%= specFile %>'
+        files: '<%= cfg.src.parent %>/<%= specFile %>'
         tasks: [ 'exec:scribeSpecs', 'includereplace' ]
 
       css:
@@ -104,14 +105,15 @@ module.exports = (grunt) ->
 
       app:
         files: [
-          '<%= cfg.app %>/**/*.hbs'
-          '<%= cfg.app %>/**/*.js'
+          '<%= cfg.src.target %>/**/*.hbs'
+          '<%= cfg.src.target %>/**/*.js'
         ]
         tasks: 'livereload'
 
       deployedFiles:
         files: [
           "<%= grunt.option('targetParent') %>/*.html"
+          "<%= grunt.option('targetParent') %>/scout.js"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.js"
 #          "<%= grunt.option('target') %>/**/*.js"
@@ -123,7 +125,6 @@ module.exports = (grunt) ->
     clean:
       target: "<%= grunt.option('target') %>"
       dev:    "<%= cfg.dev.parent %>"
-      temp:   "<%= cfg.temp %>"
       dist:   "<%= cfg.dist.parent %>"
 #      hbs:  "<%= cfg.temp %>/**/*.hbs"
 
@@ -134,18 +135,18 @@ module.exports = (grunt) ->
       cup:
         files: [
           expand: true
-          cwd:  '<%= cfg.app %>'
+          cwd:  '<%= cfg.src.target %>'
           src:  '<%= cfg.coffeeSourceGlob %>'
-          dest: '<%= cfg.app %>' # Create compiled files as siblings of source files
+          dest: '<%= cfg.src.target %>' # Create compiled files as siblings of source files
           ext:  '.js'
         ]
       spec:
         options: sourceMap: false
         files: [
           expand: true
-          cwd:  '<%= cfg.app %>'
+          cwd:  '<%= cfg.src.target %>'
           src:  '<%= cfg.coffeeSpecGlob %>'
-          dest: '<%= cfg.app %>'
+          dest: '<%= cfg.src.target %>'
           ext:  '.spec.js'
         ]
 
@@ -158,9 +159,9 @@ module.exports = (grunt) ->
           style: 'compact'
         files: [
           expand: true
-          cwd:  '<%= cfg.app %>'
+          cwd:  '<%= cfg.src.target %>'
           src:  '<%= cfg.sassSourceGlob %>'
-          dest: '<%= cfg.app %>' # Create css files as siblings of sass files
+          dest: '<%= cfg.src.target %>' # Create css files as siblings of sass files
           ext:  '.css'
         ]
 
@@ -179,7 +180,7 @@ module.exports = (grunt) ->
     requirejs:
       allInOne:
         options:
-          mainConfigFile: "<%= cfg.app %>/require_config.js"
+          mainConfigFile: "<%= cfg.src.parent %>/_require_config.js"
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
           include: [
@@ -225,7 +226,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           flatten: true
-          src: '<%= cfg.app %>/core/config.js'
+          src: '<%= cfg.src.target %>/core/config.js'
           dest: "<%= grunt.option('target') %>/core/"
         ]
       html:
@@ -241,7 +242,7 @@ module.exports = (grunt) ->
     includereplace:
       targetParent:
         options:
-          includesDir: '<%= cfg.app %>'
+          includesDir: '<%= cfg.src.parent %>'
         files: [
           expand: true
           cwd: "<%= grunt.option('targetParent') %>"
@@ -252,14 +253,14 @@ module.exports = (grunt) ->
       html:
         files: [
           expand: true
-          cwd: "<%= cfg.app %>"
+          cwd: "<%= cfg.src.parent %>"
           src: '{index.html,library.html}'
           dest: "<%= grunt.option('targetParent') %>"
         ]
       dist:
         files: [
           expand: true
-          cwd: "<%= cfg.app %>"
+          cwd: "<%= cfg.src.target %>"
           dest: "<%= grunt.option('target') %>"
           src: [
             "require_config.js"
@@ -271,7 +272,7 @@ module.exports = (grunt) ->
 #      requireJsPrep:
 #        files: [
 #          expand: true
-#          cwd: "<%= cfg.app %>"
+#          cwd: "<%= cfg.src.target %>"
 #          dest: "<%= cfg.temp %>"
 #          src: [
 #            "<%= cfg.horseAndBuggyJsGlob %>"
@@ -312,14 +313,14 @@ module.exports = (grunt) ->
 
     exec:
       convert_jqueryui_amd:
-        command: "jqueryui-amd <%= cfg.app %>/bower_components/jquery-ui"
+        command: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
         stdout: true
 
       unitTest:
         command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
 
       scribeSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
+        command: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.src.parent %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
 
   grunt.renameTask "regarde", "watch"
 

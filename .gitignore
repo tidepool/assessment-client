@@ -3,7 +3,7 @@ dist/
 .build/
 .tmp/
 .sass-cache
-app/bower_components
+src/static/bower_components
 .DS_Store
 .idea
 .env
