@@ -15,14 +15,20 @@ module.exports = (grunt) ->
     dist:     'dist'
     research: 'research'
 
+  timestamp = grunt.template.today('mm-dd_HHMM')
+
   # Configurable paths and globs
   buildConfig =
-    dev: '.build'
-    research: "../OAuthProvider/public/"
-    dist: "dist"
-    app: "app"
+    app: 'app'
+    timestamp: timestamp
+    dev:
+      parent: '.build'
+      target: ".build/#{timestamp}"
+    dist:
+      parent: 'dist'
+      target: "dist/#{timestamp}"
     temp: ".tmp"
-    timestamp: grunt.template.today('mm-dd_HHMM')
+    research: "../OAuthProvider/public/#{timestamp}/"
     minName: 'all-min'
     libraryCSS: 'library.css'
     sassSourceGlob: [
@@ -64,17 +70,19 @@ module.exports = (grunt) ->
       options:
         port: 7000
         hostname: '0.0.0.0' #"localhost" # change this to '0.0.0.0' to access the server from outside
+        target: "<%= grunt.option('target') %>"
+        dev: "<%= cfg.dev.parent %>"
+        dist: "<%= cfg.dist.parent %>"
       dev:
         options:
-          middleware: (connect) ->
-            # A grunt variable does not work here
-#            [lrSnippet, mountFolder(connect, ".build")]
-            [lrSnippet, mountFolder(connect, '.build'), mountFolder(connect, 'app')]
+          middleware: (connect, options) ->
+            [lrSnippet, mountFolder(connect, options.dev)]
+#            [lrSnippet, mountFolder(connect, options.dev), mountFolder(connect, 'app')]
       dist:
         options:
 #          keepalive: true
-          middleware: (connect) ->
-            [lrSnippet, mountFolder(connect, "dist")]
+          middleware: (connect, options) ->
+            [lrSnippet, mountFolder(connect, options.dist)]
 
     open:
       devHome:
@@ -82,25 +90,30 @@ module.exports = (grunt) ->
 
     watch:
 
+      appHtml:
+        files: [ '<%= cfg.app %>/*.html', '!<%= cfg.app %>/<%= specFile %>.html' ]
+        tasks: [ 'copy:html', 'includereplace' ]
+
+      specHtml:
+        files: '<%= cfg.app %>/<%= specFile %>'
+        tasks: [ 'exec:scribeSpecs', 'includereplace' ]
+
       css:
         files: '<%= cfg.cssSourceGlob %>'
         tasks: 'combineCSS'
 
       app:
         files: [
-          '<%= cfg.app %>/**/*.html'
           '<%= cfg.app %>/**/*.hbs'
           '<%= cfg.app %>/**/*.js'
         ]
         tasks: 'livereload'
 
-#      specScribe:
-#        files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
-#        tasks: ["exec:scribeDevSpecs", "livereload"]
-
       deployedFiles:
         files: [
+          "<%= grunt.option('targetParent') %>/*.html"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
+          "<%= grunt.option('target') %>/<%= cfg.minName %>.js"
 #          "<%= grunt.option('target') %>/**/*.js"
 #          "<%= grunt.option('target') %>/**/*.hbs"
 #          "<%= grunt.option('target') %>/**/*.{png,jpg}"
@@ -109,9 +122,9 @@ module.exports = (grunt) ->
 
     clean:
       target: "<%= grunt.option('target') %>"
-      dev:    "<%= cfg.dev %>"
+      dev:    "<%= cfg.dev.parent %>"
       temp:   "<%= cfg.temp %>"
-      dist:   "<%= cfg.dist %>"
+      dist:   "<%= cfg.dist.parent %>"
 #      hbs:  "<%= cfg.temp %>/**/*.hbs"
 
     coffee:
@@ -194,17 +207,6 @@ module.exports = (grunt) ->
           preserveLicenseComments: false
           skipPragmas: true # we don't use them, and they may slow the build
 
-    useminPrepare:
-      html: "<%= cfg.app %>/spec.html"
-      options:
-        dest: "<%= cfg.dev %>"
-
-    usemin:
-      html: ["<%= cfg.dist %>/{,*/}*.html"]
-      css: ["<%= cfg.dist %>/styles/{,*/}*.css"]
-      options:
-        dirs: ["<%= cfg.dist %>"]
-
     replace:
       options:
         variables:
@@ -217,44 +219,51 @@ module.exports = (grunt) ->
           #fbSecret:            "<%= env.fbSecret %>" # not used
           isDev:               "<%= env.isDev %>"
           timestamp:           "<%= cfg.timestamp %>"
+          buildDir:            "<%= cfg.timestamp %>"
         prefix: '@@'
-      dist:
+      config:
         files: [
           expand: true
           flatten: true
-          src: ["<%= cfg.temp %>/core/config.js"]
-          dest: "<%= cfg.temp %>/core/"
+          src: '<%= cfg.app %>/core/config.js'
+          dest: "<%= grunt.option('target') %>/core/"
         ]
-      dev:
+      html:
         files: [
           expand: true
-          flatten: true
-          src: ["<%= cfg.dev %>/core/config.js"]
-          dest: "<%= cfg.dev %>/core/"
+#          flatten: true
+          cwd: "<%= grunt.option('targetParent') %>"
+          src: "*.html"
+          dest: "<%= grunt.option('targetParent') %>"
         ]
 
+
+    includereplace:
+      targetParent:
+        options:
+          includesDir: '<%= cfg.app %>'
+        files: [
+          expand: true
+          cwd: "<%= grunt.option('targetParent') %>"
+          src: '*.html'
+          dest: "<%= grunt.option('targetParent') %>"
+        ]
     copy:
-#      markup:
-#        files: [
-#          expand: true
-#          cwd: "<%= cfg.app %>"
-#          dest: "<%= grunt.option('target') %>"
-#          src: [
-#            '**/*.html'
-#            '**/*.hbs'
-#          ]
-#        ]
-      target:
+      html:
+        files: [
+          expand: true
+          cwd: "<%= cfg.app %>"
+          src: '{index.html,library.html}'
+          dest: "<%= grunt.option('targetParent') %>"
+        ]
+      dist:
         files: [
           expand: true
           cwd: "<%= cfg.app %>"
           dest: "<%= grunt.option('target') %>"
           src: [
-            '**/*.js'
-            '**/*.css.map'
-            '*.txt'
-            '<%= cfg.imagesGlob %>'
-            '<%= cfg.bowerComponents %>'
+            "require_config.js"
+            "<%= cfg.horseAndBuggyJsGlob %>"
             '.htaccess'
             'library.css'
           ]
@@ -310,7 +319,7 @@ module.exports = (grunt) ->
         command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
 
       scribeSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"target\") %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
+        command: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
 
   grunt.renameTask "regarde", "watch"
 
@@ -327,35 +336,20 @@ module.exports = (grunt) ->
 #    "copy:libraryCss"
 #  ]
 
-  grunt.registerTask 'distServer', [
-    'open'
-    'connect:dist'
-  ]
-
-
-
-  grunt.registerTask "test", [
-    "build"
-    "devServer"
-    "exec:unitTest"
-  ]
-
-  grunt.registerTask "dist", [
-    "clean:dist"
-    "exec:convert_jqueryui_amd"
-    "clean:temp"
-    "compass"
-    "cssmin:dist"
-    "coffee:temp"
-    "replace:dist"
-    "copy:requireJsPrep"
-    "requirejs"
-    "copy:requireJsPost"
-    "copy:dist"
-    "clean:temp"
-  ]
-
-  grunt.registerTask "distTest", [ 'dist', 'exec:unitTest']
+#  grunt.registerTask "dist", [
+#    "clean:dist"
+#    "exec:convert_jqueryui_amd"
+#    "clean:temp"
+#    "compass"
+#    "cssmin:dist"
+#    "coffee:temp"
+#    "replace:dist"
+#    "copy:requireJsPrep"
+#    "requirejs"
+#    "copy:requireJsPost"
+#    "copy:dist"
+#    "clean:temp"
+#  ]
 
   grunt.registerTask "research", [
     "dist"
@@ -396,21 +390,29 @@ module.exports = (grunt) ->
   # build
   # -----
   # Clean the target dir
-  # Merge separate css files into a minified one
+  # Merge separate css files into a single file
   # Move files from the source dir to a build dir
+  # Copy markup files and parse them for replacements
   grunt.registerTask 'build', 'Clean the target and build to it', ->
-    grunt.task.run [ 'clean:target', 'combineCSS', 'exec:scribeSpecs' ]
-    grunt.task.run 'requirejs' if grunt.option TARGETS.dist
+    grunt.task.run [
+      "exec:convert_jqueryui_amd"
+      'clean:target'     # clean out the target timestamp dir
+      'combineCSS'       # Merge css into a single file and put that file in the target timestamp dir
+      'copy:html'        # Move all html to the target parent dir
+      'exec:scribeSpecs' # find all .spec.js files and write them into spec.html
+      'includereplace'   # include files and parse variables
+      'replace:html'     # parse build variables in html files
+    ]
+    if grunt.option TARGETS.dist
+      grunt.task.run 'requirejs'
 
 
   # server
   # ------
   grunt.registerTask 'server', 'Open the target folder as a web server', ->
     grunt.task.run 'livereload-start'
-    switch grunt.option 'target'
-      when TARGETS.dev  then grunt.task.run 'connect:dev'
-      when TARGETS.dist then grunt.task.run 'connect:dist'
-      else grunt.task.run 'connect:dev'
+    if grunt.option TARGETS.dist then grunt.task.run 'connect:dist'
+    else grunt.task.run 'connect:dev'
     grunt.task.run [
       'open'
       'watch'
@@ -418,7 +420,9 @@ module.exports = (grunt) ->
     #return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
 
 
-
+  # test
+  # ----
+  grunt.registerTask 'test', 'Start a server and run unit tests. build task is a prereq', [ 'connect:dev', 'exec:unitTest' ]
 
 
 
@@ -430,6 +434,7 @@ module.exports = (grunt) ->
 
 
   # ---------------------------------------------------------------------- Task Shortcuts
+  grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
   grunt.registerTask "s", [ 'build', 'server' ]
 
 
@@ -446,14 +451,12 @@ module.exports = (grunt) ->
   # Set the output path for built files.
   # Most tasks will key off this so it is a prerequisite for running any grunt task.
   setPath = ->
-    if grunt.option TARGETS.dev
-      grunt.option 'target', buildConfig[TARGETS.dev]
-    else if grunt.option TARGETS.dist
-      grunt.option 'target', "#{buildConfig[TARGETS.dist]}/#{buildConfig.timestamp}"
-    else if grunt.option TARGETS.research
-      grunt.option 'target', buildConfig[TARGETS.research]
+    if grunt.option TARGETS.dev or TARGETS.dist or TARGETS.research
+      grunt.option 'target', buildConfig[grunt.option].target
+      grunt.option 'targetParent', buildConfig[grunt.option].parent
     else # Default path
-      grunt.option 'target', buildConfig.dev
+      grunt.option 'target', buildConfig.dev.target
+      grunt.option 'targetParent', buildConfig.dev.parent
     grunt.log.writeln "Grunt output path set to: `#{grunt.option 'target'}`"
     targets = []
     targets.push target for target of TARGETS

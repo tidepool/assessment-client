@@ -208,151 +208,151 @@
 
     <script src="bower_components/requirejs/require.js"></script>
     <script>
+        //https://github.com/alanshaw/grunt-include-replace
+        @@include('_require_config.js')
 
-        require(['require_config'], function (){
-            require(['bootstrap', 'jquery'],function(){
-                var $classPrintList = $('[data-printClasses]');
+        require(['bootstrap', 'jquery'],function(){
+            var $classPrintList = $('[data-printClasses]');
 
-                // Print the class name of a thing inside itself
-                $classPrintList.each(function(){
-                    console.log( $(this).prop('tagName') )
-                    if( $(this).prop('tagName') === 'INPUT' ) {
-                        $(this).attr('placeholder', $(this).attr('class') )
-                    } else {
-                        $(this).append($(this).attr('class'))
-                    }
+            // Print the class name of a thing inside itself
+            $classPrintList.each(function(){
+                console.log( $(this).prop('tagName') )
+                if( $(this).prop('tagName') === 'INPUT' ) {
+                    $(this).attr('placeholder', $(this).attr('class') )
+                } else {
+                    $(this).append($(this).attr('class'))
+                }
 
+            });
+
+            require([
+                'backbone',
+                'syphon',
+                'text!ui_widgets/divider.hbs',
+                'ui_widgets/steps_remaining',
+                'ui_widgets/hold_please',
+                'ui_widgets/psst',
+                'composite_views/perch',
+                'ui_widgets/proceed',
+                'ui_widgets/formation/select_by_icon',
+                'ui_widgets/share'
+            ], function (
+                Backbone,
+                Syphon,
+                dividerMarkup,
+                StepsRemaining,
+                holdPlease,
+                psst,
+                perch,
+                proceed,
+                SelectByIcon,
+                ShareView
+            ) {
+                $('#DividerHolder').append( dividerMarkup )
+
+                var _steps = [ {isComplete:true}, {isComplete:true}, {}, {}, {}, {}, {}, {} ]
+                steps = new StepsRemaining({
+                        collection: new Backbone.Collection(_steps)
                 });
-
-                require([
-                    'backbone',
-                    'syphon',
-                    'text!ui_widgets/divider.hbs',
-                    'ui_widgets/steps_remaining',
-                    'ui_widgets/hold_please',
-                    'ui_widgets/psst',
-                    'composite_views/perch',
-                    'ui_widgets/proceed',
-                    'ui_widgets/formation/select_by_icon',
-                    'ui_widgets/share'
-                ], function (
-                    Backbone,
-                    Syphon,
-                    dividerMarkup,
-                    StepsRemaining,
-                    holdPlease,
-                    psst,
-                    perch,
-                    proceed,
-                    SelectByIcon,
-                    ShareView
-                ) {
-                    $('#DividerHolder').append( dividerMarkup )
-
-                    var _steps = [ {isComplete:true}, {isComplete:true}, {}, {}, {}, {}, {}, {} ]
-                    steps = new StepsRemaining({
-                            collection: new Backbone.Collection(_steps)
-                    });
-                    $('#StepsRemainingHolder').append( steps.render().el );
+                $('#StepsRemainingHolder').append( steps.render().el );
 
 
-                    $("#HoldBtn, #HoldBtnSmall").click(function(){ holdPlease.show(this) })
-                    $("#HideLoading").click(function(){ holdPlease.hide() })
-                    $("#HoldBtn, #HoldBtnSmall").trigger('click')
+                $("#HoldBtn, #HoldBtnSmall").click(function(){ holdPlease.show(this) })
+                $("#HideLoading").click(function(){ holdPlease.hide() })
+                $("#HoldBtn, #HoldBtnSmall").trigger('click')
 
 
-                    function pickRandomProperty(obj) {
-                        var result;
-                        var count = 0;
-                        for (var prop in obj)
-                            if (Math.random() < 1/++count)
-                                result = prop;
-                        return result;
-                    }
-                    $('#ShowNotification').click(function(){
-                        var type = pickRandomProperty(psst.TYPES)
-                        psst({
-                            sel: '#NotificationArea',
-                            title: type,
-                            msg: 'Hello, you special person.',
-                            type: type
-                        })
+                function pickRandomProperty(obj) {
+                    var result;
+                    var count = 0;
+                    for (var prop in obj)
+                        if (Math.random() < 1/++count)
+                            result = prop;
+                    return result;
+                }
+                $('#ShowNotification').click(function(){
+                    var type = pickRandomProperty(psst.TYPES)
+                    psst({
+                        sel: '#NotificationArea',
+                        title: type,
+                        msg: 'Hello, you special person.',
+                        type: type
                     })
-                    $('#ShowNotification').trigger('click')
-                    $('#HideNotifications').click(function(){
-                        psst.hide()
+                })
+                $('#ShowNotification').trigger('click')
+                $('#HideNotifications').click(function(){
+                    psst.hide()
+                })
+
+
+                $('#LightboxData').submit(function(e){
+                    e.preventDefault()
+                    data = Syphon.serialize(e.target)
+                    console.log(data)
+                    perch.show(data)
+                })
+
+
+                addColorNames = function () {
+                    $('.colors .swatch').each(function(){
+                        className = $(this).prop('class').replace('swatch ', '')
+                        $(this).prop('title', className)
                     })
+                }
+                addColorNames()
 
+                $('#ActionShowProceed').on('click', proceed.show)
+                $('#ActionHideProceed').on('click', proceed.hide)
 
-                    $('#LightboxData').submit(function(e){
-                        e.preventDefault()
-                        data = Syphon.serialize(e.target)
-                        console.log(data)
-                        perch.show(data)
+                hands = new SelectByIcon({
+                    model: new Backbone.Model({
+                        string_id: 'handedness',
+                        type: 'select_by_icon',
+                        multiselect: true,
+                        label: 'Rockets or Bugs?',
+                        'options': [
+                            { value:'rockets', icon:'icon-rocket' },
+                            { value:'bugs', icon:'icon-bug' }
+                        ]
                     })
-
-
-                    addColorNames = function () {
-                        $('.colors .swatch').each(function(){
-                            className = $(this).prop('class').replace('swatch ', '')
-                            $(this).prop('title', className)
-                        })
-                    }
-                    addColorNames()
-
-                    $('#ActionShowProceed').on('click', proceed.show)
-                    $('#ActionHideProceed').on('click', proceed.hide)
-
-                    hands = new SelectByIcon({
-                        model: new Backbone.Model({
-                            string_id: 'handedness',
-                            type: 'select_by_icon',
-                            multiselect: true,
-                            label: 'Rockets or Bugs?',
-                            'options': [
-                                { value:'rockets', icon:'icon-rocket' },
-                                { value:'bugs', icon:'icon-bug' }
-                            ]
-                        })
+                })
+                socialz = new SelectByIcon({
+                    model: new Backbone.Model({
+                        string_id: 'socialz',
+                        type: 'select_by_icon',
+                        label: 'How Ya Feelin\'?',
+                        'options': [
+                            { value:'smile', icon:'icon-smile' },
+                            { value:'meh', icon:'icon-meh' },
+                            { value:'frown', icon:'icon-frown' },
+                            { value:'lovey', icon:'icon-heart' },
+                            { value:'other', icon:'gfx-dottedcircle' }
+                        ]
                     })
-                    socialz = new SelectByIcon({
-                        model: new Backbone.Model({
-                            string_id: 'socialz',
-                            type: 'select_by_icon',
-                            label: 'How Ya Feelin\'?',
-                            'options': [
-                                { value:'smile', icon:'icon-smile' },
-                                { value:'meh', icon:'icon-meh' },
-                                { value:'frown', icon:'icon-frown' },
-                                { value:'lovey', icon:'icon-heart' },
-                                { value:'other', icon:'gfx-dottedcircle' }
-                            ]
-                        })
-                    })
-                    $('#SelectByIconHolder').append(
-                            hands.render().el
-                    ).append('<br/>').append(
-                            socialz.render().el
-                    )
+                })
+                $('#SelectByIconHolder').append(
+                        hands.render().el
+                ).append('<br/>').append(
+                        socialz.render().el
+                )
 
-                    tmi = new ShareView({ data: {
-                        title: "My personality is 'The Calculator'",
-                        text: 'You can find out your personality, too, at https://alpha.tidepool.co',
-                        link: 'https://alpha.tidepool.co',
-                        image: "https://alpha.tidepool.co/images/badges/The-Calculator.png"
-                    }})
-                    $('#ShareContainer').css({
-                        position: 'relative',
-                        height: '75px',
-                        border: '1px solid #ccc',
-                        'border-radius': '5px',
-                        background: 'white'
-                    }).html(
-                        tmi.render().el
-                    )
+                tmi = new ShareView({ data: {
+                    title: "My personality is 'The Calculator'",
+                    text: 'You can find out your personality, too, at https://alpha.tidepool.co',
+                    link: 'https://alpha.tidepool.co',
+                    image: "https://alpha.tidepool.co/images/badges/The-Calculator.png"
+                }})
+                $('#ShareContainer').css({
+                    position: 'relative',
+                    height: '75px',
+                    border: '1px solid #ccc',
+                    'border-radius': '5px',
+                    background: 'white'
+                }).html(
+                    tmi.render().el
+                )
 
 
-                });
             });
         });
     </script>

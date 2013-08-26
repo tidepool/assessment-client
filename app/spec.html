@@ -40,23 +40,23 @@
     <!-- Application Bootstrap -->
     <script src="bower_components/requirejs/require.js"></script>
     <script>
+        @@include('_require_config.js')
+
         window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
 
-        require(['require_config'], function () {
-            require([ 'bootstrap',
+        require([ 'bootstrap',
 
 /* scribeAmdDependencies.rb Writes Here */
 
-            ], function () {
-                var jasmineEnv = jasmine.getEnv();
-                var htmlReporter = new jasmine.HtmlReporter();
-                jasmineEnv.addReporter(htmlReporter);
-                jasmineEnv.specFilter = function(spec) {
-                    return htmlReporter.specFilter(spec);
-                };
-                jasmineEnv.addReporter(window.console_reporter);
-                jasmineEnv.execute();
-            });
+        ], function () {
+            var jasmineEnv = jasmine.getEnv();
+            var htmlReporter = new jasmine.HtmlReporter();
+            jasmineEnv.addReporter(htmlReporter);
+            jasmineEnv.specFilter = function(spec) {
+                return htmlReporter.specFilter(spec);
+            };
+            jasmineEnv.addReporter(window.console_reporter);
+            jasmineEnv.execute();
         });
     </script>
 </head>

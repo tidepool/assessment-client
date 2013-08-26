@@ -26,26 +26,28 @@
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
     <link href='//fonts.googleapis.com/css?family=Karla:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="all-min.css">
+    <link rel="stylesheet" href="@@buildDir/all-min.css">
 </head>
 <body>
-    <!--[if lt IE 7]>
+    <!--[if lte IE 7]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- build:js scripts/main.js -->
-    <script src="bower_components/requirejs/require.js"></script>
+    <script src="@@buildDir/bower_components/requirejs/require.js"></script>
     <!-- endbuild -->
-    <!--<script src='//connect.facebook.net/en_US/all.js'></script>-->
+
     <script>
-        require(['require_config'], function () {
-            require(['core'], function (core) {
-                window._app = core.start();
-                if (typeof (_base = core.analytics).trackPerformance === "function") {
-                    _base.trackPerformance((new Date()).getTime());
-                }
-            });
-        })
+        /*
+        //https://github.com/alanshaw/grunt-include-replace
+        @@include('_require_config.js')
+        */
+        require(['core'], function (core) {
+            window._app = core.start();
+            if (typeof (_base = core.analytics).trackPerformance === "function") {
+                _base.trackPerformance((new Date()).getTime());
+            }
+        });
     </script>
 </body>
 </html>
