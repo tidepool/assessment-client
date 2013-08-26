@@ -34,14 +34,15 @@ define [
 
   Core = ->
     #config.debug && console.log "#{_me} instantiated"
-    @cfg = config
     _.extend this, Backbone.Events
     #@cfg.debug && @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
     @user = new User()
     @
 
   Core.prototype =
-    start: ->
+    start: (options) ->
+      @cfg = _.extend config, options # Extend the application configuration with build options
+
       # Handle click/tap differences with this polyfill
       FastClick.attach document.body
 

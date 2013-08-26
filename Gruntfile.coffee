@@ -13,25 +13,32 @@ module.exports = (grunt) ->
   TARGETS =
     dev:      'dev'
     dist:     'dist'
-    research: 'research'
 
-  timestamp = grunt.template.today('mm-dd_HHMM')
+  timestamp = grunt.template.today('mm-dd')
+  defaultSubdir = 'static'
 
   # Configurable paths and globs
   buildConfig =
     timestamp: timestamp
     src:
       parent: 'src'
-      target: 'src/static'
+      target: "src/#{defaultSubdir}"
+      subdir: defaultSubdir
     dev:
       parent: '.build'
-      target: ".build/#{timestamp}"
+      target: ".build/#{defaultSubdir}"
+      subdir: defaultSubdir
     dist:
       parent: 'dist'
       target: "dist/#{timestamp}"
+      subdir: timestamp
     research: "../OAuthProvider/public/#{timestamp}/"
     minName: 'all-min'
     libraryCSS: 'library.css'
+    hbsSourceGlob: [
+      "**/*.hbs"
+      "!bower_components/**"
+    ]
     sassSourceGlob: [
       "**/*.sass"
       "!bower_components/**"
@@ -47,7 +54,7 @@ module.exports = (grunt) ->
       '!<%= cfg.src.target %>/bower_components/**'
       '!<%= cfg.src.parent %>/<%= cfg.libraryCSS %>'
     ]
-    bowerComponents: 'bower_components/**'
+    bowerComponents: 'src/static/bower_components'
     imagesGlob: [
       'images/**/{*.png,*.jpg,*.jpeg}'
       'welcome/**/{*.png,*.jpg,*.jpeg}'
@@ -178,8 +185,9 @@ module.exports = (grunt) ->
 
     # https://github.com/jrburke/r.js/blob/master/build/example.build.js
     requirejs:
-      allInOne:
+      oneForAll:
         options:
+          baseUrl: "<%= cfg.src.parent %>/static" #"<%= grunt.option('targetSubdir') %>"
           mainConfigFile: "<%= cfg.src.parent %>/_require_config.js"
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
@@ -201,7 +209,8 @@ module.exports = (grunt) ->
           paths:
             jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
             bootstrap: 'empty:'
-          out: '<%= grunt.option("target") %>/core/main.js'
+#          out: '<%= grunt.option("target") %>/core/main.js'
+          out: '<%= grunt.option("target") %>/all-min.js'
           optimize: "uglify2"
           #optimize: "none"
           generateSourceMaps: true
@@ -220,7 +229,7 @@ module.exports = (grunt) ->
           #fbSecret:            "<%= env.fbSecret %>" # not used
           isDev:               "<%= env.isDev %>"
           timestamp:           "<%= cfg.timestamp %>"
-          buildDir:            "<%= cfg.timestamp %>"
+          buildDir:            "<%= grunt.option('targetSubdir') %>"
         prefix: '@@'
       config:
         files: [
@@ -234,7 +243,7 @@ module.exports = (grunt) ->
           expand: true
 #          flatten: true
           cwd: "<%= grunt.option('targetParent') %>"
-          src: "*.html"
+          src: "{*.html,**/*.hbs}"
           dest: "<%= grunt.option('targetParent') %>"
         ]
 
@@ -243,6 +252,8 @@ module.exports = (grunt) ->
       targetParent:
         options:
           includesDir: '<%= cfg.src.parent %>'
+          globals:
+            buildDir: "<%= grunt.option('targetSubdir') %>"
         files: [
           expand: true
           cwd: "<%= grunt.option('targetParent') %>"
@@ -250,6 +261,19 @@ module.exports = (grunt) ->
           dest: "<%= grunt.option('targetParent') %>"
         ]
     copy:
+      bower: files: [
+        expand: true
+        cwd: "<%= cfg.src.target %>/bower_components"
+        src: '**/*.*'
+        dest: "<%= grunt.option('target') %>/bower_components"
+      ]
+      hbs:
+        files: [
+          expand: true
+          cwd: "<%= cfg.src.target %>"
+          src: "<%= cfg.hbsSourceGlob %>"
+          dest: "<%= grunt.option('target') %>"
+        ]
       html:
         files: [
           expand: true
@@ -290,6 +314,11 @@ module.exports = (grunt) ->
 #          ]
 #        ]
 
+    'git-describe':
+      options:
+        prop: 'meta.revision'
+      me: {}
+
 
     aws_s3:
       options:
@@ -314,7 +343,6 @@ module.exports = (grunt) ->
     exec:
       convert_jqueryui_amd:
         command: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
-        stdout: true
 
       unitTest:
         command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
@@ -324,45 +352,9 @@ module.exports = (grunt) ->
 
   grunt.renameTask "regarde", "watch"
 
-#  grunt.registerTask "build", [
-#    "clean:dev"
-#    "clean:temp"
-#    "exec:convert_jqueryui_amd"
-#    "coffee:dev"
-#    "replace:dev"
-#    "coffee:spec"
-#    "compass"
-#    "cssmin:dev"
-#    "exec:scribeDevSpecs"
-#    "copy:libraryCss"
-#  ]
-
-#  grunt.registerTask "dist", [
-#    "clean:dist"
-#    "exec:convert_jqueryui_amd"
-#    "clean:temp"
-#    "compass"
-#    "cssmin:dist"
-#    "coffee:temp"
-#    "replace:dist"
-#    "copy:requireJsPrep"
-#    "requirejs"
-#    "copy:requireJsPost"
-#    "copy:dist"
-#    "clean:temp"
-#  ]
-
-  grunt.registerTask "research", [
-    "dist"
-    "copy:distToPublic"
-  ]
 
 
-  grunt.registerTask 'spec', 'exec:unitTest'
 
-  grunt.registerTask "ds", ['dist', 'distServer']
-  grunt.registerTask "t", "test"
-  grunt.registerTask "default", 'server'
 
 
 
@@ -399,14 +391,22 @@ module.exports = (grunt) ->
       "exec:convert_jqueryui_amd"
       'clean:target'     # clean out the target timestamp dir
       'combineCSS'       # Merge css into a single file and put that file in the target timestamp dir
+      'copy:bower'       # Copy bower dependencies to the target timestamp dir
       'copy:html'        # Move all html to the target parent dir
+      'copy:hbs'         # Copy all hbs templates to the target dir. Necessary so that we can replace @@buildDir for image references
       'exec:scribeSpecs' # find all .spec.js files and write them into spec.html
       'includereplace'   # include files and parse variables
       'replace:html'     # parse build variables in html files
+      'replace:config'   # replace build values
     ]
     if grunt.option TARGETS.dist
+      grunt.log.writeln "Building in Dist Mode"
       grunt.task.run 'requirejs'
-
+    else
+      grunt.log.writeln "Building in Dev Mode"
+#      grunt.task.run [
+#
+#      ]
 
   # server
   # ------
@@ -429,16 +429,30 @@ module.exports = (grunt) ->
 
 
 
-
-
+  grunt.registerTask 'logRev', ->
+    grunt.event.once 'git-describe', (rev) ->
+      grunt.log.writeln "Git Revision: #{rev}"
+      grunt.option 'gitRevision', rev
+    grunt.task.run 'git-describe'
+#    grunt.log.write("Describe current commit: ")
+#    grunt.util.spawn {
+#      cmd: "git",
+#      args: [ "describe", "--tags", "--always", "--long", "--dirty" ]
+#    }, (err, result) ->
+#      if err
+#        grunt.log.error err
+#        return done false
+#      grunt.config('revision', result)
+#      grunt.log.writeln result
+#      done result
 
 
 
   # ---------------------------------------------------------------------- Task Shortcuts
   grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
   grunt.registerTask "s", [ 'build', 'server' ]
-
-
+  grunt.registerTask 'spec', 'exec:unitTest'
+  grunt.registerTask "default", 's'
 
 
 
@@ -451,20 +465,31 @@ module.exports = (grunt) ->
 
   # Set the output path for built files.
   # Most tasks will key off this so it is a prerequisite for running any grunt task.
-  setPath = ->
-    if grunt.option TARGETS.dev or TARGETS.dist or TARGETS.research
-      grunt.option 'target', buildConfig[grunt.option].target
-      grunt.option 'targetParent', buildConfig[grunt.option].parent
-    else # Default path
-      grunt.option 'target', buildConfig.dev.target
-      grunt.option 'targetParent', buildConfig.dev.parent
-    grunt.log.writeln "Grunt output path set to: `#{grunt.option 'target'}`"
+  setPath = (gitRevision) ->
+    hash = '_' + gitRevision[0]
+    grunt.option 'gitRevision', hash
+    targetInfo = buildConfig.dev # Default path
+    if grunt.option TARGETS.dev
+      targetInfo = buildConfig.dev
+    else if grunt.option TARGETS.dist
+      targetInfo = buildConfig.dist
+    else
+      grunt.option TARGETS.dev, true
+
+    grunt.option 'target',       targetInfo.target + hash
+    grunt.option 'targetParent', targetInfo.parent
+    grunt.option 'targetSubdir', targetInfo.subdir + hash
+    grunt.log.writeln "Output path set to: #{grunt.option 'target'}"
+    grunt.log.writeln "Parent path:        #{grunt.option 'targetParent'}"
+    grunt.log.writeln "Subdir:             #{grunt.option 'targetSubdir'}"
     targets = []
     targets.push target for target of TARGETS
     grunt.log.writeln "You can set targets using grunt options, such as `--dev`"
     grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
 
-  setPath()
+  grunt.event.once 'git-describe', setPath
+  grunt.task.run 'git-describe'
+#  setPath()
 
 
 

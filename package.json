@@ -18,7 +18,7 @@
     "grunt-usemin": "~0.1.9",
     "grunt-regarde": "~0.1.1",
     "grunt-open": "~0.2.0",
-    "grunt-exec": "~0.4.0",
+    "grunt-exec": "~0.4.2",
     "matchdep": "~0.1.1",
     "jqueryui-amd": "~0.0.2",
     "grunt-contrib-jasmine": "~0.4.2",
@@ -28,7 +28,8 @@
     "grunt-contrib-sass": "~0.5.0",
     "grunt-contrib-watch": "~0.5.2",
     "grunt-aws-s3": "~0.6.0",
-    "grunt-include-replace": "~1.1.0"
+    "grunt-include-replace": "~1.1.0",
+    "grunt-git-describe": "~2.3.1"
   },
   "engines": {
     "node": ">`=0.8.0"
