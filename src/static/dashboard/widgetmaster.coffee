@@ -166,7 +166,7 @@ define [
           else
             @_setUpDataSource dataSources, Widget.dependsOn, Widget.fetchOptions
         else
-          console.error "#{_me}: no widget available called `#{name}`"
+          console.warn "#{_me}: no widget available called `#{name}`"
       dataSources
 
     # Set up one data source
@@ -236,8 +236,9 @@ define [
           data = result[0]
           count += data.length if _.isArray data
 #      console.log count:count
-      prevCount = app.user.get('gamesPlayed') || 0
-      app.user.set gamesPlayed: Math.max(count, prevCount)
+      if app.user? # Reduces dependencies during unit testing
+        prevCount = app.user.get('gamesPlayed') || 0
+        app.user.set gamesPlayed: Math.max(count, prevCount)
       count
 
     # Whenever a pressable widget is clicked, log to analytics with the "title" of the widget
