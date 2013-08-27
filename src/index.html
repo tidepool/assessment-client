@@ -41,7 +41,7 @@
         //https://github.com/alanshaw/grunt-include-replace
         @@include('_require_config.js')
 
-        require.config({ baseUrl: '@@buildDir' })
+        require.config({ baseUrl: '@@buildDir' });
 
         require(['core'], function (core) {
             config = {

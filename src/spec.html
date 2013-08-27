@@ -6,16 +6,21 @@
 
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="all-min.css">
+    <link rel="stylesheet" href="@@buildDir/all-min.css">
 
     <!-- Jasmine Files -->
-    <link rel="shortcut icon" type="image/png" href="bower_components/jasmine/images/jasmine_favicon.png">
-    <link rel="stylesheet" type="text/css" href="bower_components/jasmine/lib/jasmine-core/jasmine.css">
-    <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
-    <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
-    <script type="text/javascript" src="bower_components/jasmine-jquery/lib/jasmine-jquery.js"></script>
-    <script type="text/javascript" src="scripts/vendor/jasmine_console_reporter.js"></script>
-    <script type="text/javascript" src="bower_components_ext/jasmine_toBeInstanceOf.js"></script>
+    <link rel="shortcut icon" type="image/png" href="@@buildDir/bower_components/jasmine/images/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="@@buildDir/bower_components/jasmine/lib/jasmine-core/jasmine.css">
+    <script type="text/javascript" src="@@buildDir/bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+    <script type="text/javascript" src="@@buildDir/bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+    <script type="text/javascript" src="@@buildDir/bower_components/jasmine-jquery/lib/jasmine-jquery.js"></script>
+
+    <!--<script type="text/javascript" src="@@buildDir/scripts/vendor/jasmine_console_reporter.js"></script>-->
+    <!--<script type="text/javascript" src="@@buildDir/bower_components_ext/jasmine_toBeInstanceOf.js"></script>-->
+    <script>
+        @@include('static/scripts/vendor/jasmine_console_reporter.js')
+        @@include('static/bower_components_ext/jasmine_toBeInstanceOf.js')
+    </script>
 
 
     <style type="text/css">
@@ -38,9 +43,12 @@
 
 
     <!-- Application Bootstrap -->
-    <script src="bower_components/requirejs/require.js"></script>
+    <script src="@@buildDir/bower_components/requirejs/require.js"></script>
     <script>
-        @@include('_require_config.js')
+
+        @@include('_require_config.js');
+
+        require.config({ baseUrl: '@@buildDir' });
 
         window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
 

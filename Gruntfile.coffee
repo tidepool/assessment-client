@@ -369,7 +369,7 @@ module.exports = (grunt) ->
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
       unitTest:     cmd: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
-      scribeSpecs:  cmd: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.src.parent %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
+      scribeSpecs:  cmd: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.src.parent %>/" "<%= cfg.src.target %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
       cleanEmpties: cmd: "find <%= grunt.option('target') %> -type d -empty -delete"
 
   grunt.renameTask "regarde", "watch"

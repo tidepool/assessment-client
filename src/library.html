@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="all-min.css">
+    <link rel="stylesheet" href="@@buildDir/all-min.css">
     <link href="library.css" rel="stylesheet">
 </head>
 <body class='componentLibrary'>
@@ -206,10 +206,12 @@
 
     </section>
 
-    <script src="bower_components/requirejs/require.js"></script>
+    <script src="@@buildDir/bower_components/requirejs/require.js"></script>
     <script>
         //https://github.com/alanshaw/grunt-include-replace
         @@include('_require_config.js')
+
+        require.config({ baseUrl: '@@buildDir' });
 
         require(['bootstrap', 'jquery'],function(){
             var $classPrintList = $('[data-printClasses]');

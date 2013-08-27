@@ -37,6 +37,7 @@ define [
     _.extend this, Backbone.Events
     # Log all Events the app core processes by uncommenting the following line
     #@cfg.debug && @on 'all', (e) -> @cfg.debug && console.log "#{_me} event: #{e}"
+    @cfg = config
     @
 
   Core.prototype =
