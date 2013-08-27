@@ -105,9 +105,13 @@ module.exports = (grunt) ->
 
     watch:
 
-      appHtml:
+      srcHtml:
         files: [ '<%= cfg.src.parent %>/*.html', '!<%= cfg.src.parent %>/<%= specFile %>.html' ]
         tasks: [ 'copy:html', 'includereplace' ]
+
+      srcHbs:
+        files: '<%= cfg.src.target %>/**/*.hbs'
+        tasks: ['copy:hbs', 'replace:html', 'livereload']
 
       specHtml:
         files: '<%= cfg.src.parent %>/<%= specFile %>'
@@ -117,9 +121,8 @@ module.exports = (grunt) ->
         files: '<%= cfg.cssSourceGlob %>'
         tasks: 'combineCSS'
 
-      app:
+      srcJs:
         files: [
-          '<%= cfg.src.target %>/**/*.hbs'
           '<%= cfg.src.target %>/**/*.js'
         ]
         tasks: 'livereload'
@@ -131,7 +134,6 @@ module.exports = (grunt) ->
           "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.js"
 #          "<%= grunt.option('target') %>/**/*.js"
-#          "<%= grunt.option('target') %>/**/*.hbs"
 #          "<%= grunt.option('target') %>/**/*.{png,jpg}"
         ]
         tasks: 'livereload'
@@ -297,7 +299,7 @@ module.exports = (grunt) ->
       html: files: [
           expand: true
           cwd:  "<%= cfg.src.parent %>"
-          src:  '{index.html,library.html}'
+          src:  '{index.html,library.html,404.html,redirect.html,additional_redirect.html}'
           dest: "<%= grunt.option('targetParent') %>"
         ]
       js: files: [
@@ -346,17 +348,25 @@ module.exports = (grunt) ->
         region:          '<%= env.awsRegion %>'
         params:
           # Two Year cache policy (1000 * 60 * 60 * 24 * 730)#
-          CacheControl: '630720000'
+          CacheControl: 'public,max-age=630720000'
+          ContentEncoding: 'gzip'
 #          ContentType: 'application/json',
 #        access: 'public-read'
-        gzip: true
-      deploy:
+        concurrency: 3 # More power captain!
+      deployParent:
+        options: params: CacheControl: 'public,max-age=120000' # 2 minutes (1000 * 60 * 2)
         files: [
           expand: true
-          cwd: "<%= cfg.dist %>/<%= cfg.timestamp %>"
-          src: '**/*.{html,js,css}' # keep it lightweight to save data transfer dollars until I get this figured out :)
-          dest: '<%= cfg.timestamp %>/'
+          cwd: "<%= grunt.option('targetParent') %>"
+          src: '*.*' # all files, but only those in this immediate directory
+          dest: '' # putting a slash here will cause '//path' on Amazon
         ]
+      deployStatic: files: [
+        expand: true
+        cwd: "<%= grunt.option('target') %>"
+        src: '**/**'
+        dest: "<%= grunt.option('targetSubdir') %>"
+      ]
 
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
@@ -365,13 +375,6 @@ module.exports = (grunt) ->
       cleanEmpties: cmd: "find <%= grunt.option('target') %> -type d -empty -delete"
 
   grunt.renameTask "regarde", "watch"
-
-
-
-
-
-
-
 
 
 
@@ -431,16 +434,19 @@ module.exports = (grunt) ->
   # server
   # ------
   grunt.registerTask 'server', 'Open the target folder as a web server', ->
-    grunt.task.run 'livereload-start'
     if grunt.option TARGETS.dist
-      grunt.task.run 'connect:dist'
+      grunt.task.run [
+        'livereload-start'
+        'connect:dist:keepalive'
+        'open'
+      ]
     else
-      grunt.task.run 'connect:dev'
-    grunt.task.run [
-      'open'
-      'watch'
-    ]
-    #return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
+      grunt.task.run [
+        'livereload-start'
+        'connect:dev'
+        'open'
+        'watch'
+      ]
 
 
   # test
@@ -451,28 +457,10 @@ module.exports = (grunt) ->
 
 
 
-  grunt.registerTask 'logRev', ->
-    grunt.event.once 'git-describe', (rev) ->
-      grunt.log.writeln "Git Revision: #{rev}"
-      grunt.option 'gitRevision', rev
-    grunt.task.run 'git-describe'
-#    grunt.log.write("Describe current commit: ")
-#    grunt.util.spawn {
-#      cmd: "git",
-#      args: [ "describe", "--tags", "--always", "--long", "--dirty" ]
-#    }, (err, result) ->
-#      if err
-#        grunt.log.error err
-#        return done false
-#      grunt.config('revision', result)
-#      grunt.log.writeln result
-#      done result
 
-
-
-  # ---------------------------------------------------------------------- Task Shortcuts
+  Task Shortcuts
   grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
-  grunt.registerTask "s", [ 'build', 'server' ]
+  grunt.registerTask "s", [ 'clean', 'build', 'server' ]
   grunt.registerTask 'spec', 'exec:unitTest'
   grunt.registerTask "default", 's'
 
@@ -482,7 +470,7 @@ module.exports = (grunt) ->
 
 
 
-  # Set the output path for built files.
+  # ---------------------------------------------------------------------- Set the output path for built files.
   # Most tasks will key off this so it is a prerequisite for running any grunt task.
   setPath = (gitRevision) ->
     hash = '_' + gitRevision[0]
@@ -508,7 +496,6 @@ module.exports = (grunt) ->
 
   grunt.event.once 'git-describe', setPath
   grunt.task.run 'git-describe'
-#  setPath()
 
 
 
