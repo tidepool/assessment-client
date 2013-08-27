@@ -4,41 +4,46 @@ define [
   detect
 ) ->
 
-  _urlAction = "iosaction"
-  _urlLog =    "ioslog"
-  _urlError =  "ioserr"
-  _noOp = -> @
+
+  _TYPES =
+    start: 'start'
+    finish:'finish'
+    log:   'log'
+    warn:  'warn'
+    error: 'error'
 
 
-  Export = (options) ->
+  Export = ->
     # Only use these methods for ui web views
-    if detect.isUIwebView() or options?.force
+    if detect.isUIwebView()
       @isUp = true
-    else
-      @holla = @log = @error = @cleanUp = _noOp # Blank out all methods
     @
 
 
   Export.prototype =
-
     # Save data using an iframe.
-    # msg: a string to send to IOS
+    # msg: An object to send to ios. Must be in a particular message format
     # skipCleanup: if true, don't remove the iframe. used for unit testing
-    # urlRoot: optional. If set, changes the URL root. Useful for telling IOS to treat the message differently
-    holla: (msg, skipCleanup, urlRoot) ->
-      root = urlRoot || _urlAction
+    holla: (msgObject, skipCleanup) ->
+      return @ unless @isUp
+      if @_validate msgObject
+        console.warn @_validate msgObject
+        return @
       @iframe = @iframe || document.createElement "IFRAME"
-      src = "#{root}://#{msg}"
-#      console.log "daddy_ios: #{src}"
+#      console.log msgObject:msgObject
+      src = 'ios://' + JSON.stringify msgObject
       @iframe.setAttribute 'src', src
       document.documentElement.appendChild @iframe
-#      $('iframe').contents().find("head").append($("<style type='text/css'>  body{background:lawngreen;}  </style>")) # make them bright green and easy to find. We should never see these :)
       @cleanUp() unless skipCleanup
       @
 
-    log:   (msg, skipCleanup) -> @holla msg, skipCleanup, _urlLog
-    error: (msg, skipCleanup) -> @holla msg, skipCleanup, _urlError
+    _validate: (message) ->
+      return "message.type is required" unless message.type?
+      null
 
+
+    # ----------------------------------------------------------------- Testing Helpers
+    forceOn: -> @isUp = true
     cleanUp: ->
       return unless @iframe?
       @iframe.parentNode.removeChild @iframe
@@ -46,5 +51,13 @@ define [
       @
 
 
-  Export
+    # ----------------------------------------------------------------- API meant for consumption
+    TYPES: _TYPES
+    start:  (skipCleanup) ->      @holla { type:_TYPES.start  }, skipCleanup
+    finish: (skipCleanup) ->      @holla { type:_TYPES.finish }, skipCleanup
+    log:    (msg, detail, skipCleanup) -> @holla { type:_TYPES.log,   usrMsg:msg, logMsg:detail }, skipCleanup
+    warn:   (msg, detail, skipCleanup) -> @holla { type:_TYPES.warn,  usrMsg:msg, logMsg:detail }, skipCleanup
+    error:  (msg, detail, skipCleanup) -> @holla { type:_TYPES.error, usrMsg:msg, logMsg:detail }, skipCleanup
+
+  new Export
 

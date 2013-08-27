@@ -11,7 +11,7 @@ define [
   tmpl
   app
   perch
-  IOS
+  ios
 ) ->
 
   _me = 'game/calculate_results'
@@ -21,7 +21,6 @@ define [
     className: 'calculateResults'
     initialize: ->
 #      @listenTo @model, 'all', (e,model) -> console.log( e:e, model:model )
-      @ios = new IOS
       @listenTo @model, 'change', @onChange
       @listenTo @model, 'error', @onError
       app.analytics.track @className, 'Starting game results calculation'
@@ -44,14 +43,14 @@ define [
     _gotGameResults: (model) ->
       #console.log model: @model
       app.analytics.track @className, 'Successfully calculated game results'
-      if @ios.isUp # The ios container should be sent a message
-        @ios.holla 1
+      if ios.isUp # The ios container should be sent a message
+        ios.finish()
       else
         @_showResults()
 
     onError: (model, xhr) ->
       msg = xhr.responseJSON?.status.message || xhr.statusText
-      @ios.error msg
+      ios.error msg
       app.analytics.track @className, 'Error Getting game results'
       perch.show
         title: 'Sorry, There Is a Problem.'
@@ -66,7 +65,7 @@ define [
       @_updateStatusMsg model
       if model.attributes.status.state is model.STATES.done
         @_gotGameResults model
-        @ios.log 'Got game results'
+        ios.log 'Got game results'
 
 
   View

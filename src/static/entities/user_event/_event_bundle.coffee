@@ -11,7 +11,7 @@ define [
   Events
   detect
   app
-  IOS
+  ios
 ) ->
 
   _viewNameToModuleName =
@@ -67,7 +67,6 @@ define [
       throw new Error 'Need game_id' unless @attributes.game_id
 #      @on 'sync', @onSync
       @on 'error', @onErr
-      @ios = new IOS
       @_translateEventType()
 
     validate: (attrs, options) ->
@@ -91,7 +90,7 @@ define [
 #    onSync: (model) -> console.log model.attributes
     onErr: (model, xhr) ->
       msg = xhr.responseJSON?.status.message || xhr.statusText
-      @ios.error msg
+      ios.error msg
       console.error
         message: msg
         model: model

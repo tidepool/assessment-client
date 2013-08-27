@@ -45,7 +45,7 @@ define [
   CalculateResultsView
   MiniInstructions
   numbers
-  IOS
+  ios
 ) ->
 
   _me = 'pages/playGame'
@@ -81,7 +81,6 @@ define [
       throw new Error "Need params" unless @options.params
       holdPlease.show null, true # (null = no selector, true = show a random message)
       @model = app.user.createGame @options.params.def_id
-      @ios = new IOS
       @listenTo app.user, 'error', @_userModelErr
       @listenTo @model, 'error', @_curGameErr
       @listenTo @model, 'sync', @onSync
@@ -98,7 +97,9 @@ define [
 #      document.title = if title then title else _defaultTitle
 
     _showWelcome: ->
-      @ios.log 'Game loaded'
+      ios.forceOn()
+      ios.start()
+      ios.log 'Game Started'
       gameDef = @options.params.def_id
       # Decide whether to show game introduction instructions
       if _gameWelcomePages[gameDef]?
@@ -119,7 +120,7 @@ define [
         msg: msg
         sel: @$el
         type: psst.TYPES.error
-      @ios.error msg
+      ios.error msg
       throw new Error "#{_me}: #{msg}"
 
 
@@ -185,7 +186,7 @@ define [
       @model.setLevelSeen stageData.view_name
       app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
       app.analytics.track @className, "#{@curLevel.model.attributes.stageDef} Level Started"
-      @ios.log "Game showLevel: #{stageId}"
+      ios.log "Game showLevel: #{stageId}"
 
 
     # ------------------------------------------------------------- End Game

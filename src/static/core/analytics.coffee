@@ -9,7 +9,7 @@ define [
   Kiss
   UserVoice
   detect
-  IOS
+  ios
 ) ->
   _me = 'core/analytics'
 
@@ -19,11 +19,10 @@ define [
     @google = new Google(cfg.googleAnalyticsKey, cfg.isDev) if cfg.googleAnalyticsKey
     @kiss = new Kiss(cfg.kissKey) if cfg.kissKey
     UserVoice.start() unless detect.isUIwebView()
-    @ios = new IOS
     # Track all javascript errors
     window.onerror = (msg, url, lineNumber) =>
       @trackKeyMetric @CATEGORIES.jsErr, msg, {url:lineNumber}
-      @ios.log "JS Error: #{msg}. url: #{url}. line: #{lineNumber}"
+      ios.warn 'JS Error', "JS Error: #{msg}. url: #{url}. line: #{lineNumber}"
       return false # let the default handler run, too
     @
 

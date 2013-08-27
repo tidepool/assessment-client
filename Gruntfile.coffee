@@ -124,6 +124,7 @@ module.exports = (grunt) ->
       srcJs:
         files: [
           '<%= cfg.src.target %>/**/*.js'
+          '<%= cfg.src.target %>/**/*.spec.js'
         ]
         tasks: 'livereload'
 
@@ -423,7 +424,7 @@ module.exports = (grunt) ->
         'copy:rootImages'
         'copy:assetImages'
         'exec:cleanEmpties'
-#        'pngmin'
+#        'pngmin' # works local, breaks on ci. Platform issue?
       ]
     else
       grunt.log.writeln "Building in Dev Mode"
