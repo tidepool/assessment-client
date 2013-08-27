@@ -423,7 +423,7 @@ module.exports = (grunt) ->
         'copy:rootImages'
         'copy:assetImages'
         'exec:cleanEmpties'
-        'pngmin'
+#        'pngmin'
       ]
     else
       grunt.log.writeln "Building in Dev Mode"
