@@ -1,0 +1,103 @@
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/_helpers'
+
+
+.gameResultsPage .result.reactionTime .metric .holder label
+  font-size: 80px // Bigger, but only on the results page. Dashboard doesn't have that much room
+
+.result.reactionTime
+  $colorFastestMild: lighten($colorFastest, 35%)
+  $colorSlowestMild: lighten($colorSlowest, 27%)
+  $fontSize: 50px
+
+  .colHalves
+    float: left
+    height: 100%
+    width: 50%
+
+  .metricHolder
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+  .metricHolder.showingTimeAndTitle
+    top: 75px
+
+  .metric
+    position: relative
+    height: 100%
+    text-align: center
+    //position: relative
+    //padding: 0 $spaceLil
+    +box-sizing(border-box)
+    //background: $colorBackgroundWarm
+    overflow: hidden
+
+  .metric.good
+    //bottom: 35px
+    background: $colorFastestMild
+    margin: 0 $spaceLil/2 0 $spaceLil
+
+  .metric.bad
+    //top: 75px
+    background: $colorSlowestMild
+    margin: 0 $spaceLil 0 $spaceLil/2
+
+  .metric .holder
+    position: absolute
+    height: $fontSize
+    line-height: $fontSize
+    font-size: $fontSize
+    top: 40%
+    left: 0
+    width: 100%
+    margin-top: -($fontSize/2)
+    z-index: 1 // Above the :after arrow shape
+    small
+      display: block
+      font-size: $fontSizeTiny
+      font-weight: bold
+      text-transform: uppercase
+      line-height: 1
+      //z-index: 1 // Above the :after arrow shape
+    small:first-child
+      margin-bottom: -$spaceTiny
+      font-size: $fontSizeBody
+    label
+      display: inline-block
+      margin: 0
+      font-size: $fontSize
+      font-weight: bold
+      line-height: 0.9
+      cursor: default
+    small:last-child
+      margin-top: -$spaceTiny
+
+  .metric.good label,
+  .metric.good small
+    color: $colorFastest
+  .metric.bad label,
+  .metric.bad small
+    color: $colorSlowest
+
+  // ---------------------------------- The up and down arrow shapes
+  .metric.good:after,
+  .metric.bad:after
+    content: ''
+    position: absolute
+    left: 50%
+    margin-left: -150px
+    background: white
+    width: 300px
+    border: 150px solid white
+    +box-sizing(border-box)
+  .metric.good:after
+    top: 0
+    border-top: $spaceTiny*2 solid white
+    border-bottom: $space + $spaceLil solid $colorFastestMild
+  .metric.bad:after
+    bottom: 0
+    border-bottom: $spaceTiny*2 solid white
+    border-top: $space + $spaceLil solid $colorSlowestMild

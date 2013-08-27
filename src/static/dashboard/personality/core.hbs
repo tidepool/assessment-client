@@ -1,0 +1,20 @@
+
+
+<div class="widget pressable">
+    <div class="hero clearfix">
+        {{#if logo_url}}
+            <img class="personalityBadge" src="@@buildDir/images/badges/{{logo_url}}" alt="{{name}}">
+        {{/if}}
+        {{{one_liner}}}
+    </div>
+    <ul>
+        {{#each bullet_description}}
+            <li>
+                <i class="icon-bookmark icon-2x"></i>
+                {{{ this }}}
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+

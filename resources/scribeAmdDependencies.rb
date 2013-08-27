@@ -1,25 +1,28 @@
 
 replace_block = '/* scribeAmdDependencies.rb Writes Here */'
 
-dev_dir = ARGV[0] #'.devServer/'
-app_dir = ARGV[1] #'app/'
+dev_dir = ARGV[0]
+app_dir = ARGV[1]
 
 search_pattern = ARGV[2]
 dest = ARGV[3]
+skip_dir = ARGV[4]
 files = []
 dependency_list = ''
 separator = ",\n"
 
 puts "dev dir: #{dev_dir}"
 puts "app dir: #{app_dir}"
+puts "skipping folder: #{skip_dir}"
 puts "Scribing dependencies that match `#{search_pattern}` into the file `#{dest}`."
 puts "This file must have a comment that matches `#{replace_block}` in the position the dependencies should be scribed."
 
 # Get all the dependencies that match the search pattern
-Dir.chdir dev_dir
-Dir.glob(search_pattern) do |f|
-  #puts "Found: #{f}"
-  files.push f
+Dir.chdir app_dir
+#Dir.glob(search_pattern) do |filename|
+Dir[search_pattern].reject{ |f| f[skip_dir] }.each do |filename|
+  puts "Found: #{filename}"
+  files.push filename
 end
 files.each do |f|
   dependency_list += "'#{f}'#{separator}"
@@ -46,8 +49,11 @@ dest_files.each do |f|
   end
 end
 
-puts "Success! Scribed #{files.length} dependencies to #{app_dir}#{dest} :)"
-
+if files.length === 0
+    abort 'Error, no files scribed'
+else
+    puts "Success! Scribed #{files.length} dependencies to #{app_dir}#{dest} :)"
+end
 
 
 
