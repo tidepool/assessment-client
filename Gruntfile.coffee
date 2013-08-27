@@ -458,7 +458,7 @@ module.exports = (grunt) ->
 
 
 
-  Task Shortcuts
+  # ---------------------------------------------------------------------- Task Shortcuts
   grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
   grunt.registerTask "s", [ 'clean', 'build', 'server' ]
   grunt.registerTask 'spec', 'exec:unitTest'
