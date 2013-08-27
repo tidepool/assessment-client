@@ -21,8 +21,8 @@ define [
 ) ->
 
 
-  _symbolPicks = 5
-  _wordPicks = 5
+  _symbolPicks = 3
+  _wordPicks = 4
   _symbolPicksMax = 8
   _wordPicksMax = 8
   _tempo = 800 # How often to add a new symbol
@@ -126,18 +126,18 @@ define [
       @_lastSymbCount = @collection.countPickedSymbols()
 
     _updateWordCount: (count) ->
-      if count is _wordPicks
-        $(_wordCountSel).html _doneMarkup
-        @_shimmerSel _wordContentSel
-      else
-        $(_wordCountSel).html _countTmpl count:count, limit:_wordPicks
+      # if count is _wordPicks
+      #   $(_wordCountSel).html _doneMarkup
+      #   @_shimmerSel _wordContentSel
+      # else
+      $(_wordCountSel).html _countTmpl count:count, limit:_wordPicks
 
     _updateSymbolCount: (count) ->
-      if count is _symbolPicks
-        $(_symbolCountSel).html _doneMarkup
-        @_shimmerSel _symbolContentSel
-      else
-        $(_symbolCountSel).html _countTmpl count:count, limit:_symbolPicks
+      # if count is _symbolPicks
+      #   $(_symbolCountSel).html _doneMarkup
+      #   @_shimmerSel _symbolContentSel
+      # else
+      $(_symbolCountSel).html _countTmpl count:count, limit:_symbolPicks
 
     # Given a selector, add a class that makes it shimmer like the moonlight on a breezy pond
     _shimmerSel: (sel) ->
@@ -156,13 +156,13 @@ define [
     onChange: (model) ->
       @_updateCounts()
       @_onBaitChange model
-      switch model.attributes.type
-        when model.TYPES.word
-          if @collection.countPickedWords() > _wordPicksMax
-            model.view.unpick().sayNo()
-        when model.TYPES.symbol
-          if @collection.countPickedSymbols() > _symbolPicksMax
-            model.view.unpick().sayNo()
+      # switch model.attributes.type
+      #   when model.TYPES.word
+      #     if @collection.countPickedWords() > _wordPicksMax
+      #       model.view.unpick().sayNo()
+      #   when model.TYPES.symbol
+      #     if @collection.countPickedSymbols() > _symbolPicksMax
+      #       model.view.unpick().sayNo()
       if @_hasPickedEnough()
         @summaryData =
           symbol_list: @collection.getPickedSymbols()
