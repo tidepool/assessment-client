@@ -9,8 +9,7 @@ define [
 
   Export = Collection.extend
     model: Connection
-    #TODO: resolve the circular dependency issue and remove window reference, use app.cfg instead
-    url: "#{window.apiServerUrl}/api/v1/users/-/connections"
+    url: -> "#{window.apiServerUrl}/api/v1/users/-/connections"
 
     initialize: (options) -> @options = options
 

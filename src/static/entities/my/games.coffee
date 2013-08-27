@@ -11,7 +11,7 @@ define [
 
 
     # ------------------------------------------------------------- Backbone Methods
-    urlRoot: "#{window.apiServerUrl}/api/v1/users/-/games"
+    urlRoot: -> "#{window.apiServerUrl}/api/v1/users/-/games"
 
     initialize: ->
       # @on 'all', (e) -> console.log "event: #{e}"

@@ -14,7 +14,7 @@ define [
   User = Model.extend
 
     # ----------------------------------------------------------- Backbone Methods
-    urlRoot: "#{window.apiServerUrl}/api/v1/users"
+    urlRoot: -> "#{window.apiServerUrl}/api/v1/users"
 
     defaults: ->
       return {

@@ -7,7 +7,7 @@ define [
   ConnectionProgress
 ) ->
 
-  _linkRoot = "#{window.apiServerUrl}/auth/new?"
+  _linkRoot = -> "#{window.apiServerUrl}/auth/new?"
   PROVIDERNAMES =
     'fitbit': 'Fitbit'
     'nike': 'Nike'
@@ -31,7 +31,7 @@ define [
 
     _setActivationLink: ->
       params = @pick 'provider', 'redirect_uri', 'user_id'
-      @set link: "#{_linkRoot}#{$.param params}"
+      @set link: "#{_linkRoot()}#{$.param params}"
 
     onProgressError: (progressModel, msg) ->
 #      app.analytics.track 'entities/connection', 'Error getting progress'

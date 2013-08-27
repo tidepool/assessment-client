@@ -44,7 +44,7 @@
         require.config({ baseUrl: '@@buildDir' })
 
         require(['core'], function (core) {
-            window._app = core.start({
+            config = {
                 debug: 'true' === '@@isDev', // Cast the string 'true' to a bool. You know, sort of.
                 isDev: 'true' === '@@isDev',
                 googleAnalyticsKey: '@@googleAnalyticsKey',
@@ -53,7 +53,10 @@
                 appSecret: '@@appSecret',
                 appId: '@@appId',
                 fbId: '@@fbId'
-            });
+            }
+            window.apiServerUrl = config.apiServer //TODO: eeeeeew! Encapsulate config instead
+            window._app = core.start(config);
+
             if (typeof (_base = core.analytics).trackPerformance === "function") {
                 _base.trackPerformance((new Date()).getTime());
             }

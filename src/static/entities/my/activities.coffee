@@ -6,7 +6,7 @@ define [
 ) ->
 
   Export = Collection.extend
-    url: "#{window.apiServerUrl}/api/v1/users/-/activities"
+    url: -> "#{window.apiServerUrl}/api/v1/users/-/activities"
 
 
   Export
