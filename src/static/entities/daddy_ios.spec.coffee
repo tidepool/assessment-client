@@ -9,8 +9,8 @@ define [
 
   _goodMessage =
     type: ios.TYPES.log
-    usrMsg: 'The Rain in Spain Stays Mainly in the Plain'
-    logMsg: 'This is because the elevated elevation and nearby coastline creates a convenient location for atmospheric humidity to disperse.'
+    message: 'The Rain in Spain Stays Mainly in the Plain'
+    details: 'This is because the elevated elevation and nearby coastline creates a convenient location for atmospheric humidity to disperse.'
 
   _badMessage =
     type: null
@@ -32,7 +32,7 @@ define [
     describe 'holla', ->
       it 'creates an iframe as a way to holla data to ios', ->
         ios.holla _goodMessage, true # true = skip cleanup. Not the typical usage, but allows for testing the iframe
-        _checkIFrame _goodMessage.usrMsg
+        _checkIFrame _goodMessage.message
         ios.cleanUp()
         expect($('iframe')).toHaveLength 0
       it 'will not send a message if it is missing a type', ->
@@ -59,46 +59,28 @@ define [
 
     describe 'log', ->
       it 'sends message to ios', ->
-        ios.log _goodMessage.usrMsg, null, true # msg, detail, skipCleanup
+        ios.log _goodMessage.message, null, true # msg, detail, skipCleanup
         _checkIFrame ios.TYPES.log
-        _checkIFrame _goodMessage.usrMsg
+        _checkIFrame _goodMessage.message
         ios.cleanUp()
 
     describe 'warn', ->
       it 'sends message to ios', ->
-        ios.warn _goodMessage.usrMsg, null, true # msg, detail, skipCleanup
+        ios.warn _goodMessage.message, null, true # msg, detail, skipCleanup
         _checkIFrame ios.TYPES.warn
-        _checkIFrame _goodMessage.usrMsg
+        _checkIFrame _goodMessage.message
         ios.cleanUp()
       it 'supports both a user message and details', ->
-        ios.warn _goodMessage.usrMsg, _goodMessage.logMsg, true # msg, detail, skipCleanup
+        ios.warn _goodMessage.message, _goodMessage.details, true # msg, detail, skipCleanup
         _checkIFrame ios.TYPES.warn
-        _checkIFrame _goodMessage.usrMsg
-        _checkIFrame _goodMessage.logMsg
+        _checkIFrame _goodMessage.message
+        _checkIFrame _goodMessage.details
         ios.cleanUp()
 
     describe 'error', ->
       it 'sends message to ios', ->
-        ios.error _goodMessage.usrMsg, null, true # msg, detail, skipCleanup
+        ios.error _goodMessage.message, null, true # msg, detail, skipCleanup
         _checkIFrame ios.TYPES.error
-        _checkIFrame _goodMessage.usrMsg
+        _checkIFrame _goodMessage.message
         ios.cleanUp()
 
-#    describe 'log', ->
-#      it 'log data to ios with a different protocol', ->
-#        ios.log _userName, true
-#        expect($('iframe')).toHaveLength 1
-#        expect($('iframe').attr('src').indexOf _userName).not.toEqual -1
-#        expect($('iframe').attr('src').indexOf _iosLogProtocol).not.toEqual -1
-#        ios.cleanUp()
-#        expect($('iframe')).toHaveLength 0
-#
-#    describe 'error', ->
-#      it 'sends error messages to ios', ->
-#        ios.error _fakeErrMsg, true
-#        expect($('iframe')).toHaveLength 1
-#        expect($('iframe').attr('src').indexOf _fakeErrMsg).not.toEqual -1
-#        expect($('iframe').attr('src').indexOf _iosErrorProtocol).not.toEqual -1
-#        ios.cleanUp()
-#        expect($('iframe')).toHaveLength 0
-#

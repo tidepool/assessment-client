@@ -30,15 +30,16 @@ define [
         console.warn @_validate msgObject
         return @
       @iframe = @iframe || document.createElement "IFRAME"
-#      console.log msgObject:msgObject
       src = 'ios://' + JSON.stringify msgObject
       @iframe.setAttribute 'src', src
       document.documentElement.appendChild @iframe
       @cleanUp() unless skipCleanup
       @
 
-    _validate: (message) ->
-      return "message.type is required" unless message.type?
+    _validate: (msgObj) ->
+      return "type is required" unless msgObj.type?
+      unless msgObj.type is _TYPES.start or _TYPES.finish
+        return "message is required unless this is a start or finish command" unless msgObj.message
       null
 
 
@@ -55,9 +56,9 @@ define [
     TYPES: _TYPES
     start:  (skipCleanup) ->      @holla { type:_TYPES.start  }, skipCleanup
     finish: (skipCleanup) ->      @holla { type:_TYPES.finish }, skipCleanup
-    log:    (msg, detail, skipCleanup) -> @holla { type:_TYPES.log,   usrMsg:msg, logMsg:detail }, skipCleanup
-    warn:   (msg, detail, skipCleanup) -> @holla { type:_TYPES.warn,  usrMsg:msg, logMsg:detail }, skipCleanup
-    error:  (msg, detail, skipCleanup) -> @holla { type:_TYPES.error, usrMsg:msg, logMsg:detail }, skipCleanup
+    log:    (msg, detail, skipCleanup) -> @holla { type:_TYPES.log,   message:msg, details:detail }, skipCleanup
+    warn:   (msg, detail, skipCleanup) -> @holla { type:_TYPES.warn,  message:msg, details:detail }, skipCleanup
+    error:  (msg, detail, skipCleanup) -> @holla { type:_TYPES.error, message:msg, details:detail }, skipCleanup
 
   new Export
 
