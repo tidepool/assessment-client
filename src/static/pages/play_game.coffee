@@ -97,7 +97,6 @@ define [
 #      document.title = if title then title else _defaultTitle
 
     _showWelcome: ->
-      ios.forceOn()
       ios.start()
       ios.log 'Game Started'
       gameDef = @options.params.def_id
