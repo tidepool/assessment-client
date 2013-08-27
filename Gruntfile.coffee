@@ -352,21 +352,21 @@ module.exports = (grunt) ->
           ContentEncoding: 'gzip'
 #          ContentType: 'application/json',
 #        access: 'public-read'
-        concurrency: 3 # More power captain!
+        concurrency: 5 # More power captain!
       deployParent:
         options: params: CacheControl: 'public,max-age=120000' # 2 minutes (1000 * 60 * 2)
         files: [
           expand: true
           cwd: "<%= grunt.option('targetParent') %>"
-          src: '*.*' # all files, but only those in this immediate directory
+          src: '*' # all files, but only those in this immediate directory
           dest: '' # putting a slash here will cause '//path' on Amazon
         ]
       deployStatic: files: [
-        expand: true
-        cwd: "<%= grunt.option('target') %>"
-        src: '**/**'
-        dest: "<%= grunt.option('targetSubdir') %>"
-      ]
+          expand: true
+          cwd: "<%= grunt.option('target') %>"
+          src: '**'
+          dest: "<%= grunt.option('targetSubdir') %>"
+        ]
 
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
