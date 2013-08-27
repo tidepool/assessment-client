@@ -223,13 +223,13 @@ module.exports = (grunt) ->
             jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
             bootstrap: 'empty:'
           out: '<%= grunt.option("target") %>/core/main.js'
-#          optimize: "uglify2"
-          optimize: "none"
+          optimize: "uglify2"
+#          optimize: "none"
           generateSourceMaps: true
           preserveLicenseComments: false
 #          removeCombined: true # Does not accurately identify all files it has combined. Using a manual clean instead
           skipPragmas: true # we don't use them, and they may slow the build
-#          done: (done, output) ->
+#          done: (done, output) -> # Would like to use this, but it blocks any task that follows it
 #            duplicates = require('rjs-build-analysis').duplicates(output)
 #            if duplicates.length > 0
 #              grunt.log.subhead 'Duplicates found in requirejs build:'
@@ -321,6 +321,23 @@ module.exports = (grunt) ->
 
     'git-describe': me: {}
 
+    pngmin:
+      options:
+        ext: '.png'
+        force: true
+      root: files: [
+          expand: true
+          cwd:  "<%= grunt.option('targetParent') %>"
+          src:  '*.png'
+          dest: "<%= grunt.option('targetParent') %>"
+        ]
+      target: files: [
+          expand: true
+          cwd:  "<%= grunt.option('target') %>"
+          src:  ['welcome/**/*.png', 'images/**/*.png']
+          dest: "<%= grunt.option('target') %>"
+        ]
+
     aws_s3:
       options:
         accessKeyId:     '<%= env.awsKey %>'
@@ -405,6 +422,7 @@ module.exports = (grunt) ->
         'copy:rootImages'
         'copy:assetImages'
         'exec:cleanEmpties'
+        'pngmin'
       ]
     else
       grunt.log.writeln "Building in Dev Mode"
