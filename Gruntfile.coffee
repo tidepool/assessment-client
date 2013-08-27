@@ -346,13 +346,11 @@ module.exports = (grunt) ->
         secretAccessKey: '<%= env.awsSecret %>'
         bucket:          '<%= env.awsBucket %>'
         region:          '<%= env.awsRegion %>'
-        params:
-          # Two Year cache policy (1000 * 60 * 60 * 24 * 730)#
-          CacheControl: 'public,max-age=630720000'
-          ContentEncoding: 'gzip'
-#          ContentType: 'application/json',
-#        access: 'public-read'
         concurrency: 5 # More power captain!
+        params:
+          CacheControl: 'public,max-age=630720000' # Two Year cache policy (1000 * 60 * 60 * 24 * 730)#
+#          ContentEncoding: 'gzip' # Must be manually compressed, and s3 doesn't correctly send Accept-Encoding header: http://stackoverflow.com/questions/5442011/serving-gzipped-css-and-javascript-from-amazon-cloudfront-via-s3
+
       deployParent:
         options: params: CacheControl: 'public,max-age=120000' # 2 minutes (1000 * 60 * 2)
         files: [
@@ -364,7 +362,7 @@ module.exports = (grunt) ->
       deployStatic: files: [
           expand: true
           cwd: "<%= grunt.option('target') %>"
-          src: '**'
+          src: '**/all-min.css'
           dest: "<%= grunt.option('targetSubdir') %>"
         ]
 
