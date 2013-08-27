@@ -362,7 +362,7 @@ module.exports = (grunt) ->
       deployStatic: files: [
           expand: true
           cwd: "<%= grunt.option('target') %>"
-          src: '**/all-min.css'
+          src: '**'
           dest: "<%= grunt.option('targetSubdir') %>"
         ]
 
@@ -452,7 +452,17 @@ module.exports = (grunt) ->
   grunt.registerTask 'test', 'Start a server and run unit tests. build task is a prereq', [ 'connect:dev', 'exec:unitTest' ]
 
 
-
+  # deploy
+  # ------
+  # Hard code the targets to dist locations and names and run the aws deploy step
+  # This sets global targets to dist, so take care not to try to do a deploy and a dev build in the same run
+  grunt.registerTask 'deploy', 'Moves content from the dist folder to AWS S3. Dist build is a prereq.', ->
+    targetInfo = getDistTargetWithHash grunt.option 'gitRevision'
+    setGruntOptions targetInfo
+    grunt.task.run [
+      'aws_s3:deployParent'
+      'aws_s3:deployStatic'
+    ]
 
 
 
@@ -475,23 +485,33 @@ module.exports = (grunt) ->
     grunt.option 'gitRevision', hash
     targetInfo = buildConfig.dev # Default path
     if grunt.option TARGETS.dist
-      targetInfo = buildConfig.dist
-      targetInfo.target += hash # Only the dist build appends the hash
-      targetInfo.subdir += hash
+      targetInfo = getDistTargetWithHash hash
     else
       grunt.option TARGETS.dev, true
       targetInfo = buildConfig.dev
+    setGruntOptions targetInfo
+    targets = []
+    targets.push target for target of TARGETS
+    grunt.log.writeln "You can set targets using grunt options, such as `--dev`"
+    grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
+
+  # Given a hash, create an object that stores dist locations
+  getDistTargetWithHash = (hash) ->
+    targetInfo = buildConfig.dist
+    targetInfo.target += hash # Only the dist build appends the hash
+    targetInfo.subdir += hash
+    targetInfo
+
+  # Given and object that specifies target locations, set global grunt variables
+  setGruntOptions = (targetInfo) ->
     grunt.option 'target',       targetInfo.target
     grunt.option 'targetParent', targetInfo.parent
     grunt.option 'targetSubdir', targetInfo.subdir
     grunt.log.writeln "Output path set to: #{grunt.option 'target'}"
     grunt.log.writeln "Parent path:        #{grunt.option 'targetParent'}"
     grunt.log.writeln "Subdir:             #{grunt.option 'targetSubdir'}"
-    targets = []
-    targets.push target for target of TARGETS
-    grunt.log.writeln "You can set targets using grunt options, such as `--dev`"
-    grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
 
+  # Run git-describe to get the revision number, and when it returns set the path for all grunt tasks
   grunt.event.once 'git-describe', setPath
   grunt.task.run 'git-describe'
 
