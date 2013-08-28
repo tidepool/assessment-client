@@ -46,6 +46,10 @@
 
         require.config({ baseUrl: '@@buildDir' });
 
+        if (!jasmine) {
+            throw new Error("jasmine is not defined")
+        }
+
         window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
 
         require([ 'bootstrap',
