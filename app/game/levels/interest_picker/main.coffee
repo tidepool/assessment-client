@@ -105,9 +105,12 @@ define [
         @_seenAll = true
 
       if @_seenAll
-        $('.miniInstructions').html('<span class="good" style="color:black"><strong>All items seen.</strong></span>')
+        #$('.instructions').html('<span class="good" style="color:black"><strong>Collect the items that define you.</strong></span>')
+        $('.instructions').html('<span class="good">Collect the items that define you.</span>')
+        # $('.title').text("Collect the items that define you.")
       else
-        $('.miniInstructions').text("Seen #{@_i} of #{@collection.length} items.")
+        # $('#header.title').text("Collect the items that define you.")
+        $('.instructions').text("Seen #{@_i} of #{@collection.length} items.")
 
       @_proceedIfDone()
 
