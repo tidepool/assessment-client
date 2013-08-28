@@ -13,4 +13,4 @@ src/static/bower_components
 !gfx.css
 *.js
 *.js.map
-!scripts/vendor/*.js
+!src/static/scripts/vendor/*.js
