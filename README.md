@@ -60,3 +60,7 @@ Installation:
 Now ready to run the front-end:
 
         grunt server
+        
+Deployment
+----------
+https://github.com/tidepool/assessment-client/wiki/Thar-Build
