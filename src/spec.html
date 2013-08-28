@@ -46,23 +46,21 @@
 
         require.config({ baseUrl: '@@buildDir' });
 
+        window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
+
         require([ 'bootstrap',
 
 /* scribeAmdDependencies.rb Writes Here */
 
         ], function () {
-            $(function(){ // wait for doc ready, so that 'jasmine' is sure to be defined
-                console.log({ jasmine:jasmine });
-                window.console_reporter = new jasmine.ConsoleReporter(); // PhantomJS needs this to be a global object
-                var jasmineEnv = jasmine.getEnv();
-                var htmlReporter = new jasmine.HtmlReporter();
-                jasmineEnv.addReporter(htmlReporter);
-                jasmineEnv.specFilter = function(spec) {
-                    return htmlReporter.specFilter(spec);
-                };
-                jasmineEnv.addReporter(window.console_reporter);
-                jasmineEnv.execute();
-            });
+            var jasmineEnv = jasmine.getEnv();
+            var htmlReporter = new jasmine.HtmlReporter();
+            jasmineEnv.addReporter(htmlReporter);
+            jasmineEnv.specFilter = function(spec) {
+                return htmlReporter.specFilter(spec);
+            };
+            jasmineEnv.addReporter(window.console_reporter);
+            jasmineEnv.execute();
         });
     </script>
 </head>
