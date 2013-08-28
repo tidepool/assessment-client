@@ -1,0 +1,109 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.personVessel
+  $imgWidth: 260px
+  $imgHeight: 370px
+  position: absolute
+  width: 100%
+  height: 100%
+  cursor: pointer
+  +user-select(none)
+
+
+  // ----------------------------------- Centered Things
+  .mask, .fill, .intro
+    position: absolute
+    left: 50%
+    width: $imgWidth
+    margin-left: -$imgWidth/2
+
+
+  // ----------------------------------- The Text of the Words/Concepts
+  .text
+    font-size: $fontSizeLarge
+    +phone
+      font-size: $fontSizeBody
+    output
+      font-weight: bold
+      color: $colorBrand1
+
+
+  // ----------------------------------- The masked image of the person
+  .mask
+    top: 0
+    height: $imgHeight
+    +twiceable('images/game/personality/hollowman', $imgWidth)
+
+
+  // ----------------------------------- The shape that fills up the person
+  .fill
+    bottom: 0
+    height: $spaceTiny
+    max-height: 100%
+    background: $colorBrand1
+    box-shadow: inset 0 $spaceTiny 0 tint($colorBrand1, 50%), inset 0 $spaceTiny+1 0 shade($colorBrand1, 5%)
+  .fill output
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    padding-top: $space
+    text-align: center
+    color: white
+  .fill:focus
+    outline: none
+
+
+  // ----------------------------------- Initial Instruction Arrow
+  .intro
+    display: none
+    width: $spaceBig*2
+    margin-left: -$spaceBig
+    bottom: 20%
+    height: $spaceBig
+    font-size: $spaceBig
+    color: $colorBrand1
+    text-align: center
+    small
+      font-size: $fontSizeBody
+
+
+  // ----------------------------------- States
+  left: 100%
+  +transitionable
+  &.current // The person currently being changed
+    left: 0
+  &.finished // A peson which has been changed and accepted by the user
+    left: -100%
+  &.untouched // A person who has not yet been modified
+    .intro
+      display: block
+      +animation(wiggleBottomMargin .5s alternate infinite)
+    .fill
+      +animation(wiggleHeight .5s alternate infinite)
+  &:first-child .fill
+    height: 100%
+  &.untouched:first-child // The first person shows an introductory de-filling animation
+    .fill
+      +transitionable(height, .5s, ease-out)
+      height: 0%
+
+
++keyframes(wiggleHeight)
+  0%
+    padding-top: 0
+  100%
+    padding-top: $spaceLil
+    animation-timing-function: ease-out
+
++keyframes(wiggleBottomMargin)
+  0%
+    margin-bottom: 0
+  100%
+    margin-bottom: $spaceLil
+    animation-timing-function: ease-out
+
