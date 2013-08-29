@@ -122,7 +122,7 @@ define [
       # If the current logged-in user is guest, we need to pass this for potential mutation to new user
       data =
         redirect_uri: @cfg.apiServer + _authRedirectSuffix
-        client_uri: 'http://assessments-front.dev/#do/logIn/' #encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
+        client_uri: "#{window.location.protocol}//#{window.location.host}/#do/logIn/"
         provider: provider
         client_id: @cfg.appId
         response_type: 'token'
