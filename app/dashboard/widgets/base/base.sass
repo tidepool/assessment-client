@@ -1,0 +1,169 @@
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+.widget
+  //$size: $space * 8
+  position: relative
+  display: block
+  padding: $spaceLil
+  margin: $spaceLil
+  background: white
+  border-radius: $radiusSmall
+  box-shadow: 0 $spaceTiny 0 0 $shade, 0 0 0 0 transparent
+  overflow: auto
+  text-align: center
+  +box-sizing(border-box)
+  @media all and (min-width: 1050px)
+    padding: $spaceLil $space
+
+  &.colorBrand2
+    background: $colorBrand2
+    color: white
+
+.widget
+  //.dogEar
+  //  position: absolute
+  //  top: 0
+  //  right: 0
+  //  width: 0
+  //  height: 0
+  //  border: $space solid transparent
+  //  border-top-color: $colorHighlight
+  //  border-right-color: $colorHighlight
+
+  ul, p
+    text-align: left
+  &>p
+    position: relative // stay above pos absolute things like the .dogear
+    text-align: center
+    font-weight: bold
+
+  h1
+    font-size: $fontSizeVeryLarge
+
+  h3, .subTitle
+    margin-top: -$spaceLil // Make it flush with edge of widget
+    margin-left: -$spaceLil
+    margin-right: -$spaceLil
+    padding: $spaceLil
+    line-height: 1.1
+    @media all and (min-width: 1050px)
+      padding: $spaceLil $space
+      padding-right: $spaceTiny
+      margin-left: -$space
+      margin-right: -$space
+
+  &>h3
+    color: $colorForeground
+    font-weight: bold
+    text-align: left
+    font-size: $fontSizeBody
+    background: $colorBackground
+    text-transform: uppercase
+    margin-bottom: $spaceTiny
+
+  //&.featured>h3
+  //  background-color: $colorGood
+  //  color: white
+  .subTitle // Shows up right below the title
+    color: $colorForegroundMild
+    background: white
+    text-transform: uppercase
+    //box-shadow: inset 0 -3px 0 0 lighten($colorForegroundMild, 20%)
+    border-bottom: 1px solid $colorBackgroundWarm
+    margin-bottom: 0
+    margin-top: -$spaceTiny
+
+
+
+  .intro
+    color: lighten($colorForegroundCool, 20%)
+    text-align: left
+    background: white
+    margin-top: -$spaceLil
+    margin-bottom: -$space
+    padding: $spaceLil $space
+    padding-bottom: $space // extra room for the icon divider
+    font-size: $fontSizeBody
+    border-bottom: 1px solid $colorQuiet
+
+
+
+  // widgets that contain charts
+  .chart.polarArea,
+  .chart.pie,
+  .chart.doughnut
+    margin-top: $space
+  canvas
+    float: left
+    margin-right: $spaceLil
+    margin-left: -$spaceLil
+  ul.key
+    position: absolute
+    top: $space
+    right: 0
+    min-width: 100px
+    padding: $spaceLil
+    background: $highlight
+    border-radius: $radiusSmall
+    margin-top: $spaceBig
+  ul.key li
+    font-size: $fontSizeTiny
+
+
+
+
+  // The round dividing icon between the sections
+  .bottomIcon
+    $size: $space + $spaceLil
+    position: absolute
+    bottom: -($size/2)
+    left: 50%
+    margin-left: -($size/2)
+    width: $size
+    height: $size
+    font-size: 20px
+    line-height: $size
+    background-color: white
+    box-shadow: 0 0 0 1px $colorQuiet
+    color: $colorForegroundCool
+    border-radius: 50%
+    text-align: center
+
+  // Center aligned multi-paragraph text
+  .fancyTitle
+    position: relative
+    margin: $spaceLil 0 $spaceLil
+    //text-shadow: 0 5px 10px $highlightThick, 5px 0 10px $highlightThick, -5px 0 10px $highlightThick
+    p
+      font-size: $fontSizeLarge
+      line-height: 0.9
+      text-transform: uppercase
+      margin: 0
+      padding: 0
+      text-align: center
+    strong
+      font-size: 30px
+
+  img
+    margin-bottom: $spaceLil
+
+
+
+  // Content that should go all the way to the left and right edge of the widget
+  .fullWidth
+    margin-left: -$spaceLil
+    margin-right: -$spaceLil
+    @media all and (min-width: 1050px)
+      margin-left: -$space
+      margin-right: -$space
+
+
+
+
+
+
+
+
