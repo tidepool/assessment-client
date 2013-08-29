@@ -77,11 +77,10 @@ define [
         .find(".#{@className}").remove()
 
     _hideAll: ->
-      $yall = $(".#{@className}:not(#{_everlasting})")
-      $yall
-        .parent()
-          .removeClass('onHold')
-          .css('position', '')
+      $yall = $(".#{@className}").not _everlasting
+      $yall.parent()
+        .removeClass('onHold')
+        .css('position', '')
       $yall.remove()
       @
 
