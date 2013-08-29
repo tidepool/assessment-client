@@ -92,6 +92,7 @@ define [
 
     # ----------------------------------------------------------- Callbacks
     _onModelError: (model, xhr, options) ->
+      console.warn 'model error'
       console.warn xhr.responseJSON?.status?.message
 #      console.log model:model , xhr: xhr
       # Flush the local cache whenever we get a login exception from the server

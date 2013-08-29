@@ -68,7 +68,7 @@ define [
 
     # ----------------------------------------------------------- Event Handlers
     _clickedSignInFacebook: (e) ->
-      @options.app.session.loginUsingOauth('facebook', {width: 1006, height: 775})
+      @options.app.session.oauth 'facebook'
       holdPlease.show $(e.target)
       @options.app.analytics?.track @className, 'Pressed Facebook Sign In'
 

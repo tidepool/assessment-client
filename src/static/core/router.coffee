@@ -11,6 +11,8 @@ define [
   _me = 'routers/main_router'
   _welcomePageUrlPrefix = '/welcome/'
 
+
+
   MainRouter = Backbone.Router.extend
     routes:
       '':                       'showHome'
@@ -32,11 +34,19 @@ define [
       'preferences-training':   'showTrainingPreferences'
       'friendHelper/:uid/:gid': 'showFriendHelper'
       'friendResults/:gid':     'showFriendResults'
+      'logInUsingToken/:token': 'logInUsingToken'
 
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
 #      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..." # Uncomment to show all the routes the app responds to
+
+
+    # ------------------------------------------------- Private Methods
+    _logIn: (token) ->
+      @listenToOnce @app.user, 'error', (model, xhr) -> @showError xhr.responseJSON.status.message, model
+      @app.user.reset(token).fetch()
+      @
 
 
     # ------------------------------------------------ Route Handlers
@@ -81,6 +91,11 @@ define [
     showTrainingPreferences: ->
       @navigate 'dashboard'
       @app.trigger 'action:showPersonalizations'
+    logInUsingToken: (token) ->
+      console.log "logInUsingToken: #{token}"
+      @listenToOnce @app.user, 'sync', -> @showDashboard()
+      @_logIn token
+
 
 
     # ------------------------------------------------- Route Helpers

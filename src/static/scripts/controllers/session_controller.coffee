@@ -13,6 +13,7 @@ define [
 
   _me = 'controllers/session_controller'
   _authUrlSuffix = '/oauth/authorize'
+  _authRedirectSuffix = '/auth/client_redirect'
 
 
   # ----------------------------------------------- Constructor
@@ -116,26 +117,26 @@ define [
 
     # ---------------------------------------------- Private Utility Methods
 
-
     # authorizeThrough: facebook, twitter or fitbit
-    _buildExternalServiceUrl: (authorizeThrough) ->
-      redirectUri = encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
-      authorize_param = "provider=#{authorizeThrough}&"
-      if @user.get('guest')
-        # If the current logged-in user is guest, we need to pass this for potential mutation to new user
-        guest_param = "guest_id=#{@user.get('id')}&"
-      else
-        guest_param = ""
-      url = "#{@_authUrl}?#{authorize_param}#{guest_param}client_id=#{@cfg.appId}&redirect_uri=#{redirectUri}&response_type=token"
-      url
+    _buildOauthUrl: (provider) ->
+      # If the current logged-in user is guest, we need to pass this for potential mutation to new user
+      data =
+        redirect_uri: @cfg.apiServer + _authRedirectSuffix
+        client_uri: 'http://assessments-front.dev/#logInUsingToken/' #encodeURIComponent "#{window.location.protocol}//#{window.location.host}/redirect.html"
+        provider: provider
+        client_id: @cfg.appId
+        response_type: 'token'
+      data.guest_id = @user.get('id') if @user.get('guest')
+      console.log oauthUrlData: data
+      url = "#{@_authUrl}?#{$.param data}"
 
-    _parseHash: (hash) ->
-      params = {}
-      queryString = hash.substring(1)
-      regex = /([^&=]+)=([^&]*)/g
-      while (m = regex.exec(queryString))
-        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
-      params
+#    _parseHash: (hash) ->
+#      params = {}
+#      queryString = hash.substring(1)
+#      regex = /([^&=]+)=([^&]*)/g
+#      while (m = regex.exec(queryString))
+#        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
+#      params
 
     _persistLocally: (data) ->
       sessionStorage['access_token'] = data['access_token']
@@ -156,15 +157,10 @@ define [
         deferred.reject("Fail")
       deferred.promise()
 
-    loginUsingOauth: (provider, popupWindowSize) ->
-      # Inspired by: https://github.com/ptnplanet/backbone-oauth
-      # Popup a Window to let the providers (Facebook, Twitter...) show their login UI
-      left = window.screenLeft + 50
-      top = window.screenTop + 50
-      width = popupWindowSize.width
-      height = popupWindowSize.height
-      window.OAuthRedirect = _.bind(@externalAuthServiceCallback, @)
-      window.open(@_buildExternalServiceUrl(provider), "Login", "width=#{width}, height=#{height}, left=#{left}, top=#{top}, menubar=no")
+    oauth: (provider) ->
+#      window.OAuthRedirect = _.bind(@externalAuthServiceCallback, @)
+      console.log url:@_buildOauthUrl provider
+      window.location.href = @_buildOauthUrl provider
 
     nuke: ->
       delete sessionStorage['access_token']
@@ -184,17 +180,25 @@ define [
       @
 
     # Called as a global object by the opened window
-    externalAuthServiceCallback: (hash, location) ->
-      params = @_parseHash hash
-      #console.log("Redirected with token #{params['access_token']}, hash #{hash}")
-      if params['access_token']
-        @logOut()
-        @_persistLocally params
-        @user.reset() # Reset to defaults. Defaults includes getting the token out of local storage, so this does a fetch with a user with an id `-` and an accessToken
-        @user.fetch()
-      else
-        console.log 'Odd Error, no token received but redirected'
-      @options.app.analytics.track 'session', 'Successful External Auth Login'
+#    externalAuthServiceCallback: (hash, location) ->
+#      params = @_parseHash hash
+#      #console.log("Redirected with token #{params['access_token']}, hash #{hash}")
+#      if params['access_token']
+#        @logOut()
+#        @_persistLocally params
+#        @user.reset() # Reset to defaults. Defaults includes getting the token out of local storage, so this does a fetch with a user with an id `-` and an accessToken
+#        @user.fetch()
+#      else
+#        console.log 'Odd Error, no token received but redirected'
+#      @options.app.analytics.track 'session', 'Successful External Auth Login'
 
 
   SessionController
+
+
+
+
+
+  
+
+
