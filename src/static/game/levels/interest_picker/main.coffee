@@ -62,11 +62,11 @@ define [
       @heightAdjustment = _drawerSize + _margins
       @summaryData = {}
       @once 'domInsert', @fillHeight
-      _.bindAll @, '_step', '_startSteppin'
+      _.bindAll @, '_step', '_startSteppin', '_stopSteppin'
       @_i = 0
       # Don't keep throwing symbols when the window isn't focused, otherwise they'll stack up
-      $(window).blur => clearInterval @_interval
-      $(window).focus @_startSteppin
+      $(window).on 'blur', @_stopSteppin
+      $(window).on 'focus', @_startSteppin
       @_updateCounts()
       @_startSteppin()
       @
@@ -87,6 +87,8 @@ define [
     _startSteppin: ->
       clearInterval @_interval
       @_interval = setInterval @_step, _tempo
+
+    _stopSteppin: -> clearInterval @_interval
 
     _hasPickedEnough: ->
       true if @collection.countPickedWords() >= _wordPicks and @collection.countPickedSymbols() >= _symbolPicks
@@ -181,7 +183,8 @@ define [
     close: ->
       # Clean up all intervals and timeouts
       clearInterval @_interval
-      $(window).off() # Lose all the window focus/blur events
+      $(window).off 'blur', @_stopSteppin
+      $(window).off 'focus', @_startSteppin
 
 
   Export
