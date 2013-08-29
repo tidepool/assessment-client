@@ -89,7 +89,7 @@ define [
       console.log "logInUsingToken: #{token}"
       @listenToOnce @app.user, 'sync', ->
         @app.analytics.track 'session', 'Successful External Auth Login'
-        @showDefaultPage
+        @showDefaultPage()
       @_logInUsingToken token
 
 
@@ -98,15 +98,12 @@ define [
 
     # Show whatever the default page is for this application and user state.
     showDefaultPage: ->
-      console.log
-        isUnfetched: @app.user.isUnfetched()
-        isGuest: @app.user.isGuest()
-        isLoggedIn: @app.user.isLoggedIn()
-        user: @app.user.toJSON()
-
-      if @app.user.isUnfetched()
-        @listenToOnce @app.user, 'sync', @showDefaultPage  # User with a token, but not fetched so of unknown status
-        return
+#      console.log
+#        isUnfetched: @app.user.isUnfetched()
+#        isGuest: @app.user.isGuest()
+#        isLoggedIn: @app.user.isLoggedIn()
+#        hasPersonality: @app.user.attributes.personality?
+#        user: @app.user.toJSON()
 
       opts =
         trigger: true # go there
@@ -115,16 +112,19 @@ define [
       if @app.user.isLoggedIn() and @app.user.isGuest()
         if @app.user.attributes.personality?
           console.log user:@app.user.attributes
-          @navigate 'home', opts                         # Guest with Personality
+          @navigate 'home', opts                             # Guest with Personality
         else
-          @navigate 'home', opts                         # Guest without
+          @navigate 'home', opts                             # Guest without
       else if @app.user.isLoggedIn()
-        if @app.user.attributes.personality?
-          @navigate 'dashboard', opts                    # x User with personality
+        if @app.user.isUnfetched()
+          console.log 'showDefaultPage(): unfetched user'
+          @listenToOnce @app.user, 'sync', @showDefaultPage  # User with a token, but not fetched so of unknown status
+        else if @app.user.attributes.personality?
+          @navigate 'dashboard', opts                        # User with personality
         else
-          @navigate 'createDefaultGame', opts            # User without
+          @navigate 'getStarted', opts                       # User without
       else
-        @navigate 'home', opts                           # Non-user
+        @navigate 'home', opts                               # Non-user
 
       @
 
