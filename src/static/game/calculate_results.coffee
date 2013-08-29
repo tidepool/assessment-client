@@ -43,6 +43,7 @@ define [
     _gotGameResults: (model) ->
       #console.log model: @model
       app.analytics.track @className, 'Successfully calculated game results'
+      ios.log 'Got game results'
       if ios.isUp # The ios container should be sent a message
         ios.finish()
       else
@@ -65,7 +66,7 @@ define [
       @_updateStatusMsg model
       if model.attributes.status.state is model.STATES.done
         @_gotGameResults model
-        ios.log 'Got game results'
+
 
 
   View
