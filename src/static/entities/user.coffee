@@ -30,6 +30,7 @@ define [
       @on 'change:guest', @_calculateNickname
       @on 'change:age', @_calculateDOB
       @on 'change:date_of_birth', @_calculateAge
+      @on 'change:image', @_noteImagePath
       @on 'error', @_onModelError
       @on 'invalid', @_onModelInvalid
 
@@ -77,6 +78,11 @@ define [
 #        year:year
 #        age:age
       @set age:age
+
+    _noteImagePath: (model, val) ->
+      return unless val
+      if val.indexOf('http://') isnt -1
+        model.set isAbsoluteImagePath:true
 
     _nuke: ->
       delete sessionStorage['access_token']

@@ -29,7 +29,8 @@
         </ul>
         <i class="avatar">
             {{#if image}}
-                <img src="@@buildDir{{image}}" alt="{{nickname}}'s Profile Image" />
+                <img src="{{#unless isAbsoluteImagePath}}@@buildDir{{/unless}}{{image}}"
+                     alt="{{nickname}}'s Profile Image" />
             {{/if}}
         </i>
         <span class="nickname" title="{{name}}: {{email}}">{{nickname}}</span>
