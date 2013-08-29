@@ -50,6 +50,7 @@ define [
     events:
       'click .bentoBox .title': 'onClickTitle'
       'click .bentoBox .groovy': 'onClickTitle'
+      'click .menu': 'onClickMenu'
 
     start: ->
       @track Level.EVENTS.start
@@ -59,6 +60,7 @@ define [
         model.view = view
       @listenTo @collection, 'change', @onChange
       @heightAdjustment = _drawerSize + _margins
+      @summaryData = {}
       @once 'domInsert', @fillHeight
       _.bindAll @, '_step', '_startSteppin'
       @_i = 0
@@ -133,6 +135,12 @@ define [
       $el.removeClass _shimmerClass
       setTimeout (-> $el.addClass _shimmerClass), 1 # This delay lets the dom notice and animate the added class
 
+    # A 'cheater' method for allowing us to speed past this game. Picks enough items to allow you to proceed
+    _pickAll: ->
+      @summaryData.cheater_pick = true
+      @collection.each (model) ->
+        model.view._pick() # Yes, I'm accessing a private method but it's for a dev-only hack so I'm already misbehaving.
+
 
     # ------------------------------------------------------------- Event Handlers
     onChange: (model) ->
@@ -146,7 +154,7 @@ define [
           if @collection.countPickedSymbols() > _symbolPicks
             model.view.unpick().sayNo()
       if @_hasPickedEnough()
-        @summaryData =
+        @summaryData = _.extend @summaryData,
           symbol_list: @collection.getPickedSymbols()
           word_list:   @collection.getPickedWords()
         @readyToProceed()
@@ -163,6 +171,10 @@ define [
 
     onClickTitle: (e) ->
       $(_bentoSel).toggleClass _expandedClass
+
+    onClickMenu: (e) ->
+      # Hold [CMD/CTRL] + [SHIFT] + [ALT] to skip the level
+      @_pickAll() if (e.metaKey or e.ctrlKey) and e.shiftKey and e.altKey
 
 
     # ------------------------------------------------------------- Event Handlers
