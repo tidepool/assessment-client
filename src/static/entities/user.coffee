@@ -169,6 +169,9 @@ define [
 
     isLoggedIn: -> @hasCurrentToken()
 
+    # Before being fetched, the user can be valid, but only have a token and ID
+    isUnfetched: -> ! @get('email')
+
     # Set the client version of the model back to as if it were new
     # If the optional token is passed in, reset the user to that
     reset: (token) ->

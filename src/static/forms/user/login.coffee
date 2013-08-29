@@ -115,7 +115,9 @@ define [
         @options.app.session.signIn() if @model.isValid( login:true )
       @options.app.analytics?.track @className, 'Submitted Form', formData.loginType
 
-    _onSync: -> perch.hide()
+    _onSync: ->
+      perch.hide()
+      @options.app.router.showDefaultPage()
 
     _onModelInvalid: (model, msg) ->
       @_showErr msg

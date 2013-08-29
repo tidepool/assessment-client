@@ -16,6 +16,7 @@ define [
   MainRouter = Backbone.Router.extend
     routes:
       '':                       'showHome'
+      'def':                    'showDefault'
       home:                     'showHome'
       about:                    'showAbout'
       team:                     'showTeam'
@@ -34,7 +35,7 @@ define [
       'preferences-training':   'showTrainingPreferences'
       'friendHelper/:uid/:gid': 'showFriendHelper'
       'friendResults/:gid':     'showFriendResults'
-      'logInUsingToken/:token': 'logInUsingToken'
+      'do/logIn/:token':        'doLogIn'
 
 
     initialize: (appCoreSingleton) ->
@@ -43,25 +44,16 @@ define [
 
 
     # ------------------------------------------------- Private Methods
-    _logIn: (token) ->
+    _logInUsingToken: (token) ->
       @listenToOnce @app.user, 'error', (model, xhr) -> @showError xhr.responseJSON.status.message, model
       @app.user.reset(token).fetch()
       @
 
 
-    # ------------------------------------------------ Route Handlers
-    showHome: ->
-      if @app.user.attributes.referred_by?
-        window.location.href = _welcomePageUrlPrefix + @app.user.attributes.referred_by
-      else
-        @app.view.asSite 'pages/home'
-    getStarted: ->
-      if @app.user.attributes.personality?
-        @navigate 'dashboard',
-          trigger: true
-          replace: true
-      else
-        @createDefaultGame()
+    # ------------------------------------------------ Location Route Handlers
+    showDefault: ->                  @showDefaultPage()
+    showHome: ->                     @app.view.asSite 'pages/home'
+    getStarted: ->                   @createDefaultGame()
     # Basic Site Pages
     showAbout: ->                    @app.view.asSite 'pages/about'
     showTeam: ->                     @app.view.asSite 'pages/team'
@@ -71,8 +63,7 @@ define [
     createGame: (def_id) ->          @app.view.asGame 'pages/play_game', def_id:def_id
     createGameForUser: (token) ->
       @listenToOnce @app.user, 'sync', ->               @createGame 'baseline'
-      @listenToOnce @app.user, 'error', (model, xhr) -> @showError xhr.responseJSON.status.message, model
-      @app.user.reset(token).fetch()
+      @_logInUsingToken token
 
     showGameResults: (id) ->         @app.view.asGame 'pages/game_results', game_id:id
     # Dashboard
@@ -91,15 +82,51 @@ define [
     showTrainingPreferences: ->
       @navigate 'dashboard'
       @app.trigger 'action:showPersonalizations'
-    logInUsingToken: (token) ->
-      console.log "logInUsingToken: #{token}"
-      @listenToOnce @app.user, 'sync', -> @showDashboard()
-      @_logIn token
 
+
+    # ------------------------------------------------- Action/Verb Routes
+    doLogIn: (token) ->
+      console.log "logInUsingToken: #{token}"
+      @listenToOnce @app.user, 'sync', ->
+        @app.analytics.track 'session', 'Successful External Auth Login'
+        @showDefaultPage
+      @_logInUsingToken token
 
 
     # ------------------------------------------------- Route Helpers
     showError: (message, object) ->  @app.view.asSite 'pages/error', { message:message, object:object }
+
+    # Show whatever the default page is for this application and user state.
+    showDefaultPage: ->
+      console.log
+        isUnfetched: @app.user.isUnfetched()
+        isGuest: @app.user.isGuest()
+        isLoggedIn: @app.user.isLoggedIn()
+        user: @app.user.toJSON()
+
+      if @app.user.isUnfetched()
+        @listenToOnce @app.user, 'sync', @showDefaultPage  # User with a token, but not fetched so of unknown status
+        return
+
+      opts =
+        trigger: true # go there
+        replace: true # replace the url
+
+      if @app.user.isLoggedIn() and @app.user.isGuest()
+        if @app.user.attributes.personality?
+          console.log user:@app.user.attributes
+          @navigate 'home', opts                         # Guest with Personality
+        else
+          @navigate 'home', opts                         # Guest without
+      else if @app.user.isLoggedIn()
+        if @app.user.attributes.personality?
+          @navigate 'dashboard', opts                    # x User with personality
+        else
+          @navigate 'createDefaultGame', opts            # User without
+      else
+        @navigate 'home', opts                           # Non-user
+
+      @
 
 
   MainRouter
