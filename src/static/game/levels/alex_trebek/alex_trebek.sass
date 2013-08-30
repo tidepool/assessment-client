@@ -8,7 +8,10 @@
   max-width: $maxSiteWidth * .75
   margin: 0 auto
   padding: $spaceBig $spaceLil 0
-
+  +tablet
+    padding-top: $space
+  +phone
+    padding-top: $spaceLil
 
   .selectByIcon, .psst
     margin-bottom: $space
