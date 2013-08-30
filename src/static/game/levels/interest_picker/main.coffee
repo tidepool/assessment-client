@@ -21,10 +21,7 @@ define [
 ) ->
 
 
-  _symbolPicks = 3
-  _wordPicks = 4
-  _symbolPicksMax = 8
-  _wordPicksMax = 8
+  _minPicks = 7
   _tempo = 800 # How often to add a new symbol
   _drawerSize = 53 # how large is the drawer that shows up at the bottom on small screens?
   _margins = 50
@@ -32,6 +29,8 @@ define [
 #  _travelTime = 12 * 1000 # Time for a symbol to cross the screen
   _menuSel =         '.menu'
   _rowSel =          '.menu .row'
+  _countSel =        '#CountSeen'
+  _doneClass =       'done'
   _blockedClass =    'blocked' # Don't add the bait to this row
   _wordContentSel =  '.content.words'
   _symbolContentSel ='.content.symbols'
@@ -43,7 +42,8 @@ define [
   _expandedClass =   'expanded'
   _countTmpl =       Handlebars.compile countTmpl
   _tmpl =            Handlebars.compile tmpl
-  _doneMarkup = '<output class="good"><i class="icon-ok-sign"></i> Done</output>'
+  _doneIcon = '<i class="icon-ok-sign"></i>'
+  _doneMarkup = "<output class='good'>#{_doneIcon} Done</output>"
 
 
   Export = Level.extend
@@ -67,7 +67,7 @@ define [
       _.bindAll @, '_step', '_startSteppin', '_stopSteppin'
       @_i = 0
       # Don't keep throwing symbols when the window isn't focused, otherwise they'll stack up
-      $(window).on 'blur', @_stopSteppin
+      $(window).on 'blur',  @_stopSteppin
       $(window).on 'focus', @_startSteppin
       @_updateCounts()
       @_startSteppin()
@@ -78,8 +78,6 @@ define [
     render: ->
       rows = (i for i in [1.._rowCount]) # The numbers themselves aren't really used, Handlebars just needs something to iterate over
       @$el.html _tmpl
-        words: _wordPicks
-        symbols: _symbolPicks
         rows: rows
         rowHeight: "#{Math.floor(1 / rows.length * 100)}%" # convert to a percentage
       @
@@ -93,10 +91,11 @@ define [
     _stopSteppin: -> clearInterval @_interval
 
     _hasPickedEnough: ->
-      true if @collection.countPickedWords() >= _wordPicks and @collection.countPickedSymbols() >= _symbolPicks
+      true if @collection.countPickedWords() + @collection.countPickedSymbols() >= _minPicks
 
     # Every _tempo add another symbol
     _step: ->
+      console.log 'step'
       model = @collection.at(@_i)
       if model and not model.attributes.isPicked
         # Pick a vertical place to add the bait at random
@@ -109,12 +108,10 @@ define [
         @_seenAll = true
 
       if @_seenAll
-        #$('.instructions').html('<span class="good" style="color:black"><strong>Collect the items that define you.</strong></span>')
-        $('.instructions').html('<span class="good">Collect the items that define you.</span>')
-        # $('.title').text("Collect the items that define you.")
+        $(_countSel).html(_doneIcon)
+        setTimeout (-> $(_countSel).addClass _doneClass), 500
       else
-        # $('#header.title').text("Collect the items that define you.")
-        $('.instructions').text("Seen #{@_i} of #{@collection.length} items.")
+        $(_countSel).text("#{@_i}/#{@collection.length}")
 
       @_proceedIfDone()
 
@@ -132,19 +129,8 @@ define [
       @_lastWordCount = @collection.countPickedWords()
       @_lastSymbCount = @collection.countPickedSymbols()
 
-    _updateWordCount: (count) ->
-      # if count is _wordPicks
-      #   $(_wordCountSel).html _doneMarkup
-      #   @_shimmerSel _wordContentSel
-      # else
-      $(_wordCountSel).html _countTmpl count:count, limit:_wordPicks
-
-    _updateSymbolCount: (count) ->
-      # if count is _symbolPicks
-      #   $(_symbolCountSel).html _doneMarkup
-      #   @_shimmerSel _symbolContentSel
-      # else
-      $(_symbolCountSel).html _countTmpl count:count, limit:_symbolPicks
+    _updateWordCount: (count) ->   $(_wordCountSel).html   _countTmpl count:count
+    _updateSymbolCount: (count) -> $(_symbolCountSel).html _countTmpl count:count
 
     # Given a selector, add a class that makes it shimmer like the moonlight on a breezy pond
     _shimmerSel: (sel) ->
@@ -156,11 +142,13 @@ define [
     _pickAll: ->
       @summaryData.cheater_pick = true
       @_seenAll = true
-      @collection.each (model) ->
-        model.view._pick() # Yes, I'm accessing a private method but it's for a dev-only hack so I'm already misbehaving.
+      @collection.each (model) -> model.view._pick() # Accessing a private method but it's for a dev-only hack so I'm already misbehaving.
 
     _proceedIfDone: ->
       if @_hasPickedEnough() and @_seenAll
+        @summaryData = _.extend @summaryData,
+          symbol_list: @collection.getPickedSymbols()
+          word_list:   @collection.getPickedWords()
         @readyToProceed()
       else
         @notReadyToProceed()
@@ -170,20 +158,7 @@ define [
     onChange: (model) ->
       @_updateCounts()
       @_onBaitChange model
-      # switch model.attributes.type
-      #   when model.TYPES.word
-      #     if @collection.countPickedWords() > _wordPicksMax
-      #       model.view.unpick().sayNo()
-      #   when model.TYPES.symbol
-      #     if @collection.countPickedSymbols() > _symbolPicksMax
-      #       model.view.unpick().sayNo()
-      if @_hasPickedEnough()
-        @summaryData = _.extend @summaryData,
-          symbol_list: @collection.getPickedSymbols()
-          word_list:   @collection.getPickedWords()
-        @_proceedIfDone()
-      else
-        @notReadyToProceed()
+      @_proceedIfDone()
 
     # Given a model that has just changed, log a user event for it
     _onBaitChange: (model) ->
@@ -205,7 +180,7 @@ define [
     close: ->
       # Clean up all intervals and timeouts
       clearInterval @_interval
-      $(window).off 'blur', @_stopSteppin
+      $(window).off 'blur',  @_stopSteppin
       $(window).off 'focus', @_startSteppin
 
 

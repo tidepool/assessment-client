@@ -19,7 +19,7 @@ define [
 
     # --------------------------------------------------- Backbone Methods
     initialize: ->
-      @on 'sync', @onSync
+      #@on 'sync', @onSync
       @on 'error', @onErr
 
     validate: (attrs, options) ->
@@ -31,7 +31,7 @@ define [
 
 
     # --------------------------------------------------- Event Handling
-    onSync: (model) -> console.log eventLog: model.attributes
+    #onSync: (model) -> console.log eventLog: model.attributes
     onErr: (model, xhr) ->
       msg = xhr.responseJSON?.status.message || xhr.statusText
       ios.error msg
