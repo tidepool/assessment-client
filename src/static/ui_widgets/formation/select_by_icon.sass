@@ -1,0 +1,39 @@
+@import '../../styles/appVars'
+@import '../../styles/colorVars'
+@import '../../styles/helpers'
+
+
+
+.selectByIcon
+  // The outer button shape
+  .btn-tall
+    +tablet
+      min-height: 100px
+      line-height: 80px
+    +phone
+      min-height: 60px
+      line-height: 50px
+
+  .btn-large.btn-tall
+    +tablet
+      min-width: 75px
+    +phone
+      min-width: 50px
+      padding: 0 $spaceTiny
+
+
+  =iconSize($size)
+    font-size: $size
+    width: $size
+    height: $size
+    line-height: $size * .75
+
+  // Thar icon
+  .btn-large.btn-tall i
+    +iconSize(100px)
+    +tablet
+      +iconSize(75px)
+    +phone
+      +iconSize(50px)
+
+
