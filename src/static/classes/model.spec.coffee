@@ -13,6 +13,11 @@ define [
     name: 'Lars'
     email: 'lars@gmail.com'
     visits: 42
+    stuffedAnimals: [
+      'zebra'
+      'teddy bear'
+      'horse'
+    ]
   _successfulResposnse =
     status: {}
     data: _data
@@ -67,11 +72,6 @@ define [
         expect(parsedData.name).toEqual _dontUnwrapMe.name
         expect(parsedData.data).toBeDefined()
 
-
-
-
-
-
     describe '.increment', ->
       it 'increments model value if the value is a number', ->
         expect(model.attributes.visits).toEqual _data.visits
@@ -81,4 +81,15 @@ define [
         expect(model.attributes.name).toEqual _data.name
         model.increment 'name'
         expect(model.attributes.name).toEqual _data.name
+
+    describe '.push', ->
+      it 'exists', ->
+        expect(model.push).toBeDefined()
+      it 'pushes new values onto an existing array', ->
+        origLen = _data.stuffedAnimals.length
+        expect(model.attributes.stuffedAnimals.length).toEqual origLen
+        model.push 'stuffedAnimals', 'dolphin, yikes!'
+        expect(model.attributes.stuffedAnimals.length).toEqual origLen + 1
+
+
 

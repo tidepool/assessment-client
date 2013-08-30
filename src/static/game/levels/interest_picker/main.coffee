@@ -155,6 +155,7 @@ define [
     # A 'cheater' method for allowing us to speed past this game. Picks enough items to allow you to proceed
     _pickAll: ->
       @summaryData.cheater_pick = true
+      @_seenAll = true
       @collection.each (model) ->
         model.view._pick() # Yes, I'm accessing a private method but it's for a dev-only hack so I'm already misbehaving.
 

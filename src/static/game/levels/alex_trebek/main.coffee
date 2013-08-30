@@ -34,7 +34,6 @@ define [
     className: 'alexTrebek'
 
     render: ->
-      console.log thus:@
       if @model.attributes.instructions
         instructionData = instructions: markdown.toHTML @model.attributes.instructions
         console.log id:instructionData

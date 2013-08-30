@@ -2,11 +2,10 @@ define [
   'backbone'
   'Handlebars'
   'core'
-  'entities/results_calculator'
-  'entities/user_event/_event_bundle'
   'ui_widgets/steps_remaining'
   'ui_widgets/hold_please'
   'ui_widgets/psst'
+  'entities/user_event/event_log'
   # Levels
   'game/levels/reaction_time_disc'
   'game/levels/rank_images'
@@ -26,11 +25,10 @@ define [
   Backbone
   Handlebars
   app
-  Results
-  EventBundle
   StepsRemainingView
   holdPlease
   psst
+  EventLog
   # Levels
   ReactionTime
   ImageRank
@@ -80,6 +78,7 @@ define [
     initialize: ->
       throw new Error "Need params" unless @options.params
       holdPlease.show null, true # (null = no selector, true = show a random message)
+      # Game
       @model = app.user.createGame @options.params.def_id
       @listenTo app.user, 'error', @_userModelErr
       @listenTo @model, 'error', @_curGameErr
@@ -97,6 +96,7 @@ define [
 #      document.title = if title then title else _defaultTitle
 
     _showWelcome: ->
+      @eventLog = new EventLog game_id:@model.attributes.id
       ios.start()
       ios.log 'Game Started'
       gameDef = @options.params.def_id
@@ -159,6 +159,7 @@ define [
 
     _finishPreviousLevel: (levelView) ->
       if levelView and levelView instanceof Backbone.View
+        @eventLog.addEvent levelView.event if levelView.event?
         levelView.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
         @miniInstructions.model.set text:''
         app.analytics.track @className, "#{levelView.model.attributes.stageDef} Level Finished"
@@ -190,9 +191,9 @@ define [
 
     # ------------------------------------------------------------- End Game
     _endGame: ->
+      @_finishPreviousLevel @curLevel
       # Sometimes, ask the user if they've enjoyed themselves
       if numbers.casino _surveyOdds
-        @_finishPreviousLevel @curLevel
         @curLevel = new AlexTrebek
           assessment: @model
           stageNo: 999
@@ -204,8 +205,8 @@ define [
               topic: "user_behavior_survey"
               question_type: "select_by_icon"
               options: [
-                { icon: 'gfx-happiness', value: 'yes' }
-                { icon: 'gfx-sadness', value: 'no' }
+                { icon: 'gfx-happiness', value: 'yes', label:'Yes' }
+                { icon: 'gfx-sadness', value: 'no', label:'No' }
               ]
             ]
         @$el.html @curLevel.render().el
@@ -220,25 +221,14 @@ define [
         @_calculateResults()
 
     _calculateResults: ->
+      @curLevel = new CalculateResultsView
+        game: @model
+        eventLog: @eventLog
+      @$el.html @curLevel.render().el
       app.analytics.trackKeyMetric "Game", "Finished"
       app.analytics.track @className, "#{@options.params.def_id} Game Finished"
       if @options.params.def_id is _coreGame
         app.analytics.trackKeyMetric "#{_coreGame} Game", 'Finished'
-      # Don't start the results calculation until we get a successful response on the user event
-      throw new Error 'Need @curLevel.event' unless @curLevel.event?
-      @listenToOnce @curLevel.event, 'sync', @_eventSync
-      @listenToOnce @curLevel.event, 'error', @_eventSync
-
-    _eventSync: (model, resp) ->
-#      console.log
-#        eventModel:model
-#        resp:resp
-      @_finishPreviousLevel @curLevel
-      @curLevel = new CalculateResultsView
-        game: @model
-        model: new Results
-          game_id: @model.get 'id'
-      @$el.html @curLevel.render().el
 
 
     # ------------------------------------------------------------- Consumable API
