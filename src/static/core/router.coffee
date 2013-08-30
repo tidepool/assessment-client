@@ -42,7 +42,7 @@ define [
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
-      @on 'route', (r) -> console.log "Routing #{r}..." # Uncomment to show all the routes the app responds to
+#      @on 'route', (r) -> console.log "Routing #{r}..." # Uncomment to show all the routes the app responds to
 
 
     # ------------------------------------------------- Private Methods
