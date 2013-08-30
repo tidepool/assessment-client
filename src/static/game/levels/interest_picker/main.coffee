@@ -21,8 +21,10 @@ define [
 ) ->
 
 
-  _symbolPicks = 7
-  _wordPicks = 3
+  _symbolPicks = 3
+  _wordPicks = 4
+  _symbolPicksMax = 8
+  _wordPicksMax = 8
   _tempo = 800 # How often to add a new symbol
   _drawerSize = 53 # how large is the drawer that shows up at the bottom on small screens?
   _margins = 50
@@ -54,7 +56,7 @@ define [
 
     start: ->
       @track Level.EVENTS.start
-#      @collection.reset @collection.shuffle(), { silent:true }
+      @collection.reset @collection.shuffle(), { silent:true }
       @collection.each (model) ->
         view = new BaitView model:model
         model.view = view
@@ -101,7 +103,20 @@ define [
         @_pickRow().append model.view.render().el
       # Counter bound by 0 and the collection.length
       @_i++
-      @_i = 0 if @_i >= @collection.length
+
+      if @_i >= @collection.length
+        @_i = 0
+        @_seenAll = true
+
+      if @_seenAll
+        #$('.instructions').html('<span class="good" style="color:black"><strong>Collect the items that define you.</strong></span>')
+        $('.instructions').html('<span class="good">Collect the items that define you.</span>')
+        # $('.title').text("Collect the items that define you.")
+      else
+        # $('#header.title').text("Collect the items that define you.")
+        $('.instructions').text("Seen #{@_i} of #{@collection.length} items.")
+
+      @_proceedIfDone()
 
     # Pick a random row to put the bait in, but not if the row is blocked with something.
     # Blocked is determined by last used for now
@@ -118,18 +133,18 @@ define [
       @_lastSymbCount = @collection.countPickedSymbols()
 
     _updateWordCount: (count) ->
-      if count is _wordPicks
-        $(_wordCountSel).html _doneMarkup
-        @_shimmerSel _wordContentSel
-      else
-        $(_wordCountSel).html _countTmpl count:count, limit:_wordPicks
+      # if count is _wordPicks
+      #   $(_wordCountSel).html _doneMarkup
+      #   @_shimmerSel _wordContentSel
+      # else
+      $(_wordCountSel).html _countTmpl count:count, limit:_wordPicks
 
     _updateSymbolCount: (count) ->
-      if count is _symbolPicks
-        $(_symbolCountSel).html _doneMarkup
-        @_shimmerSel _symbolContentSel
-      else
-        $(_symbolCountSel).html _countTmpl count:count, limit:_symbolPicks
+      # if count is _symbolPicks
+      #   $(_symbolCountSel).html _doneMarkup
+      #   @_shimmerSel _symbolContentSel
+      # else
+      $(_symbolCountSel).html _countTmpl count:count, limit:_symbolPicks
 
     # Given a selector, add a class that makes it shimmer like the moonlight on a breezy pond
     _shimmerSel: (sel) ->
@@ -143,23 +158,29 @@ define [
       @collection.each (model) ->
         model.view._pick() # Yes, I'm accessing a private method but it's for a dev-only hack so I'm already misbehaving.
 
+    _proceedIfDone: ->
+      if @_hasPickedEnough() and @_seenAll
+        @readyToProceed()
+      else
+        @notReadyToProceed()
+
 
     # ------------------------------------------------------------- Event Handlers
     onChange: (model) ->
       @_updateCounts()
       @_onBaitChange model
-      switch model.attributes.type
-        when model.TYPES.word
-          if @collection.countPickedWords() > _wordPicks
-            model.view.unpick().sayNo()
-        when model.TYPES.symbol
-          if @collection.countPickedSymbols() > _symbolPicks
-            model.view.unpick().sayNo()
+      # switch model.attributes.type
+      #   when model.TYPES.word
+      #     if @collection.countPickedWords() > _wordPicksMax
+      #       model.view.unpick().sayNo()
+      #   when model.TYPES.symbol
+      #     if @collection.countPickedSymbols() > _symbolPicksMax
+      #       model.view.unpick().sayNo()
       if @_hasPickedEnough()
         @summaryData = _.extend @summaryData,
           symbol_list: @collection.getPickedSymbols()
           word_list:   @collection.getPickedWords()
-        @readyToProceed()
+        @_proceedIfDone()
       else
         @notReadyToProceed()
 

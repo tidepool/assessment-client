@@ -9,7 +9,7 @@ $psstShading: 15
   color: white
   text-shadow: none
   text-align: left
-  font-size: $fontSizeSmall
+  font-size: $fontSizeBody
   background: $colorBrandContrastNeutral
   border-radius: $radiusSmall
   line-height: 1.2
@@ -22,6 +22,9 @@ $psstShading: 15
     color: white
     text-transform: uppercase
     line-height: 1.2
+
+  p
+    margin-bottom: 0
 
 .psst.good
   background-color: $colorGood
@@ -40,4 +43,11 @@ $psstShading: 15
   background-color: $colorBad
   border-color: $colorBad - $psstShading
   border-bottom-color: $colorBad - $psstShading * 4
+.psst.muted
+  color: lighten($colorForeground, 20%)
+  background-color: $colorBackgroundWarm
+  border-color: $colorBackgroundWarm - $psstShading
+  border-bottom-color: $colorBackgroundWarm - $psstShading * 3
+
+
 

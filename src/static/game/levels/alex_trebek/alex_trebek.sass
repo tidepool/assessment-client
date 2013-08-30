@@ -8,25 +8,33 @@
   max-width: $maxSiteWidth * .75
   margin: 0 auto
   padding: $spaceBig $spaceLil 0
+  +tablet
+    padding-top: $space
+  +phone
+    padding-top: $spaceLil
 
-  .selectByIcon .purdyBts
-    font-size: 0 // No space between inline-block elements
-    text-align: center
-  .selectByIcon button
-    &.btn.btn-large.btn-tall i
-      font-size: $size
-      width: $size
-      height: $size
+  .selectByIcon, .psst
+    margin-bottom: $space
+    +phoneAndTablet
+      margin-bottom: $spaceLil
 
-    // Sizing changes based on screen width
-    @media all and (min-width: 321px)
-      min-width: 33.333%
-    @media all and (min-width: 601px)
-      min-width: 25%
-    @media all and (min-width: 801px)
-      min-width: 20%
-    @media all and (min-width: 1001px)
-      min-width: 16.666%
+    label
+      +phoneAndTablet
+        margin-bottom: 0
+
+    .purdyBts
+      font-size: 0 // No space between inline-block elements
+      text-align: center
+
+      // Sizing changes based on screen width
+      @media all and (min-width: 321px)
+        min-width: 33.333%
+      @media all and (min-width: 601px)
+        min-width: 25%
+      @media all and (min-width: 801px)
+        min-width: 20%
+      @media all and (min-width: 1001px)
+        min-width: 16.666%
 
 
 
