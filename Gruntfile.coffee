@@ -11,8 +11,9 @@ module.exports = (grunt) ->
 
   # Enum for target switching behavior
   TARGETS =
-    dev:      'dev'
-    dist:     'dist'
+    dev: 'dev'
+    dist:'dist'
+    site:'site'
 
   timestamp = grunt.template.today('mm-dd')
   defaultSubdir = 'static'
@@ -31,6 +32,10 @@ module.exports = (grunt) ->
     dist:
       parent: 'dist'
       target: "dist/#{timestamp}"
+      subdir: timestamp
+    site:
+      parent: '.site'
+      target: ".site/#{timestamp}"
       subdir: timestamp
     research: "../OAuthProvider/public/#{timestamp}/"
     minName: 'all-min'
@@ -89,6 +94,7 @@ module.exports = (grunt) ->
         src: "<%= cfg.src.parent %>"
         dev: "<%= cfg.dev.parent %>"
         dist: "<%= cfg.dist.parent %>"
+        site: "<%= cfg.site.parent %>"
       dev:
         options:
           middleware: (connect, options) ->
@@ -98,6 +104,11 @@ module.exports = (grunt) ->
 #          keepalive: true
           middleware: (connect, options) ->
             [lrSnippet, mountFolder(connect, options.dist)]
+      site:
+        options:
+#          keepalive: true
+          middleware: (connect, options) ->
+            [lrSnippet, mountFolder(connect, options.site), mountFolder(connect, options.src)]
 
     open:
       devHome:
@@ -107,7 +118,7 @@ module.exports = (grunt) ->
 
       srcHtml:
         files: [ '<%= cfg.src.parent %>/*.html', '!<%= cfg.src.parent %>/<%= specFile %>.html' ]
-        tasks: [ 'copy:html', 'includereplace' ]
+        tasks: [ 'copy:html', 'includereplace:html' ]
 
       srcHbs:
         files: '<%= cfg.src.target %>/**/*.hbs'
@@ -115,7 +126,7 @@ module.exports = (grunt) ->
 
       specHtml:
         files: '<%= cfg.src.parent %>/<%= specFile %>'
-        tasks: [ 'exec:scribeSpecs', 'includereplace' ]
+        tasks: [ 'exec:scribeSpecs', 'includereplace:html' ]
 
       css:
         files: '<%= cfg.cssSourceGlob %>'
@@ -134,22 +145,28 @@ module.exports = (grunt) ->
           "<%= grunt.option('targetParent') %>/scout.js"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
           "<%= grunt.option('target') %>/<%= cfg.minName %>.js"
-#          "<%= grunt.option('target') %>/**/*.js"
-#          "<%= grunt.option('target') %>/**/*.{png,jpg}"
         ]
         tasks: 'livereload'
+
+      site:
+        files: [
+          '<%= cfg.src.parent %>/site.html'
+          '<%= cfg.src.parent %>/site.css'
+          '<%= cfg.src.target %>/pages/home.hbs'
+        ]
+        tasks: [ 'build', 'livereload' ]
 
     clean:
       target: "<%= grunt.option('target') %>"
       dev:    "<%= cfg.dev.parent %>"
       dist:   "<%= cfg.dist.parent %>"
+      site:   "<%= cfg.site.parent %>"
       unoptimizedFiles: [
         "<%= grunt.option('target') %>/**/*.hbs"
         "<%= grunt.option('target') %>/**/*.js"
         "!<%= grunt.option('target') %>/<%= cfg.jsMain %>"
         "!<%= grunt.option('target') %>/bower_components/**"
       ]
-#      hbs:  "<%= cfg.temp %>/**/*.hbs"
 
     coffee:
       options:
@@ -232,13 +249,6 @@ module.exports = (grunt) ->
           preserveLicenseComments: false
 #          removeCombined: true # Does not accurately identify all files it has combined. Using a manual clean instead
           skipPragmas: true # we don't use them, and they may slow the build
-#          done: (done, output) -> # Would like to use this, but it blocks any task that follows it
-#            duplicates = require('rjs-build-analysis').duplicates(output)
-#            if duplicates.length > 0
-#              grunt.log.subhead 'Duplicates found in requirejs build:'
-#              grunt.log.warn duplicates
-#              done new Error 'r.js built duplicate modules, please check the excludes option.'
-#            done()
 
     replace:
       options:
@@ -272,17 +282,22 @@ module.exports = (grunt) ->
 
 
     includereplace:
-      targetParent:
-        options:
-          includesDir: '<%= cfg.src.parent %>'
-          globals:
-            buildDir: "<%= grunt.option('targetSubdir') %>"
-        files: [
-          expand: true
-          cwd: "<%= grunt.option('targetParent') %>"
-          src: '*.html'
-          dest: "<%= grunt.option('targetParent') %>"
-        ]
+      options:
+        includesDir: '<%= cfg.src.parent %>'
+        globals:
+          buildDir: "<%= grunt.option('targetSubdir') %>"
+      html: files: [
+        expand: true
+        cwd: "<%= grunt.option('targetParent') %>"
+        src: '*.html'
+        dest: "<%= grunt.option('targetParent') %>"
+      ]
+      marketingSite: files: [
+        expand: true
+        cwd: "<%= cfg.src.parent %>"
+        src: 'site.html'
+        dest: "<%= cfg.site.parent %>"
+      ]
 
     copy:
       bower: files: [
@@ -372,6 +387,7 @@ module.exports = (grunt) ->
       unitTest:     cmd: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
       scribeSpecs:  cmd: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.src.parent %>/" "<%= cfg.src.target %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
       cleanEmpties: cmd: "find <%= grunt.option('target') %> -type d -empty -delete"
+      renameSite:   cmd: "mv <%= cfg.site.parent %>/site.html <%= cfg.site.parent %>/index.html"
 
   grunt.renameTask "regarde", "watch"
 
@@ -403,36 +419,47 @@ module.exports = (grunt) ->
   # Move files from the source dir to a build dir
   # Copy markup files and parse them for replacements
   grunt.registerTask 'build', 'Clean the target and build to it', ->
-    grunt.task.run [
-      "exec:jqueryuiAmd"
-      'clean:target'     # clean out the target timestamp dir
-      'combineCSS'       # Merge css into a single file and put that file in the target timestamp dir
-      'copy:bower'       # Copy bower dependencies to the target timestamp dir
-      'copy:html'        # Move all html to the target parent dir
-      'copy:hbs'         # Copy all hbs templates to the target dir. Necessary so that we can replace @@buildDir for image references
-      'exec:scribeSpecs' # find all .spec.js files and write them into spec.html
-      'includereplace'   # include files and parse variables
-      'replace:html'     # parse build variables in html files
-      'replace:config'   # replace build values
-    ]
-    if grunt.option TARGETS.dist
-      grunt.log.writeln "Building in Dist Mode"
-      grunt.task.run [
-        'copy:js'
-        'requirejs'
-        'clean:unoptimizedFiles'
-        'copy:rootImages'
-        'copy:assetImages'
-        'exec:cleanEmpties'
-#        'pngmin' # works local, breaks on ci. Platform issue?
-      ]
+    if grunt.option TARGETS.site
+      grunt.log.writeln "Building in Site Mode"
+      grunt.task.run [ 'includereplace:marketingSite', 'exec:renameSite' ]
     else
-      grunt.log.writeln "Building in Dev Mode"
+      grunt.task.run [
+        "exec:jqueryuiAmd"
+        'clean:target'        # clean out the target timestamp dir
+        'combineCSS'          # Merge css into a single file and put that file in the target timestamp dir
+        'copy:bower'          # Copy bower dependencies to the target timestamp dir
+        'copy:html'           # Move all html to the target parent dir
+        'copy:hbs'            # Copy all hbs templates to the target dir. Necessary so that we can replace @@buildDir for image references
+        'exec:scribeSpecs'    # find all .spec.js files and write them into spec.html
+        'includereplace:html' # include files and parse variables
+        'replace:html'        # parse build variables in html files
+        'replace:config'      # replace build values
+      ]
+      if grunt.option TARGETS.dist
+        grunt.log.writeln "Building in Dist Mode"
+        grunt.task.run [
+          'copy:js'
+          'requirejs'
+          'clean:unoptimizedFiles'
+          'copy:rootImages'
+          'copy:assetImages'
+          'exec:cleanEmpties'
+  #        'pngmin' # works local, breaks on ci. Platform issue?
+        ]
+      else
+        grunt.log.writeln "Building in Dev Mode"
 
 
   # server
   # ------
   grunt.registerTask 'server', 'Open the target folder as a web server', ->
+    if grunt.option TARGETS.site
+      grunt.task.run [
+        'livereload-start'
+        'connect:site'
+        'open'
+        'watch:site'
+      ]
     if grunt.option TARGETS.dist
       grunt.task.run [
         'livereload-start'
@@ -466,17 +493,11 @@ module.exports = (grunt) ->
     ]
 
 
-
   # ---------------------------------------------------------------------- Task Shortcuts
   grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
   grunt.registerTask "s", [ 'clean', 'build', 'server' ]
   grunt.registerTask 'spec', 'exec:unitTest'
   grunt.registerTask "default", 's'
-
-
-
-
-
 
 
   # ---------------------------------------------------------------------- Set the output path for built files.
@@ -487,6 +508,8 @@ module.exports = (grunt) ->
     targetInfo = buildConfig.dev # Default path
     if grunt.option TARGETS.dist
       targetInfo = getDistTargetWithHash hash
+    else if grunt.option TARGETS.site
+      targetInfo = buildConfig.site
     else
       grunt.option TARGETS.dev, true
       targetInfo = buildConfig.dev

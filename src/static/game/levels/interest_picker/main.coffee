@@ -95,7 +95,6 @@ define [
 
     # Every _tempo add another symbol
     _step: ->
-      console.log 'step'
       model = @collection.at(@_i)
       if model and not model.attributes.isPicked
         # Pick a vertical place to add the bait at random

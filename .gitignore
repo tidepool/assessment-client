@@ -8,6 +8,7 @@ src/static/bower_components
 .idea
 .env
 .devServer
+.site
 .env.json
 *.css
 *.css.map
