@@ -3,6 +3,7 @@ define [
   'Handlebars'
   'text!./calculate_results.hbs'
   'core'
+  'entities/results_calculator'
   'composite_views/perch'
   'entities/daddy_ios'
 ], (
@@ -10,6 +11,7 @@ define [
   Handlebars
   tmpl
   app
+  ResultsCalculator
   perch
   ios
 ) ->
@@ -21,28 +23,37 @@ define [
     className: 'calculateResults'
     initialize: ->
 #      @listenTo @model, 'all', (e,model) -> console.log( e:e, model:model )
-      @listenTo @model, 'change', @onChange
-      @listenTo @model, 'error', @onError
-      app.analytics.track @className, 'Starting game results calculation'
+      app.analytics.track @className, 'Saving user events...'
+      @listenTo @options.eventLog, 'sync', @onEventLogSync
 
     render: ->
       @$el.html tmpl
+      @_setStatusMsg 'Saving events.'
+      @options.eventLog.save()
       @
 
 
+    # ------------------------------------------------------------- Event Log
+    onEventLogSync: ->
+      app.analytics.track @className, 'Saved User events, starting game results calculation'
+      @model = new ResultsCalculator game_id: @options.game.get 'id'
+      @listenTo @model, 'change', @onChange
+      @listenTo @model, 'error', @onError
+
+
     # ------------------------------------------------------------- Helper Methods
-    _updateStatusMsg: (model) ->
-      if model.attributes.status.message
-        @$(_statusMsgSel).text model.attributes.status.message
+    _setStatusMsg: (msg) -> @$(_statusMsgSel).text msg
+    _updateStatusMsg: (model) -> @_setStatusMsg model.attributes.status.message if model.attributes.status.message
 
     _showResults: ->
       app.router.navigate "gameResults/#{@model.attributes.game_id}", trigger: true
 
 
-    # ------------------------------------------------------------- Callbacks
+    # ------------------------------------------------------------- Results Polling Callbacks
     _gotGameResults: (model) ->
       #console.log model: @model
       app.analytics.track @className, 'Successfully calculated game results'
+      ios.log 'Got game results'
       if ios.isUp # The ios container should be sent a message
         ios.finish()
       else
@@ -65,7 +76,7 @@ define [
       @_updateStatusMsg model
       if model.attributes.status.state is model.STATES.done
         @_gotGameResults model
-        ios.log 'Got game results'
+
 
 
   View

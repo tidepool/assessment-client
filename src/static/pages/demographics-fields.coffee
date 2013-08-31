@@ -27,7 +27,7 @@ define [],() ->
       type: 'select_by_icon'
       label: 'Handedness'
       options: [
-        { value: 'left', label: 'Left', icon: 'gfx-lefthand'}
+        { value: 'left',  label: 'Left',  icon: 'gfx-lefthand'}
         { value: 'right', label: 'Right', icon: 'gfx-righthand'}
         { value: 'mixed', label: 'Mixed', icon: 'gfx-bothhands'}
       ]
@@ -38,7 +38,7 @@ define [],() ->
       label: 'Sex'
       options: [
         { value: 'female', label: 'Female', icon: 'gfx-female'}
-        { value: 'male', label: 'Male', icon: 'gfx-male'}
+        { value: 'male',   label: 'Male',   icon: 'gfx-male'}
       ]
     }
   ]

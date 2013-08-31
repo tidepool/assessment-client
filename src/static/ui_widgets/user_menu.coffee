@@ -42,8 +42,7 @@ define [
       delete @model
 
     render: ->
-      userData = @_parseModel @model
-      @$el.html @tmpl userData
+      @$el.html @tmpl @model.attributes
       @
 
     _parseModel: (model) ->

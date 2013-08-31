@@ -10,10 +10,15 @@ define [
 
   _me = 'routers/main_router'
   _welcomePageUrlPrefix = '/welcome/'
+  _reroute =
+    trigger: true # go there
+    replace: true # replace the url
+
 
   MainRouter = Backbone.Router.extend
     routes:
       '':                       'showHome'
+      'def':                    'showDefault'
       home:                     'showHome'
       about:                    'showAbout'
       team:                     'showTeam'
@@ -32,27 +37,30 @@ define [
       'preferences-training':   'showTrainingPreferences'
       'friendHelper/:uid/:gid': 'showFriendHelper'
       'friendResults/:gid':     'showFriendResults'
+      'do/logIn/:token':        'doLogIn'
 
 
     initialize: (appCoreSingleton) ->
       @app = appCoreSingleton
-#      @on 'route', (r) -> console.log(''); console.log "Routing #{r}..." # Uncomment to show all the routes the app responds to
+#      @on 'route', (r) -> console.log "Routing #{r}..." # Uncomment to show all the routes the app responds to
 
 
-    # ------------------------------------------------ Route Handlers
-    showHome: ->
-      if @app.user.attributes.referred_by?
-        window.location.href = _welcomePageUrlPrefix + @app.user.attributes.referred_by
-      else
-        @app.view.asSite 'pages/home'
+    # ------------------------------------------------- Private Methods
+    _logInUsingToken: (token) ->
+      @listenToOnce @app.user, 'error', (model, xhr) -> @showError xhr.responseJSON.status.message, model
+      @app.user.reset(token).fetch()
+      @
+
+
+    # ------------------------------------------------ Location Route Handlers
+    showDefault: ->                  @showDefaultPage()
+    showHome: ->                     @app.view.asSite 'pages/home'
     getStarted: ->
       if @app.user.attributes.personality?
-        @navigate 'dashboard',
-          trigger: true
-          replace: true
+        @navigate 'dashboard', _reroute
       else
         @createDefaultGame()
-    # Basic Site Pages
+  # Basic Site Pages
     showAbout: ->                    @app.view.asSite 'pages/about'
     showTeam: ->                     @app.view.asSite 'pages/team'
     showDemographics: ->             @app.view.asGame 'pages/demographics'
@@ -61,8 +69,7 @@ define [
     createGame: (def_id) ->          @app.view.asGame 'pages/play_game', def_id:def_id
     createGameForUser: (token) ->
       @listenToOnce @app.user, 'sync', ->               @createGame 'baseline'
-      @listenToOnce @app.user, 'error', (model, xhr) -> @showError xhr.responseJSON.status.message, model
-      @app.user.reset(token).fetch()
+      @_logInUsingToken token
 
     showGameResults: (id) ->         @app.view.asGame 'pages/game_results', game_id:id
     # Dashboard
@@ -79,12 +86,49 @@ define [
       @showDemographics()
       @navigate 'startGame', replace:true # Change, the url, but don't add to the browser's history stack
     showTrainingPreferences: ->
-      @navigate 'dashboard'
+      @navigate 'dashboard', _reroute
       @app.trigger 'action:showPersonalizations'
+
+
+    # ------------------------------------------------- Action/Verb Routes
+    doLogIn: (token) ->
+      console.log "logInUsingToken: #{token}"
+      @listenToOnce @app.user, 'sync', ->
+        @app.analytics.track 'session', 'Successful External Auth Login'
+        @showDefaultPage()
+      @_logInUsingToken token
 
 
     # ------------------------------------------------- Route Helpers
     showError: (message, object) ->  @app.view.asSite 'pages/error', { message:message, object:object }
+
+    # Show whatever the default page is for this application and user state.
+    showDefaultPage: ->
+#      console.log
+#        isUnfetched: @app.user.isUnfetched()
+#        isGuest: @app.user.isGuest()
+#        isLoggedIn: @app.user.isLoggedIn()
+#        hasPersonality: @app.user.attributes.personality?
+#        user: @app.user.toJSON()
+
+      if @app.user.isLoggedIn() and @app.user.isGuest()
+        if @app.user.attributes.personality?
+          console.log user:@app.user.attributes
+          @navigate 'home', _reroute                             # Guest with Personality
+        else
+          @navigate 'home', _reroute                             # Guest without
+      else if @app.user.isLoggedIn()
+        if @app.user.isUnfetched()
+          console.log 'showDefaultPage(): unfetched user'
+          @listenToOnce @app.user, 'sync', @showDefaultPage      # User with a token, but not fetched so of unknown status
+        else if @app.user.attributes.personality?
+          @navigate 'dashboard', _reroute                        # User with personality
+        else
+          @navigate 'getStarted', _reroute                       # User without
+      else
+        @navigate 'home', _reroute                               # Non-user
+
+      @
 
 
   MainRouter

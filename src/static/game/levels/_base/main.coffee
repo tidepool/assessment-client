@@ -26,7 +26,6 @@ define [
       @event = new EventBundle
         event_type: @options.stageDef
         stage: @options.stageNo
-        game_id: @options.assessment.get 'id'
       if @model.attributes.data?
         if @CollectionClass
           @collection = new @CollectionClass @model.attributes.data
@@ -72,8 +71,8 @@ define [
       # Send level summary
       @track EventBundle.EVENTS.summary, @summaryData
       # Send level end event
-      @track EventBundle.EVENTS.end#, @endData
-      @event.save()
+      @track EventBundle.EVENTS.end
+#      @event.save() # Instead of saving these one at a time, the parent object with send them all in a batch
       @trigger 'done', @summaryData
       @close?() # Call the mixed-in level's close method, if it has implemented one
       @remove()

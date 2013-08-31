@@ -4,14 +4,12 @@ define [
   './_events'
   'utils/detect'
   'core'
-  'entities/daddy_ios'
 ], (
   _
   Model
   Events
   detect
   app
-  ios
 ) ->
 
   _viewNameToModuleName =
@@ -23,7 +21,7 @@ define [
     EmotionsCircles: 'emotions_circles'
     InterestPicker: 'interest_picker'
 
-  _EVENTS =
+  EVENTS =
     start:             'level_started'
     instructions:      'show_instructions'
     sublevelStart:     'sublevel_initialize'
@@ -46,8 +44,6 @@ define [
 
 
   Export = Model.extend
-    url: -> "#{app.cfg.apiServer}/api/v1/users/-/games/#{@attributes.game_id}/event_log"
-    isNew: -> false # Always do a PUT, not a POST
     defaults: ->
       {
         event_type: null # The string id of the level type (eg: 'image_rank')
@@ -61,13 +57,9 @@ define [
 
     # --------------------------------------------------- Backbone Methods
     initialize: ->
-#      console.log eventBundle: @
       throw new Error 'Need event_type' unless @attributes.event_type
       throw new Error 'event_type should be a string' unless typeof @attributes.event_type is 'string'
       throw new Error 'Need stage as a number' unless typeof @attributes.stage is 'number'
-      throw new Error 'Need game_id' unless @attributes.game_id
-#      @on 'sync', @onSync
-      @on 'error', @onErr
       @_translateEventType()
 
     validate: (attrs, options) ->
@@ -77,7 +69,8 @@ define [
     toJSON: (options) ->
       attrs = _.clone(this.attributes)
       attrs.events = attrs.events.toJSON()
-      event_log: attrs
+      attrs
+
 
 
     # --------------------------------------------------- Private Methods
@@ -85,18 +78,6 @@ define [
       newET = _viewNameToModuleName[ @attributes.event_type ]
       @set event_type:newET if newET?
       @
-
-
-    # --------------------------------------------------- Event Handling
-#    onSync: (model) -> console.log model.attributes
-    onErr: (model, xhr) ->
-      msg = xhr.responseJSON?.status.message || xhr.statusText
-      ios.error msg
-      console.error
-        message: msg
-        model: model
-        xhr: xhr
-#      throw new Error 'Error syncing user_event'
 
 
     # --------------------------------------------------- Consumable API
@@ -108,7 +89,7 @@ define [
       # ------------------------------------------------------ ^ Line of Awesome
       @
 
-  Export.EVENTS = _EVENTS
+  Export.EVENTS = EVENTS
   Export
 
 

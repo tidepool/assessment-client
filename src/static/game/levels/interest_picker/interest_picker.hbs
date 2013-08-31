@@ -10,20 +10,19 @@
             <div class="row row{{this}}" style="height:{{../rowHeight}}"></div>
         {{/each}}
     </div>
+    <div id="CountSeen" class="counter"></div>
 </div>
 
 <div class="bentoBox">
 
     <h3 class="symbols title">
         <span class="remaining" id="SymbolCount">
-            <span class="hideDesktop">collect <output>{{symbols}}</output></span>
+            <span class="hideDesktop"><output>&nbsp;</output></span>
         </span>
         <span class="name">Symbols</span>
     </h3>
     <div class="symbols content">
         <div id="SymbolCountdown" class="countdown">
-            Collect <br/>
-            <strong>{{symbols}}</strong>
         </div>
     </div>
 
@@ -31,14 +30,12 @@
 
     <h3 class="words title">
         <span class="remaining" id="WordCount">
-            <span class="hideDesktop">collect <output>{{words}}</output></span>
+            <span class="hideDesktop"><output>&nbsp;</output></span>
         </span>
         <span class="name">Words</span>
     </h3>
     <div class="words content">
         <div id="WordCountdown" class="countdown">
-            Collect <br/>
-            <strong>{{words}}</strong>
         </div>
     </div>
 

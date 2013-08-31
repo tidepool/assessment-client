@@ -32,5 +32,10 @@ define [
       return if isNaN val
       @set property, val + 1
 
+    # Push a value on to an attribute that is an array
+    push: (prop, val) ->
+      array = @get prop
+      @set prop, array.concat val
+      @
 
   Model

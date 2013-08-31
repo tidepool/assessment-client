@@ -30,6 +30,7 @@ define [
       @on 'change:guest', @_calculateNickname
       @on 'change:age', @_calculateDOB
       @on 'change:date_of_birth', @_calculateAge
+      @on 'change:image', @_noteImagePath
       @on 'error', @_onModelError
       @on 'invalid', @_onModelInvalid
 
@@ -78,6 +79,11 @@ define [
 #        age:age
       @set age:age
 
+    _noteImagePath: (model, val) ->
+      return unless val
+      if val.indexOf('http://') isnt -1
+        model.set isAbsoluteImagePath:true
+
     _nuke: ->
       delete sessionStorage['access_token']
       delete sessionStorage['expires_in']
@@ -92,6 +98,7 @@ define [
 
     # ----------------------------------------------------------- Callbacks
     _onModelError: (model, xhr, options) ->
+      console.warn 'model error'
       console.warn xhr.responseJSON?.status?.message
 #      console.log model:model , xhr: xhr
       # Flush the local cache whenever we get a login exception from the server
@@ -167,6 +174,9 @@ define [
       curToken
 
     isLoggedIn: -> @hasCurrentToken()
+
+    # Before being fetched, the user can be valid, but only have a token and ID
+    isUnfetched: -> ! @get('email')
 
     # Set the client version of the model back to as if it were new
     # If the optional token is passed in, reset the user to that

@@ -27,6 +27,8 @@
 
 
   // ----------------------------------------------- The Buffet Menu
+  .menu
+    position: relative
   .menu .content
     margin: 0 $spaceLil
     overflow: hidden
@@ -70,6 +72,29 @@
       display: none
     .groovy
       display: none
+
+  .menu .counter
+    position: absolute
+    left: $spaceLil * 2
+    top: $spaceLil + $spaceTiny
+
+    text-align: right
+    color: lighten($colorForegroundCool, 30%)
+    +transitionable
+    $height: 25px
+    height: $height
+    line-height: $height
+    font-size: $height
+    width: $height*3
+    +phone
+      $height: 16px
+      height: $height
+      line-height: $height
+      font-size: $height
+      width: $height*3
+  .menu .counter.done
+    left: -100px
+    color: transparent
 
 
   // ----------------------------------------------- Menu at full height

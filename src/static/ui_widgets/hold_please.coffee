@@ -15,6 +15,7 @@ define [
 
   _me = 'ui_widgets/hold_please'
   _msgHolderSel = '.msg'
+  _everlasting = '.everlasting'
   _loadingMessages = [
     'Powering up the Flux Capacitor...'
     'Seeking the Keymaster...'
@@ -76,11 +77,12 @@ define [
         .find(".#{@className}").remove()
 
     _hideAll: ->
-      $(".#{@className}")
-        .parent()
-          .removeClass('onHold')
-          .css('position', '')
-      $(".#{@className}").remove()
+      $yall = $(".#{@className}").not _everlasting
+      $yall.parent()
+        .removeClass('onHold')
+        .css('position', '')
+      $yall.remove()
+      @
 
 
     # Public API

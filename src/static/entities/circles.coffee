@@ -82,12 +82,17 @@ define [
       @set 'image_url', "/images/game/emotions/#{imgName}.png"
 
     _setWidthBySize: (size) ->
-      @set width: @sizeToScale[size] * @baseSizePx
+#      if sz > @maxSize
+#        size = @maxSize
+      scale = @sizeToScale[size]
+      console.error "No scale for size #{size}" unless scale?
+      @set width: scale * @baseSizePx
 
     _setSizeByPercent: (percent) ->
       # Sizes are in 5 steps
-      step = Math.round (percent / 20) + .5 # the .5 shifts it into the middle of the step
+      step = Math.round( percent / 20 + .5 ) # the .5 shifts it into the middle of the step
       size = step - 1
+      size = @maxSize if size > @maxSize # A percent of 100 calculates to 5. this fits the algorithm but fails at the max case. We adjust here.
       @set size:size
 
 

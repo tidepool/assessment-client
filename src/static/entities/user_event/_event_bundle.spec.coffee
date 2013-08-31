@@ -65,8 +65,6 @@ define [
       it 'gets angry unless sent an integer `stage`', ->
         expect( -> new EventBundle _missingStage ).toThrow()
         expect( -> new EventBundle _nonIntStage ).toThrow()
-      it 'needs `game_id`', ->
-        expect( -> new EventBundle _missingGameId ).toThrow()
 
     describe 'validation requirements', ->
       it 'needs at least one event before it will save', ->
@@ -93,16 +91,13 @@ define [
         expect(ebFarnum.attributes.events.length).toEqual 2
 
     describe 'flattens itself for the server', ->
-      it 'wraps events in `event_log` for the server', ->
-        eventsForServer = ebFarnum.toJSON()
-        expect(eventsForServer.event_log).toBeDefined()
 
       it 'turns events into a flat array after `toJSON`', ->
         ebFarnum.record _validEvent
         ebFarnum.record _validEvent
         eventsForServer = ebFarnum.toJSON()
-        expect(_.isArray eventsForServer.event_log.events).toBeTruthy()
-        expect(eventsForServer.event_log.events.length).toEqual 2
+        expect(_.isArray eventsForServer.events).toBeTruthy()
+        expect(eventsForServer.events.length).toEqual 2
 
 
 
