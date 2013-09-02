@@ -121,7 +121,7 @@ module.exports = (grunt) ->
         tasks: [ 'copy:html', 'includereplace:html' ]
 
       srcHbs:
-        files: '<%= cfg.src.target %>/**/*.hbs'
+        files: '<%= cfg.src.target %>/{,*}/{,*}/*.hbs'
         tasks: ['copy:hbs', 'replace:html', 'livereload']
 
       specHtml:
@@ -134,8 +134,8 @@ module.exports = (grunt) ->
 
       srcJs:
         files: [
-          '<%= cfg.src.target %>/**/*.js'
-          '<%= cfg.src.target %>/**/*.spec.js'
+          '<%= cfg.src.target %>/{,*}/{,*}/*.js'
+          '<%= cfg.src.target %>/{,*}/*.spec.js'
         ]
         tasks: 'livereload'
 
