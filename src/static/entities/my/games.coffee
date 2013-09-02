@@ -44,7 +44,7 @@ define [
     nextStage: ->
       i = @get('stage_completed')
 #      @save( {stage_completed: i + 1}, { wait:true } ) # Wait to change the client until the server confirms
-      @save stage_completed: i + 1
+      @set stage_completed: i + 1
 
     # See if this is the first time the user has seen this level
     # levelStringId should be a unique string key defining the level type
