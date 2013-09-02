@@ -73,7 +73,9 @@ define [
   Me = Backbone.View.extend
     title: _defaultTitle
     className: 'playGamePage'
-    events: 'click #ActionBeginGame': '_begin'
+    events:
+      'click #ActionBeginGame': '_begin'
+      'click #WelcomeImage':    '_begin'
 
     initialize: ->
       throw new Error "Need params" unless @options.params
@@ -137,13 +139,16 @@ define [
       else if curStage > stageCount then @_calculateResults()
       else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
-    _curGameErr: ->
+    _curGameErr: (model, xhr) ->
       clearTimeout @loadTimeoutPointer
-      @_showError 'Sorry, there was a problem loading the game.'
+      console.log model:model, xhr:xhr
+      msg = xhr.responseJSON?.status.message || 'Sorry, there was a problem loading the game.'
+      @_showError msg
 
-    _userModelErr: ->
+    _userModelErr: (model, xhr) ->
       clearTimeout @loadTimeoutPointer
-      @_showError 'Sorry, there was a problem loading the user.'
+      msg = xhr.responseJSON?.status.message || 'Sorry, there was a problem loading the user.'
+      @_showError msg
 
     _onGameTimeout: ->
       @_showError 'Sorry, it looks like there is a problem. The game is taking too long to load.'
@@ -185,7 +190,7 @@ define [
       app.view.scrollToTop()
       @model.setLevelSeen stageData.view_name
       app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
-      app.analytics.track @className, "#{@curLevel.model.attributes.stageDef} Level Started"
+      app.analytics.track @className, "#{stageData.view_name} Level Started"
       ios.log "Game showLevel: #{stageId}"
 
 

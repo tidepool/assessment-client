@@ -3,13 +3,11 @@ define [
   './analytics/kiss'
   './analytics/uservoice'
   'utils/detect'
-  'entities/daddy_ios'
 ],(
   Google
   Kiss
   UserVoice
   detect
-  ios
 ) ->
   _me = 'core/analytics'
 
@@ -22,7 +20,6 @@ define [
     # Track all javascript errors
     window.onerror = (msg, url, lineNumber) =>
       @trackKeyMetric @CATEGORIES.jsErr, msg, {url:lineNumber}
-      ios.warn 'JS Error', "JS Error: #{msg}. url: #{url}. line: #{lineNumber}"
       return false # let the default handler run, too
     @
 
@@ -42,12 +39,9 @@ define [
 
     track: (category, action, label, value) ->
       return unless category? and action?
-      if label and value
-        @google?.trackEvent category, action, label, value
-      else
-        @google?.trackEvent category, action
+      @google?.trackEvent category, action, label, value
       # ------------------------------------------------------ v Line of Awesome
-      console.log category:category, action:action, label:label, value:value # Uncomment this to view real-time details of every analytics event send to .track
+      #console.log category:category, action:action, label:label, value:value # Uncomment this to view real-time details of every analytics event send to .track
       # ------------------------------------------------------ ^ Line of Awesome
 
     trackKeyMetric: (category, action, data) ->

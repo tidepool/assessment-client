@@ -14,6 +14,7 @@ define [
   'ui_widgets/psst'
   'core'
   'ui_widgets/guest_signup'
+  'entities/daddy_ios'
 ], (
   Backbone
   Handlebars
@@ -30,6 +31,7 @@ define [
   psst
   app
   GuestSignup
+  ios
 ) ->
 
   _contentSel = '#ResultsDisplay'
@@ -116,15 +118,9 @@ define [
             user_id: app.user.id
             game_id: @collection.game_id
             origin: window.location.protocol + '//' + window.location.hostname
-
           @$(_ctaSel).append _friendTeaserTmpl _.extend teaserData,
             emailSubject: encodeURIComponent 'Request for Help'
             emailBody: encodeURIComponent _friendTeaserEmail teaserData
-
-#          console.log
-#            coll: @collection.toJSON()
-#            pers: personalityModel
-#            stringId: stringId
           $('body').addClass "#{@className}-#{stringId}"
         else
           console.warn "Unknown type: #{type}"
@@ -147,28 +143,34 @@ define [
     # -------------------------------------------------------------------- Event Callbacks
     onSync: (collection, data) ->
       if data?.status?.state is Results.STATES.pending
+        msg = "Sorry, but for some reason results haven't yet been calculated for game #{collection.game_id}"
+        ios.error msg
         @_renderResults()
         psst
           sel: _contentSel
           title: "Results Are Pending"
-          msg: "Sorry, but for some reason results haven't yet been calculated for game #{collection.game_id}"
+          msg: msg
           type: psst.TYPES.error
       else if collection.length
         @_renderResults()
       else
         @$(_contentSel).empty()
+        msg = "Sorry, but we didn't find any results for game #{collection.game_id}"
+        ios.error msg
         psst
           sel: _contentSel
           title: "No Results Found"
-          msg: "Sorry, but we didn't find any results for game #{collection.game_id}"
+          msg: msg
           type: psst.TYPES.error
 
     onError: (collection, xhr) ->
+      msg = xhr.responseJSON?.status.message || "Error on the Game Results model"
+      ios.error msg
       @$(_contentSel).empty()
       psst
         sel: _contentSel
         title: "Error Getting Results"
-        msg: xhr.responseJSON?.status.message || xhr.statusText
+        msg: msg
         type: psst.TYPES.error
 
     onClickFriendSurvey: ->  app.analytics.trackKeyMetric 'Friend Survey', 'Clicked Email Link'

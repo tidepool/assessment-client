@@ -1,6 +1,8 @@
 define [
+  'core'
   'utils/detect'
 ], (
+  app
   detect
 ) ->
 
@@ -54,11 +56,15 @@ define [
 
     # ----------------------------------------------------------------- API meant for consumption
     TYPES: _TYPES
-    start:  (skipCleanup) ->      @holla { type:_TYPES.start  }, skipCleanup
-    finish: (skipCleanup) ->      @holla { type:_TYPES.finish }, skipCleanup
+    start:  (skipCleanup) ->              @holla { type:_TYPES.start  }, skipCleanup
+    finish: (skipCleanup) ->              @holla { type:_TYPES.finish }, skipCleanup
     log:    (msg, detail, skipCleanup) -> @holla { type:_TYPES.log,   message:msg, details:detail }, skipCleanup
-    warn:   (msg, detail, skipCleanup) -> @holla { type:_TYPES.warn,  message:msg, details:detail }, skipCleanup
-    error:  (msg, detail, skipCleanup) -> @holla { type:_TYPES.error, message:msg, details:detail }, skipCleanup
+    warn:   (msg, detail, skipCleanup) ->
+      app.analytics.track 'javascript', 'message', 'warning', msg
+      @holla { type:_TYPES.warn,  message:msg, details:detail }, skipCleanup
+    error:  (msg, detail, skipCleanup) ->
+      app.analytics.track 'javascript', 'message', 'error', msg
+      @holla { type:_TYPES.error, message:msg, details:detail }, skipCleanup
 
   new Export
 

@@ -42,7 +42,7 @@ define [
 
 
     # ------------------------------------------------------------- Helper Methods
-    _setStatusMsg: (msg) -> @$(_statusMsgSel).text msg
+    _setStatusMsg:    (msg)   -> @$(_statusMsgSel).text msg
     _updateStatusMsg: (model) -> @_setStatusMsg model.attributes.status.message if model.attributes.status.message
 
     _showResults: ->
@@ -60,9 +60,8 @@ define [
         @_showResults()
 
     onError: (model, xhr) ->
-      msg = xhr.responseJSON?.status.message || xhr.statusText
+      msg = xhr.responseJSON?.status.message || 'Error Calculating Game Results'
       ios.error msg
-      app.analytics.track @className, 'Error Getting game results'
       perch.show
         title: 'Sorry, There Is a Problem.'
         msg: msg
