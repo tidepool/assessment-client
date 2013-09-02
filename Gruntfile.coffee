@@ -169,16 +169,12 @@ module.exports = (grunt) ->
       ]
       # Bower is a useful package manager, but fetches both build and dev code. We don't want to deploy that
       unusedBowerComponents: [
-        # File Types
-        "<%= grunt.option('target') %>/bower_components/**/*.{html,jpg,png,md,doc,map,gemspec,lock,rb,ico,markdown,yml}"
         # Libraries (dev only)
-        "<%= grunt.option('target') %>/bower_components/{bourbon,jasmine,jasmine-jquery}/"
+        "<%= grunt.option('target') %>/bower_components/{backbone-amd,bourbon,Chart.js,fastclick,jasmine,jasmine-jquery,jquery,jquery-ui,markdown,modernizr,require-handlebars-plugin,requirejs-text,sass-bootstrap,tidepool-backbone.syphon,toastr,underscore-amd}/"
         # Subfolders
-        "<%= grunt.option('target') %>/bower_components/**/{src,docs,app,examples,samples,node_modules,test,tests,spec,features,site,demo}/"
-        # Specific Files
-        "<%= grunt.option('target') %>/bower_components/*/package.json"
-        "<%= grunt.option('target') %>/bower_components/*/component.json"
-        "<%= grunt.option('target') %>/bower_components/*/bower.json"
+        "<%= grunt.option('target') %>/bower_components/**/{fonts,docs,tests}/"
+        # File Types
+        "<%= grunt.option('target') %>/bower_components/**/*.{html,jpg,png,md,doc,map,gemspec,lock,rb,ico,markdown,yml,json}"
       ]
 
     coffee:
