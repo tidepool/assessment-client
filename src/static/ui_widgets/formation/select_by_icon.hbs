@@ -1,0 +1,39 @@
+
+
+{{#if label}}
+    <label for="{{string_id}}">{{label}}</label>
+{{else}}
+    {{#if question}}
+        <label for="{{string_id}}">{{question}}</label>
+    {{/if}}
+{{/if}}
+
+
+<select name="{{string_id}}" {{#if multiselect}}multiple{{/if}}>
+    {{#unless multiselect}}
+        <option value="">Select...</option>
+    {{/unless}}
+    {{#options}}
+        <option value="{{value}}">{{value}}</option>
+    {{/options}}
+</select>
+
+
+<span class="purdyBts noDisplay">
+    {{#options}}
+        <button value="{{value}}" class="btn btn-large btn-link btn-tall" type="button">
+            <i class="
+                {{#if icon}}
+                    {{icon}}
+                {{else}}
+                    gfx-{{value}}
+                {{/if}}">
+            </i>
+            <small>
+                {{label}}
+            </small>
+        </button>
+    {{/options}}
+</span>
+
+

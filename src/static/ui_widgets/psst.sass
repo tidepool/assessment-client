@@ -1,0 +1,53 @@
+@import '../styles/appVars'
+@import '../styles/colorVars'
+@import '../styles/helpers'
+
+$psstShading: 15
+
+.psst
+  //padding: $spaceLil $space
+  color: white
+  text-shadow: none
+  text-align: left
+  font-size: $fontSizeBody
+  background: $colorBrandContrastNeutral
+  border-radius: $radiusSmall
+  line-height: 1.2
+  margin-bottom: $spaceLil
+
+  .title
+    background: none
+
+  h4
+    color: white
+    text-transform: uppercase
+    line-height: 1.2
+
+  p
+    margin-bottom: 0
+
+.psst.good
+  background-color: $colorGood
+  border-color: $colorGood - $psstShading
+  border-bottom-color: $colorGood - $psstShading * 4
+.psst.info,
+.psst.question
+  background-color: $colorInfo
+  border-color: $colorInfo - $psstShading
+  border-bottom-color: $colorInfo - $psstShading * 4
+.psst.warn
+  background-color: $colorWarn
+  border-color: $colorWarn - $psstShading
+  border-bottom-color: $colorWarn - $psstShading * 4
+.psst.error
+  background-color: $colorBad
+  border-color: $colorBad - $psstShading
+  border-bottom-color: $colorBad - $psstShading * 4
+.psst.muted
+  color: lighten($colorForeground, 20%)
+  background-color: $colorBackgroundWarm
+  border-color: $colorBackgroundWarm - $psstShading
+  border-bottom-color: $colorBackgroundWarm - $psstShading * 3
+
+
+

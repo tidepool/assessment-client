@@ -9,54 +9,106 @@ module.exports = (grunt) ->
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
 
-  # configurable paths and globs
+  # Enum for target switching behavior
+  TARGETS =
+    dev: 'dev'
+    dist:'dist'
+    site:'site'
+
+  timestamp = grunt.template.today('mm-dd')
+  defaultSubdir = 'static'
+
+  # Configurable paths and globs
   buildConfig =
-    app: "app"
-    dist: "dist"
-    dev: ".devServer"
-    temp: ".tmp"
-    research: "../OAuthProvider/public/"
-    sassSourceGlob: [
-      "<%= cfg.app %>/**/*.sass"
-      "!<%= cfg.app %>/bower_components/*"
-    ]
-    cssSourceGlob: [
-#      "<%= cfg.app %>/bower_components/sass-bootstrap/bootstrap-2.3.*.css"
-      "<%= cfg.app %>/styles/gfx.css"
-      "<%= cfg.temp %>/**/*.css"
-      "!<%= cfg.temp %>/library.css"
-    ]
-    horseAndBuggyJsGlob: [
-      "bower_components/**/{*.js,*.css}"
-      "bower_components_ext/*.js"
-      "scripts/vendor/*.js"
-    ]
-    handlebarsGlob: [
+    timestamp: timestamp
+    src:
+      parent: 'src'
+      target: "src/#{defaultSubdir}"
+      subdir: defaultSubdir
+    dev:
+      parent: '.build'
+      target: ".build/#{defaultSubdir}"
+      subdir: defaultSubdir
+    dist:
+      parent: 'dist'
+      target: "dist/#{timestamp}"
+      subdir: timestamp
+    site:
+      parent: '.site'
+      target: ".site/#{timestamp}"
+      subdir: timestamp
+    research: "../OAuthProvider/public/#{timestamp}/"
+    minName: 'all-min'
+    libraryCSS: 'library.css'
+    hbsSourceGlob: [
       "**/*.hbs"
+      "!bower_components/**"
     ]
+    sassSourceGlob: [
+      "**/*.sass"
+      "!bower_components/**"
+    ]
+    coffeeSourceGlob: [
+      "**/*.coffee"
+      "!**/*.spec.coffee"
+      "!bower_components/**/*.coffee"
+    ]
+    jsSourceGlob: [
+      '**/*.js'
+      '!bower_components/**/*.js'
+    ]
+    jsMain: [
+      'core/main.js'
+    ]
+    coffeeSpecGlob: '**/*.spec.coffee'
+    cssSourceGlob: [
+      '<%= cfg.src.parent %>/**/*.css'
+      '!<%= cfg.src.target %>/bower_components/**'
+      '!<%= cfg.src.parent %>/<%= cfg.libraryCSS %>'
+    ]
+    bowerComponents: 'src/static/bower_components'
     imagesGlob: [
-      "images/**/{*.png,*.jpg,*.jpeg}"
+      'images/**/{*.png,*.jpg,*.jpeg}'
+      'welcome/**/{*.png,*.jpg,*.jpeg}'
+      'apple*.png'
+      'favicon.ico'
     ]
     specGlob: "**/*.spec.js"
     specFile: "spec.html"
 
+
+
+
+
+
+
   grunt.initConfig
     cfg: buildConfig
     env: grunt.file.readJSON '.env.json'
+    pkg: grunt.file.readJSON 'package.json'
     connect:
       options:
         port: 7000
         hostname: '0.0.0.0' #"localhost" # change this to '0.0.0.0' to access the server from outside
-      livereload:
+        target: "<%= grunt.option('target') %>"
+        src: "<%= cfg.src.parent %>"
+        dev: "<%= cfg.dev.parent %>"
+        dist: "<%= cfg.dist.parent %>"
+        site: "<%= cfg.site.parent %>"
+      dev:
         options:
-          middleware: (connect) ->
-            # A grunt variable does not work here
-            [lrSnippet, mountFolder(connect, ".devServer"), mountFolder(connect, "app")]
+          middleware: (connect, options) ->
+            [lrSnippet, mountFolder(connect, options.dev), mountFolder(connect, options.src)]
       dist:
         options:
-          keepalive: true
-          middleware: (connect) ->
-            [mountFolder(connect, "dist")]
+#          keepalive: true
+          middleware: (connect, options) ->
+            [lrSnippet, mountFolder(connect, options.dist)]
+      site:
+        options:
+#          keepalive: true
+          middleware: (connect, options) ->
+            [lrSnippet, mountFolder(connect, options.site), mountFolder(connect, options.src)]
 
     open:
       devHome:
@@ -64,107 +116,121 @@ module.exports = (grunt) ->
 
     watch:
 
-      hbs:
-        files: ["<%= cfg.app %>/**/*.hbs"]
-        tasks: ["livereload"]
+      srcHtml:
+        files: [ '<%= cfg.src.parent %>/*.html', '!<%= cfg.src.parent %>/<%= specFile %>.html' ]
+        tasks: [ 'copy:html', 'includereplace:html' ]
 
-      coffee:
-        files: ["<%= cfg.app %>/**/*.coffee"]
-        tasks: ["coffee:dev", "replace:dev"]
+      srcHbs:
+        files: '<%= cfg.src.target %>/{,*}/{,*}/*.hbs'
+        tasks: ['copy:hbs', 'replace:html', 'livereload']
 
-      coffeeTest:
-        files: ["<%= cfg.app %>/**/*.spec.coffee"]
-        tasks: ["coffee:spec"]
+      specHtml:
+        files: '<%= cfg.src.parent %>/<%= specFile %>'
+        tasks: [ 'exec:scribeSpecs', 'includereplace:html' ]
 
-      specScribe:
-        files: ["<%= cfg.app %>/<%= cfg.specFile %>", "<%= cfg.specGlob %>"]
-        tasks: ["exec:scribeDevSpecs", "livereload"]
+      css:
+        files: '<%= cfg.cssSourceGlob %>'
+        tasks: 'combineCSS'
 
-      compass:
-        files: "<%= cfg.sassSourceGlob %>"
-        tasks: ["compass", "cssmin:dev", "clean:temp", "livereload"]
-
-      libraryCss:
-        files: "<%= cfg.temp %>/library.css"
-        tasks: "copy:libraryCss"
-
-      livereload:
+      srcJs:
         files: [
-          "<%= cfg.app %>/*.html"
-          "<%= cfg.dev %>/spec.html"
-          "<%= cfg.dev %>/**/*.css"
-          "<%= cfg.app %>/library.css"
-          "<%= cfg.dev %>/**/*.js"
-          "<%= cfg.app %>/**/*.{png,jpg}"
+          '<%= cfg.src.target %>/{,*}/{,*}/*.js'
+          '<%= cfg.src.target %>/{,*}/*.spec.js'
         ]
-        tasks: ["livereload"]
+        tasks: 'livereload'
+
+      deployedFiles:
+        files: [
+          "<%= grunt.option('targetParent') %>/*.html"
+          "<%= grunt.option('targetParent') %>/scout.js"
+          "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
+          "<%= grunt.option('target') %>/<%= cfg.minName %>.js"
+        ]
+        tasks: 'livereload'
+
+      site:
+        files: [
+          '<%= cfg.src.parent %>/site.html'
+          '<%= cfg.src.parent %>/site.css'
+          '<%= cfg.src.target %>/pages/home.hbs'
+        ]
+        tasks: [ 'build', 'livereload' ]
 
     clean:
-      dev: ["<%= cfg.dev %>", "<%= cfg.temp %>", ".grunt"]
-      temp: "<%= cfg.temp %>"
-      dist: "<%= cfg.dist %>"
-      hbs: "<%= cfg.temp %>/**/*.hbs"
+      target: "<%= grunt.option('target') %>"
+      dev:    "<%= cfg.dev.parent %>"
+      dist:   "<%= cfg.dist.parent %>"
+      site:   "<%= cfg.site.parent %>"
+      unoptimizedFiles: [
+        "<%= grunt.option('target') %>/**/*.hbs"
+        "<%= grunt.option('target') %>/**/*.js"
+        "!<%= grunt.option('target') %>/<%= cfg.jsMain %>"
+        "!<%= grunt.option('target') %>/bower_components/**"
+      ]
+      # Bower is a useful package manager, but fetches both build and dev code. We don't want to deploy that
+      unusedBowerComponents: [
+        # Libraries (dev only)
+        "<%= grunt.option('target') %>/bower_components/{backbone-amd,bourbon,Chart.js,fastclick,jasmine,jasmine-jquery,jquery,jquery-ui,markdown,modernizr,require-handlebars-plugin,requirejs-text,sass-bootstrap,tidepool-backbone.syphon,toastr,underscore-amd}/"
+        # Subfolders
+        "<%= grunt.option('target') %>/bower_components/**/{fonts,docs,tests}/"
+        # File Types
+        "<%= grunt.option('target') %>/bower_components/**/*.{html,jpg,png,md,doc,map,gemspec,lock,rb,ico,markdown,yml,json}"
+      ]
 
     coffee:
       options:
         bare: true
-      temp:
-          files: [
-            expand: true
-            cwd: "<%= cfg.app %>"
-            src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-            dest: "<%= cfg.temp %>"
-            ext: ".js"
-          ]
-      dev:
+        sourceMap: true
+      cup:
         files: [
           expand: true
-          cwd: "<%= cfg.app %>"
-          src: ["**/*.coffee", "!**/*.spec.coffee", "!bower_components/**/*.coffee"]
-          dest: "<%= cfg.dev %>"
-          ext: ".js"
+          cwd:  '<%= cfg.src.parent %>'
+          src:  '<%= cfg.coffeeSourceGlob %>'
+          dest: '<%= cfg.src.parent %>' # Create compiled files as siblings of source files
+          ext:  '.js'
         ]
       spec:
+        options: sourceMap: false
         files: [
           expand: true
-          cwd: "<%= cfg.app %>"
-          src: "**/*.spec.coffee"
-          dest: "<%= cfg.dev %>"
-          ext: ".spec.js"
-        ]
-      specToTemp:
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>"
-          src: "**/*.spec.coffee"
-          dest: "<%= cfg.temp %>"
-          ext: ".spec.js"
+          cwd:  '<%= cfg.src.target %>'
+          src:  '<%= cfg.coffeeSpecGlob %>'
+          dest: '<%= cfg.src.target %>'
+          ext:  '.spec.js'
         ]
 
     sass:
-      dev:
+      quatch:
         options:
-          #debugInfo: true
-          #lineNumbers: true
-          trace: true
+          lineNumbers: true #TODO switch on targets and use this to decide whether to add line numbers or not
+#          sourcemap: true #Requires Sass 3.3.0, which can be installed with gem install sass --pre
+#          trace: true
           style: 'compact'
-        files:
-          "<%= cfg.dev %>/all-min.css": "<%= cfg.sassSourceGlob %>"
+        files: [
+          expand: true
+          cwd:  '<%= cfg.src.parent %>'
+          src:  '<%= cfg.sassSourceGlob %>'
+          dest: '<%= cfg.src.parent %>' # Create css files as siblings of sass files
+          ext:  '.css'
+        ]
 
-    compass:
-      sassPrep:
-        options:
-          sassDir: "<%= cfg.app %>"
-          specify: "<%= cfg.sassSourceGlob %>"
-          cssDir: "<%= cfg.temp %>"
-          outputStyle: "compact"
-          noLineComments: true
+    concat:
+      enate:
+        src: '<%= cfg.cssSourceGlob %>'
+        dest: "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
+
+    cssmin:
+      ify:
+        options: report: 'min'
+        files: "<%= grunt.option('target') %>/<%= cfg.minName %>.css": "<%= grunt.option('target') %>/<%= cfg.minName %>.css"
+
 
     # https://github.com/jrburke/r.js/blob/master/build/example.build.js
     requirejs:
-      dist:
+      oneForAll:
         options:
-          mainConfigFile: "<%= cfg.temp %>/require_config.js"
+          baseUrl: "<%= grunt.option('target') %>"
+          mainConfigFile: "<%= cfg.src.parent %>/_require_config.js"
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
           include: [
@@ -185,55 +251,13 @@ module.exports = (grunt) ->
           paths:
             jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
             bootstrap: 'empty:'
-          out: '<%= cfg.dist %>/core/main.js'
+          out: '<%= grunt.option("target") %>/core/main.js'
           optimize: "uglify2"
-          #optimize: "none"
+#          optimize: "none"
           generateSourceMaps: true
           preserveLicenseComments: false
+#          removeCombined: true # Does not accurately identify all files it has combined. Using a manual clean instead
           skipPragmas: true # we don't use them, and they may slow the build
-
-    useminPrepare:
-      html: "<%= cfg.app %>/spec.html"
-      options:
-        dest: "<%= cfg.dev %>"
-
-    usemin:
-      html: ["<%= cfg.dist %>/{,*/}*.html"]
-      css: ["<%= cfg.dist %>/styles/{,*/}*.css"]
-      options:
-        dirs: ["<%= cfg.dist %>"]
-
-    imagemin:
-      dist:
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>/images"
-          src: "{,*/}*.{png,jpg,jpeg}"
-          dest: "<%= cfg.dist %>/images"
-        ]
-
-    cssmin:
-      dev:
-        options:
-          report: 'min'
-        files:
-          "<%= cfg.dev %>/all-min.css": "<%= cfg.cssSourceGlob %>"
-      dist:
-        options:
-          #banner: '/* Copyright 2013 TidePool, Inc */'
-          report: 'min'
-        files:
-          "<%= cfg.dist %>/all-min.css": "<%= cfg.cssSourceGlob %>"
-
-    htmlmin:
-      dist:
-        options: {}
-        files: [
-          expand: true
-          cwd: "<%= cfg.app %>"
-          src: "index.html"
-          dest: "<%= cfg.dist %>"
-        ]
 
     replace:
       options:
@@ -246,150 +270,314 @@ module.exports = (grunt) ->
           fbId:                "<%= env.fbId %>"
           #fbSecret:            "<%= env.fbSecret %>" # not used
           isDev:               "<%= env.isDev %>"
+          timestamp:           "<%= cfg.timestamp %>"
+          buildDir:            "<%= grunt.option('targetSubdir') %>"
         prefix: '@@'
-      dist:
+      config:
         files: [
           expand: true
           flatten: true
-          src: ["<%= cfg.temp %>/core/config.js"]
-          dest: "<%= cfg.temp %>/core/"
+          src: '<%= cfg.src.target %>/core/config.js'
+          dest: "<%= grunt.option('target') %>/core/"
         ]
-      dev:
+      html:
         files: [
           expand: true
-          flatten: true
-          src: ["<%= cfg.dev %>/core/config.js"]
-          dest: "<%= cfg.dev %>/core/"
+#          flatten: true
+          cwd: "<%= grunt.option('targetParent') %>"
+          src: "{*.html,**/*.hbs}"
+          dest: "<%= grunt.option('targetParent') %>"
         ]
+
+
+    includereplace:
+      options:
+        includesDir: '<%= cfg.src.parent %>'
+        globals:
+          buildDir: "<%= grunt.option('targetSubdir') %>"
+      html: files: [
+        expand: true
+        cwd: "<%= grunt.option('targetParent') %>"
+        src: '*.html'
+        dest: "<%= grunt.option('targetParent') %>"
+      ]
+      marketingSite: files: [
+        expand: true
+        cwd: "<%= cfg.src.parent %>"
+        src: 'site.html'
+        dest: "<%= cfg.site.parent %>"
+      ]
 
     copy:
-      libraryCss:
-        src: "<%= cfg.temp %>/library.css"
-        dest: "<%= cfg.app %>/library.css"
-      dist:
-        files: [
+      bower: files: [
           expand: true
-          cwd: "<%= cfg.app %>"
-          dest: "<%= cfg.dist %>"
-          src: [
-            "welcome/**"
-            ".htaccess"
-            "*.html"
-            "!spec.html"
-            "*.{ico,txt}"
-            #"<%= cfg.horseAndBuggyJsGlob %>"
-            #"<%= cfg.handlebarsGlob %>"
-            "<%= cfg.imagesGlob %>"
-          ]
+          cwd:  "<%= cfg.src.target %>/bower_components"
+          src:  '**/*.*'
+          dest: "<%= grunt.option('target') %>/bower_components"
         ]
-      requireJsPrep:
-        files: [
+      hbs: files: [
           expand: true
-          cwd: "<%= cfg.app %>"
-          dest: "<%= cfg.temp %>"
-          src: [
-            "<%= cfg.horseAndBuggyJsGlob %>"
-            "<%= cfg.handlebarsGlob %>"
-          ]
+          cwd:  "<%= cfg.src.target %>"
+          src:  "<%= cfg.hbsSourceGlob %>"
+          dest: "<%= grunt.option('target') %>"
         ]
-      requireJsPost:
-        files: [
+      html: files: [
           expand: true
-          cwd: "<%= cfg.temp %>"
-          dest: "<%= cfg.dist %>"
-          src: [
-            "require_config.js"
-            "<%= cfg.horseAndBuggyJsGlob %>"
-          ]
+          cwd:  "<%= cfg.src.parent %>"
+          src:  '{index.html,library.html,404.html,redirect.html,additional_redirect.html}'
+          dest: "<%= grunt.option('targetParent') %>"
         ]
-      distToPublic:
-        files: [
+      js: files: [
           expand: true
-          cwd: "<%= cfg.dist %>"
-          src: "**/*.*"
-          dest: "<%= cfg.research %>"
+          cwd:  "<%= cfg.src.target %>"
+          src:  "<%= cfg.jsSourceGlob %>"
+          dest: "<%= grunt.option('target') %>"
+        ]
+      assetImages: files: [
+          expand: true
+          cwd:  "<%= cfg.src.target %>"
+          src:  "<%= cfg.imagesGlob %>"
+          dest: "<%= grunt.option('target') %>"
+        ]
+      rootImages: files: [
+          expand: true
+          cwd:  "<%= cfg.src.parent %>"
+          src:  "<%= cfg.imagesGlob %>"
+          dest: "<%= grunt.option('targetParent') %>"
         ]
 
+    'git-describe': me: {}
+
+    pngmin:
+      options:
+        ext: '.png'
+        force: true
+      root: files: [
+          expand: true
+          cwd:  "<%= grunt.option('targetParent') %>"
+          src:  '*.png'
+          dest: "<%= grunt.option('targetParent') %>"
+        ]
+      target: files: [
+          expand: true
+          cwd:  "<%= grunt.option('target') %>"
+          src:  ['welcome/**/*.png', 'images/**/*.png']
+          dest: "<%= grunt.option('target') %>"
+        ]
+
+    compress:
+      options: pretty: true
+      mainPackages:
+        expand: true
+        cwd: "<%= grunt.option('target') %>"
+        src: '**/{<%= cfg.minName %>.css,core/main.js}'
+        dest: "<%= grunt.option('target') %>"
+
+    aws_s3:
+      options:
+        accessKeyId:     '<%= env.awsKey %>'
+        secretAccessKey: '<%= env.awsSecret %>'
+        bucket:          '<%= env.awsBucket %>'
+        region:          '<%= env.awsRegion %>'
+        concurrency: 5 # More power captain!
+        params:
+          CacheControl: 'public,max-age=630720000' # Two Year cache policy (1000 * 60 * 60 * 24 * 730)#
+#          ContentEncoding: 'gzip' # Must be manually compressed, and s3 doesn't correctly send Accept-Encoding header: http://stackoverflow.com/questions/5442011/serving-gzipped-css-and-javascript-from-amazon-cloudfront-via-s3
+
+      deployParent:
+        options: params: CacheControl: 'public,max-age=120000' # 2 minutes (1000 * 60 * 2)
+        files: [
+          expand: true
+          cwd: "<%= grunt.option('targetParent') %>"
+          src: '*' # all files, but only those in this immediate directory
+          dest: '' # putting a slash here will cause '//path' on Amazon
+        ]
+      deployStatic: files: [
+          expand: true
+          cwd: "<%= grunt.option('target') %>"
+          src: [ '**', '!**/*.gz' ]
+          dest: "<%= grunt.option('targetSubdir') %>"
+        ]
+      deployGzipped:
+        options: params: ContentEncoding: 'gzip'
+        files: [
+          { # The Minified CSS file
+            expand: true
+            cwd: "<%= grunt.option('target') %>"
+            src: "<%= cfg.minName %>.css.gz"
+            dest: "<%= grunt.option('targetSubdir') %>"
+            ext: '.css'
+            params: ContentType: 'text/css'
+          }
+          { # The Javascript package
+            expand: true
+            cwd: "<%= grunt.option('target') %>"
+            src: "core/main.js.gz"
+            dest: "<%= grunt.option('targetSubdir') %>"
+            ext: '.js'
+            params: ContentType: 'application/javascript'
+          }
+        ]
 
     exec:
-      convert_jqueryui_amd:
-        command: "jqueryui-amd <%= cfg.app %>/bower_components/jquery-ui"
-        stdout: true
-
-      unitTest:
-        command: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
-
-      scribeDevSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dev %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
-
-      scribeDistSpecs:
-        command: 'ruby resources/scribeAmdDependencies.rb "<%= cfg.dist %>/" "<%= cfg.app %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>"'
+      jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
+      unitTest:     cmd: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
+      scribeSpecs:  cmd: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.src.parent %>/" "<%= cfg.src.target %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
+      cleanEmpties: cmd: "find <%= grunt.option('target') %> -type d -empty -delete"
+      renameSite:   cmd: "mv <%= cfg.site.parent %>/site.html <%= cfg.site.parent %>/index.html"
 
   grunt.renameTask "regarde", "watch"
 
-  grunt.registerTask "build", [
-    "clean:dev"
-    "clean:temp"
-    "exec:convert_jqueryui_amd"
-    "coffee:dev"
-    "replace:dev"
-    "coffee:spec"
-    "compass"
-    "cssmin:dev"
-    "exec:scribeDevSpecs"
-    "copy:libraryCss"
-  ]
 
-  grunt.registerTask "devServer", [
-    "livereload-start"
-    "connect:livereload"
-  ]
-  grunt.registerTask 'distServer', [
-    'open'
-    'connect:dist'
-  ]
 
-  grunt.registerTask "server", (target) ->
-    return grunt.task.run(["build", "open", "connect:dist:keepalive"])  if target is "dist"
+
+
+  # ---------------------------------------------------------------------- v2 Task Definitions
+
+  # precompile
+  # ----------
+  # Turn SASS into CSS as sibling files
+  # Turn Coffeescript into JS as sibling files
+  # Optional to run if you preocompile SASS and Coffeescript on your dev machine
+  grunt.registerTask 'precompile', [ 'sass', 'coffee' ]
+
+
+  # combineCSS
+  # ----------
+  grunt.registerTask 'combineCSS', 'Combines css into one file. With minify if the --dist option is set.', ->
+    grunt.task.run 'concat'
+    grunt.task.run('cssmin') if grunt.option TARGETS.dist # only minify non-dist builds
+
+
+  # build
+  # -----
+  # Clean the target dir
+  # Merge separate css files into a single file
+  # Move files from the source dir to a build dir
+  # Copy markup files and parse them for replacements
+  grunt.registerTask 'build', 'Clean the target and build to it', ->
+    if grunt.option TARGETS.site
+      grunt.log.writeln "Building in Site Mode"
+      grunt.task.run [ 'includereplace:marketingSite', 'exec:renameSite' ]
+    else
+      grunt.task.run [
+        "exec:jqueryuiAmd"
+        'clean:target'        # clean out the target timestamp dir
+        'combineCSS'          # Merge css into a single file and put that file in the target timestamp dir
+        'copy:bower'          # Copy bower dependencies to the target timestamp dir
+        'copy:html'           # Move all html to the target parent dir
+        'copy:hbs'            # Copy all hbs templates to the target dir. Necessary so that we can replace @@buildDir for image references
+        'exec:scribeSpecs'    # find all .spec.js files and write them into spec.html
+        'includereplace:html' # include files and parse variables
+        'replace:html'        # parse build variables in html files
+        'replace:config'      # replace build values
+      ]
+      if grunt.option TARGETS.dist
+        grunt.log.writeln "Building in Dist Mode"
+        grunt.task.run [
+          'copy:js'
+          'requirejs'
+          'clean:unoptimizedFiles'
+          'clean:unusedBowerComponents'
+          'copy:rootImages'
+          'copy:assetImages'
+          'exec:cleanEmpties'
+          'compress'
+  #        'pngmin' # works local, breaks on ci. Platform issue?
+        ]
+      else
+        grunt.log.writeln "Building in Dev Mode"
+
+
+  # server
+  # ------
+  grunt.registerTask 'server', 'Open the target folder as a web server', ->
+    if grunt.option TARGETS.site
+      grunt.task.run [
+        'livereload-start'
+        'connect:site'
+        'open'
+        'watch:site'
+      ]
+    if grunt.option TARGETS.dist
+      grunt.task.run [
+        'livereload-start'
+        'connect:dist:keepalive'
+        'open'
+      ]
+    else
+      grunt.task.run [
+        'livereload-start'
+        'connect:dev'
+        'open'
+        'watch'
+      ]
+
+
+  # test
+  # ----
+  grunt.registerTask 'test', 'Start a server and run unit tests. build task is a prereq', [ 'connect:dev', 'exec:unitTest' ]
+
+
+  # deploy
+  # ------
+  # Hard code the targets to dist locations and names and run the aws deploy step
+  # This sets global targets to dist, so take care not to try to do a deploy and a dev build in the same run
+  grunt.registerTask 'deploy', 'Moves content from the dist folder to AWS S3. Dist build is a prereq.', ->
+    targetInfo = getDistTargetWithHash grunt.option 'gitRevision'
+    setGruntOptions targetInfo
     grunt.task.run [
-      "build"
-      "devServer"
-      "open"
-      "watch"
+      'aws_s3:deployParent'
+      'aws_s3:deployStatic'
+      'aws_s3:deployGzipped'
     ]
 
-  grunt.registerTask "test", [
-    "build"
-    "devServer"
-    "exec:unitTest"
-  ]
 
-  grunt.registerTask "dist", [
-    "clean:dist"
-    "exec:convert_jqueryui_amd"
-    "clean:temp"
-    "compass"
-    "cssmin:dist"
-    "coffee:temp"
-    "replace:dist"
-    "copy:requireJsPrep"
-    "requirejs"
-    "copy:requireJsPost"
-    "copy:dist"
-    "htmlmin"
-    "clean:temp"
-  ]
-
-  grunt.registerTask "distTest", [ 'dist', 'exec:unitTest']
-
-  grunt.registerTask "research", [
-    "dist"
-    "copy:distToPublic"
-  ]
-
+  # ---------------------------------------------------------------------- Task Shortcuts
+  grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
+  grunt.registerTask "s", [ 'clean', 'build', 'server' ]
   grunt.registerTask 'spec', 'exec:unitTest'
-  grunt.registerTask "s", "server"
-  grunt.registerTask "ds", ['dist', 'distServer']
-  grunt.registerTask "t", "test"
-  grunt.registerTask "default", 'server'
+  grunt.registerTask "default", 's'
+
+
+  # ---------------------------------------------------------------------- Set the output path for built files.
+  # Most tasks will key off this so it is a prerequisite for running any grunt task.
+  setPath = (gitRevision) ->
+    hash = '_' + gitRevision[0]
+    grunt.option 'gitRevision', hash
+    targetInfo = buildConfig.dev # Default path
+    if grunt.option TARGETS.dist
+      targetInfo = getDistTargetWithHash hash
+    else if grunt.option TARGETS.site
+      targetInfo = buildConfig.site
+    else
+      grunt.option TARGETS.dev, true
+      targetInfo = buildConfig.dev
+    setGruntOptions targetInfo
+    targets = []
+    targets.push target for target of TARGETS
+    grunt.log.writeln "You can set targets using grunt options, such as `--dev`"
+    grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
+
+  # Given a hash, create an object that stores dist locations
+  getDistTargetWithHash = (hash) ->
+    targetInfo = buildConfig.dist
+    targetInfo.target += hash # Only the dist build appends the hash
+    targetInfo.subdir += hash
+    targetInfo
+
+  # Given and object that specifies target locations, set global grunt variables
+  setGruntOptions = (targetInfo) ->
+    grunt.option 'target',       targetInfo.target
+    grunt.option 'targetParent', targetInfo.parent
+    grunt.option 'targetSubdir', targetInfo.subdir
+    grunt.log.writeln "Output path set to: #{grunt.option 'target'}"
+    grunt.log.writeln "Parent path:        #{grunt.option 'targetParent'}"
+    grunt.log.writeln "Subdir:             #{grunt.option 'targetSubdir'}"
+
+  # Run git-describe to get the revision number, and when it returns set the path for all grunt tasks
+  grunt.event.once 'git-describe', setPath
+  grunt.task.run 'git-describe'
+
+
 

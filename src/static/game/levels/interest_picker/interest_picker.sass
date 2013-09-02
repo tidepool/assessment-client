@@ -1,0 +1,235 @@
+@import '../../../bower_components/bourbon/app/assets/stylesheets/bourbon'
+@import '../../../styles/appVars'
+@import '../../../styles/colorVars'
+@import '../../../styles/helpers'
+
+
+
+.interestPicker
+  margin: $space auto
+  +phone
+    margin-top: $spaceLil
+  max-width: $maxSiteWidth
+
+  .menu, .bentoBox
+    display: block
+    vertical-align: top
+    +tabletAndUp
+      min-height: $spaceBig
+
+  // ----------------------------------------------- Instructions above the game
+  .instructions
+    color: tint($colorForegroundCool, 25%)
+    +phone
+      font-size: $fontSizeBody
+    +desktop
+      display: none
+
+
+  // ----------------------------------------------- The Buffet Menu
+  .menu
+    position: relative
+  .menu .content
+    margin: 0 $spaceLil
+    overflow: hidden
+    background: $colorForegroundCool
+    border: $spaceLil solid lighten($colorForegroundCool, 20%)
+    +phone
+      border-right-width: $spaceTiny
+      border-left-width: $spaceTiny
+    border-top: none
+    border-bottom: none
+    color: white
+    border-radius: $radiusMed
+    padding: $spaceTiny 1px
+
+  .menu .row
+    position: relative
+    display: block
+    margin: 0
+    min-height: $spaceBig
+    border-bottom: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
+    margin-bottom: -$spaceLil/2
+    +phone
+      border-bottom-width: $spaceTiny
+      margin-bottom: -$spaceTiny
+  .menu .content .row:first-child
+    border-top: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
+    margin-bottom: -$spaceLil - $spaceTiny
+    +phone
+      border-top-width: $spaceTiny
+      margin-bottom: -$spaceTiny*3
+
+  +desktop
+    .menu, .bentoBox
+      float: left
+    .menu
+      width: 73%
+      clear: left
+    .bentoBox
+      width: 25%
+    .hideDesktop
+      display: none
+    .groovy
+      display: none
+
+  .menu .counter
+    position: absolute
+    left: $spaceLil * 2
+    top: $spaceLil + $spaceTiny
+
+    text-align: right
+    color: lighten($colorForegroundCool, 30%)
+    +transitionable
+    $height: 25px
+    height: $height
+    line-height: $height
+    font-size: $height
+    width: $height*3
+    +phone
+      $height: 16px
+      height: $height
+      line-height: $height
+      font-size: $height
+      width: $height*3
+  .menu .counter.done
+    left: -100px
+    color: transparent
+
+
+  // ----------------------------------------------- Menu at full height
+  .menu,
+  .menu .content
+    height: 100%
+  +phone
+    min-height: 200px
+  +tabletAndUp
+    min-height: 400px
+
+
+  // ----------------------------------------------- The grooved gripper shape
+  .groovy
+    $size: 25px
+    position: absolute
+    width: $size
+    height: $size
+    left: 50%
+    text-align: center
+    margin-left: -$size/2
+    top: $spaceLil
+    color: shade($colorBackgroundWarm, 15%)
+    font-size: $size
+    text-shadow: 0 1px $highlightThick
+    z-index: 1 // Above the titles
+    cursor: pointer
+
+  // ----------------------------------------------- The Picked Items
+  .bentoBox h3
+    margin: 0 0 $spaceTiny 0
+    color: tint($colorForegroundCool, 50%)
+    text-transform: uppercase
+    font-weight: bold
+    text-align: center
+
+  .bentoBox h3 .good
+    color: $colorForegroundCool
+
+  .bentoBox .remaining
+    text-transform: none
+    color: $colorForegroundCool
+    output
+      font-size: 125%
+
+  .bentoBox .content
+    position: relative
+    background: white
+    +tabletAndUp
+      min-height: 200px
+    color: $colorForegroundCool
+    padding: $spaceLil
+    border-radius: $radiusMed
+    text-align: center
+    &.shimmer
+      @include animation(jollyGreenGiant .75s ease-out 2 alternate) // Make green, then reverse
+
+  .bentoBox .countdown
+    position: absolute
+    left: 0
+    top: $space
+    width: 100%
+    text-align: center
+    color: tint($colorForegroundCool, 85%)
+    font-size: $fontSizeVeryLarge
+    line-height: .8
+    strong
+      font-size: $fontSizeMegaLarge * 3
+
+
+  // ----------------------------------------------- Picker As a Drawer
+  +phoneAndTablet
+    .bentoBox.expanded
+      bottom: 0
+      box-shadow: 0 (-$spaceTiny) $spaceLil 0 $shadeLight
+    .bentoBox
+      $bentoHeight: 150px
+      position: fixed
+      left: 0
+      bottom: -150px
+      height: $bentoHeight
+      padding-top: $spaceBig
+      font-size: 0
+      width: 100%
+      background: shade($colorForegroundCool, 15%)
+      border-top: $spaceTiny solid shade($colorBackgroundWarm, 10%)
+      +transition( bottom .2s )
+
+      .title, .content
+        position: absolute
+        top: 0
+        left: 0
+        width: 50%
+      .title
+        height: $spaceBig
+        background: $colorBackgroundWarm
+        cursor: pointer
+      .title.words
+        left: 50%
+      .title .remaining
+        display: block
+      .content
+        top: 50px
+        background: none
+        color: white
+        +box-sizing(border-box)
+        width: 50%
+        height: $bentoHeight
+        border-radius: 0
+        vertical-align: top
+        &.shimmer
+          @include animation(darkGreenGiant .75s ease-out 2 alternate) // Make green, then reverse
+      .content.words
+        left: 50%
+        border-left: $spaceTiny solid $colorForegroundCool
+        .bait
+          display: block
+      .countdown
+        display: none
+
+
++keyframes(jollyGreenGiant)
+  0%
+    box-shadow: inset 0 0 0 $spaceTiny white
+    background: white
+  100%, 25%
+    box-shadow: inset 0 0 0 $spaceTiny $colorGood
+    background: tint($colorGood, 90%)
+
++keyframes(darkGreenGiant)
+  0%
+    box-shadow: inset 0 0 0 $spaceTiny $colorForegroundCool
+    background: $colorForegroundCool
+  100%, 25%
+    box-shadow: inset 0 0 0 $spaceTiny $colorGood
+    background: mix($colorGood, $colorForegroundCool)
+
+
