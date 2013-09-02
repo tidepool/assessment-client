@@ -356,6 +356,14 @@ module.exports = (grunt) ->
           dest: "<%= grunt.option('target') %>"
         ]
 
+    compress:
+      options: pretty: true
+      mainPackages:
+        expand: true
+        cwd: "<%= grunt.option('target') %>"
+        src: '**/{<%= cfg.minName %>.css,core/main.js}'
+        dest: "<%= grunt.option('target') %>"
+
     aws_s3:
       options:
         accessKeyId:     '<%= env.awsKey %>'
@@ -381,6 +389,15 @@ module.exports = (grunt) ->
           src: '**'
           dest: "<%= grunt.option('targetSubdir') %>"
         ]
+      deployGzipped:
+        options: params: ContentEncoding: 'gzip'
+        files: [
+          # The Minified CSS file
+          "<%= grunt.option('targetSubdir') %>/<%= cfg.minName %>.css": "<%= grunt.option('target') %>/<%= cfg.minName %>.css.gz"
+          # The Javascript package
+          "<%= grunt.option('targetSubdir') %>/core/main.js": "<%= grunt.option('target') %>/core/main.js.gz"
+        ]
+
 
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
@@ -490,6 +507,7 @@ module.exports = (grunt) ->
     grunt.task.run [
       'aws_s3:deployParent'
       'aws_s3:deployStatic'
+      'aws_s3:deployGzipped'
     ]
 
 
