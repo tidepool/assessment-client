@@ -461,6 +461,7 @@ module.exports = (grunt) ->
           'copy:rootImages'
           'copy:assetImages'
           'exec:cleanEmpties'
+          'compress'
   #        'pngmin' # works local, breaks on ci. Platform issue?
         ]
       else
