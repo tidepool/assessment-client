@@ -47,7 +47,7 @@ define [
       else
         @google?.trackEvent category, action
       # ------------------------------------------------------ v Line of Awesome
-      console.log category:category, action:action, label:label, value:value # Uncomment this to view real-time details of every analytics event send to .track
+      #console.log category:category, action:action, label:label, value:value # Uncomment this to view real-time details of every analytics event send to .track
       # ------------------------------------------------------ ^ Line of Awesome
 
     trackKeyMetric: (category, action, data) ->
