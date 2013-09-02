@@ -167,6 +167,19 @@ module.exports = (grunt) ->
         "!<%= grunt.option('target') %>/<%= cfg.jsMain %>"
         "!<%= grunt.option('target') %>/bower_components/**"
       ]
+      # Bower is a useful package manager, but fetches both build and dev code. We don't want to deploy that
+      unusedBowerComponents: [
+        # File Types
+        "<%= grunt.option('target') %>/bower_components/**/*.{html,jpg,png,md,doc,map,gemspec,lock,rb,ico,markdown,yml}"
+        # Libraries (dev only)
+        "<%= grunt.option('target') %>/bower_components/{bourbon,jasmine,jasmine-jquery}/"
+        # Subfolders
+        "<%= grunt.option('target') %>/bower_components/**/{src,docs,app,examples,samples,node_modules,test,tests,spec,features,site,demo}/"
+        # Specific Files
+        "<%= grunt.option('target') %>/bower_components/*/package.json"
+        "<%= grunt.option('target') %>/bower_components/*/component.json"
+        "<%= grunt.option('target') %>/bower_components/*/bower.json"
+      ]
 
     coffee:
       options:
@@ -386,18 +399,29 @@ module.exports = (grunt) ->
       deployStatic: files: [
           expand: true
           cwd: "<%= grunt.option('target') %>"
-          src: '**'
+          src: [ '**', '!**/*.gz' ]
           dest: "<%= grunt.option('targetSubdir') %>"
         ]
       deployGzipped:
         options: params: ContentEncoding: 'gzip'
         files: [
-          # The Minified CSS file
-          "<%= grunt.option('targetSubdir') %>/<%= cfg.minName %>.css": "<%= grunt.option('target') %>/<%= cfg.minName %>.css.gz"
-          # The Javascript package
-          "<%= grunt.option('targetSubdir') %>/core/main.js": "<%= grunt.option('target') %>/core/main.js.gz"
+          { # The Minified CSS file
+            expand: true
+            cwd: "<%= grunt.option('target') %>"
+            src: "<%= cfg.minName %>.css.gz"
+            dest: "<%= grunt.option('targetSubdir') %>"
+            ext: '.css'
+            params: ContentType: 'text/css'
+          }
+          { # The Javascript package
+            expand: true
+            cwd: "<%= grunt.option('target') %>"
+            src: "core/main.js.gz"
+            dest: "<%= grunt.option('targetSubdir') %>"
+            ext: '.js'
+            params: ContentType: 'application/javascript'
+          }
         ]
-
 
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
@@ -458,6 +482,7 @@ module.exports = (grunt) ->
           'copy:js'
           'requirejs'
           'clean:unoptimizedFiles'
+          'clean:unusedBowerComponents'
           'copy:rootImages'
           'copy:assetImages'
           'exec:cleanEmpties'
