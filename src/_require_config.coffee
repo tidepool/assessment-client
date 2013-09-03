@@ -28,25 +28,25 @@ require.config
 #      'scripts/vendor/bootstrap'
 
     # 3rd Party Bower Libraries
-    Handlebars: 'bower_components/require-handlebars-plugin/Handlebars'
-    underscore: 'bower_components/underscore-amd/underscore'
-    jqueryui: 'bower_components/jquery-ui/jqueryui'
+    Handlebars:     'bower_components/require-handlebars-plugin/Handlebars'
+    underscore:     'bower_components/underscore-amd/underscore'
+    jqueryui:       'bower_components/jquery-ui/jqueryui'
     jquiTouchPunch: 'bower_components/jquery-ui-touch-punch/jquery.ui.touch-punch.min'
-    backbone: 'bower_components/backbone-amd/backbone'
-    syphon: 'bower_components/tidepool-backbone.syphon/lib/amd/backbone.syphon'
-    text: 'bower_components/requirejs-text/text'
-    toastr: 'bower_components/toastr'
-    chart: 'bower_components/Chart.js/Chart.min'
-    markdown: 'bower_components/markdown/lib/markdown'
-    fastclick: 'bower_components/fastclick/lib/fastclick'
+    backbone:       'bower_components/backbone-amd/backbone'
+    syphon:         'bower_components/tidepool-backbone.syphon/lib/amd/backbone.syphon'
+    text:           'bower_components/requirejs-text/text'
+    toastr:         'bower_components/toastr'
+    chart:          'bower_components/Chart.js/Chart.min'
+    markdown:       'bower_components/markdown/lib/markdown'
+    fastclick:      'bower_components/fastclick/lib/fastclick'
 
     # 3rd Party non-Bower Libraries
     nested_view: 'scripts/vendor/nested_view'
 
     # Convenience Folder Mapping
-    results: 'scripts/views/results'
+    results:     'scripts/views/results'
     controllers: 'scripts/controllers'
-    helpers: 'scripts/helpers'
+    helpers:     'scripts/helpers'
 
   shim:
     bootstrap:
