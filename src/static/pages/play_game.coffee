@@ -167,7 +167,7 @@ define [
         @eventLog.addEvent levelView.event if levelView.event?
         levelView.remove() #remove the existing level if it exits. This is a safety valve for leaking dom nodes and events
         @miniInstructions.model.set text:''
-        app.analytics.track @className, "#{levelView.model.attributes.stageDef} Level Finished"
+        app.analytics.track @className, "#{levelView.model.attributes.level_definition_name || levelView.model.attributes.view_name} Level Finished"
 
     _showLevel: (stageId) ->
       #console.log "#{_me}._showLevel(#{stageId})"
