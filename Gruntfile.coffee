@@ -134,7 +134,7 @@ module.exports = (grunt) ->
 
       srcJs:
         files: [
-          '<%= cfg.src.target %>/{,*}/{,*}/*.js'
+          '<%= cfg.src.target %>/{,*}/{,*}/{,*}/*.js'
           '<%= cfg.src.target %>/{,*}/*.spec.js'
         ]
         tasks: 'livereload'
