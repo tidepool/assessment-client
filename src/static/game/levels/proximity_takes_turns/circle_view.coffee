@@ -40,8 +40,11 @@ define [
     render: ->
       @$el.html @model.attributes.abbreviation
       @$el.prop title:"#{@model.attributes.trait1} / #{@model.attributes.trait2}"
-      require ['jquiTouchPunch'], => # This kludge is to support touch on the jqui draggable element. TODO: drag lib with native touch support
+      require ['jquiTouchPunch'], (=> # This kludge is to support touch on the jqui draggable element. TODO: drag lib with native touch support
         @_makeDraggable()
+        console.log 'loaded jquiTouchPunch'
+      ), ->
+        alert 'Error Loading jquiTouchPunch'
       @
 
 
