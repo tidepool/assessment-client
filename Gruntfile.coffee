@@ -381,11 +381,11 @@ module.exports = (grunt) ->
         region:          '<%= env.awsRegion %>'
         concurrency: 5 # More power captain!
         params:
-          CacheControl: 'public,max-age=630720000' # Two Year cache policy (1000 * 60 * 60 * 24 * 730)#
+          CacheControl: 'max-age=63072000' # Two Year cache policy (60 * 60 * 24 * 730)#
 #          ContentEncoding: 'gzip' # Must be manually compressed, and s3 doesn't correctly send Accept-Encoding header: http://stackoverflow.com/questions/5442011/serving-gzipped-css-and-javascript-from-amazon-cloudfront-via-s3
 
       deployParent:
-        options: params: CacheControl: 'public,max-age=120000' # 2 minutes (1000 * 60 * 2)
+        options: params: CacheControl: 'max-age=120' # 2 minutes (60 * 2)
         files: [
           expand: true
           cwd: "<%= grunt.option('targetParent') %>"
