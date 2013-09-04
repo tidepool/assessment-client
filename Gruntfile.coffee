@@ -310,6 +310,14 @@ module.exports = (grunt) ->
 
     uglify: requirejs: files: "<%= cfg.src.target %>/bower_components/requirejs/require.min.js" : "<%= cfg.src.target %>/bower_components/requirejs/require.js"
 
+    htmlmin: index:
+      options:
+        collapseWhitespace: true
+        removeRedundantAttributes: true
+        removeAttributeQuotes: true
+      files: "<%= grunt.option('targetParent') %>/index.html" : "<%= grunt.option('targetParent') %>/index.html"
+
+
     copy:
       bower: files: [
           expand: true
@@ -382,9 +390,7 @@ module.exports = (grunt) ->
         bucket:          '<%= env.awsBucket %>'
         region:          '<%= env.awsRegion %>'
         concurrency: 5 # More power captain!
-        params:
-          CacheControl: 'max-age=63072000' # Two Year cache policy (60 * 60 * 24 * 730)#
-#          ContentEncoding: 'gzip' # Must be manually compressed, and s3 doesn't correctly send Accept-Encoding header: http://stackoverflow.com/questions/5442011/serving-gzipped-css-and-javascript-from-amazon-cloudfront-via-s3
+        params: CacheControl: 'max-age=63072000' # Two Year cache policy (60 * 60 * 24 * 730)#
 
       deployParent:
         options: params: CacheControl: 'max-age=120' # 2 minutes (60 * 2)
@@ -401,7 +407,9 @@ module.exports = (grunt) ->
           dest: "<%= grunt.option('targetSubdir') %>"
         ]
       deployGzipped:
-        options: params: ContentEncoding: 'gzip'
+        options: params:
+          ContentEncoding: 'gzip'
+          CacheControl: 'max-age=120' # 2 minutes (60 * 2)
         files: [
           { # The Minified CSS file
             expand: true
@@ -474,6 +482,7 @@ module.exports = (grunt) ->
         'includereplace:html' # include files and parse variables
         'replace:html'        # parse build variables in html files
         'replace:config'      # replace build values
+        'htmlmin'
       ]
       if grunt.option TARGETS.dist
         grunt.log.writeln "Building in Dist Mode"
@@ -486,7 +495,6 @@ module.exports = (grunt) ->
           'copy:assetImages'
           'exec:cleanEmpties'
           'compress'
-  #        'pngmin' # works local, breaks on ci. Platform issue?
         ]
       else
         grunt.log.writeln "Building in Dev Mode"
@@ -505,8 +513,8 @@ module.exports = (grunt) ->
     if grunt.option TARGETS.dist
       grunt.task.run [
         'livereload-start'
-        'connect:dist:keepalive'
         'open'
+        'connect:dist:keepalive'
       ]
     else
       grunt.task.run [
