@@ -5,9 +5,6 @@
 
 
 
-
-
-
 body
   margin: 0
   padding: 0
@@ -16,3 +13,50 @@ body
   font-size: $fontSizeBody
   color: $colorForeground
   line-height: 1.5
+
+  +bigassBackground('@@buildDir/images/home_page/homepageblur_bg.jpg')
+  +phone
+    background: url('@@buildDir/images/home_page/homepageblur_bg.jpg') no-repeat top center
+    background-size: cover
+
+
+// ---------------------------------------- Common Elements
+h1, h2, h3
+  text-transform: uppercase
+  color: white
+  text-shadow: $spaceTiny 1px $spaceLil $shade, -$spaceTiny 1px $spaceLil $shade, 0 $spaceTiny $spaceLil $shade
+  letter-spacing: .02em
+  line-height: 1.2
+h1
+  font-size: $fontSizeMegaLarge
+  margin-bottom: $spaceBig
+  +phone
+    font-size: $fontSizeVeryLarge
+    margin-bottom: $space
+    line-height: 1
+    letter-spacing: -.02em
+h2
+  font-size: $fontSizeMegaLarge
+  margin-bottom: $spaceBig
+  +phone
+    font-size: $fontSizeVeryLarge - $spaceLil
+    margin-bottom: $spaceLil
+
+hr
+  height: 1px
+  background-color: rgba(255,255,255,.5)
+  border: 0
+  margin: 25px auto
+  width: 90%
+
+.majorDivider
+  min-height: $space
+  background: $colorBrand1
+  box-shadow: 0 $spaceTiny $spaceTiny $shade
+.majorDivider.withContent
+  padding: $space 0
+  background: $colorGood
+
+
+.teamPage
+  padding: $space 0

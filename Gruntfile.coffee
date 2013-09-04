@@ -152,7 +152,8 @@ module.exports = (grunt) ->
         files: [
           '<%= cfg.src.parent %>/site.html'
           '<%= cfg.src.parent %>/site.css'
-          '<%= cfg.src.target %>/pages/home.hbs'
+          '<%= cfg.src.parent %>/app_teaser.css'
+          '<%= cfg.src.target %>/pages/team.hbs'
         ]
         tasks: [ 'build', 'livereload' ]
 
@@ -201,11 +202,7 @@ module.exports = (grunt) ->
 
     sass:
       quatch:
-        options:
-          lineNumbers: true #TODO switch on targets and use this to decide whether to add line numbers or not
-#          sourcemap: true #Requires Sass 3.3.0, which can be installed with gem install sass --pre
-#          trace: true
-          style: 'compact'
+        options: style: 'compact'
         files: [
           expand: true
           cwd:  '<%= cfg.src.parent %>'
@@ -449,7 +446,8 @@ module.exports = (grunt) ->
   # Turn SASS into CSS as sibling files
   # Turn Coffeescript into JS as sibling files
   # Optional to run if you preocompile SASS and Coffeescript on your dev machine
-  grunt.registerTask 'precompile', [ 'sass', 'coffee' ]
+  grunt.registerTask 'precompile', ->
+    grunt.task.run [ 'sass', 'coffee' ]
 
 
   # combineCSS
@@ -468,7 +466,12 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', 'Clean the target and build to it', ->
     if grunt.option TARGETS.site
       grunt.log.writeln "Building in Site Mode"
-      grunt.task.run [ 'includereplace:marketingSite', 'exec:renameSite' ]
+      grunt.task.run [
+        'includereplace:marketingSite'
+        'exec:renameSite'
+        'htmlmin:index:removeComments'
+        'copy:assetImages'
+      ]
     else
       grunt.task.run [
         "exec:jqueryuiAmd"
@@ -532,16 +535,22 @@ module.exports = (grunt) ->
 
   # deploy
   # ------
-  # Hard code the targets to dist locations and names and run the aws deploy step
-  # This sets global targets to dist, so take care not to try to do a deploy and a dev build in the same run
+  # deploy the site to a remote location. Only valid for --dist and --site builds so far
   grunt.registerTask 'deploy', 'Moves content from the dist folder to AWS S3. Dist build is a prereq.', ->
-    targetInfo = getDistTargetWithHash grunt.option 'gitRevision'
-    setGruntOptions targetInfo
-    grunt.task.run [
-      'aws_s3:deployParent'
-      'aws_s3:deployStatic'
-      'aws_s3:deployGzipped'
-    ]
+#    targetInfo = getDistTargetWithHash grunt.option 'gitRevision'
+#    setGruntOptions targetInfo
+    if grunt.option TARGETS.site
+      grunt.log.writeln "Deploying standalone/marketing site"
+      grunt.task.run 'aws_s3:deploySite'
+    else if grunt.option TARGETS.dist
+      grunt.log.writeln "Deploying dist"
+      grunt.task.run [
+        'aws_s3:deployParent'
+        'aws_s3:deployStatic'
+        'aws_s3:deployGzipped'
+      ]
+    else
+      grunt.fail.warn 'No action taken -- can only deploy to dist or site target'
 
 
   # ---------------------------------------------------------------------- Task Shortcuts
@@ -559,9 +568,9 @@ module.exports = (grunt) ->
     grunt.option 'gitRevision', hash
     targetInfo = buildConfig.dev # Default path
     if grunt.option TARGETS.dist
-      targetInfo = getDistTargetWithHash hash
+      targetInfo = targetPlusHash buildConfig.dist, hash
     else if grunt.option TARGETS.site
-      targetInfo = buildConfig.site
+      targetInfo = targetPlusHash buildConfig.site, hash
     else
       grunt.option TARGETS.dev, true
       targetInfo = buildConfig.dev
@@ -572,8 +581,8 @@ module.exports = (grunt) ->
     grunt.log.writeln "Possible targets for this project: #{targets.join(', ')}"
 
   # Given a hash, create an object that stores dist locations
-  getDistTargetWithHash = (hash) ->
-    targetInfo = buildConfig.dist
+  targetPlusHash = (target, hash) ->
+    targetInfo = target
     targetInfo.target += hash # Only the dist build appends the hash
     targetInfo.subdir += hash
     targetInfo
