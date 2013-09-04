@@ -6,28 +6,50 @@
 
 .appTeaser
   $animSpeed: 16s
-  padding: $spaceBig 0 $spaceBig * 3 0
   margin: 0 auto
   max-width: 1000px
+  padding: $space 0
+  padding-bottom: $space * 3
+  +tabletAndUp
+    padding: $spaceBig 0
+    padding-bottom: $spaceBig * 3
+
 
   // ------------------------------------------------------ Major Structure
   .phoneHolder, .infoHolder
-    display: table-cell
     vertical-align: top
+    display: block
+    +tabletAndUp
+      display: table-cell
+
   .infoHolder
     width: 100%
 
 
   // ------------------------------------------------------ Phone Area
+  .phoneHolder
+    text-align: center
+    +tablet
+      padding-left: $spaceLil
+    +desktop
+      padding-left: $space
+
+    .appIcon
+      width: 72px
+      +tabletAndUp
+        display: none
+
   .phone
-    position: relative
-    //width: 317px // Actual image size
-    //height: 648px
-    width: 295px // visual phone shape size
-    height: 627px
-    border-radius: 38px
-    background: black
-    box-shadow: 0 3px 2px 1px $shade, inset 0 0 0 3px #444, inset 0 0 0 5px #111
+    +phone
+      display: none // If the viewer is using a phone, hide all the phone visuals
+    +tabletAndUp
+      position: relative
+      width: 295px // visual phone shape size
+      height: 627px
+      border-radius: 38px
+      background: black
+      box-shadow: 0 3px 2px 1px $shade, inset 0 0 0 3px #444, inset 0 0 0 5px #111
+
 
     .gloss
       position: absolute
@@ -63,15 +85,17 @@
       left: -12px
 
     .screen
-      position: absolute
-      width: 254px
-      height: 450px
-      left: 22px
-      top: 88px
       overflow: hidden
-      border-radius: 3px
-      box-shadow: inset 1px 1px 0 0 $shadeDark, inset -1px -1px 0 0 #222
-      +linear-gradient(to bottom, #444, #333)
+      width: 254px
+      margin: 0 auto
+      +tabletAndUp
+        position: absolute
+        height: 450px
+        left: 22px
+        top: 88px
+        border-radius: 3px
+        box-shadow: inset 1px 1px 0 0 $shadeDark, inset -1px -1px 0 0 #222
+        background: #444
 
     .screen .statusBar
       position: absolute
@@ -81,30 +105,48 @@
 
 
     .screen .contents
-      display: inline-block
-      margin-top: 16px
-      height: 433px
-      min-width: 500px
+      position: relative
       +animation(electricSlide $animSpeed infinite)
+      img.full
+        margin-top: 16px
+      +tabletAndUp
+        height: 433px
+        img.full
+          z-index: 1
+
+
 
 
   // ------------------------------------------------------ Headline Area
+  .infoHolder
+    +phone
+      text-align: center
+
   .headlineHolder
     position: relative
-    height: 400px
     overflow: hidden
+    height: 120px
+    +tabletAndUp
+      height: 400px
 
   .headlineHolder h1
     position: absolute
-    width: 100%
-    top: $space * 6
-    padding-left: $spaceBig
-    +box-sizing(border-box)
+    top: 0
+    +phone
+      font-size: $fontSizeVeryLarge - 10
+      padding: 0 $spaceTiny
+    +tabletAndUp
+      width: 100%
+      top: $space * 6
+      left: 0
+      +box-sizing(border-box)
+      padding-left: $spaceBig
+    +tablet
+      padding-left: $space
+      font-size: $fontSizeMegaLarge - 10px
     &.yodel2, &.yodel3, &.yodel4
-      left: 1000px
       opacity: .02
     &.yodel1
-      left: 0
       opacity: .99
       +animation(homelessManYodeling1 $animSpeed infinite)
     &.yodel2
@@ -115,8 +157,17 @@
       +animation(homelessManYodeling4 $animSpeed infinite)
 
   .appStoreBtn
-    margin-left: $spaceBig
-
+    img
+      vertical-align: middle
+    +tablet
+      margin-left: $space
+    +desktop
+      margin-left: $spaceBig
+    .appIcon
+      width: 72px
+      margin-right: $spaceLil
+      +phone
+        display: none
 
 // ------------------------------------------------------ Animations
 $moveAmnt: 264px
@@ -136,14 +187,16 @@ $farFarAway: 1000px
   left: -$farFarAway
   opacity: .001
 =offRight
-  left: $farFarAway
-  opacity: .2
+  //left: $farFarAway
+  //opacity: .2
+  left: 0
+  opacity: .001
 +keyframes(homelessManYodeling1)
   0%, 23%
     left: 0
     opacity: .99
   25%
-    +offLeft
+    +offRight
   26%, 98%
     +offRight
 +keyframes(homelessManYodeling2)
@@ -151,7 +204,7 @@ $farFarAway: 1000px
     left: 0
     opacity: 1
   50%
-    +offLeft
+    +offRight
   51%, 23%
     +offRight
 +keyframes(homelessManYodeling3)
@@ -159,7 +212,7 @@ $farFarAway: 1000px
     left: 0
     opacity: 1
   75%
-    +offLeft
+    +offRight
   76%, 48%
     +offRight
 +keyframes(homelessManYodeling4)
@@ -167,7 +220,7 @@ $farFarAway: 1000px
     left: 0
     opacity: 1
   100%
-    +offLeft
+    +offRight
   1%, 73%
     +offRight
 

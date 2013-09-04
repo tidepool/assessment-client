@@ -37,6 +37,7 @@ module.exports = (grunt) ->
       parent: '.site'
       target: ".site/#{timestamp}"
       subdir: timestamp
+    siteBucket: 'site.tidepool.co'
     research: "../OAuthProvider/public/#{timestamp}/"
     minName: 'all-min'
     libraryCSS: 'library.css'
@@ -153,6 +154,7 @@ module.exports = (grunt) ->
           '<%= cfg.src.parent %>/site.html'
           '<%= cfg.src.parent %>/site.css'
           '<%= cfg.src.target %>/pages/team.hbs'
+          '<%= cfg.src.target %>/pages/team.css'
           '<%= cfg.src.target %>/pages/app_teaser.css'
           '<%= cfg.src.target %>/pages/app_teaser.hbs'
         ]
@@ -353,6 +355,18 @@ module.exports = (grunt) ->
           src:  "<%= cfg.imagesGlob %>"
           dest: "<%= grunt.option('targetParent') %>"
         ]
+      siteAssetImages: files: [
+        expand: true
+        cwd:  "<%= cfg.src.target %>"
+        src:  [
+          'images/app_teaser/*.{jpg,png}'
+          'images/people/*.{jpg,png}'
+          'images/tidepool.png'
+          'images/home_page/homepage*.jpg'
+          'images/home_page/phone_bg*.jpg'
+        ]
+        dest: "<%= grunt.option('target') %>"
+      ]
 
     'git-describe': me: {}
 
@@ -426,6 +440,24 @@ module.exports = (grunt) ->
             params: ContentType: 'application/javascript'
           }
         ]
+      siteParent:
+        options:
+          bucket: "<%= cfg.siteBucket %>"
+          params: CacheControl: 'max-age=120' # 2 minutes (60 * 2)
+        files: [
+          expand: true
+          cwd: "<%= grunt.option('targetParent') %>"
+          src: '*' # all files, but only those in this immediate directory
+          dest: '' # putting a slash here will cause '//path' on Amazon
+        ]
+      siteStatic:
+        options: bucket: "<%= cfg.siteBucket %>"
+        files: [
+          expand: true
+          cwd: "<%= grunt.option('target') %>"
+          src: [ '**', '!**/*.gz' ]
+          dest: "<%= grunt.option('targetSubdir') %>"
+        ]
 
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
@@ -438,9 +470,7 @@ module.exports = (grunt) ->
 
 
 
-
-
-  # ---------------------------------------------------------------------- v2 Task Definitions
+  # ---------------------------------------------------------------------- Task Definitions
 
   # precompile
   # ----------
@@ -471,7 +501,8 @@ module.exports = (grunt) ->
         'includereplace:marketingSite'
         'exec:renameSite'
         'htmlmin:index:removeComments'
-        'copy:assetImages'
+        'copy:rootImages'
+        'copy:siteAssetImages'
       ]
     else
       grunt.task.run [
@@ -542,7 +573,11 @@ module.exports = (grunt) ->
 #    setGruntOptions targetInfo
     if grunt.option TARGETS.site
       grunt.log.writeln "Deploying standalone/marketing site"
-      grunt.task.run 'aws_s3:deploySite'
+      grunt.task.run [
+        'build'
+        'aws_s3:siteParent'
+        'aws_s3:siteStatic'
+      ]
     else if grunt.option TARGETS.dist
       grunt.log.writeln "Deploying dist"
       grunt.task.run [

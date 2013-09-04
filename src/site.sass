@@ -14,16 +14,31 @@ body
 
   +bigassBackground('@@buildDir/images/home_page/homepageblur_bg.jpg')
   +phone
-    background: url('@@buildDir/images/home_page/homepageblur_bg.jpg') no-repeat top center
+    background: $colorForegroundCool
+.appTeaser
+  +phone
+    background: url('@@buildDir/images/home_page/phone_bg_blur.jpg') no-repeat top center
     background-size: cover
 
 header
   background: white
   height: $spaceBig
+  +phone
+    height: $spaceBig - 20
   .inner
     max-width: 1000px
     margin: 0 auto
     padding-top: 5px
+  // Logo
+  img
+    margin-left: $spaceTiny
+    +phone
+      height: 20px
+    +tabletAndUp
+      margin-left: 80px
+
+.avatar
+  background-image: none
 
 
 // ---------------------------------------- Common Elements
@@ -68,8 +83,13 @@ hr
 
 // ---------------------------------------- Team Page
 .teamPage
-  background: $shadeLight
+  background: $shade
+  +phone
+    background: none
   padding: $space 0
 
-
+  .avatar
+    +phone
+      width: 80px
+      height: 80px
 
