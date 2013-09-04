@@ -308,6 +308,8 @@ module.exports = (grunt) ->
         dest: "<%= cfg.site.parent %>"
       ]
 
+    uglify: requirejs: files: "<%= cfg.src.target %>/bower_components/requirejs/require.min.js" : "<%= cfg.src.target %>/bower_components/requirejs/require.js"
+
     copy:
       bower: files: [
           expand: true
@@ -462,6 +464,7 @@ module.exports = (grunt) ->
     else
       grunt.task.run [
         "exec:jqueryuiAmd"
+        'uglify:requirejs'    # RequireJS doesn't have a min version, this puts one in the bower folder for it
         'clean:target'        # clean out the target timestamp dir
         'combineCSS'          # Merge css into a single file and put that file in the target timestamp dir
         'copy:bower'          # Copy bower dependencies to the target timestamp dir

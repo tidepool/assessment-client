@@ -12,8 +12,6 @@
   "fbIdProd": "470347313045508",
   "fbSecretProd": "719ba224a77d723d56de0ec6a1039639",
   "dependencies": {
-    "toastr": "~1.2.2",
-    "sass-bootstrap": "~2.3.0",
     "requirejs": "~2.1.4",
     "modernizr": "~2.6.2",
     "jquery": "~1.10.2",
