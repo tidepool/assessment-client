@@ -16,16 +16,23 @@
 </head>
 <body class="homePage">
 
+    <header>
+        <div class="inner">
+            <img src="@@buildDir/images/tidepool.png" alt="TidePool Logo" title="TidePool"/>
+        </div>
+    </header>
+
 
     @@include('static/pages/app_teaser.hbs')
 
 
 <div class="majorDivider"></div>
 
-<!--https://github.com/alanshaw/grunt-include-replace-->
-<div class="teamPage">
-    @@include('static/pages/team.hbs')
-</div>
+    <!--https://github.com/alanshaw/grunt-include-replace-->
+    <div class="teamPage">
+        @@include('static/pages/team.hbs')
+    </div>
 
+<div class="majorDivider"></div>
 </body>
 </html>

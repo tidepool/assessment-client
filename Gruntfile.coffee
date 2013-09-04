@@ -108,7 +108,7 @@ module.exports = (grunt) ->
         options:
 #          keepalive: true
           middleware: (connect, options) ->
-            [lrSnippet, mountFolder(connect, options.site), mountFolder(connect, options.src)]
+            [lrSnippet, mountFolder(connect, options.site)] #, mountFolder(connect, options.src)]
 
     open:
       devHome:
@@ -152,8 +152,9 @@ module.exports = (grunt) ->
         files: [
           '<%= cfg.src.parent %>/site.html'
           '<%= cfg.src.parent %>/site.css'
-          '<%= cfg.src.parent %>/app_teaser.css'
           '<%= cfg.src.target %>/pages/team.hbs'
+          '<%= cfg.src.target %>/pages/app_teaser.css'
+          '<%= cfg.src.target %>/pages/app_teaser.hbs'
         ]
         tasks: [ 'build', 'livereload' ]
 
