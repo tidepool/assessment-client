@@ -66,6 +66,7 @@ module.exports = (grunt) ->
       '<%= cfg.src.parent %>/**/*.css'
       '!<%= cfg.src.target %>/bower_components/**'
       '!<%= cfg.src.parent %>/<%= cfg.libraryCSS %>'
+      '!<%= cfg.src.parent %>/site.css'
     ]
     bowerComponents: 'src/static/bower_components'
     imagesGlob: [
