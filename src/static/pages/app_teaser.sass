@@ -99,6 +99,8 @@
 
     .screen .statusBar
       position: absolute
+      top: 0
+      left: 0
       width: 100%
       height: 17px
       background: #222
@@ -107,12 +109,9 @@
     .screen .contents
       position: relative
       +animation(electricSlide $animSpeed infinite)
-      img.full
-        margin-top: 16px
       +tabletAndUp
+        margin-top: 16px
         height: 433px
-        img.full
-          z-index: 1
 
 
 
