@@ -6,6 +6,7 @@
     <meta name="description" content="Fun, scientifically validated games help you discover your personality and other traits.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script type="text/javascript">window.pageLoadStart = (new Date()).getTime()</script>
     <link href='//fonts.googleapis.com/css?family=Karla:400,700&text=ABCDEFGHIJKLMNOPQRSTUVWXYZ60' rel='stylesheet' type='text/css'>
     <style type="text/css">
         @@include('static/styles/avatar.css')
@@ -45,6 +46,36 @@
         ga('create', 'UA-41751970-1', 'tidepool.co');
         ga('send', 'pageview');
 
+
+        // Track Site Performance
+        setTimeout(function(){ // Wait until the performance numbers come in before we log them
+            var data = {}
+            if(performance && performance.timing) {
+                data.latency =       performance.timing.responseEnd  - performance.timing.fetchStart;
+                data.pageLoad =      performance.timing.loadEventEnd - performance.timing.responseEnd;
+                data.totalLoadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                ga('send', 'event', {
+                    eventCategory: 'performance',
+                    eventAction: 'log',
+                    eventLabel: 'latency',
+                    eventValue: data.latency
+                });
+                ga('send', 'event', {
+                    eventCategory: 'performance',
+                    eventAction: 'log',
+                    eventLabel: 'pageLoad',
+                    eventValue: data.pageLoad
+                });
+            } else {
+                if (window.pageLoadStart) { data.totalLoadTime = (new Date()).getTime() - window.pageLoadStart }
+            };
+            ga('send', 'event', {
+                eventCategory: 'performance',
+                eventAction: 'log',
+                eventLabel: 'totalLoadTime',
+                eventValue: data.totalLoadTime
+            });
+        }, 1000)
     </script>
 </body>
 </html>
