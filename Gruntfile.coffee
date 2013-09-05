@@ -576,14 +576,14 @@ module.exports = (grunt) ->
       grunt.log.writeln "Deploying standalone/marketing site"
       grunt.task.run [
         'build'
-        'aws_s3:siteParent'
         'aws_s3:siteStatic'
+        'aws_s3:siteParent'
       ]
     else if grunt.option TARGETS.dist
       grunt.log.writeln "Deploying dist"
       grunt.task.run [
-        'aws_s3:deployParent'
         'aws_s3:deployStatic'
+        'aws_s3:deployParent'
         'aws_s3:deployGzipped'
       ]
     else
