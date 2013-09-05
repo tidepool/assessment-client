@@ -154,10 +154,10 @@ module.exports = (grunt) ->
         files: [
           '<%= cfg.src.parent %>/site.html'
           '<%= cfg.src.parent %>/site.css'
-          '<%= cfg.src.target %>/pages/team.hbs'
-          '<%= cfg.src.target %>/pages/team.css'
-          '<%= cfg.src.target %>/pages/app_teaser.css'
-          '<%= cfg.src.target %>/pages/app_teaser.hbs'
+          '<%= cfg.src.target %>/pages/app_teaser/team.html'
+          '<%= cfg.src.target %>/pages/app_teaser/team.css'
+          '<%= cfg.src.target %>/pages/app_teaser/app_teaser.css'
+          '<%= cfg.src.target %>/pages/app_teaser/app_teaser.html'
         ]
         tasks: [ 'build', 'livereload' ]
 

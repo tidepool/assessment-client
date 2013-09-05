@@ -11,8 +11,8 @@
     <style type="text/css">
         @@include('static/styles/avatar.css')
         @@include('site.css')
-        @@include('static/pages/team.css')
-        @@include('static/pages/app_teaser.css')
+        @@include('static/pages/app_teaser/team.css')
+        @@include('static/pages/app_teaser/app_teaser.css')
     </style>
 </head>
 <body class="homePage">
@@ -24,14 +24,13 @@
     </header>
 
 
-    @@include('static/pages/app_teaser.hbs')
+    @@include('static/pages/app_teaser/app_teaser.html')
 
 
 <div class="majorDivider"></div>
 
-    <!--https://github.com/alanshaw/grunt-include-replace-->
     <div class="teamPage">
-        @@include('static/pages/team.hbs')
+        @@include('static/pages/app_teaser/team.html')
     </div>
 
 <div class="majorDivider"></div>
