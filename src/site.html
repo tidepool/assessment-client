@@ -48,7 +48,7 @@
 
 
         // Track Site Performance
-        setTimeout(function(){ // Wait until the performance numbers come in before we log them
+        trackPerf = function(){ // Wait until the performance numbers come in before we log them
             var data = {}
             if(performance && performance.timing) {
                 data.latency =       performance.timing.responseEnd  - performance.timing.fetchStart;
@@ -75,7 +75,8 @@
                 eventLabel: 'totalLoadTime',
                 eventValue: data.totalLoadTime
             });
-        }, 1000)
+        }
+        window.onload=trackPerf
     </script>
 </body>
 </html>
