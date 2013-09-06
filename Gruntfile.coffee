@@ -154,6 +154,7 @@ module.exports = (grunt) ->
         files: [
           '<%= cfg.src.parent %>/site.html'
           '<%= cfg.src.parent %>/site.css'
+          '<%= cfg.src.parent %>/site-ie8.css'
           '<%= cfg.src.target %>/pages/app_teaser/team.html'
           '<%= cfg.src.target %>/pages/app_teaser/team.css'
           '<%= cfg.src.target %>/pages/app_teaser/app_teaser.css'

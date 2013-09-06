@@ -1,12 +1,14 @@
 - var appStoreLink = "https://itunes.apple.com/us/app/tidepool/id691052387?ls=1&mt=8"
-- var appClickEvent = "ga('send', 'event', {eventCategory: 'appStore', eventAction:'click'});"
 - var appIcon = "@@buildDir/images/app_teaser/logo_appicon_2x.png"
 
 
 .appTeaser
+
+
+
   .phoneHolder
 
-    a(href=appStoreLink, onclick=appClickEvent)
+    a(href=appStoreLink)
       img.appIcon(src=appIcon, alt="Starfish App Icon")
 
     .phone
@@ -26,7 +28,15 @@
       h1.yodel3 Track your daily attention &amp; speed.
       h1.yodel4 Enhance your productivity &amp; quality of life.
 
-    a.appStoreCTA(href=appStoreLink, onclick=appClickEvent)
+    a.appStoreCTA(href=appStoreLink)
       img.appIcon(src=appIcon, alt="Starfish App Icon")
       img.appStoreBtn(src="@@buildDir/images/app_teaser/btn_downloadappstore_2x.png", alt="App Store Button", title="Download at the App Store")
 
+
+  .plainSummary
+    a(href=appStoreLink)
+      img.appIcon(src=appIcon, alt="Starfish App Icon")
+    h1 Discover your unique personality from 60 different types.
+    h1 Play scientifically designed, fun, easy games.
+    a.appStoreCTA(href=appStoreLink)
+      img.appStoreBtn(src="@@buildDir/images/app_teaser/btn_downloadappstore_2x.png", alt="App Store Button", title="Download at the App Store")
