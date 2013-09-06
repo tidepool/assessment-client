@@ -166,7 +166,7 @@ module.exports = (grunt) ->
       target: "<%= grunt.option('target') %>"
       dev:    "<%= cfg.dev.parent %>"
       dist:   "<%= cfg.dist.parent %>"
-      site:   "<%= cfg.site.parent %>"
+      siam:   "<%= cfg.site.parent %>"
       unoptimizedFiles: [
         "<%= grunt.option('target') %>/**/*.hbs"
         "<%= grunt.option('target') %>/**/*.js"
@@ -236,19 +236,18 @@ module.exports = (grunt) ->
           skipDirOptimize: true # don't optimize non AMD files in the dir
           name: 'core'
           include: [
-            'pages/dashboard/mood'
-            'pages/dashboard/personality'
-            'pages/dashboard/productivity'
-            'pages/dashboard/summary'
-            'pages/about'
-            'pages/demographics'
+#            'pages/dashboard/mood'
+#            'pages/dashboard/personality'
+#            'pages/dashboard/productivity'
+#            'pages/dashboard/summary'
+#            'pages/about'
+#            'pages/demographics'
             'pages/error'
             'pages/friend_survey'
             'pages/game_results'
             'pages/home'
             'pages/play_game'
             'pages/social_results'
-            'pages/team'
           ]
           paths:
             jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
