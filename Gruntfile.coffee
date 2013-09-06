@@ -166,7 +166,7 @@ module.exports = (grunt) ->
       target: "<%= grunt.option('target') %>"
       dev:    "<%= cfg.dev.parent %>"
       dist:   "<%= cfg.dist.parent %>"
-      siam:   "<%= cfg.site.parent %>"
+      site:   "<%= cfg.site.parent %>"
       unoptimizedFiles: [
         "<%= grunt.option('target') %>/**/*.hbs"
         "<%= grunt.option('target') %>/**/*.js"
