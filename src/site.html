@@ -51,7 +51,6 @@
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
         ga('create', 'UA-41751970-1', 'tidepool.co');
         ga('send', 'pageview');
 
@@ -63,29 +62,30 @@
                 data.latency =       performance.timing.responseEnd  - performance.timing.fetchStart;
                 data.pageLoad =      performance.timing.loadEventEnd - performance.timing.responseEnd;
                 data.totalLoadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-                ga('send', 'event', {
-                    eventCategory: 'performance',
-                    eventAction: 'log',
-                    eventLabel: 'latency',
-                    eventValue: data.latency
-                });
-                ga('send', 'event', {
-                    eventCategory: 'performance',
-                    eventAction: 'log',
-                    eventLabel: 'pageLoad',
-                    eventValue: data.pageLoad
-                });
-            } else {
-                if (window.pageLoadStart) { data.totalLoadTime = (new Date()).getTime() - window.pageLoadStart }
-            };
-            ga('send', 'event', {
-                eventCategory: 'performance',
-                eventAction: 'log',
-                eventLabel: 'totalLoadTime',
-                eventValue: data.totalLoadTime
-            });
+                if( data.latency > 0 && data.pageLoad > 0 && data.totalLoadTime > 0) {
+                    ga('send', 'event', {
+                        eventCategory: 'performance',
+                        eventAction: 'log',
+                        eventLabel: 'latency',
+                        eventValue: data.latency
+                    });
+                    ga('send', 'event', {
+                        eventCategory: 'performance',
+                        eventAction: 'log',
+                        eventLabel: 'pageLoad',
+                        eventValue: data.pageLoad
+                    });
+                    ga('send', 'event', {
+                        eventCategory: 'performance',
+                        eventAction: 'log',
+                        eventLabel: 'totalLoadTime',
+                        eventValue: data.totalLoadTime
+                    });
+                }
+            }
         }
-        window.onload=trackPerf
+        // Wait until we think it's loaded before trying to read performance data
+        setTimeout(trackPerf, 1200)
     </script>
 </body>
 </html>
