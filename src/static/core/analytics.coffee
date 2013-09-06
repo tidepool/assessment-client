@@ -59,19 +59,20 @@ define [
         jsLoadTime: coreLoadedTime - window.pageLoadStart if window.pageLoadStart
 
       # If the new performance api is aviailable, log that stuff too
-      if performance?.timing? #and numbers.casino(.05) #TODO: consider only tracking a percentage of the time.
+      if performance?.timing? and numbers.casino(.1) #Only track a percentage of the time
         data.latency =       performance.timing.responseEnd  - performance.timing.fetchStart
         data.pageLoad =      performance.timing.loadEventEnd - performance.timing.responseEnd
         data.totalLoadTime = performance.timing.loadEventEnd - performance.timing.navigationStart
         data.jsLoadTime =    coreLoadedTime - performance.timing.navigationStart
-        @kiss?.track        'performance', data
-        @google?.trackEvent 'performance', 'log', 'latency',    data.latency
-        @google?.trackEvent 'performance', 'log', 'pageLoad',   data.pageLoad
-        @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime
+        # Track the data unless performance is less than zero. This happens if the performance.timing numbers haven't come in yet (eg: null - (new Date()).getTime())
+        @kiss?.track        'performance', data unless data.jsLoadTime < 0
+        @google?.trackEvent 'performance', 'log', 'latency',    data.latency    unless data.latency < 0
+        @google?.trackEvent 'performance', 'log', 'pageLoad',   data.pageLoad   unless data.pageLoad < 0
+        @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime unless data.jsLoadTime < 0
       # Always log jsLoadTime
       else
-        @kiss?.track        'performance', data
-        @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime
+        @kiss?.track        'performance', data unless data.jsLoadTime < 0
+        @google?.trackEvent 'performance', 'log', 'jsLoadTime', data.jsLoadTime unless data.jsLoadTime < 0
 
 
 
