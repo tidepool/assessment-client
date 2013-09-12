@@ -16,4 +16,3 @@ src/static/bower_components
 *.js
 *.js.map
 !src/static/scripts/vendor/*.js
-!site.css
