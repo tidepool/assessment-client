@@ -25,6 +25,7 @@ define [
 #      @listenTo @model, 'all', (e,model) -> console.log( e:e, model:model )
       app.analytics.track @className, 'Saving user events...'
       @listenTo @options.eventLog, 'sync', @onEventLogSync
+      @listenTo @options.eventLog, 'error', @onEventLogError
 
     render: ->
       @$el.html tmpl
@@ -39,6 +40,10 @@ define [
       @model = new ResultsCalculator game_id: @options.game.get 'id'
       @listenTo @model, 'change', @onChange
       @listenTo @model, 'error', @onError
+
+    onEventLogError: (model, xhr) ->
+      msg = xhr.responseJSON?.status.message || 'Error saving user events'
+      app.router.showError msg, model
 
 
     # ------------------------------------------------------------- Helper Methods
@@ -61,13 +66,7 @@ define [
 
     onError: (model, xhr) ->
       msg = xhr.responseJSON?.status.message || 'Error Calculating Game Results'
-      ios.error msg
-      perch.show
-        title: 'Sorry, There Is a Problem.'
-        msg: msg
-        btn1Text: 'Ok'
-        onClose: => @_showResults() #-> app.router.navigate('home', trigger: true)
-        mustUseButton: true
+      app.router.showError msg, model
 
     onChange: (model) ->
       #console.log "#{_me}.model.result changed"
@@ -75,7 +74,6 @@ define [
       @_updateStatusMsg model
       if model.attributes.status.state is model.STATES.done
         @_gotGameResults model
-
 
 
   View

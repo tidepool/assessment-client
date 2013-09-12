@@ -72,7 +72,6 @@ define [
       attrs
 
 
-
     # --------------------------------------------------- Private Methods
     _translateEventType: ->
       newET = _viewNameToModuleName[ @attributes.event_type ]
