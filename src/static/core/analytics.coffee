@@ -3,11 +3,13 @@ define [
   './analytics/kiss'
   './analytics/uservoice'
   'utils/detect'
+  'utils/numbers'
 ],(
   Google
   Kiss
   UserVoice
   detect
+  numbers
 ) ->
   _me = 'core/analytics'
 
