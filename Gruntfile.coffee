@@ -13,7 +13,6 @@ module.exports = (grunt) ->
   TARGETS =
     dev: 'dev'
     dist:'dist'
-    site:'site'
 
   timestamp = grunt.template.today('mm-dd')
   defaultSubdir = 'static'
@@ -33,11 +32,6 @@ module.exports = (grunt) ->
       parent: 'dist'
       target: "dist/#{timestamp}"
       subdir: timestamp
-    site:
-      parent: '.site'
-      target: ".site/#{timestamp}"
-      subdir: timestamp
-    siteBucket: 'site.tidepool.co'
     research: "../OAuthProvider/public/#{timestamp}/"
     minName: 'all-min'
     libraryCSS: 'library.css'
@@ -66,7 +60,6 @@ module.exports = (grunt) ->
       '<%= cfg.src.parent %>/**/*.css'
       '!<%= cfg.src.target %>/bower_components/**'
       '!<%= cfg.src.parent %>/<%= cfg.libraryCSS %>'
-      '!<%= cfg.src.parent %>/site.css'
     ]
     bowerComponents: 'src/static/bower_components'
     imagesGlob: [
@@ -96,7 +89,6 @@ module.exports = (grunt) ->
         src: "<%= cfg.src.parent %>"
         dev: "<%= cfg.dev.parent %>"
         dist: "<%= cfg.dist.parent %>"
-        site: "<%= cfg.site.parent %>"
       dev:
         options:
           middleware: (connect, options) ->
@@ -106,11 +98,6 @@ module.exports = (grunt) ->
 #          keepalive: true
           middleware: (connect, options) ->
             [lrSnippet, mountFolder(connect, options.dist)]
-      site:
-        options:
-#          keepalive: true
-          middleware: (connect, options) ->
-            [lrSnippet, mountFolder(connect, options.site)] #, mountFolder(connect, options.src)]
 
     open:
       devHome:
@@ -150,23 +137,10 @@ module.exports = (grunt) ->
         ]
         tasks: 'livereload'
 
-      site:
-        files: [
-          '<%= cfg.src.parent %>/site.html'
-          '<%= cfg.src.parent %>/site.css'
-          '<%= cfg.src.parent %>/site-ie8.css'
-          '<%= cfg.src.target %>/pages/app_teaser/team.html'
-          '<%= cfg.src.target %>/pages/app_teaser/team.css'
-          '<%= cfg.src.target %>/pages/app_teaser/app_teaser.css'
-          '<%= cfg.src.target %>/pages/app_teaser/app_teaser.html'
-        ]
-        tasks: [ 'build', 'livereload' ]
-
     clean:
       target: "<%= grunt.option('target') %>"
       dev:    "<%= cfg.dev.parent %>"
       dist:   "<%= cfg.dist.parent %>"
-      site:   "<%= cfg.site.parent %>"
       unoptimizedFiles: [
         "<%= grunt.option('target') %>/**/*.hbs"
         "<%= grunt.option('target') %>/**/*.js"
@@ -302,12 +276,6 @@ module.exports = (grunt) ->
         src: '*.html'
         dest: "<%= grunt.option('targetParent') %>"
       ]
-      marketingSite: files: [
-        expand: true
-        cwd: "<%= cfg.src.parent %>"
-        src: 'site.html'
-        dest: "<%= cfg.site.parent %>"
-      ]
 
     uglify: requirejs: files: "<%= cfg.src.target %>/bower_components/requirejs/require.min.js" : "<%= cfg.src.target %>/bower_components/requirejs/require.js"
 
@@ -356,18 +324,6 @@ module.exports = (grunt) ->
           src:  "<%= cfg.imagesGlob %>"
           dest: "<%= grunt.option('targetParent') %>"
         ]
-      siteAssetImages: files: [
-        expand: true
-        cwd:  "<%= cfg.src.target %>"
-        src:  [
-          'images/app_teaser/*.{jpg,png}'
-          'images/people/*.{jpg,png}'
-          'images/tidepool.png'
-          'images/home_page/homepage*.jpg'
-          'images/home_page/phone_bg*.jpg'
-        ]
-        dest: "<%= grunt.option('target') %>"
-      ]
 
     'git-describe': me: {}
 
@@ -441,31 +397,12 @@ module.exports = (grunt) ->
             params: ContentType: 'application/javascript'
           }
         ]
-      siteParent:
-        options:
-          bucket: "<%= cfg.siteBucket %>"
-          params: CacheControl: 'max-age=120' # 2 minutes (60 * 2)
-        files: [
-          expand: true
-          cwd: "<%= grunt.option('targetParent') %>"
-          src: '*' # all files, but only those in this immediate directory
-          dest: '' # putting a slash here will cause '//path' on Amazon
-        ]
-      siteStatic:
-        options: bucket: "<%= cfg.siteBucket %>"
-        files: [
-          expand: true
-          cwd: "<%= grunt.option('target') %>"
-          src: [ '**', '!**/*.gz' ]
-          dest: "<%= grunt.option('targetSubdir') %>"
-        ]
 
     exec:
       jqueryuiAmd:  cmd: "jqueryui-amd <%= cfg.src.target %>/bower_components/jquery-ui"
       unitTest:     cmd: "node_modules/phantomjs/bin/phantomjs resources/run.js http://localhost:<%= connect.options.port %>/<%= cfg.specFile %>"
       scribeSpecs:  cmd: 'ruby resources/scribeAmdDependencies.rb "<%= grunt.option(\"targetParent\") %>/" "<%= cfg.src.parent %>/" "<%= cfg.src.target %>/" "<%= cfg.specGlob %>" "<%= cfg.specFile %>" bower_components'
       cleanEmpties: cmd: "find <%= grunt.option('target') %> -type d -empty -delete"
-      renameSite:   cmd: "mv <%= cfg.site.parent %>/site.html <%= cfg.site.parent %>/index.html"
 
   grunt.renameTask "regarde", "watch"
 
@@ -496,56 +433,39 @@ module.exports = (grunt) ->
   # Move files from the source dir to a build dir
   # Copy markup files and parse them for replacements
   grunt.registerTask 'build', 'Clean the target and build to it', ->
-    if grunt.option TARGETS.site
-      grunt.log.writeln "Building in Site Mode"
+    grunt.task.run [
+      "exec:jqueryuiAmd"
+      'uglify:requirejs'    # RequireJS doesn't have a min version, this puts one in the bower folder for it
+      'clean:target'        # clean out the target timestamp dir
+      'combineCSS'          # Merge css into a single file and put that file in the target timestamp dir
+      'copy:bower'          # Copy bower dependencies to the target timestamp dir
+      'copy:html'           # Move all html to the target parent dir
+      'copy:hbs'            # Copy all hbs templates to the target dir. Necessary so that we can replace @@buildDir for image references
+      'exec:scribeSpecs'    # find all .spec.js files and write them into spec.html
+      'includereplace:html' # include files and parse variables
+      'replace:html'        # parse build variables in html files
+      'replace:config'      # replace build values
+      'htmlmin'
+    ]
+    if grunt.option TARGETS.dist
+      grunt.log.writeln "Building in Dist Mode"
       grunt.task.run [
-        'includereplace:marketingSite'
-        'exec:renameSite'
-        'htmlmin:index:removeComments'
+        'copy:js'
+        'requirejs'
+        'clean:unoptimizedFiles'
+        'clean:unusedBowerComponents'
         'copy:rootImages'
-        'copy:siteAssetImages'
+        'copy:assetImages'
+        'exec:cleanEmpties'
+        'compress'
       ]
     else
-      grunt.task.run [
-        "exec:jqueryuiAmd"
-        'uglify:requirejs'    # RequireJS doesn't have a min version, this puts one in the bower folder for it
-        'clean:target'        # clean out the target timestamp dir
-        'combineCSS'          # Merge css into a single file and put that file in the target timestamp dir
-        'copy:bower'          # Copy bower dependencies to the target timestamp dir
-        'copy:html'           # Move all html to the target parent dir
-        'copy:hbs'            # Copy all hbs templates to the target dir. Necessary so that we can replace @@buildDir for image references
-        'exec:scribeSpecs'    # find all .spec.js files and write them into spec.html
-        'includereplace:html' # include files and parse variables
-        'replace:html'        # parse build variables in html files
-        'replace:config'      # replace build values
-        'htmlmin'
-      ]
-      if grunt.option TARGETS.dist
-        grunt.log.writeln "Building in Dist Mode"
-        grunt.task.run [
-          'copy:js'
-          'requirejs'
-          'clean:unoptimizedFiles'
-          'clean:unusedBowerComponents'
-          'copy:rootImages'
-          'copy:assetImages'
-          'exec:cleanEmpties'
-          'compress'
-        ]
-      else
-        grunt.log.writeln "Building in Dev Mode"
+      grunt.log.writeln "Building in Dev Mode"
 
 
   # server
   # ------
   grunt.registerTask 'server', 'Open the target folder as a web server', ->
-    if grunt.option TARGETS.site
-      grunt.task.run [
-        'livereload-start'
-        'connect:site'
-        'open'
-        'watch:site'
-      ]
     if grunt.option TARGETS.dist
       grunt.task.run [
         'livereload-start'
@@ -568,18 +488,11 @@ module.exports = (grunt) ->
 
   # deploy
   # ------
-  # deploy the site to a remote location. Only valid for --dist and --site builds so far
+  # deploy the app to a remote location. Only valid for --dist builds so far
   grunt.registerTask 'deploy', 'Moves content from the dist folder to AWS S3. Dist build is a prereq.', ->
 #    targetInfo = getDistTargetWithHash grunt.option 'gitRevision'
 #    setGruntOptions targetInfo
-    if grunt.option TARGETS.site
-      grunt.log.writeln "Deploying standalone/marketing site"
-      grunt.task.run [
-        'build'
-        'aws_s3:siteStatic'
-        'aws_s3:siteParent'
-      ]
-    else if grunt.option TARGETS.dist
+    if grunt.option TARGETS.dist
       grunt.log.writeln "Deploying dist"
       grunt.task.run [
         'aws_s3:deployStatic'
@@ -587,7 +500,7 @@ module.exports = (grunt) ->
         'aws_s3:deployGzipped'
       ]
     else
-      grunt.fail.warn 'No action taken -- can only deploy to dist or site target'
+      grunt.fail.warn 'No action taken -- can only deploy to dist target'
 
 
   # ---------------------------------------------------------------------- Task Shortcuts
@@ -606,8 +519,6 @@ module.exports = (grunt) ->
     targetInfo = buildConfig.dev # Default path
     if grunt.option TARGETS.dist
       targetInfo = targetPlusHash buildConfig.dist, hash
-    else if grunt.option TARGETS.site
-      targetInfo = targetPlusHash buildConfig.site, hash
     else
       grunt.option TARGETS.dev, true
       targetInfo = buildConfig.dev
