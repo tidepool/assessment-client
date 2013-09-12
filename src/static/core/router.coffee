@@ -92,7 +92,6 @@ define [
 
     # ------------------------------------------------- Action/Verb Routes
     doLogIn: (token) ->
-      console.log "logInUsingToken: #{token}"
       @listenToOnce @app.user, 'sync', ->
         @app.analytics.track 'session', 'Successful External Auth Login'
         @showDefaultPage()
@@ -113,13 +112,11 @@ define [
 
       if @app.user.isLoggedIn() and @app.user.isGuest()
         if @app.user.attributes.personality?
-          console.log user:@app.user.attributes
           @navigate 'home', _reroute                             # Guest with Personality
         else
           @navigate 'home', _reroute                             # Guest without
       else if @app.user.isLoggedIn()
         if @app.user.isUnfetched()
-          console.log 'showDefaultPage(): unfetched user'
           @listenToOnce @app.user, 'sync', @showDefaultPage      # User with a token, but not fetched so of unknown status
         else if @app.user.attributes.personality?
           @navigate 'dashboard', _reroute                        # User with personality

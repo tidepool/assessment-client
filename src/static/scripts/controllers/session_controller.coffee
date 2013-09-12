@@ -127,7 +127,6 @@ define [
         client_id: @cfg.appId
         response_type: 'token'
       data.guest_id = @user.get('id') if @user.get('guest')
-      console.log oauthUrlData: data
       url = "#{@_authUrl}?#{$.param data}"
 
 #    _parseHash: (hash) ->

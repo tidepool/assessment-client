@@ -106,7 +106,7 @@ define [
         @session?.logOut()
 
     _onModelInvalid: (model, error) ->
-      console.log "#{_me}._onModelInvalid(): #{error}"
+      console.warn "#{_me}._onModelInvalid(): #{error}"
 
 
     # ----------------------------------------------------------- URL related Methods
@@ -135,9 +135,9 @@ define [
 
     onAddAuthRedirect: (hash, location) ->
       # additional_redirect.html#user_id=113&provider=twitter
-      console.log("onAddAuthRedirect called with #{location} and hash #{hash}")
+#      console.log("onAddAuthRedirect called with #{location} and hash #{hash}")
       params = @parseHash(hash)
-      console.log("params are: #{params['user_id']} and #{params['provider']}")
+#      console.log("params are: #{params['user_id']} and #{params['provider']}")
       @trigger('user:authentication_added', params['provider'])
 
 
@@ -154,7 +154,6 @@ define [
           curGame.create(gameDefId)
         .fail =>
           @trigger 'error:createGame'
-          console.log "#{_me}.createGame.fail()"
       curGame
 
     isGuest: -> !! @get('guest')

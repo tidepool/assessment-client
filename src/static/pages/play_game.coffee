@@ -137,7 +137,7 @@ define [
       else if curStage < stageCount then @_showLevel curStage
       else if curStage is stageCount then @_endGame()
       else if curStage > stageCount then @_calculateResults()
-      else console.log "#{_me}._curGameSync: unusual curStage: #{curStage}"
+      else console.warn "#{_me}._curGameSync: unusual curStage: #{curStage}"
 
     _curGameErr: (model, xhr) ->
       clearTimeout @loadTimeoutPointer

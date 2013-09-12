@@ -39,7 +39,7 @@ define [
         type: 'GET'
         url: url
       promise.done (data, textStatus, jqXHR) =>
-        console.log("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 200
+        console.warn("Unexpected StatusCode: #{jqXHR.status}") if jqXHR.status isnt 200
         switch data.status.state
           when @STATES.pending
             # Look for progress updates at intervals
@@ -59,7 +59,7 @@ define [
 
     _handleServerError: (data) ->
       @tries++
-      console.log "Error on try #{@tries}"
+      console.error "Error on try #{@tries}"
       if @tries >= _maxTryCount
         @trigger 'error', @, data.status.message
       else

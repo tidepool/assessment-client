@@ -32,7 +32,7 @@ define [
 #      @$(_widgetSel).append view.render().el
       @
 
-    renderChart: -> console.log 'renderChart'
+    renderChart: -> #console.log 'renderChart'
 
 
 

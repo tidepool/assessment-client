@@ -25,8 +25,6 @@ define [
 
   View = Widget.extend
     className: 'holder doubleWide coolTones career-jobs'
-    events:
-      'click .icon-briefcase': 'onClickBriefcase'
     render: ->
       @$el.html _tmpl @model.attributes
       share = new ShareView data:
@@ -35,9 +33,6 @@ define [
         link: 'https://alpha.tidepool.co'
       @$el.append share.render().el
       @
-
-    onClickBriefcase: ->
-      console.log "Magical briefcase clicked"
 
 
   View.dependsOn = 'entities/my/career'

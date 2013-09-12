@@ -36,7 +36,6 @@ define [
 
     # ----------------------------------------------------------- Private Helper Methods
     _renderList: ->
-      console.log collection:@collection.toJSON()
       @collection.each (model) ->
         model.view = new ConnectionView model:model
         @$(_containerSel).append model.view.render().el

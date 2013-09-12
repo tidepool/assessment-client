@@ -201,7 +201,6 @@ define [
             for name, definition of Widget.dependsOn
               key = _keyBuilder definition.klass, definition.fetchOptions
               opts[name] = dataSources[key]
-            console.log opts:opts
             widgets.push new Widget opts
           # Widgets with 1 dependency
           else if Widget.dependsOn

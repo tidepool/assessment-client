@@ -36,7 +36,6 @@ define [
     render: ->
       if @model.attributes.instructions
         instructionData = instructions: markdown.toHTML @model.attributes.instructions
-        console.log id:instructionData
         @$el.html _instructionsTmpl instructionData
       if @collection?
         @collection.each (question) => @_renderOneQuestion question
@@ -44,7 +43,6 @@ define [
 
     _renderOneQuestion: (question) ->
       type = question.attributes.question_type
-#      console.log question:question
       # Render it if it's a known type
       if TYPEVIEWS[type]
         questionView = new TYPEVIEWS[type] model:question
@@ -56,8 +54,6 @@ define [
             @listenTo questionView, 'stop', @onChange
           when TYPES.select_by_icon
             @listenTo questionView, 'change', @onChange
-#          else
-#            console.log "#{type} has no special behavior, and that's OK"
       else
         console.warn "#{type} is not a known question type"
 

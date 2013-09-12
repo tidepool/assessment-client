@@ -21,7 +21,6 @@ define [
     # Default parse behavior is to dewrap
     parse: (resp, options) ->
       resp = @dewrap resp, options
-#      console.log resp:resp
       # TODO: handle blank/null
       # TODO: handle empty results
       resp

@@ -28,7 +28,6 @@ define [
       deferred = $.Deferred()
       @fetch({ url: "#{@url()}/latest_with_profile" })
         .done (data, textStatus, jqXHR) =>
-          console.log('Got the latest game')
           deferred.resolve()
         .fail (jqXHR, textStatus, errorThrown) =>
             deferred.reject()

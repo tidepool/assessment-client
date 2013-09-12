@@ -57,9 +57,9 @@ define [
 
     # --------------------------------------------------- Backbone Methods
     initialize: ->
-      throw new Error 'Need event_type' unless @attributes.event_type
+      throw new Error 'Need event_type'               unless @attributes.event_type
       throw new Error 'event_type should be a string' unless typeof @attributes.event_type is 'string'
-      throw new Error 'Need stage as a number' unless typeof @attributes.stage is 'number'
+      throw new Error 'Need stage as a number'        unless typeof @attributes.stage is 'number'
       @_translateEventType()
 
     validate: (attrs, options) ->
