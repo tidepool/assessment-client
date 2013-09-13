@@ -63,7 +63,6 @@ define [
     _calculateDOB: (model, val) ->
       age = Math.abs parseInt val
       age = 0 if isNaN age
-      console.log age:age
       fuzzyDOB = (new Date()).getFullYear() - age
       if age
         @set is_dob_by_age: true
@@ -74,15 +73,12 @@ define [
 
     _calculateAge: (model, val) ->
       return unless val
-      year = val.split('-')[0]
-      unless year? and year.length is 4
-        console.error "Can't find the year in DOB year: #{year}"
-      age = (new Date()).getFullYear() - year
-#      console.log
-#        val: val
-#        year:year
-#        age: age
-      @set age:age
+      year = parseInt val.split('-')[0]
+      if isNaN year
+        console.error "Can't find the year in DOB: #{val}"
+      else
+        age = (new Date()).getFullYear() - year
+        @set age:age
 
     _noteImagePath: (model, val) ->
       return unless val
