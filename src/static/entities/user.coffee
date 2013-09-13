@@ -61,22 +61,27 @@ define [
         {silent: true}
 
     _calculateDOB: (model, val) ->
-      @set is_dob_by_age: true
-      fuzzyDOB = (new Date()).getFullYear() - val
-      @set date_of_birth: "#{fuzzyDOB}-01-01"
-#      console.log fuzzyDOB:fuzzyDOB
-#      console.log thus:@toJSON()
+      age = Math.abs parseInt val
+      age = 0 if isNaN age
+      console.log age:age
+      fuzzyDOB = (new Date()).getFullYear() - age
+      if age
+        @set is_dob_by_age: true
+        @set date_of_birth: "#{fuzzyDOB}-01-01"
+      else
+        @set is_dob_by_age: true
+        @set date_of_birth: null
 
     _calculateAge: (model, val) ->
       return unless val
       year = val.split('-')[0]
       unless year? and year.length is 4
-        console.error "Can't find the year in DOB: #{val}"
+        console.error "Can't find the year in DOB year: #{year}"
       age = (new Date()).getFullYear() - year
 #      console.log
-#        val:val
+#        val: val
 #        year:year
-#        age:age
+#        age: age
       @set age:age
 
     _noteImagePath: (model, val) ->
@@ -183,8 +188,6 @@ define [
       @session.nuke().persistToken token if token?
       @clear().set @defaults()
       @
-
-
 
 
   User
