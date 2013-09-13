@@ -131,15 +131,48 @@
   .teamHolder
     background: $highlightThin
   .teamPage
+    text-align: center
     padding: $spaceBig 0
     +desktop
       padding: $gap 0
+    text-align: center
+
+    .coolPerson,
+    .supercoolPerson
+      display: inline-block
+      margin: 0 $spaceLil $spaceLil $spaceLil
+      min-width: 120px
+      +phone
+        margin: 0 $spaceLil $spaceLil $spaceLil
+        min-width: 90px
+      color: white
+    .coolPerson p,
+    .supercoolPerson p
+      color: white
+      text-transform: uppercase
+      line-height: 1.2
+      margin-top: $spaceLil
+    .coolPerson .avatar,
+    .supercoolPerson .avatar
+      border: $spaceTiny solid $colorBrand1
+      margin-top: $space
+      +phone
+        margin-top: $spaceLil
+      +box-sizing(border-box)
+      img
+        width: 100%
+    .supercoolPerson.caps
+      text-transform: uppercase
+    .supercoolPerson .muted
+      text-transform: none
 
 
 body.pages-home
   +bigassBackground
   +phone
     background: tint($colorInfoDark, 50%)
+
+
 
 
 
