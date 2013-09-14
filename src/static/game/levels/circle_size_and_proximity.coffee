@@ -5,11 +5,8 @@ define [
   'Handlebars'
   'game/levels/_base'
   'entities/circles'
-  'game/levels/circle_size'
   'game/levels/person_fill'
-  'game/levels/circle_proximity'
   'game/levels/proximity_takes_turns'
-  'utils/detect'
 ], (
   $
   _
@@ -17,11 +14,8 @@ define [
   Handlebars
   Level
   Circles
-  CircleSize
   PersonFill
-  CircleProximity
   ProximityTakesTurns
-  detect
 ) ->
 
 
@@ -41,12 +35,8 @@ define [
 
     # ------------------------------------------------------------- Running the Game Level / Stage
     _showCircleSize: ->
-      if detect.isPhoneOrTablet()
-        SizeLevel = PersonFill
-      else
-        SizeLevel = CircleSize
       @options.instructions.set text: @model.get('instructions')[0]
-      @curView = new SizeLevel
+      @curView = new PersonFill
         collection: @circlesCollection
         runner: @
         showInstructions: @options.showInstructions
@@ -58,12 +48,8 @@ define [
 
     _showCircleProximity: ->
       @curView?.close?().remove()
-      if detect.isPhoneOrTablet()
-        ProxLevel = ProximityTakesTurns
-      else
-        ProxLevel = CircleProximity
       @options.instructions.set text: @model.get('instructions')[1]
-      @curView = new ProxLevel
+      @curView = new ProximityTakesTurns
         collection: @circlesCollection
         runner: @
         showInstructions: @options.showInstructions

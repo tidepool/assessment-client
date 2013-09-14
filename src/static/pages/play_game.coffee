@@ -8,10 +8,8 @@ define [
   'entities/user_event/event_log'
   # Levels
   'game/levels/reaction_time_disc'
-  'game/levels/rank_images'
   'game/levels/circle_size_and_proximity'
   'game/levels/alex_trebek'
-  'game/levels/emotions_circles'
   'game/levels/snoozer'
   'game/levels/interest_picker'
   # Welcome Pages
@@ -31,10 +29,8 @@ define [
   EventLog
   # Levels
   ReactionTime
-  ImageRank
   CirclesTest
   AlexTrebek
-  EmotionsCircles
   Snoozer
   InterestPicker
   # Welcome Pages
@@ -54,10 +50,8 @@ define [
   _loadTimeout = 10 * 1000 # After this long waiting, the game has failed to load and should time out
   _views =
     ReactionTime: ReactionTime
-    ImageRank: ImageRank
     CirclesTest: CirclesTest
     Survey: AlexTrebek
-    EmotionsCircles: EmotionsCircles
     Snoozer: Snoozer
     InterestPicker: InterestPicker
   _gameWelcomePages =
@@ -65,10 +59,7 @@ define [
   _titleByGameType =
     baseline: 'The Personality Game'
     emotions: 'Emotions Game'
-#    reaction_time: 'Reaction Time'
   _defaultTitle = 'Play a Game'
-  _animationTime = 1
-  _gameStartMsg = 'This short, fun, and interactive assessment helps you discover your personality type.'
 
   Me = Backbone.View.extend
     title: _defaultTitle
@@ -93,10 +84,6 @@ define [
 
 
     # ------------------------------------------------------------- Helper Methods
-#    _setTitle: ->
-#      title = _titleByGameType[@options.params.def_id]
-#      document.title = if title then title else _defaultTitle
-
     _showWelcome: ->
       @eventLog = new EventLog game_id:@model.attributes.id
       ios.start()

@@ -6,26 +6,17 @@ require.config
     'core'
     'game/levels/_base'
     'game/levels/reaction_time_disc'
-    'game/levels/rank_images'
-    'game/levels/circle_size'
     'game/levels/person_fill'
     'game/levels/proximity_takes_turns'
-    'game/levels/circle_proximity'
     'game/levels/alex_trebek'
-    'game/levels/emotions_circles'
     'game/levels/snoozer'
     'game/levels/interest_picker'
-    'dashboard/widgets/base'
-    'dashboard/widgets/lister'
     'ui_widgets/formation'
   ]
   paths:
     # Global CDN Libraries
-    jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min'
-#      'bower_components/jquery/jquery'
-#        '//code.jquery.com/jquery-1.10.1.min'
+    jquery:    '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min'
     bootstrap: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min'
-#      'scripts/vendor/bootstrap'
 
     # 3rd Party Bower Libraries
     Handlebars:     'bower_components/require-handlebars-plugin/Handlebars'
@@ -57,4 +48,3 @@ require.config
       exports: 'markdown'
 
   waitSeconds: 14
-
