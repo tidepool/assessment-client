@@ -15,4 +15,4 @@ src/static/bower_components
 !gfx.css
 *.js
 *.js.map
-!src/static/scripts/vendor/*.js
+!src/static/vendor/*.js
