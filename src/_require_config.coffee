@@ -14,11 +14,8 @@ require.config
     'ui_widgets/formation'
   ]
   paths:
-    # Global CDN Libraries
-    jquery:    '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min'
-    bootstrap: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min'
 
-    # 3rd Party Bower Libraries
+    # 3rd Party Libraries
     Handlebars:     'bower_components/require-handlebars-plugin/Handlebars'
     underscore:     'bower_components/underscore-amd/underscore'
     jqueryui:       'bower_components/jquery-ui/jqueryui'
@@ -29,14 +26,13 @@ require.config
     chart:          'bower_components/Chart.js/Chart.min'
     markdown:       'bower_components/markdown/lib/markdown'
     fastclick:      'bower_components/fastclick/lib/fastclick'
-
-    # 3rd Party non-Bower Libraries
-    nested_view: 'scripts/vendor/nested_view'
+    bootstrap:      'vendor/bootstrap/js/bootstrap.min'
+    jquery:         'vendor/jquery-2.0.3.min'
 
     # Convenience Folder Mapping
-    results:     'scripts/views/results'
-    controllers: 'scripts/controllers'
-    helpers:     'scripts/helpers'
+    results:        'scripts/views/results'
+    controllers:    'scripts/controllers'
+    helpers:        'scripts/helpers'
 
   shim:
     bootstrap:

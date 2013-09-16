@@ -55,7 +55,7 @@ define [
 
     # ----------------------------------------------------------- Helper Methods
     _jazzifySubmitBtn: ->
-      @$(_submitSel).addClass('btn-inverse')
+      @$(_submitSel).addClass('btn-primary')
 
     _showErr: (msg) ->
       msg = msg || 'Unknown Error'

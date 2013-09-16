@@ -11,11 +11,14 @@
 @mixin magicalButton($btnClassName: 'defaultPink', $color: #f66, $shading: 15, $highlighting: 10)
   #{$btnClassName}
     @include linear-gradient( $color, $color - $shading )
+    border-color: $color
   #{$btnClassName}:hover, #{$btnClassName}:focus
     @include linear-gradient( $color + $highlighting, $color - $shading )
+    border-color: $color - $shading
   #{$btnClassName}:active, #{$btnClassName}.active,
   #{$btnClassName}.active:hover
     @include linear-gradient( $color - $shading, $color - $shading * 2 )
+    border-color: $color - ($shading * 2)
   #{$btnClassName}.disabled, #{$btnClassName}[disabled],
   #{$btnClassName}.disabled:hover, #{$btnClassName}[disabled]:hover
     @include linear-gradient( $color - 100, $color - 115 )

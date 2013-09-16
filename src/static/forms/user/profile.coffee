@@ -51,7 +51,7 @@ define [
         data: profileFields
         values: @model.attributes
         submitBtn:
-          className: 'btn-large btn-block btn-inverse'
+          className: 'btn-large btn-block btn-primary'
       @$el.append @form.render().el
       @
 
