@@ -12,6 +12,8 @@ require.config
     'game/levels/snoozer'
     'game/levels/interest_picker'
     'ui_widgets/formation'
+    'dashboard/widgets/base'
+    'dashboard/widgets/lister'
   ]
   paths:
 
