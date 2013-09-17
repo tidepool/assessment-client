@@ -5,7 +5,7 @@ define [], () ->
       "question_id": "high_extraversion"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-sun"
+      "icon": "gfx-sun"
       "steps": 7
       value: 4
       "question": "Extraverted and Enthusiastic?"
@@ -23,7 +23,7 @@ define [], () ->
       "question_id": "low_agreeableness"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-comments"
+      "icon": "gfx-comments"
       "steps": 7
       value: 4
       "question": "Critical and Quarrelsome?"
@@ -37,7 +37,7 @@ define [], () ->
       "question_id": "high_conscientiousness"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-briefcase"
+      "icon": "gfx-briefcase"
       "steps": 7
       value: 4
       "question": "Dependable and Self-Disciplined?"
@@ -51,7 +51,7 @@ define [], () ->
       "question_id": "high_neuroticism"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-bolt"
+      "icon": "gfx-bolt"
       "steps": 7
       value: 4
       "question": "Anxious and Easily Upset?"
@@ -65,7 +65,7 @@ define [], () ->
       "question_id": "high_openness"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-cloud"
+      "icon": "gfx-cloud"
       "steps": 7
       value: 4
       "question": "Open to New Experiences and Complex?"
@@ -79,7 +79,7 @@ define [], () ->
       "question_id": "low_extraversion"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-book"
+      "icon": "gfx-book"
       "steps": 7
       value: 4
       "question": "Reserved and Quiet?"
@@ -93,7 +93,7 @@ define [], () ->
       "question_id": "high_agreeableness"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-smile"
+      "icon": "gfx-smile"
       "steps": 7
       value: 4
       "question": "Sympathetic and Warm?"
@@ -107,7 +107,7 @@ define [], () ->
       "question_id": "low_conscientiousness"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-leaf"
+      "icon": "gfx-leaf"
       "steps": 7
       value: 4
       "question": "Disorganized and Careless?"
@@ -121,7 +121,7 @@ define [], () ->
       "question_id": "low_neuroticism"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-home"
+      "icon": "gfx-home"
       "steps": 7
       value: 4
       "question": "Calm and Emotionally Stable?"
@@ -135,7 +135,7 @@ define [], () ->
       "question_id": "low_openness"
       "question_topic": "tipi"
       "question_type": "icon_slider"
-      "icon": "icon-cog"
+      "icon": "gfx-cog"
       "steps": 7
       value: 4
       "question": "Conventional and Uncreative?"

@@ -75,7 +75,7 @@
         <p class="large"><i class="gfx-male"></i> You're a manly man.</p>
         <p class="large"><i class="gfx-female"></i> You're a classy lady.</p>
         <p class="large">
-            <i class="icon-briefcase"></i> Take your kids to work day
+            <i class="gfx-briefcase"></i> Take your kids to work day
         </p>
 
         <h2>`Share` ui_widget</h2>
@@ -180,7 +180,7 @@
         </p>
         <p>
             <b class="holdPlease everlasting inline">
-                <i class="icon-repeat"></i>
+                <i class="gfx-repeat"></i>
             </b>
         </p>
         <p class="muted">.holdPlease.everlasting.inline</p>
@@ -312,10 +312,10 @@
                         string_id: 'handedness',
                         type: 'select_by_icon',
                         multiselect: true,
-                        label: 'Rockets or Bugs?',
+                        label: 'Rockets, Sun, or Both?',
                         'options': [
-                            { value:'rockets', icon:'icon-rocket' },
-                            { value:'bugs', icon:'icon-bug' }
+                            { value:'rockets', label:'rocket', icon:'gfx-rocket' },
+                            { value:'sun', label:'sun', icon:'gfx-sun' }
                         ]
                     })
                 })
@@ -325,10 +325,9 @@
                         type: 'select_by_icon',
                         label: 'How Ya Feelin\'?',
                         'options': [
-                            { value:'smile', icon:'icon-smile' },
-                            { value:'meh', icon:'icon-meh' },
-                            { value:'frown', icon:'icon-frown' },
-                            { value:'lovey', icon:'icon-heart' },
+                            { value:'smile', icon:'gfx-happiness' },
+                            { value:'meh',   icon:'gfx-boredom' },
+                            { value:'frown', icon:'gfx-sadness' },
                             { value:'other', icon:'gfx-dottedcircle' }
                         ]
                     })

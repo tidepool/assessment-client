@@ -1,0 +1,14 @@
+@import '__'
+
+// Animation keyframes are global and resuable in CSS.
+// It makes sense to centralize them rather than splitting by component.
+
+
+
++keyframes(spin)
+  0%
+    +transform( rotate(0deg) )
+  100%
+    +transform( rotate(359deg) )
+
+

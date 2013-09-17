@@ -6,6 +6,7 @@
   display: inline-block
   background: url("images/brand.png")
 
+
 .icon.icon-bulb-circle
   width: 50px
   height: 50px
@@ -16,8 +17,64 @@
   background-position: -502px -25px
 
 a:hover .icon,
-a:hover [class^="icon-"],
+a:hover [class^="gfx-"],
 a:hover>i
   text-decoration: none
 
 
+
+// ------------------------------------------------- gfx- style icons
+[class^="gfx-"],
+[class*=" gfx-"]
+  -webkit-font-smoothing: antialiased
+  *margin-right: .3em
+
+[class^="gfx-"]:before,
+[class*=" gfx-"]:before
+  display: inline-block
+  speak: none
+
+/* makes the font 33% larger relative to the icon container */
+.icon-large:before,
+.gfx-large:before
+  vertical-align: -10%
+  font-size: 1.3333333333333333em
+
+.icon-2x
+  font-size: 2em
+.icon-4x
+  font-size: 4em
+
+
+[class^="gfx-"].icon-fixed-width,
+[class*=" gfx-"].icon-fixed-width
+  display: inline-block
+  width: 1.1428571428571428em
+  text-align: right
+  padding-right: 0.2857142857142857em
+
+.icon-fixed-width.icon-large,
+.icon-fixed-width.icon-large
+  width: 1.4285714285714286em
+
+// Stacked and layered icon
+.icon-stack
+  position: relative
+  display: inline-block
+  width: 2em
+  height: 2em
+  line-height: 2em
+  vertical-align: -35%
+.icon-stack [class^="gfx-"],
+.icon-stack [class*=" gfx-"]
+  display: block
+  text-align: center
+  position: absolute
+  width: 100%
+  height: 100%
+  font-size: 1em
+  line-height: inherit
+  *line-height: 2em
+.icon-stack .icon-stack-base
+  font-size: 2em
+  *line-height: 1em
