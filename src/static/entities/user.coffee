@@ -50,6 +50,13 @@ define [
 
       return null # no validation errors
 
+    toJSON: (options) ->
+      attrs = _.clone @attributes
+      attrs.password_confirmation = attrs.passwordConfirm
+      delete attrs.passwordConfirm
+      console.log attrs:attrs
+      attrs
+
 
     # ----------------------------------------------------------- Private Helper Methods
     # If a nickname isn't specified, use the name or email field
