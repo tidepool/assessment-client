@@ -2,7 +2,28 @@
 @import '_colorVars.sass'
 @import '_helpers.sass'
 
-// Bootstrap Form Overrides
+input
+  &[type=text],
+  &[type=email],
+  &[type=password],
+  &[type=number],
+  &[type=search],
+  &[type=date]
+    display: block
+    height: $space + $spaceLil
+    line-height: $space
+    padding: $spaceLil / 2 $spaceLil
+    min-width: 220px
+    +transitionable
+    +box-sizing(border-box)
+    border: 1px solid darken($colorBackground, 10%)
+    border-radius: $radiusSmall
+    margin: 0 0 $spaceLil 0
+    box-shadow: inset 1px 2px 3px 0 $shadeLight
+    background: $colorBackground
+    font-size: $fontSizeBody
+    &.input-block-level
+      width: 100%
 
 form.form-inline input
   &[type=text],
@@ -11,28 +32,12 @@ form.form-inline input
   &[type=number],
   &[type=search],
   &[type=date]
-    margin-bottom: $spaceLil
+    display: inline-block
 form.form-inline .btn
   margin-bottom: $spaceLil
 form.form-inline label
+  display: inline-block
   margin-bottom: 0
-
-input
-  &[type=text],
-  &[type=email],
-  &[type=password],
-  &[type=number],
-  &[type=search],
-  &[type=date]
-    box-shadow: inset 1px 2px 3px 0 $shadeLight
-    background: $colorBackground
-    font-size: $fontSizeBody
-    height: $space + $spaceLil
-    line-height: $space
-    padding: $spaceLil / 2 $spaceLil
-    min-width: 220px
-    +transitionable
-    +box-sizing(border-box)
 
 select.large,
 input.large[type=text],
@@ -71,8 +76,10 @@ input:focus
     background-color: white
 
 form label
+  display: block
   cursor: default
   text-transform: uppercase
+  margin: $spaceLil 0
 
 
 // Checkboxes

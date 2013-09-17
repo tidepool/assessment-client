@@ -15,10 +15,13 @@
 <form id="SigninForm">
     <h3>
         Use Your Email
-        <div class="btn-group btn-rocker" data-toggle="buttons-radio">
-            <button id="ActionSignIn" class="btn active" value="signIn" type="button">Sign In</button>
-            <button id="ActionRegister" class="btn" value="register" type="button">Register</button>
-            <input id="LoginType" type="hidden" name="loginType" value="signIn" />
+        <div class="btn-group btn-rocker" data-toggle="buttons">
+            <label id="ActionSignIn" class="btn active">
+                <input type="radio" name="loginType" value="signIn"> Sign In
+            </label>
+            <label id="ActionRegister" class="btn">
+                <input type="radio" name="loginType" value="register"> Register
+            </label>
         </div>
     </h3>
 

@@ -4,8 +4,18 @@
 
 {{#if nickname}}
 
-    <div class="btn btn-clear btn-large dropdown-toggle">
-        <ul class="dropdown-menu">
+    <div class="dropdown">
+        <div class="btn btn-clear dropdown-toggle" data-toggle="dropdown">
+            <i class="avatar">
+                {{#if image}}
+                    <img src="{{#unless isAbsoluteImagePath}}@@buildDir{{/unless}}{{image}}"
+                         alt="{{nickname}}'s Profile Image" />
+                {{/if}}
+            </i>
+            <span class="nickname" title="{{name}}: {{email}}">{{nickname}}</span>
+            <i class="arrow icon-chevron-sign-down muted"></i>
+        </div>
+        <ul class="dropdown-menu" role="menu">
             <li><a id="ActionShowProfile">
                 <i class="icon-fixed-width icon-user"></i>
                 Profile
@@ -27,15 +37,8 @@
                 Log Out
             </a></li>
         </ul>
-        <i class="avatar">
-            {{#if image}}
-                <img src="{{#unless isAbsoluteImagePath}}@@buildDir{{/unless}}{{image}}"
-                     alt="{{nickname}}'s Profile Image" />
-            {{/if}}
-        </i>
-        <span class="nickname" title="{{name}}: {{email}}">{{nickname}}</span>
-        <i class="arrow icon-chevron-sign-down muted"></i>
     </div>
+
 
 {{else}}
 

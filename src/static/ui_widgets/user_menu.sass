@@ -4,11 +4,13 @@
 
 .userMenu
   float: right
+  +tabletAndUp
+    min-width: 200px
 
 
   // ------------------------------------------------------ Login Link
   +phone
-    .btn-large
+    .btn-clear
       padding-top: 0
       top: 0
       height: $shortHeaderHeight
@@ -27,17 +29,19 @@
     text-align: center
   .dropdown-toggle
     height: $headerHeight
-    line-height: $headerHeight - $spaceLil + $spaceTiny
     position: relative
     border-radius: 0
-    top: - $spaceTiny
-    padding-top: $spaceTiny
-    cursor: default
+    width: 100%
+    text-align: left
     +phone
       padding-top: 0
       top: 0
       height: $shortHeaderHeight
       line-height: $shortHeaderHeight - $spaceTiny
+  .open .dropdown-toggle
+    color: white
+    background: $colorForeground
+
   .dropdown-toggle i:last-child
     margin-left: $spaceLil
   .dropdown-menu
@@ -45,7 +49,7 @@
     +phone
       top: $shortHeaderHeight - 1
     width: 100%
-    min-width: 200px
+
     left: auto
     right: 0
     box-sizing: border-box
@@ -59,9 +63,6 @@
     box-shadow: none
     border: none
     z-index: 1
-  .dropdown-toggle:hover,
-  .dropdown-toggle:focus,
-  .dropdown-toggle:active,
   .dropdown-menu
     background: $colorForeground
     color: white
@@ -71,13 +72,13 @@
     text-shadow: none
     padding: $spaceLil $space
     +phone
-      padding: $spaceLil $spaceTiny
+      padding: $spaceLil
+      padding-right: 0
   .dropdown-menu li a:hover,
   .dropdown-menu li a:focus
     background: $colorBrand
-  .dropdown-toggle:hover .dropdown-menu,
-  .dropdown-toggle:focus .dropdown-menu
-    display: block
+
+  .open .dropdown-menu
     +phone
       &:before
         content: ''

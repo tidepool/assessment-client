@@ -10,11 +10,16 @@
   background: $colorBackground - 40
   padding: 1px
   border-radius: $radiusSmall
+  label.btn
+    text-transform: none
+    margin: 0
   .btn
     color: transparentize($colorForeground, .3)
     box-shadow: none
     border: none
     border-top: 1px solid white
+    padding-top: $spaceTiny
+    padding-bottom: $spaceTiny
     @include transform-style(preserve-3d)
   .btn.active
     color: $colorForeground

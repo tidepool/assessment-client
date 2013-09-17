@@ -23,7 +23,6 @@ define [
   _confirmPassSel = '#Login-confirm'
   _submitSel = '#Login-submit'
   _registerBtnSel = '#ActionRegister'
-  _loginTypeSel = '#LoginType'
 
   LoginDialog = Backbone.View.extend
     className: "loginDialog"
@@ -77,7 +76,6 @@ define [
 
     _modeSignIn: ->
       @_isRegisterMode = false
-      @$(_loginTypeSel).val 'signIn'
       @$(_confirmPassSel).hide()
       @_jazzifySubmitBtn()
       psst.hide()
@@ -85,7 +83,6 @@ define [
 
     _modeRegister: ->
       @_isRegisterMode = true
-      @$(_loginTypeSel).val 'register'
       @$(_confirmPassSel).show()
       @_jazzifySubmitBtn()
       psst.hide()

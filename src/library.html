@@ -72,19 +72,9 @@
         </p>
 
 
-        <h2><i class="icon-circle"></i> Icons with Text</h2>
+        <h2><i class="icon-user"></i> Icons with Text</h2>
         <p class="large"><i class="gfx-male"></i> You're a manly man.</p>
         <p class="large"><i class="gfx-female"></i> You're a classy lady.</p>
-        <p class="large"><i class="icon-male"></i> Many Gargoyles protrude prodigously.</p>
-        <p class="large">
-            <i class="gfx-surprise"></i> Suprised Much?
-        </p>
-        <p class="large">
-            <i class="gfx-clock"></i> This special ends soon.
-        </p>
-        <p class="large">
-            <i class="icon-circle-blank"></i> Will the circle be unbroken.
-        </p>
         <p class="large">
             <i class="icon-briefcase"></i> Take your kids to work day
         </p>
@@ -125,24 +115,38 @@
 
 
         <h2>Decision Groups</h2>
-        <p>These follow the naming conventions and behavior rules from <a href="http://twitter.github.io/bootstrap/javascript.html#buttons">Bootstrap</a> but have overridden styles.</p>
-        <p class="muted">.btn-group.btn-radio</p>
-        <div class="btn-group" data-toggle="buttons-radio">
-            <button class="btn" data-printClasses></button>
-            <button class="btn active" data-printClasses></button>
-            <button class="btn" data-printClasses></button>
+        <p>These follow the naming conventions and behavior rules from <a href="http://getbootstrap.com/javascript/#buttons">Bootstrap</a> but have overridden styles.</p>
+        <p class="muted">.btn-group[data-toggle="buttons"]</p>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn">
+                <input type="radio" name="options" id="option1"> Potato
+            </label>
+            <label class="btn">
+                <input type="radio" name="options" id="option2"> Pototo
+            </label>
+            <label class="btn">
+                <input type="radio" name="options" id="option3"> Tomato
+            </label>
         </div>
 
-        <p class="muted">.btn-group.btn-rocker</p>
-        <div class="btn-group btn-rocker" data-toggle="buttons-radio">
-            <button class="btn active">Apples</button>
-            <button class="btn">Oranges</button>
+        <p class="muted">.btn-group.btn-rocker[data-toggle="buttons"]</p>
+        <div class="btn-group btn-rocker" data-toggle="buttons">
+            <label class="btn active">
+                <input type="radio" name="fruit" id="apples"> Apples
+            </label>
+            <label class="btn">
+                <input type="radio" name="fruit" id="oranges"> Oranges
+            </label>
         </div>
 
-        <p class="muted">.btn-group.btn-rocker.gendered</p>
-        <div class="btn-group btn-rocker gendered" data-toggle="buttons-radio">
-            <button class="btn active">Boys</button>
-            <button class="btn">Girls</button>
+        <p class="muted">.btn-group.btn-rocker.gendered[data-toggle="buttons"]</p>
+        <div class="btn-group btn-rocker gendered" data-toggle="buttons">
+            <label class="btn active">
+                <input type="radio" name="gender" id="boys"> Boys
+            </label>
+            <label class="btn">
+                <input type="radio" name="gender" id="girls"> Girls
+            </label>
         </div>
 
         <h2>Forms</h2>
