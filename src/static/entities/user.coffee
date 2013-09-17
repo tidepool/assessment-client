@@ -54,7 +54,6 @@ define [
       attrs = _.clone @attributes
       attrs.password_confirmation = attrs.passwordConfirm
       delete attrs.passwordConfirm
-      console.log attrs:attrs
       attrs
 
 
