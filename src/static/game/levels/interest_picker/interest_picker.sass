@@ -49,16 +49,16 @@
     margin: 0
     min-height: $spaceBig
     border-bottom: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
-    margin-bottom: -$spaceLil/2
+    //margin-bottom: -$spaceLil/2
     +phone
       border-bottom-width: $spaceTiny
-      margin-bottom: -$spaceTiny
+      //margin-bottom: -$spaceTiny
   .menu .content .row:first-child
     border-top: $spaceLil/2 dashed lighten($colorForegroundCool, 20%)
-    margin-bottom: -$spaceLil - $spaceTiny
+    //margin-bottom: -$spaceLil - $spaceTiny
     +phone
       border-top-width: $spaceTiny
-      margin-bottom: -$spaceTiny*3
+      //margin-bottom: -$spaceTiny*3
 
   +desktop
     .menu, .bentoBox
@@ -181,6 +181,7 @@
       width: 100%
       background: shade($colorForegroundCool, 15%)
       border-top: $spaceTiny solid shade($colorBackgroundWarm, 10%)
+      box-sizing: content-box
       +transition( bottom .2s )
 
       .title, .content

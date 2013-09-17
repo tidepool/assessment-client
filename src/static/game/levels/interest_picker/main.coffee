@@ -22,7 +22,7 @@ define [
 
 
   _minPicks = 7
-  _tempo = 800 # How often to add a new symbol
+  _tempo = 900 # How often to add a new symbol
   _drawerSize = 53 # how large is the drawer that shows up at the bottom on small screens?
   _margins = 50
   _rowCount = 4 # How many rows of items to show

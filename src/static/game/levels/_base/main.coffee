@@ -39,7 +39,7 @@ define [
 
     # ------------------------------------------------------------- Private Methods
     _fillHeight: ->
-      @$el.css height: @getAvailHeight()
+      setTimeout (=> @$el.css height: @getAvailHeight()), 1 # Timeout gives it time to calculate offset properly
 
 
     # ------------------------------------------------------------- Consumable API
@@ -86,10 +86,10 @@ define [
     getAvailHeight: ->
       availHeight = $(window).height() - @$el.offset().top
       availHeight -= @heightAdjustment if @heightAdjustment
-#      console.log
-#        offset: @$el.offset().top
-#        windowHeight: $(window).height()
-#        availHeight: availHeight
+      console.log
+        offset: @$el.offset().top
+        windowHeight: $(window).height()
+        availHeight: availHeight
       availHeight
 
     # Fill the height to what is available, and continue to do so if the window size changes

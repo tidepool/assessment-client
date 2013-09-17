@@ -6,6 +6,7 @@
 .friendSurveyPage
   max-width: $maxSiteWidth * .75
   margin: 0 auto
+  padding-bottom: $space
 
   .intro
     background: $highlight
@@ -44,8 +45,9 @@
         display: none
         min-height: 0
       &:first-child legend
-        display: block
-        margin-top: -110px
+        position: absolute
+        //display: block
+        //margin-top: -110px
 
 
   // ---------------------------------------------------------- Action Button
