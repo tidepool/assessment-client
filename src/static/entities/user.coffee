@@ -35,7 +35,8 @@ define [
       @on 'invalid', @_onModelInvalid
 
     validate: (attrs, options) ->
-      return null if attrs.guest is true # skip validation
+      if attrs.guest is true and not options.register
+        return null # skip validation
 
       if options.login or options.register
         return 'The email address cannot be blank.' unless attrs.email
