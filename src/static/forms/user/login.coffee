@@ -23,6 +23,7 @@ define [
   _confirmPassSel = '#Login-confirm'
   _submitSel = '#Login-submit'
   _registerBtnSel = '#ActionRegister'
+  _signInBtnSel = '#ActionSignIn'
 
   LoginDialog = Backbone.View.extend
     className: "loginDialog"
@@ -49,6 +50,8 @@ define [
         @$(_registerBtnSel).trigger 'click'
         @$(_registerBtnSel).siblings().removeClass 'active'
         @$(_registerBtnSel).addClass 'active'
+      else
+        @$(_signInBtnSel).trigger 'click'
       @
 
 

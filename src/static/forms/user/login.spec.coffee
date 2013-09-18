@@ -2,11 +2,13 @@ define [
   'underscore'
   'backbone'
   './login'
+  'syphon'
 ],
 (
   _
   Backbone
   Login
+  Syphon
 ) ->
 
   _myClassName = '.loginDialog'
@@ -44,15 +46,20 @@ define [
         $('#sandbox').html login.render().el
         expect($('body')).toContain _myClassName
         expect( $("[name='passwordConfirm']") ).not.toBeVisible()
-        expect( $("[name='loginType']") ).toHaveValue 'signIn'
+        expect( $('#SigninForm') ).toHaveLength 1
+        formData = Syphon.serialize $('#SigninForm').get(0)
+        expect(formData.loginType).toEqual 'signIn'
 
       it 'can switch to register mode', ->
         login = _factory()
         $('#sandbox').html login.render().el
         expect($('body')).toContain _myClassName
-        $("#ActionRegister").click()
+        $("#ActionRegister").trigger 'click'
         expect( $("[name='passwordConfirm']") ).toBeVisible()
-        expect( $("[name='loginType']") ).toHaveValue 'register'
+        expect( $('#SigninForm') ).toHaveLength 1
+        formData = Syphon.serialize $('#SigninForm').get(0)
+        expect(formData.loginType).toEqual 'register'
+
 
 
 
