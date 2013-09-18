@@ -12,7 +12,7 @@ define [],() ->
       i[r].l = 1 * new Date()
       a = s.createElement(o) ; m = s.getElementsByTagName(o)[0]
       a.async = 1 ; a.src = g ; m.parentNode.insertBefore a, m
-    ) window, document, "script", "//www.google-analytics.com/analytics.js", "ga"
+    ) window, document, "script", "https://www.google-analytics.com/analytics.js", "ga"
     if isDev
       ga "create", key, "tide-dev.herokuapp.com"
     else

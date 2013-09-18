@@ -15,8 +15,8 @@ define [],() ->
       ), 1
     window._kmq = window._kmq or []
     window._kmk = window._kmk or key
-    window._kms "//i.kissmetrics.com/i.js"
-    window._kms "//doug1izaerwt3.cloudfront.net/" + window._kmk + ".1.js"
+    window._kms "https://i.kissmetrics.com/i.js"
+    window._kms "https://doug1izaerwt3.cloudfront.net/" + window._kmk + ".1.js"
     @ #constructor returns `this`
 
 
