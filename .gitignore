@@ -17,3 +17,4 @@ src/static/bower_components
 *.js.map
 !src/static/vendor/*.js
 !src/static/vendor/bootstrap/js/*.js
+!src/static/vendor/bootstrap/css/*.css
