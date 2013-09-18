@@ -28,7 +28,7 @@ define [
   _instructionsSel = '.instructions'
   _upKey = 38
   _downKey = 40
-  _instructions = 'Place each circle near yourself based on importance.'
+  _instructions = 'Place each circle near yourself based on how it represents you.'
 
 
   View = Level.extend
