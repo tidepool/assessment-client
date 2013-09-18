@@ -13,6 +13,7 @@ module.exports = (grunt) ->
   TARGETS =
     dev: 'dev'
     dist:'dist'
+    ios: 'ios'
 
   timestamp = grunt.template.today('mm-dd')
   defaultSubdir = 'static'
@@ -155,6 +156,30 @@ module.exports = (grunt) ->
         "<%= grunt.option('target') %>/bower_components/**/{fonts,docs,tests}/"
         # File Types
         "<%= grunt.option('target') %>/bower_components/**/*.{html,jpg,png,md,doc,map,gemspec,lock,rb,ico,markdown,yml,json}"
+        # Specific Files
+        "<%= grunt.option('target') %>/bower_components/requirejs/require.js"
+        "<%= grunt.option('target') %>/bower_components/requirejs/t*"
+        "<%= grunt.option('target') %>/bower_components/requirejs/u*"
+        "<%= grunt.option('target') %>/bower_components/requirejs/dist"
+        "<%= grunt.option('target') %>/bower_components/jquery-ui-touch-punch/jquery.ui.touch-punch.js"
+      ]
+      #
+      nativeIosOnly: [
+        "<%= grunt.option('target') %>/**/*.{gz,map}"
+        "<%= grunt.option('target') %>/welcome"
+        "<%= grunt.option('target') %>/images/app_teaser"
+        "<%= grunt.option('target') %>/images/badges"
+        "<%= grunt.option('target') %>/images/dashboard"
+        "<%= grunt.option('target') %>/images/game/instructions"
+        "<%= grunt.option('target') %>/images/game/snoozer"
+        "<%= grunt.option('target') %>/images/game/teasers"
+        "<%= grunt.option('target') %>/images/home_page/*"
+        "!<%= grunt.option('target') %>/images/home_page/about-graphics_02b.png"
+        "<%= grunt.option('target') %>/images/people"
+        "<%= grunt.option('target') %>/images/results"
+        "<%= grunt.option('target') %>/images/glyphicons"
+        "<%= grunt.option('targetParent') %>/*.html"
+        "!<%= grunt.option('targetParent') %>/index.html"
       ]
 
     coffee:
@@ -223,9 +248,9 @@ module.exports = (grunt) ->
             'pages/play_game'
             'pages/social_results'
           ]
-          paths:
-            jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
-            bootstrap: 'empty:'
+#          paths:
+#            jquery: 'empty:' #http://requirejs.org/docs/optimization.html#empty
+#            bootstrap: 'empty:'
           out: '<%= grunt.option("target") %>/core/main.js'
           optimize: "uglify2"
 #          optimize: "none"
@@ -243,7 +268,6 @@ module.exports = (grunt) ->
           kissKey:             "<%= env.kissKey %>"
           googleAnalyticsKey:  "<%= env.googleAnalyticsKey %>"
           fbId:                "<%= env.fbId %>"
-          #fbSecret:            "<%= env.fbSecret %>" # not used
           isDev:               "<%= env.isDev %>"
           timestamp:           "<%= cfg.timestamp %>"
           buildDir:            "<%= grunt.option('targetSubdir') %>"
@@ -258,7 +282,6 @@ module.exports = (grunt) ->
       html:
         files: [
           expand: true
-#          flatten: true
           cwd: "<%= grunt.option('targetParent') %>"
           src: "{*.html,**/*.hbs}"
           dest: "<%= grunt.option('targetParent') %>"
@@ -316,6 +339,12 @@ module.exports = (grunt) ->
           expand: true
           cwd:  "<%= cfg.src.target %>"
           src:  "<%= cfg.imagesGlob %>"
+          dest: "<%= grunt.option('target') %>"
+        ]
+      fonts: files: [
+          expand: true
+          cwd:  "<%= cfg.src.target %>"
+          src:  "vendor/fonts/*.woff"
           dest: "<%= grunt.option('target') %>"
         ]
       rootImages: files: [
@@ -456,11 +485,13 @@ module.exports = (grunt) ->
         'clean:unusedBowerComponents'
         'copy:rootImages'
         'copy:assetImages'
+        'copy:fonts'
         'exec:cleanEmpties'
         'compress'
       ]
-    else
-      grunt.log.writeln "Building in Dev Mode"
+    if grunt.option TARGETS.ios
+      grunt.log.writeln 'Performing IOS specific build tasks'
+      grunt.task.run 'clean:nativeIosOnly'
 
 
   # server
@@ -503,6 +534,9 @@ module.exports = (grunt) ->
       grunt.fail.warn 'No action taken -- can only deploy to dist target'
 
 
+#  grunt.registerTask 'logOptions', -> grunt.log.writeln grunt.option.flags()
+
+
   # ---------------------------------------------------------------------- Task Shortcuts
   grunt.registerTask 'pre', 'precompile'
   grunt.registerTask "b", [ 'build' ] # because of zsh's stupid 'build' autocorrect message
@@ -517,6 +551,7 @@ module.exports = (grunt) ->
     hash = '_' + gitRevision[0]
     grunt.option 'gitRevision', hash
     targetInfo = buildConfig.dev # Default path
+    if grunt.option TARGETS.ios then grunt.option TARGETS.dist, true
     if grunt.option TARGETS.dist
       targetInfo = targetPlusHash buildConfig.dist, hash
     else
