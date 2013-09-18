@@ -49,7 +49,7 @@ define [
         event_type: null # The string id of the level type (eg: 'image_rank')
         stage: null # The index of the level instance (eg: 0 is the first level in the game)
         events: new Events()
-        timezone_offset: (new Date).getTimezoneOffset()
+        timezone_offset: (new Date).getTimezoneOffset() * 60 * -1 # Server wants seconds and + hours east
         is_touch: detect.isTouch()
         is_phone_width: detect.isPhone()
       }
