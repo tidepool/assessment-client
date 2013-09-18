@@ -47,8 +47,10 @@ define [
         expect($('body')).toContain _myClassName
         expect( $("[name='passwordConfirm']") ).not.toBeVisible()
         expect( $('#SigninForm') ).toHaveLength 1
-        formData = Syphon.serialize $('#SigninForm').get(0)
-        expect(formData.loginType).toEqual 'signIn'
+        waits 1 # wait for post-render events to set initial state
+        runs ->
+          formData = Syphon.serialize $('#SigninForm').get(0)
+          expect(formData.loginType).toEqual 'signIn'
 
       it 'can switch to register mode', ->
         login = _factory()
@@ -59,6 +61,7 @@ define [
         expect( $('#SigninForm') ).toHaveLength 1
         formData = Syphon.serialize $('#SigninForm').get(0)
         expect(formData.loginType).toEqual 'register'
+
 
 
 

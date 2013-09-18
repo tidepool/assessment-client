@@ -46,12 +46,17 @@ define [
     render: ->
       @$el.html tmpl
       @options.app.analytics?.track @className, 'show'
-      if @options.register
-        @$(_registerBtnSel).trigger 'click'
-        @$(_registerBtnSel).siblings().removeClass 'active'
-        @$(_registerBtnSel).addClass 'active'
-      else
-        @$(_signInBtnSel).trigger 'click'
+      setTimeout (=>
+        if @options.register
+          @$(_registerBtnSel).trigger 'click'
+          @$(_registerBtnSel).siblings().removeClass 'active'
+          @$(_registerBtnSel).addClass 'active'
+        else
+          @$(_registerBtnSel).trigger 'click'
+          @$(_signInBtnSel).trigger 'click'
+          @$(_signInBtnSel).siblings().removeClass 'active'
+          @$(_signInBtnSel).addClass 'active'
+      ), 1 # don't trigger the click until the dom has time to draw
       @
 
 
