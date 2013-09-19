@@ -174,7 +174,6 @@ define [
         instructions: @miniInstructions.model
       @$el.html @curLevel.render().el
       @curLevel.trigger 'domInsert'
-      app.view.scrollToTop()
       @model.setLevelSeen stageData.view_name
       app.analytics.trackPage "#{_parentPageName}/#{@options.params.def_id}/#{stageId}"
       app.analytics.track @className, "#{stageData.view_name} Level Started"

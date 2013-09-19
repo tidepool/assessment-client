@@ -70,18 +70,11 @@ define [
         else
           document.title = _companyName
 
-        @scrollToTop()
         @options.app.analytics.trackPage module
         @
 
 
     # ------------------------------------------------------------- Public API
-    # For mobile devices, scroll the address bar away
-    scrollToTop: ->
-      if detect.isPhone()
-        setTimeout (-> window.scrollTo(0,1) ), 0
-      @
-
     asSite: (viewModuleString, data) ->
       @_curLayout = new SiteLayout
         app: @options.app
