@@ -10,8 +10,11 @@
   // Limit widths
   .explanation,
   .psst.error
-    margin: $space auto
     max-width: $spaceBig * 15
+    margin: $space auto
+    +phone
+      margin: $spaceLil auto
+
 
   // Loading...
   .results
@@ -39,6 +42,8 @@
       margin: 0
     h1
       font-size: $fontSizeMegaLarge
+      +phone
+        font-size: $fontSizeVeryLarge
       color: white
       letter-spacing: .05em
 
@@ -69,6 +74,9 @@
     text-align: left
 
   //Text
+  .explanation
+    padding: 0 $spaceLil
+
   .explanation,
   .explanation p
     text-align: left
