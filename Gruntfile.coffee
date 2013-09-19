@@ -269,6 +269,7 @@ module.exports = (grunt) ->
           googleAnalyticsKey:  "<%= env.googleAnalyticsKey %>"
           fbId:                "<%= env.fbId %>"
           isDev:               "<%= env.isDev %>"
+          includeFeedbackBtn:  "<%= env.includeFeedbackBtn %>"
           timestamp:           "<%= cfg.timestamp %>"
           buildDir:            "<%= grunt.option('targetSubdir') %>"
         prefix: '@@'

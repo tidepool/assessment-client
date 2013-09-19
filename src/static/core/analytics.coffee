@@ -18,7 +18,7 @@ define [
   Analytics = (cfg) ->
     @google = new Google(cfg.googleAnalyticsKey, cfg.isDev) if cfg.googleAnalyticsKey
     @kiss = new Kiss(cfg.kissKey) if cfg.kissKey
-    UserVoice.start() unless detect.isUIwebView()
+    UserVoice.start() if cfg.includeFeedbackBtn unless detect.isUIwebView()
     # Track all javascript errors
     window.onerror = (msg, url, lineNumber) =>
       @trackKeyMetric @CATEGORIES.jsErr, msg, {url:lineNumber}
