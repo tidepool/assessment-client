@@ -43,7 +43,11 @@
 {{else}}
 
     <button id="ActionShowLogin" class="btn btn-link btn-large" href="">
-        <i class="gfx-lock"></i>
+        {{#if guest}}
+            <i class="gfx-user"></i>
+        {{else}}
+            <i class="gfx-lock"></i>
+        {{/if}}
         Log In
     </button>
 
